@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = import.meta.env.PROD ? 'https://buggy-books.onrender.com/api' : 'http://localhost:4000/api';
 
 const getHeaders = () => {
   const token = localStorage.getItem('dummyAccessToken');

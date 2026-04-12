@@ -11,14 +11,14 @@
       "id": "2",
       "title": "To Kill a Mockingbird Exception",
       "author": "Harper Lee",
-      "price": 15.50,
+      "price": 15.5,
       "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop"
     },
     {
       "id": "3",
       "title": "1984 Bugs",
       "author": "George Orwell",
-      "price": 12.00,
+      "price": 12,
       "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=600&auto=format&fit=crop"
     },
     {
