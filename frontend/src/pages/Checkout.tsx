@@ -8,7 +8,7 @@ export default function Checkout() {
 
   useEffect(() => {
     api.getCart().then(cart => {
-      setTotal(cart.reduce((acc: number, item: any) => acc + item.price, 0));
+      setTotal(cart.reduce((acc: number, item: { price: number }) => acc + item.price, 0));
     }).catch(console.error);
   }, []);
 
@@ -19,6 +19,7 @@ export default function Checkout() {
       await api.checkout();
       setStatus('success');
     } catch (err) {
+      console.error(err);
       setStatus('error');
     }
   };

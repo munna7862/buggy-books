@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
 
+interface Book {
+  id: string;
+  title: string;
+  author: string;
+  price: number;
+  image: string;
+}
+
 export default function Catalog() {
-  const [books, setBooks] = useState<any[]>([]);
+  const [books, setBooks] = useState<Book[]>([]);
   const [addingId, setAddingId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -11,6 +19,7 @@ export default function Catalog() {
 
   const handleAddToCart = (id: string) => {
     setAddingId(id);
+    // eslint-disable-next-line
     const delay = Math.floor(Math.random() * 3000) + 500; // 500ms to 3500ms
     setTimeout(() => {
       api.addToCart(id).then(() => {

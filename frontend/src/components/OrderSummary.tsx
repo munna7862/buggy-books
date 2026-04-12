@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 // Define the custom element for Shadow DOM encapsulation
 class OrderSummaryElement extends HTMLElement {

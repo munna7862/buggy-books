@@ -2,8 +2,14 @@ import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { Link } from 'react-router-dom';
 
+interface CartItem {
+  id: string;
+  title: string;
+  price: number;
+}
+
 export default function Cart() {
-  const [cart, setCart] = useState<any[]>([]);
+  const [cart, setCart] = useState<CartItem[]>([]);
 
   useEffect(() => {
     api.getCart().then(setCart).catch(console.error);
