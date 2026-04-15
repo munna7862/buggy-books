@@ -7,8 +7,8 @@
 We have successfully built a full-stack local application from scratch. The application intentionally contains flaky behavior, delayed responses, and difficult-to-locate web elements to serve as a robust target for test automation frameworks like Selenium.
 
 ### Live Deployments
-* **Frontend UI**: [https://buggy-books.onrender.com](https://buggy-books.onrender.com)
-* **Backend API**: [https://buggy-books.onrender.com/api/books](https://buggy-books.onrender.com/api/books)
+* **Frontend UI**: [https://buggy-books-fe.onrender.com](https://buggy-books-fe.onrender.com)
+* **Backend API**: [https://buggy-books.onrender.com/api](https://buggy-books.onrender.com/api)
 
 ## 1. Project Architecture
 The project utilizes a segmented, Monorepo style structure, easily spun up concurrently using a single command (`npm run dev`).
