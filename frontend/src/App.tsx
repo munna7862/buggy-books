@@ -4,6 +4,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import { useEffect } from 'react';
 import { api } from './api';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   
@@ -15,6 +16,15 @@ function App() {
   return (
     <BrowserRouter>
       <div className="app-container">
+        <Toaster position="bottom-right" toastOptions={{
+          style: {
+            background: 'var(--bg)',
+            color: 'var(--text-h)',
+            border: '1px solid var(--border)',
+            boxShadow: 'var(--shadow-md)',
+            fontFamily: 'var(--sans)'
+          }
+        }} />
         <header className="glass-nav">
           <Link to="/" style={{textDecoration: 'none'}}>
             <h2 className="nav-brand">BuggyBooks</h2>

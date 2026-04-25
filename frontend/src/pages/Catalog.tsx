@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '../api';
+import toast from 'react-hot-toast';
 
 interface Book {
   id: string;
@@ -24,10 +25,11 @@ export default function Catalog() {
     setTimeout(() => {
       api.addToCart(id).then(() => {
         setAddingId(null);
-        alert('Added to cart!'); // Intentionally requires alert handling in tests
+        toast.success('Added to cart!');
       }).catch((err) => {
         console.error(err);
         setAddingId(null);
+        toast.error('Failed to add to cart.');
       });
     }, delay);
   };

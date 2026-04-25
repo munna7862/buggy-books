@@ -12,6 +12,14 @@ vi.mock('../api', () => ({
   }
 }));
 
+// Mock react-hot-toast
+vi.mock('react-hot-toast', () => ({
+  default: {
+    success: vi.fn(),
+    error: vi.fn()
+  }
+}));
+
 describe('Catalog Component grid rendering', () => {
   it('renders the grid layout structure and maps table into cards', async () => {
     // Setup mock data

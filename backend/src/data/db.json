@@ -29,5 +29,13 @@
       "image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600&auto=format&fit=crop"
     }
   ],
-  "cart": []
+  "cart": [
+    {
+      "id": "2",
+      "title": "To Kill a Mockingbird Exception",
+      "author": "Harper Lee",
+      "price": 15.5,
+      "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop"
+    }
+  ]
 }
