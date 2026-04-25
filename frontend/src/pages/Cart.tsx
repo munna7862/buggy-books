@@ -24,14 +24,14 @@ export default function Cart() {
         <p>Your cart is empty.</p>
       ) : (
         <div>
-          <ul style={{ listStyle: 'none', padding: 0 }}>
+          <ul className="cart-list">
             {cart.map((item, i) => (
-              <li key={`${item.id}-${i}`} style={{ padding: '0.5rem', borderBottom: '1px solid #ccc' }}>
-                {item.title} - ${item.price.toFixed(2)}
+              <li key={`${item.id}-${i}`} className="cart-item">
+                <span>{item.title}</span> <span>${item.price.toFixed(2)}</span>
               </li>
             ))}
           </ul>
-          <h3>Total: ${total.toFixed(2)}</h3>
+          <h3 className="cart-total-header">Total: ${total.toFixed(2)}</h3>
           <Link to="/checkout" style={{ textDecoration: 'none' }}>
             <button className="action-btn-primary">
               Proceed to Checkout

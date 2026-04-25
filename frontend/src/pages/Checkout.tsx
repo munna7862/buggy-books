@@ -36,7 +36,7 @@ export default function Checkout() {
       <OrderSummary total={total} />
 
       {status === 'error' && (
-        <div style={{ padding: '10px', background: '#ffebee', color: 'red', marginBottom: '20px' }}>
+        <div className="error-banner">
           Payment processing failed due to server error (Intentionally Flaky API). Please try again.
         </div>
       )}
