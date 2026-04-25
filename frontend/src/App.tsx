@@ -14,17 +14,19 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className="app-container" style={{ fontFamily: 'sans-serif' }}>
-        <header style={{ padding: '1rem', borderBottom: '1px solid #ccc', display: 'flex', gap: '1rem' }}>
-          <h2>BuggyBooks</h2>
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <Link to="/">Catalog</Link>
-            <Link to="/cart">Cart</Link>
-            <Link to="/checkout">Checkout</Link>
+      <div className="app-container">
+        <header className="glass-nav">
+          <Link to="/" style={{textDecoration: 'none'}}>
+            <h2 className="nav-brand">BuggyBooks</h2>
+          </Link>
+          <nav className="nav-links">
+            <Link to="/" className="nav-link">Catalog</Link>
+            <Link to="/cart" className="nav-link">Cart</Link>
+            <Link to="/checkout" className="nav-link">Checkout</Link>
           </nav>
         </header>
 
-        <main style={{ padding: '2rem' }}>
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<Catalog />} />
             <Route path="/cart" element={<Cart />} />
