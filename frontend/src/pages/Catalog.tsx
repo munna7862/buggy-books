@@ -36,17 +36,17 @@ export default function Catalog() {
     <div>
       <h1>Book Catalog</h1>
       {/* Obfuscated wrapper instead of simple list */}
-      <div className="layout-wrapper-xyz987" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <div className="layout-wrapper-xyz987">
         {books.map((b) => (
           // Intentional use of a single-row table or strange structure for each item instead of a clean container
-          <table key={b.id} className="complex-item-box-alpha" style={{ border: '1px solid #eee', width: '100%', maxWidth: '600px' }}>
+          <table key={b.id} className="complex-item-box-alpha">
             <tbody>
               <tr>
-                <td style={{ width: '120px' }}>
-                  <img src={b.image} alt={b.title} style={{ width: '100px', height: '150px', objectFit: 'cover' }} />
+                <td className="image-cell-omega">
+                  <img src={b.image} alt={b.title} className="catalog-book-cover" />
                 </td>
-                <td className="info-cell-beta" style={{ verticalAlign: 'top', padding: '10px' }}>
-                  <h3 className="title-variant-2" style={{ margin: 0 }}>{b.title}</h3>
+                <td className="info-cell-beta">
+                  <h3 className="title-variant-2">{b.title}</h3>
                   <p className="author-meta-tag">{b.author}</p>
                   <p className="price-tag-value">${b.price.toFixed(2)}</p>
                   
