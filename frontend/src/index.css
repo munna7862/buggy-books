@@ -235,18 +235,57 @@ code {
   margin: auto 0 1.5rem 0;
 }
 
-/* Base button styling before step 4 overhauls it completely */
-.action-btn-primary {
-  padding: 0.75rem 1rem;
-  background: var(--accent);
+/* Step 4: Button States & Animations */
+.action-btn-primary, .submit-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
 }
 
-.action-btn-primary:active {
-  transform: scale(0.98);
+.action-btn-primary:not(:disabled):hover,
+.submit-action-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  filter: brightness(1.1);
+}
+
+.action-btn-primary:active,
+.submit-action-btn:active {
+  transform: translateY(0);
+}
+
+.action-btn-primary:disabled,
+.submit-action-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: var(--border);
+  color: var(--text);
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: currentColor;
+  animation: spin 0.8s linear infinite;
 }

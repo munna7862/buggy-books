@@ -32,8 +32,8 @@ export default function Cart() {
             ))}
           </ul>
           <h3>Total: ${total.toFixed(2)}</h3>
-          <Link to="/checkout">
-            <button style={{ padding: '10px 20px', background: 'blue', color: 'white', cursor: 'pointer' }}>
+          <Link to="/checkout" style={{ textDecoration: 'none' }}>
+            <button className="action-btn-primary">
               Proceed to Checkout
             </button>
           </Link>

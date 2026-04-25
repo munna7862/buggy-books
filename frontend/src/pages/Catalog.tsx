@@ -57,7 +57,9 @@ export default function Catalog() {
                     onClick={() => handleAddToCart(b.id)}
                     disabled={addingId === b.id}
                   >
-                    {addingId === b.id ? 'Processing...' : 'Add to Cart'}
+                    {addingId === b.id ? (
+                      <><span className="spinner"></span> Processing...</>
+                    ) : 'Add to Cart'}
                   </button>
                 </td>
               </tr>

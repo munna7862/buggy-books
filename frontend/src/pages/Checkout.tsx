@@ -64,7 +64,9 @@ export default function Checkout() {
           className="submit-action-btn primary-x2"
           disabled={status === 'loading'}
         >
-          {status === 'loading' ? 'Processing Transaction...' : 'Complete Payment'}
+          {status === 'loading' ? (
+            <><span className="spinner"></span> Processing Transaction...</>
+          ) : 'Complete Payment'}
         </button>
       </form>
     </div>
