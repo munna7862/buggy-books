@@ -19,10 +19,17 @@ export const api = {
       body: JSON.stringify({ username, password })
     });
     const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Login failed');
+    }
     if (data.token) {
       localStorage.setItem('dummyAccessToken', data.token);
     }
     return data;
+  },
+
+  logout: () => {
+    localStorage.removeItem('dummyAccessToken');
   },
 
   getBooks: async () => {

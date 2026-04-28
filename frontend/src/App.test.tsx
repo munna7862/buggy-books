@@ -12,11 +12,9 @@ describe('App Component', () => {
     
     // Check if the navigation links are present
     const catalogLink = screen.getByRole('link', { name: /catalog/i });
-    const cartLink = screen.getByRole('link', { name: /cart/i });
-    const checkoutLink = screen.getByRole('link', { name: /checkout/i });
+    const loginLink = screen.getByRole('link', { name: /login/i });
     
     expect(catalogLink).toBeInTheDocument();
-    expect(cartLink).toBeInTheDocument();
-    expect(checkoutLink).toBeInTheDocument();
+    expect(loginLink).toBeInTheDocument();
   });
 });
