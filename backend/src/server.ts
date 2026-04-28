@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import apiRoutes from './routes/api';
 
@@ -8,6 +9,9 @@ const PORT = process.env.PORT || 4000;
 
 // Enable CORS
 app.use(cors());
+
+// Add request logging
+app.use(morgan('dev'));
 
 // Parse JSON payloads
 app.use(express.json());
@@ -26,6 +30,15 @@ app.use(limiter);
 
 // API Routes
 app.use('/api', apiRoutes);
+
+// Centralized error handler
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({
+    error: 'Internal Server Error',
+    message: err.message || 'Something went wrong'
+  });
+});
 
 app.listen(PORT, () => {
   console.log(`Backend server running on http://localhost:${PORT}`);
