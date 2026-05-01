@@ -28,6 +28,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
 // --- Standard API Routes ---
 router.get('/books', bookController.getBooks);
 router.post('/login', authController.login);
+router.post('/register', authController.register);
 
 router.get('/cart', authenticateToken, cartController.getCart);
 router.post('/cart', authenticateToken, cartController.addToCart);

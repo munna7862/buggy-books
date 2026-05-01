@@ -28,6 +28,22 @@ export const api = {
     return data;
   },
 
+  register: async (username: string, password: string) => {
+    const res = await fetch(`${BASE_URL}/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Registration failed');
+    }
+    if (data.token) {
+      localStorage.setItem('dummyAccessToken', data.token);
+    }
+    return data;
+  },
+
   logout: () => {
     localStorage.removeItem('dummyAccessToken');
   },
