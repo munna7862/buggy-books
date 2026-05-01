@@ -4,6 +4,7 @@ import Catalog from './pages/Catalog';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './AuthContext';
 
@@ -34,7 +35,10 @@ function Header() {
             </button>
           </>
         ) : (
-          <Link to="/login" className="nav-link">Login</Link>
+          <>
+            <Link to="/login" className="nav-link">Login</Link>
+            <Link to="/register" className="nav-link">Sign Up</Link>
+          </>
         )}
       </nav>
     </header>
@@ -62,6 +66,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Catalog />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
               <Route path="/cart" element={
                 <ProtectedRoute>
                   <Cart />

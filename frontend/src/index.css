@@ -41,6 +41,212 @@
   }
 }
 
+/* Premium Auth UI */
+.auth-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 120px);
+  padding: 2rem;
+  background: radial-gradient(circle at top right, var(--accent-bg), transparent 50%),
+              radial-gradient(circle at bottom left, rgba(192, 132, 252, 0.1), transparent 50%);
+}
+
+.auth-card {
+  background: var(--nav-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 3rem 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.auth-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, var(--text-h), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.02em;
+}
+
+.auth-subtitle {
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.auth-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.auth-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-h);
+  margin-left: 0.25rem;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 0.875rem 1.25rem;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: var(--code-bg);
+  color: var(--text-h);
+  font-size: 1rem;
+  font-family: var(--sans);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+.auth-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--bg);
+  box-shadow: 0 0 0 4px var(--accent-bg);
+  transform: translateY(-1px);
+}
+
+.auth-input::placeholder {
+  color: var(--text);
+  opacity: 0.5;
+}
+
+.auth-submit-btn {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 10px 15px -3px var(--accent-bg);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.auth-submit-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.2), transparent);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px -5px var(--accent-bg);
+  filter: brightness(1.1);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  background: var(--border);
+  color: var(--text);
+  box-shadow: none;
+}
+
+.auth-footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.9375rem;
+  color: var(--text);
+}
+
+.auth-footer a {
+  font-weight: 600;
+  color: var(--accent);
+  position: relative;
+}
+
+.auth-footer a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.auth-footer a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Password Strength Indicator */
+.pwd-strength-container {
+  margin-top: 0.25rem;
+  display: flex;
+  gap: 0.25rem;
+  height: 4px;
+}
+
+.pwd-bar {
+  flex: 1;
+  border-radius: 2px;
+  background: var(--border);
+  transition: background 0.3s ease;
+}
+
+.pwd-bar.active-weak { background: #ef4444; }
+.pwd-bar.active-fair { background: #f59e0b; }
+.pwd-bar.active-good { background: #10b981; }
+.pwd-bar.active-strong { background: #059669; }
+
+.pwd-text {
+  font-size: 0.75rem;
+  text-align: right;
+  margin-top: 0.35rem;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+.pwd-text.weak { color: #ef4444; }
+.pwd-text.fair { color: #f59e0b; }
+.pwd-text.good { color: #10b981; }
+.pwd-text.strong { color: #059669; }
+
 body {
   margin: 0;
   padding: 0;

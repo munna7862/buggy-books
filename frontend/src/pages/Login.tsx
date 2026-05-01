@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../api';
 import { useAuth } from '../AuthContext';
 
@@ -77,6 +77,10 @@ export default function Login() {
           ) : 'Sign In'}
         </button>
       </form>
+
+      <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+        <p>Don't have an account? <Link to="/register">Sign Up</Link></p>
+      </div>
     </div>
   );
 }
