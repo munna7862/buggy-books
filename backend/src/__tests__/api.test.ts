@@ -17,6 +17,34 @@ describe('BuggyBooks API Integration Tests', () => {
       expect(res.body.length).toBeGreaterThan(0);
     });
 
+    it('POST /api/register should create a new user and return a token', async () => {
+      const res = await request(app).post('/api/register').send({
+        username: 'test_new_user',
+        password: 'securepassword123'
+      });
+      expect(res.status).toBe(201);
+      expect(res.body.token).toBeDefined();
+      expect(res.body.message).toBe('Registration successful');
+    });
+
+    it('POST /api/register should fail if missing credentials', async () => {
+      const res = await request(app).post('/api/register').send({
+        username: 'test_new_user'
+      });
+      expect(res.status).toBe(400);
+      expect(res.body.error).toContain('Bad Request');
+    });
+
+    it('POST /api/register should fail if username already exists', async () => {
+      // admin already exists
+      const res = await request(app).post('/api/register').send({
+        username: 'admin',
+        password: 'newpassword123'
+      });
+      expect(res.status).toBe(409);
+      expect(res.body.error).toContain('Conflict');
+    });
+
     it('POST /api/login should authenticate a valid user', async () => {
       const res = await request(app).post('/api/login').send({
         username: 'admin',
@@ -26,6 +54,7 @@ describe('BuggyBooks API Integration Tests', () => {
       expect(res.body.token).toBeDefined();
       token = res.body.token; // save for subsequent tests
     });
+
 
     it('POST /api/login should fail with bad credentials', async () => {
       const res = await request(app).post('/api/login').send({
