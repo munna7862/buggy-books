@@ -10,9 +10,22 @@ const app = express();
 // Security Headers
 app.use(helmet());
 
-// Enable CORS with restricted origin
+// Enable CORS with restricted but flexible origins
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'https://buggy-books-fe.onrender.com' // Your specific Render URL
+    ];
+    
+    // Allow requests with no origin (like mobile apps or curl) 
+    // or origins that match our list or are render subdomains
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.onrender.com')) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true
 }));
 
