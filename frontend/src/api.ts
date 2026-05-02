@@ -20,10 +20,22 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
   if (res.status === 401) {
     localStorage.removeItem(TOKEN_KEY);
     window.location.href = '/login';
-    return; // unreachable but satisfies TypeScript
+    return;
   }
 
-  const data = await res.json();
+  const contentType = res.headers.get('content-type');
+  let data: any;
+
+  if (contentType && contentType.includes('application/json')) {
+    data = await res.json();
+  } else {
+    const text = await res.text();
+    throw new Error(
+      `Expected JSON response but received ${contentType || 'unknown'}. ` +
+      `This often happens when the API URL is incorrect or the server is returning an HTML error page. ` +
+      `Response start: ${text.substring(0, 100)}...`
+    );
+  }
 
   if (!res.ok) {
     throw new Error(data.error || `Request failed with status ${res.status}`);
