@@ -32,6 +32,14 @@ app.use(limiter);
 // API Routes
 app.use('/api', apiRoutes);
 
+// 404 handler for unknown routes (returns JSON)
+app.use((req, res) => {
+  res.status(404).json({
+    error: 'Not Found',
+    message: `The requested route ${req.originalUrl} was not found on this server. Make sure your API URL is correct.`
+  });
+});
+
 // Centralized error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   if (process.env.NODE_ENV !== 'test') {

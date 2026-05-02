@@ -2,24 +2,48 @@ import React from 'react';
 
 // Define the custom element for Shadow DOM encapsulation
 class OrderSummaryElement extends HTMLElement {
+  static get observedAttributes() {
+    return ['total'];
+  }
+
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+
   connectedCallback() {
-    const shadow = this.attachShadow({ mode: 'open' });
+    this.render();
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === 'total' && oldValue !== newValue && this.shadowRoot) {
+      const span = this.shadowRoot.querySelector('.total-amount');
+      if (span) {
+        span.textContent = `$${newValue}`;
+      } else {
+        this.render();
+      }
+    }
+  }
+
+  render() {
     const total = this.getAttribute('total') || '0.00';
+    if (!this.shadowRoot) return;
     
-    const wrapper = document.createElement('div');
-    wrapper.innerHTML = `
+    this.shadowRoot.innerHTML = `
       <style>
         .summary-box {
           padding: 15px;
           border: 2px dashed #999;
-          background: #f9f9f9;
+          background: var(--code-bg, #f9f9f9);
           margin-bottom: 20px;
           border-radius: 4px;
+          color: var(--text);
         }
         .total-amount { 
           font-weight: bold; 
           font-size: 1.2em; 
-          color: #2c3e50; 
+          color: var(--text-h, #2c3e50); 
         }
       </style>
       <div class="summary-box">
@@ -27,7 +51,6 @@ class OrderSummaryElement extends HTMLElement {
         <p>Total to pay: <span class="total-amount">$${total}</span></p>
       </div>
     `;
-    shadow.appendChild(wrapper);
   }
 }
 

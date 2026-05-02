@@ -12,6 +12,15 @@ export interface Book {
 export interface AppData {
   books: Book[];
   cart: Book[];
+  orders: Order[];
+}
+
+export interface Order {
+  id: string;
+  items: Book[];
+  total: number;
+  customerName: string;
+  date: string;
 }
 
 class DataStore {
@@ -50,7 +59,8 @@ class DataStore {
   constructor() {
     this.data = {
       books: [...this.defaultBooks],
-      cart: []
+      cart: [],
+      orders: []
     };
   }
 
@@ -70,14 +80,30 @@ class DataStore {
     this.data.cart.push(book);
   }
 
+  public removeFromCart(bookId: string): boolean {
+    const index = this.data.cart.findIndex(b => b.id === bookId);
+    if (index === -1) return false;
+    this.data.cart.splice(index, 1);
+    return true;
+  }
+
   public clearCart(): void {
     this.data.cart = [];
+  }
+
+  public getOrders(): Order[] {
+    return this.data.orders;
+  }
+
+  public addOrder(order: Order): void {
+    this.data.orders.push(order);
   }
 
   public resetData(): void {
     this.data = {
       books: [...this.defaultBooks],
-      cart: []
+      cart: [],
+      orders: []
     };
   }
 }

@@ -33,3 +33,18 @@ export const clearCart = (req: Request, res: Response) => {
   dataStore.clearCart();
   res.json({ success: true });
 };
+
+export const removeFromCart = (req: Request, res: Response) => {
+  const { bookId } = req.params;
+
+  if (!bookId) {
+    return res.status(400).json({ error: 'Bad Request: bookId parameter is required' });
+  }
+
+  const removed = dataStore.removeFromCart(bookId);
+  if (!removed) {
+    return res.status(404).json({ error: 'Not Found: Book not in cart' });
+  }
+
+  res.json(dataStore.getCart());
+};
