@@ -132,6 +132,25 @@ describe('BuggyBooks API Integration Tests', () => {
       expect(cartRes.body.length).toBe(0);
     });
 
+    it('DELETE /api/cart/:bookId should return 404 if item is not in cart', async () => {
+      const res = await request(app)
+        .delete('/api/cart/999')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(res.status).toBe(404);
+      expect(res.body.error).toContain('Not Found');
+    });
+
+    it('POST /api/checkout/process should return 400 if validation fails', async () => {
+      const res = await request(app)
+        .post('/api/checkout/process')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ firstName: 'John' }); // Missing lastName and creditCard
+
+      expect(res.status).toBe(400);
+      expect(res.body.error).toContain('Validation failed');
+    });
+
 
   });
 

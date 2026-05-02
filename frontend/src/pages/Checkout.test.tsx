@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Checkout from './Checkout';
 import { api } from '../api';
@@ -34,5 +34,40 @@ describe('Checkout Component rendering', () => {
     
     const inputElement = document.querySelector('.input-group-rnd-9182');
     expect(inputElement).toBeInTheDocument();
+  });
+
+  it('submits checkout form with proper payload', async () => {
+    vi.mocked(api.getCart).mockResolvedValue([{ id: '1', title: 'Book', price: 10 }]);
+    vi.mocked(api.checkout).mockResolvedValue({ success: true });
+
+    render(
+      <MemoryRouter>
+        <Checkout />
+      </MemoryRouter>
+    );
+
+    // Wait for cart to load so total isn't 0
+    await screen.findByTestId('order-summary-mock');
+
+    const firstNameInput = document.querySelector('input[name="txt_f1"]') as HTMLInputElement;
+    const lastNameInput = document.querySelector('input[name="txt_f2"]') as HTMLInputElement;
+    const cardInput = document.querySelector('input[name="txt_c99"]') as HTMLInputElement;
+    const submitBtn = document.querySelector('button[name="btn_submit_rnd"]') as HTMLButtonElement;
+
+    // Simulate filling form
+    firstNameInput.value = 'John';
+    lastNameInput.value = 'Doe';
+    cardInput.value = '1234567812345678';
+
+    // Submit
+    submitBtn.click();
+
+    await waitFor(() => {
+      expect(api.checkout).toHaveBeenCalledWith({
+        firstName: 'John',
+        lastName: 'Doe',
+        creditCard: '1234567812345678'
+      });
+    });
   });
 });
