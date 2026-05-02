@@ -1,82 +1,82 @@
-const BASE_URL = import.meta.env.PROD ? 'https://buggy-books.onrender.com/api' : 'http://localhost:4000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
-const getHeaders = () => {
-  const token = localStorage.getItem('dummyAccessToken');
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json'
-  };
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
+const TOKEN_KEY = 'dummyAccessToken';
+
+const getHeaders = (): Record<string, string> => {
+  const token = localStorage.getItem(TOKEN_KEY);
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
   return headers;
+};
+
+/**
+ * Fix #5: Centralized request helper.
+ * - Always checks res.ok and throws a descriptive Error on failure.
+ * - On 401, clears the stale token and redirects to /login automatically.
+ */
+const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
+  const res = await fetch(url, options);
+
+  if (res.status === 401) {
+    localStorage.removeItem(TOKEN_KEY);
+    window.location.href = '/login';
+    return; // unreachable but satisfies TypeScript
+  }
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw new Error(data.error || `Request failed with status ${res.status}`);
+  }
+
+  return data;
 };
 
 export const api = {
   login: async (username: string, password: string) => {
-    const res = await fetch(`${BASE_URL}/login`, {
+    const data = await apiRequest(`${BASE_URL}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Login failed');
-    }
-    if (data.token) {
-      localStorage.setItem('dummyAccessToken', data.token);
-    }
+    if (data?.token) localStorage.setItem(TOKEN_KEY, data.token);
     return data;
   },
 
   register: async (username: string, password: string) => {
-    const res = await fetch(`${BASE_URL}/register`, {
+    const data = await apiRequest(`${BASE_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     });
-    const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Registration failed');
-    }
-    if (data.token) {
-      localStorage.setItem('dummyAccessToken', data.token);
-    }
+    if (data?.token) localStorage.setItem(TOKEN_KEY, data.token);
     return data;
   },
 
   logout: () => {
-    localStorage.removeItem('dummyAccessToken');
+    localStorage.removeItem(TOKEN_KEY);
   },
 
   getBooks: async () => {
-    const res = await fetch(`${BASE_URL}/books`);
-    return res.json();
+    return apiRequest(`${BASE_URL}/books`);
   },
 
   getCart: async () => {
-    const res = await fetch(`${BASE_URL}/cart`, {
-      headers: getHeaders()
-    });
-    return res.json();
+    return apiRequest(`${BASE_URL}/cart`, { headers: getHeaders() });
   },
 
   addToCart: async (bookId: string) => {
-    const res = await fetch(`${BASE_URL}/cart`, {
+    return apiRequest(`${BASE_URL}/cart`, {
       method: 'POST',
       headers: getHeaders(),
-      body: JSON.stringify({ bookId })
+      body: JSON.stringify({ bookId }),
     });
-    return res.json();
   },
 
   checkout: async () => {
-    const res = await fetch(`${BASE_URL}/checkout/process`, {
+    return apiRequest(`${BASE_URL}/checkout/process`, {
       method: 'POST',
-      headers: getHeaders()
+      headers: getHeaders(),
     });
-    if (!res.ok) {
-        throw new Error('Checkout failed');
-    }
-    return res.json();
-  }
+  },
 };

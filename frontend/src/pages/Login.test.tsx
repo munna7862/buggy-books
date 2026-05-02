@@ -29,14 +29,14 @@ describe('Login Component', () => {
 
   it('renders login form with expected non-semantic names', () => {
     renderLogin();
-    
-    // Automation tools should find these intentionally obscured names
+
+    // Intentional QA anti-pattern attributes must remain intact
     expect(screen.getByRole('textbox')).toHaveAttribute('name', 'txt_usr_77');
-    
-    // There are labels, but they are wrapped in .input-group-rnd-9182
+    expect(document.querySelector('input[name="txt_pwd_99"]')).toBeInTheDocument();
+
     expect(screen.getByText('Username')).toBeInTheDocument();
     expect(screen.getByText('Password')).toBeInTheDocument();
-    
+
     expect(screen.getByRole('button', { name: /sign in/i })).toHaveAttribute('name', 'btn_submit_login_rnd');
   });
 

@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET } from '../config';
 
 import * as bookController from '../controllers/bookController';
 import * as authController from '../controllers/authController';
@@ -8,7 +9,6 @@ import * as checkoutController from '../controllers/checkoutController';
 import * as testController from '../controllers/testController';
 
 const router = Router();
-const SECRET_KEY = 'super-secret-buggy-key';
 
 // Middleware to authenticate cart operations
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
@@ -19,7 +19,7 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ error: 'Unauthorized: Token required' });
   }
 
-  jwt.verify(token, SECRET_KEY, (err) => {
+  jwt.verify(token, JWT_SECRET, (err) => {
     if (err) return res.status(403).json({ error: 'Forbidden: Invalid token' });
     next();
   });
