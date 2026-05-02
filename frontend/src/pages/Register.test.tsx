@@ -118,7 +118,7 @@ describe('Register Component', () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(api.register).toHaveBeenCalledWith('testuser', 'password123');
+      expect(api.register).toHaveBeenCalledWith('testuser', 'password123', 'Test User');
     });
   });
 });

@@ -52,8 +52,7 @@ export default function Register() {
     }
 
     try {
-      // Backend ignores full name currently, but we provide it for realism
-      const data = await api.register(username, password);
+      const data = await api.register(username, password, fullName);
       toast.success('Welcome to BuggyBooks! 🎉');
       if (data.token) {
         login(data.token);

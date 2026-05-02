@@ -55,11 +55,11 @@ export const api = {
     return data;
   },
 
-  register: async (username: string, password: string) => {
+  register: async (username: string, password: string, fullName?: string) => {
     const data = await apiRequest(`${BASE_URL}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password, fullName }),
     });
     if (data?.token) localStorage.setItem(TOKEN_KEY, data.token);
     return data;
