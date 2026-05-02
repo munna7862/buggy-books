@@ -89,6 +89,50 @@ describe('BuggyBooks API Integration Tests', () => {
       expect(res.body.length).toBe(1);
       expect(res.body[0].id).toBe('1');
     });
+
+    it('DELETE /api/cart/:bookId should remove an item from the cart', async () => {
+      // First add an item
+      await request(app)
+        .post('/api/cart')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ bookId: '1' });
+
+      // Then remove it
+      const res = await request(app)
+        .delete('/api/cart/1')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.length).toBe(0);
+    });
+
+    it('DELETE /api/cart should clear the cart', async () => {
+      // First add some items
+      await request(app)
+        .post('/api/cart')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ bookId: '1' });
+      await request(app)
+        .post('/api/cart')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ bookId: '2' });
+
+      // Then clear the cart
+      const res = await request(app)
+        .delete('/api/cart')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+
+      // Verify cart is empty
+      const cartRes = await request(app)
+        .get('/api/cart')
+        .set('Authorization', `Bearer ${token}`);
+      expect(cartRes.body.length).toBe(0);
+    });
+
+
   });
 
   describe('Chaos API / Testing Configurations', () => {
@@ -109,13 +153,49 @@ describe('BuggyBooks API Integration Tests', () => {
       // 1. Configure to 100% failure rate
       await request(app).post('/api/test/config').send({ checkoutFailureRate: 1.0 });
 
+      // Add a book first so cart isn't empty
+      await request(app)
+        .post('/api/cart')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ bookId: '1' });
+
       // 2. Process checkout
       const res = await request(app)
         .post('/api/checkout/process')
-        .set('Authorization', `Bearer ${token}`);
+        .set('Authorization', `Bearer ${token}`)
+        .send({ firstName: 'John', lastName: 'Doe', creditCard: '1234567812345678' });
 
       expect(res.status).toBe(500);
       expect(res.body.error).toContain('Payment Gateway Timeout');
+    });
+
+    it('POST /api/checkout/process should succeed and create an order', async () => {
+      // Configure 0% failure rate
+      await request(app).post('/api/test/config').send({ checkoutFailureRate: 0.0 });
+
+      // Add a book
+      await request(app).post('/api/cart').set('Authorization', `Bearer ${token}`).send({ bookId: '1' });
+
+      // Process checkout
+      const res = await request(app)
+        .post('/api/checkout/process')
+        .set('Authorization', `Bearer ${token}`)
+        .send({ firstName: 'Jane', lastName: 'Doe', creditCard: '8765432187654321' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.orderId).toBeDefined();
+
+      // Verify cart is empty
+      const cartRes = await request(app).get('/api/cart').set('Authorization', `Bearer ${token}`);
+      expect(cartRes.body.length).toBe(0);
+
+      // Verify order exists
+      const ordersRes = await request(app).get('/api/orders').set('Authorization', `Bearer ${token}`);
+      expect(ordersRes.status).toBe(200);
+      expect(ordersRes.body.length).toBe(1);
+      expect(ordersRes.body[0].id).toBe(res.body.orderId);
+      expect(ordersRes.body[0].customerName).toBe('Jane Doe');
     });
   });
 });

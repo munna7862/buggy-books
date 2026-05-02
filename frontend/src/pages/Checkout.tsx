@@ -12,11 +12,17 @@ export default function Checkout() {
     }).catch(console.error);
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setStatus('loading');
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      firstName: formData.get('txt_f1') as string,
+      lastName: formData.get('txt_f2') as string,
+      creditCard: formData.get('txt_c99') as string,
+    };
     try {
-      await api.checkout();
+      await api.checkout(payload);
       setStatus('success');
     } catch (err) {
       console.error(err);

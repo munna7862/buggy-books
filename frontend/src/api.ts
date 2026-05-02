@@ -85,10 +85,25 @@ export const api = {
     });
   },
 
-  checkout: async () => {
+  removeFromCart: async (bookId: string) => {
+    return apiRequest(`${BASE_URL}/cart/${bookId}`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+  },
+
+  clearCart: async () => {
+    return apiRequest(`${BASE_URL}/cart`, {
+      method: 'DELETE',
+      headers: getHeaders(),
+    });
+  },
+
+  checkout: async (payload: { firstName: string, lastName: string, creditCard: string }) => {
     return apiRequest(`${BASE_URL}/checkout/process`, {
       method: 'POST',
       headers: getHeaders(),
+      body: JSON.stringify(payload),
     });
   },
 };

@@ -33,8 +33,11 @@ router.post('/register', authController.register);
 router.get('/cart', authenticateToken, cartController.getCart);
 router.post('/cart', authenticateToken, cartController.addToCart);
 router.delete('/cart', authenticateToken, cartController.clearCart);
+router.delete('/cart/:bookId', authenticateToken, cartController.removeFromCart);
 
 router.post('/checkout/process', authenticateToken, checkoutController.processCheckout);
+router.get('/orders', authenticateToken, checkoutController.getOrders);
+
 router.get('/inventory/report', bookController.getInventoryReport);
 
 // --- Testing / Chaos API Routes ---
