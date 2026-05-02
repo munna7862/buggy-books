@@ -1,10 +1,14 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import apiRoutes from './routes/api';
 
 const app = express();
+
+// Security Headers
+app.use(helmet());
 
 // Enable CORS
 app.use(cors());
