@@ -10,8 +10,11 @@ const app = express();
 // Security Headers
 app.use(helmet());
 
-// Enable CORS
-app.use(cors());
+// Enable CORS with restricted origin
+app.use(cors({
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true
+}));
 
 // Add request logging (only if not in test env)
 if (process.env.NODE_ENV !== 'test') {
