@@ -1,24 +1,25 @@
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
-const TOKEN_KEY = 'dummyAccessToken';
-
-const getHeaders = (): Record<string, string> => {
-  const token = localStorage.getItem(TOKEN_KEY);
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (token) headers['Authorization'] = `Bearer ${token}`;
-  return headers;
-};
-
 /**
  * Fix #5: Centralized request helper.
  * - Always checks res.ok and throws a descriptive Error on failure.
- * - On 401, clears the stale token and redirects to /login automatically.
+ * - On 401, clears the stale storage and redirects to /login automatically.
+ * - Includes credentials for httpOnly cookies.
  */
 const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
-  const res = await fetch(url, options);
+  const mergedOptions = {
+    ...options,
+    credentials: 'include' as RequestCredentials,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options?.headers || {})
+    }
+  };
+
+  const res = await fetch(url, mergedOptions);
 
   if (res.status === 401) {
-    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem('authUser');
     window.location.href = '/login';
     return;
   }
@@ -46,27 +47,21 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
 
 export const api = {
   login: async (username: string, password: string) => {
-    const data = await apiRequest(`${BASE_URL}/login`, {
+    return apiRequest(`${BASE_URL}/login`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
     });
-    if (data?.token) localStorage.setItem(TOKEN_KEY, data.token);
-    return data;
   },
 
   register: async (username: string, password: string, fullName?: string) => {
-    const data = await apiRequest(`${BASE_URL}/register`, {
+    return apiRequest(`${BASE_URL}/register`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password, fullName }),
     });
-    if (data?.token) localStorage.setItem(TOKEN_KEY, data.token);
-    return data;
   },
 
-  logout: () => {
-    localStorage.removeItem(TOKEN_KEY);
+  logout: async () => {
+    return apiRequest(`${BASE_URL}/logout`, { method: 'POST' });
   },
 
   getBooks: async (params?: { q?: string; page?: number; limit?: number }) => {
@@ -83,13 +78,12 @@ export const api = {
   },
 
   getCart: async () => {
-    return apiRequest(`${BASE_URL}/cart`, { headers: getHeaders() });
+    return apiRequest(`${BASE_URL}/cart`);
   },
 
   addToCart: async (bookId: string) => {
     return apiRequest(`${BASE_URL}/cart`, {
       method: 'POST',
-      headers: getHeaders(),
       body: JSON.stringify({ bookId }),
     });
   },
@@ -97,21 +91,18 @@ export const api = {
   removeFromCart: async (bookId: string) => {
     return apiRequest(`${BASE_URL}/cart/${bookId}`, {
       method: 'DELETE',
-      headers: getHeaders(),
     });
   },
 
   clearCart: async () => {
     return apiRequest(`${BASE_URL}/cart`, {
       method: 'DELETE',
-      headers: getHeaders(),
     });
   },
 
   checkout: async (payload: { firstName: string, lastName: string, creditCard: string }) => {
     return apiRequest(`${BASE_URL}/checkout/process`, {
       method: 'POST',
-      headers: getHeaders(),
       body: JSON.stringify(payload),
     });
   },

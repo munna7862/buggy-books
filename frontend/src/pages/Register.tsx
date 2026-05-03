@@ -54,8 +54,8 @@ export default function Register() {
     try {
       const data = await api.register(username, password, fullName);
       toast.success('Welcome to BuggyBooks! 🎉');
-      if (data.token) {
-        login(data.token);
+      if (data.username) {
+        login(data.username);
         navigate('/');
       } else {
         navigate('/login');

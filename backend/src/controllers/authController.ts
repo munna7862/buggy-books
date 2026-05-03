@@ -3,19 +3,29 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '../config';
 
+import { storage } from '../data/storage';
+
 const SALT_ROUNDS = 10;
 
-// Seed users with pre-hashed passwords so bcrypt works consistently from startup.
-// Original plain-text values: admin→password123, testuser→buggybooks
-// These hashes were generated with bcrypt saltRounds=10
 interface UserRecord {
   passwordHash: string;
   fullName?: string;
 }
 
-const MOCK_USERS: Record<string, UserRecord> = {
+const defaultUsers: Record<string, UserRecord> = {
   admin: { passwordHash: bcrypt.hashSync('password123', SALT_ROUNDS) },
   testuser: { passwordHash: bcrypt.hashSync('buggybooks', SALT_ROUNDS) },
+};
+
+const MOCK_USERS: Record<string, UserRecord> = storage.get('users') || defaultUsers;
+
+const setAuthCookie = (res: Response, token: string) => {
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 3600000 // 1 hour
+  });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -33,7 +43,8 @@ export const login = async (req: Request, res: Response) => {
   const isValid = await bcrypt.compare(password, user.passwordHash);
   if (isValid) {
     const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    setAuthCookie(res, token);
+    res.json({ message: 'Login successful', username });
   } else {
     res.status(401).json({ error: 'Unauthorized: Invalid credentials' });
   }
@@ -52,7 +63,14 @@ export const register = async (req: Request, res: Response) => {
 
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
   MOCK_USERS[username] = { passwordHash, fullName };
+  storage.set('users', MOCK_USERS);
 
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-  res.status(201).json({ token, message: 'Registration successful' });
+  setAuthCookie(res, token);
+  res.status(201).json({ message: 'Registration successful', username });
+};
+
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie('token');
+  res.json({ message: 'Logged out successfully' });
 };

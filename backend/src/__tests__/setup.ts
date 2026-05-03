@@ -3,7 +3,19 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
+import fs from 'fs';
+import path from 'path';
+
 // Fallback for CI environments where a .env file may not exist
 if (!process.env.JWT_SECRET) {
   process.env.JWT_SECRET = 'test-only-jwt-secret';
+}
+
+const testDbPath = path.join(__dirname, '../../db.test.json');
+try {
+  if (fs.existsSync(testDbPath)) {
+    fs.unlinkSync(testDbPath);
+  }
+} catch (e) {
+  // ignore
 }

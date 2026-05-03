@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../app';
 
 describe('BuggyBooks API Integration Tests', () => {
-  let token: string;
+  let cookies: string[];
 
   beforeEach(async () => {
     // Reset data before each test
@@ -54,7 +54,7 @@ describe('BuggyBooks API Integration Tests', () => {
         password: 'securepassword123'
       });
       expect(res.status).toBe(201);
-      expect(res.body.token).toBeDefined();
+      expect(res.headers['set-cookie']).toBeDefined();
       expect(res.body.message).toBe('Registration successful');
     });
 
@@ -82,8 +82,8 @@ describe('BuggyBooks API Integration Tests', () => {
         password: 'password123'
       });
       expect(res.status).toBe(200);
-      expect(res.body.token).toBeDefined();
-      token = res.body.token; // save for subsequent tests
+      expect(res.headers['set-cookie']).toBeDefined();
+      cookies = (res.headers['set-cookie'] as any) || []; // save for subsequent tests
     });
 
 
@@ -103,7 +103,7 @@ describe('BuggyBooks API Integration Tests', () => {
     it('POST /api/cart should validate request body schema', async () => {
       const res = await request(app)
         .post('/api/cart')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ bookId: 123 }); // integer instead of string
 
       expect(res.status).toBe(400);
@@ -113,7 +113,7 @@ describe('BuggyBooks API Integration Tests', () => {
     it('POST /api/cart should add item to cart', async () => {
       const res = await request(app)
         .post('/api/cart')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ bookId: '1' });
 
       expect(res.status).toBe(200);
@@ -125,13 +125,13 @@ describe('BuggyBooks API Integration Tests', () => {
       // First add an item
       await request(app)
         .post('/api/cart')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ bookId: '1' });
 
       // Then remove it
       const res = await request(app)
         .delete('/api/cart/1')
-        .set('Authorization', `Bearer ${token}`);
+        .set('Cookie', cookies);
 
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(0);
@@ -141,17 +141,17 @@ describe('BuggyBooks API Integration Tests', () => {
       // First add some items
       await request(app)
         .post('/api/cart')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ bookId: '1' });
       await request(app)
         .post('/api/cart')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ bookId: '2' });
 
       // Then clear the cart
       const res = await request(app)
         .delete('/api/cart')
-        .set('Authorization', `Bearer ${token}`);
+        .set('Cookie', cookies);
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -159,14 +159,14 @@ describe('BuggyBooks API Integration Tests', () => {
       // Verify cart is empty
       const cartRes = await request(app)
         .get('/api/cart')
-        .set('Authorization', `Bearer ${token}`);
+        .set('Cookie', cookies);
       expect(cartRes.body.length).toBe(0);
     });
 
     it('DELETE /api/cart/:bookId should return 404 if item is not in cart', async () => {
       const res = await request(app)
         .delete('/api/cart/999')
-        .set('Authorization', `Bearer ${token}`);
+        .set('Cookie', cookies);
 
       expect(res.status).toBe(404);
       expect(res.body.error).toContain('Not Found');
@@ -175,7 +175,7 @@ describe('BuggyBooks API Integration Tests', () => {
     it('POST /api/checkout/process should return 400 if validation fails', async () => {
       const res = await request(app)
         .post('/api/checkout/process')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ firstName: 'John' }); // Missing lastName and creditCard
 
       expect(res.status).toBe(400);
@@ -206,13 +206,13 @@ describe('BuggyBooks API Integration Tests', () => {
       // Add a book first so cart isn't empty
       await request(app)
         .post('/api/cart')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ bookId: '1' });
 
       // 2. Process checkout
       const res = await request(app)
         .post('/api/checkout/process')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ firstName: 'John', lastName: 'Doe', creditCard: '1234567812345678' });
 
       expect(res.status).toBe(500);
@@ -224,12 +224,12 @@ describe('BuggyBooks API Integration Tests', () => {
       await request(app).post('/api/test/config').send({ checkoutFailureRate: 0.0 });
 
       // Add a book
-      await request(app).post('/api/cart').set('Authorization', `Bearer ${token}`).send({ bookId: '1' });
+      await request(app).post('/api/cart').set('Cookie', cookies).send({ bookId: '1' });
 
       // Process checkout
       const res = await request(app)
         .post('/api/checkout/process')
-        .set('Authorization', `Bearer ${token}`)
+        .set('Cookie', cookies)
         .send({ firstName: 'Jane', lastName: 'Doe', creditCard: '8765432187654321' });
 
       expect(res.status).toBe(200);
@@ -237,11 +237,11 @@ describe('BuggyBooks API Integration Tests', () => {
       expect(res.body.orderId).toBeDefined();
 
       // Verify cart is empty
-      const cartRes = await request(app).get('/api/cart').set('Authorization', `Bearer ${token}`);
+      const cartRes = await request(app).get('/api/cart').set('Cookie', cookies);
       expect(cartRes.body.length).toBe(0);
 
       // Verify order exists
-      const ordersRes = await request(app).get('/api/orders').set('Authorization', `Bearer ${token}`);
+      const ordersRes = await request(app).get('/api/orders').set('Cookie', cookies);
       expect(ordersRes.status).toBe(200);
       expect(ordersRes.body.length).toBe(1);
       expect(ordersRes.body[0].id).toBe(res.body.orderId);
