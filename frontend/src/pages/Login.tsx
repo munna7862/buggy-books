@@ -18,8 +18,8 @@ export default function Login() {
 
     try {
       const data = await api.login(username, password);
-      if (data.token) {
-        login(data.token);
+      if (data.username) {
+        login(data.username);
         navigate('/');
       }
     } catch (err: any) {

@@ -1,15 +1,5 @@
 {
-  "users": {
-    "admin": {
-      "passwordHash": "$2b$10$ym74zJ9n0us1W8TGK6rFF.AR8ojFd8uk1ggXnV4UTfOa5vhhHkVJi"
-    },
-    "testuser": {
-      "passwordHash": "$2b$10$HCb.3JxZt5S0wP9Ck//ocuwguMWa8C/KGe0kNWrUx.86GMkNSPapi"
-    },
-    "test_new_user": {
-      "passwordHash": "$2b$10$tqJZT3.A644jzbicpShPyOXeFqau/uh4eg78S0sgoSQHKEALxpzZO"
-    }
-  },
+  "users": null,
   "dataStore": {
     "books": [
       {
@@ -151,26 +141,23 @@
     "cart": [],
     "orders": [
       {
-        "id": "d6a31b26-fc30-4510-addd-051051a6b339",
+        "id": "5da628b4-42a9-4e72-992b-9037ec012277",
         "items": [
           {
-            "id": "1",
-            "title": "The Great Buggy Gatsby",
-            "author": "F. Scott Fitzgerald",
-            "price": 10.99,
+            "id": "8",
+            "title": "Moby Stack Overflow",
+            "author": "Herman Melville",
+            "price": 8.99,
             "genre": "Classic",
-            "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
-            "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+            "description": "Captain Ahab's obsessive pursuit of the white stack trace.",
+            "image": "https://images.unsplash.com/photo-1623018035782-b269248df916?q=80&w=600&auto=format&fit=crop"
           }
         ],
-        "total": 10.99,
-        "customerName": "Jane Doe",
-        "date": "2026-05-03T07:10:43.354Z"
+        "total": 8.99,
+        "customerName": "a qw",
+        "date": "2026-05-03T07:46:16.421Z"
       }
     ]
   },
-  "chaosStore": {
-    "checkoutFailureRate": 0,
-    "inventoryDelayMs": 3000
-  }
+  "chaosStore": null
 }

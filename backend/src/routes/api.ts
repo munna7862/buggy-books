@@ -10,16 +10,15 @@ import * as testController from '../controllers/testController';
 
 const router = Router();
 
-// Middleware to authenticate cart operations
+// Middleware to authenticate operations
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = req.cookies?.token;
 
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized: Token required' });
   }
 
-  jwt.verify(token, JWT_SECRET, (err) => {
+  jwt.verify(token, JWT_SECRET, (err: any) => {
     if (err) return res.status(403).json({ error: 'Forbidden: Invalid token' });
     next();
   });
@@ -30,6 +29,7 @@ router.get('/books', bookController.getBooks);
 router.get('/books/:id', bookController.getBookById);
 router.post('/login', authController.login);
 router.post('/register', authController.register);
+router.post('/logout', authController.logout);
 
 router.get('/cart', authenticateToken, cartController.getCart);
 router.post('/cart', authenticateToken, cartController.addToCart);

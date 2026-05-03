@@ -19,6 +19,15 @@ const defaultUsers: Record<string, UserRecord> = {
 
 const MOCK_USERS: Record<string, UserRecord> = storage.get('users') || defaultUsers;
 
+const setAuthCookie = (res: Response, token: string) => {
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 3600000 // 1 hour
+  });
+};
+
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
@@ -34,7 +43,8 @@ export const login = async (req: Request, res: Response) => {
   const isValid = await bcrypt.compare(password, user.passwordHash);
   if (isValid) {
     const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-    res.json({ token });
+    setAuthCookie(res, token);
+    res.json({ message: 'Login successful', username });
   } else {
     res.status(401).json({ error: 'Unauthorized: Invalid credentials' });
   }
@@ -56,5 +66,11 @@ export const register = async (req: Request, res: Response) => {
   storage.set('users', MOCK_USERS);
 
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-  res.status(201).json({ token, message: 'Registration successful' });
+  setAuthCookie(res, token);
+  res.status(201).json({ message: 'Registration successful', username });
+};
+
+export const logout = (req: Request, res: Response) => {
+  res.clearCookie('token');
+  res.json({ message: 'Logged out successfully' });
 };

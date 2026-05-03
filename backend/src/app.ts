@@ -3,9 +3,12 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
+import cookieParser from 'cookie-parser';
 import apiRoutes from './routes/api';
 
 const app = express();
+
+app.use(cookieParser());
 
 // Security Headers
 app.use(helmet());
