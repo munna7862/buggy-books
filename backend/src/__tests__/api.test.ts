@@ -14,7 +14,38 @@ describe('BuggyBooks API Integration Tests', () => {
       const res = await request(app).get('/api/books');
       expect(res.status).toBe(200);
       expect(Array.isArray(res.body)).toBeTruthy();
-      expect(res.body.length).toBeGreaterThan(0);
+      expect(res.body.length).toBeGreaterThanOrEqual(15);
+    });
+
+    it('GET /api/books?page=1&limit=6 should return paginated results', async () => {
+      const res = await request(app).get('/api/books?page=1&limit=6');
+      expect(res.status).toBe(200);
+      expect(res.body.books).toHaveLength(6);
+      expect(res.body.total).toBeGreaterThanOrEqual(15);
+      expect(res.body.page).toBe(1);
+      expect(res.body.totalPages).toBeGreaterThanOrEqual(2);
+    });
+
+    it('GET /api/books?q=dystopian should filter by genre', async () => {
+      const res = await request(app).get('/api/books?q=dystopian&page=1&limit=10');
+      expect(res.status).toBe(200);
+      expect(res.body.books.length).toBeGreaterThanOrEqual(1);
+      expect(res.body.books.every((b: any) =>
+        b.genre?.toLowerCase().includes('dystopian')
+      )).toBeTruthy();
+    });
+
+    it('GET /api/books/:id should return a specific book', async () => {
+      const res = await request(app).get('/api/books/1');
+      expect(res.status).toBe(200);
+      expect(res.body.id).toBe('1');
+      expect(res.body.title).toContain('Gatsby');
+    });
+
+    it('GET /api/books/:id should return 404 for a missing book', async () => {
+      const res = await request(app).get('/api/books/999');
+      expect(res.status).toBe(404);
+      expect(res.body.error).toContain('Not Found');
     });
 
     it('POST /api/register should create a new user and return a token', async () => {

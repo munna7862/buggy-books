@@ -69,8 +69,17 @@ export const api = {
     localStorage.removeItem(TOKEN_KEY);
   },
 
-  getBooks: async () => {
-    return apiRequest(`${BASE_URL}/books`);
+  getBooks: async (params?: { q?: string; page?: number; limit?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.q) query.set('q', params.q);
+    if (params?.page) query.set('page', String(params.page));
+    if (params?.limit) query.set('limit', String(params.limit));
+    const qs = query.toString();
+    return apiRequest(`${BASE_URL}/books${qs ? `?${qs}` : ''}`);
+  },
+
+  getBookById: async (id: string) => {
+    return apiRequest(`${BASE_URL}/books/${id}`);
   },
 
   getCart: async () => {

@@ -5,6 +5,7 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import BookDetail from './pages/BookDetail';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './AuthContext';
 
@@ -65,6 +66,7 @@ function App() {
           <main className="main-content">
             <Routes>
               <Route path="/" element={<Catalog />} />
+              <Route path="/books/:id" element={<BookDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/cart" element={
