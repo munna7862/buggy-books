@@ -19,7 +19,8 @@ export const processCheckout = (req: Request, res: Response) => {
       return res.status(500).json({ error: 'Internal Server Error: Payment Gateway Timeout' });
     }
     
-    const cart = dataStore.getCart();
+    const username = req.user?.username;
+    const cart = dataStore.getCart(username);
     if (cart.length === 0) {
       return res.status(400).json({ error: 'Bad Request: Cart is empty' });
     }
@@ -34,8 +35,8 @@ export const processCheckout = (req: Request, res: Response) => {
       date: new Date().toISOString()
     };
 
-    dataStore.addOrder(order);
-    dataStore.clearCart();
+    dataStore.addOrder(username, order);
+    dataStore.clearCart(username);
     
     res.json({ success: true, message: 'Order processed successfully', orderId });
   } catch (error) {
@@ -47,6 +48,7 @@ export const processCheckout = (req: Request, res: Response) => {
 };
 
 export const getOrders = (req: Request, res: Response) => {
-  const orders = dataStore.getOrders();
+  const username = req.user?.username;
+  const orders = dataStore.getOrders(username);
   res.json(orders);
 };

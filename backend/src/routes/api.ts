@@ -10,6 +10,14 @@ import * as testController from '../controllers/testController';
 
 const router = Router();
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: any;
+    }
+  }
+}
+
 // Middleware to authenticate operations
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.cookies?.token;
@@ -18,8 +26,9 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ error: 'Unauthorized: Token required' });
   }
 
-  jwt.verify(token, JWT_SECRET, (err: any) => {
+  jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
     if (err) return res.status(403).json({ error: 'Forbidden: Invalid token' });
+    req.user = user;
     next();
   });
 };

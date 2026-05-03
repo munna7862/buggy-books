@@ -12,8 +12,8 @@ export interface Book {
 
 export interface AppData {
   books: Book[];
-  cart: Book[];
-  orders: Order[];
+  cart: Record<string, Book[]>;
+  orders: Record<string, Order[]>;
 }
 
 export interface Order {
@@ -61,8 +61,8 @@ class DataStore {
     } else {
       this.data = {
         books: [...this.defaultBooks],
-        cart: [],
-        orders: []
+        cart: {},
+        orders: {}
       };
     }
   }
@@ -99,42 +99,45 @@ class DataStore {
     return this.data.books.find(b => b.id === id);
   }
 
-  public getCart(): Book[] {
-    return this.data.cart;
+  public getCart(username: string): Book[] {
+    return this.data.cart[username] || [];
   }
 
-  public addToCart(book: Book): void {
-    this.data.cart.push(book);
+  public addToCart(username: string, book: Book): void {
+    if (!this.data.cart[username]) this.data.cart[username] = [];
+    this.data.cart[username].push(book);
     this.save();
   }
 
-  public removeFromCart(bookId: string): boolean {
-    const index = this.data.cart.findIndex(b => b.id === bookId);
+  public removeFromCart(username: string, bookId: string): boolean {
+    if (!this.data.cart[username]) return false;
+    const index = this.data.cart[username].findIndex(b => b.id === bookId);
     if (index === -1) return false;
-    this.data.cart.splice(index, 1);
+    this.data.cart[username].splice(index, 1);
     this.save();
     return true;
   }
 
-  public clearCart(): void {
-    this.data.cart = [];
+  public clearCart(username: string): void {
+    this.data.cart[username] = [];
     this.save();
   }
 
-  public getOrders(): Order[] {
-    return this.data.orders;
+  public getOrders(username: string): Order[] {
+    return this.data.orders[username] || [];
   }
 
-  public addOrder(order: Order): void {
-    this.data.orders.push(order);
+  public addOrder(username: string, order: Order): void {
+    if (!this.data.orders[username]) this.data.orders[username] = [];
+    this.data.orders[username].push(order);
     this.save();
   }
 
   public resetData(): void {
     this.data = {
       books: [...this.defaultBooks],
-      cart: [],
-      orders: []
+      cart: {},
+      orders: {}
     };
     this.save();
   }
