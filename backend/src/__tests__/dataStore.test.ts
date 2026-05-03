@@ -53,26 +53,26 @@ describe('DataStore Unit Tests', () => {
   describe('Cart Operations', () => {
     it('adds and removes items from cart', () => {
       const book = dataStore.getBooks()[0];
-      dataStore.addToCart(book);
-      expect(dataStore.getCart()).toHaveLength(1);
+      dataStore.addToCart('testuser', book);
+      expect(dataStore.getCart('testuser')).toHaveLength(1);
       
-      const removed = dataStore.removeFromCart(book.id);
+      const removed = dataStore.removeFromCart('testuser', book.id);
       expect(removed).toBeTruthy();
-      expect(dataStore.getCart()).toHaveLength(0);
+      expect(dataStore.getCart('testuser')).toHaveLength(0);
     });
 
     it('returns false when removing non-existent item', () => {
-      const removed = dataStore.removeFromCart('invalid-id');
+      const removed = dataStore.removeFromCart('testuser', 'invalid-id');
       expect(removed).toBeFalsy();
     });
 
     it('clears the cart', () => {
-      dataStore.addToCart(dataStore.getBooks()[0]);
-      dataStore.addToCart(dataStore.getBooks()[1]);
-      expect(dataStore.getCart()).toHaveLength(2);
+      dataStore.addToCart('testuser', dataStore.getBooks()[0]);
+      dataStore.addToCart('testuser', dataStore.getBooks()[1]);
+      expect(dataStore.getCart('testuser')).toHaveLength(2);
       
-      dataStore.clearCart();
-      expect(dataStore.getCart()).toHaveLength(0);
+      dataStore.clearCart('testuser');
+      expect(dataStore.getCart('testuser')).toHaveLength(0);
     });
   });
 
@@ -85,9 +85,9 @@ describe('DataStore Unit Tests', () => {
     });
 
     it('resetData restores default state', () => {
-      dataStore.addToCart(dataStore.getBooks()[0]);
+      dataStore.addToCart('testuser', dataStore.getBooks()[0]);
       dataStore.resetData();
-      expect(dataStore.getCart()).toHaveLength(0);
+      expect(dataStore.getCart('testuser')).toHaveLength(0);
       expect(dataStore.getBooks()).toHaveLength(15);
     });
   });
