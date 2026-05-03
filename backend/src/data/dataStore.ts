@@ -32,6 +32,8 @@ export interface PaginatedBooks {
   limit: number;
 }
 
+import { storage } from './storage';
+
 class DataStore {
   private data: AppData;
   private readonly defaultBooks: Book[] = [
@@ -53,11 +55,20 @@ class DataStore {
   ];
 
   constructor() {
-    this.data = {
-      books: [...this.defaultBooks],
-      cart: [],
-      orders: []
-    };
+    const saved = storage.get('dataStore');
+    if (saved) {
+      this.data = saved;
+    } else {
+      this.data = {
+        books: [...this.defaultBooks],
+        cart: [],
+        orders: []
+      };
+    }
+  }
+
+  private save() {
+    storage.set('dataStore', this.data);
   }
 
   public getBooks(): Book[] {
@@ -94,17 +105,20 @@ class DataStore {
 
   public addToCart(book: Book): void {
     this.data.cart.push(book);
+    this.save();
   }
 
   public removeFromCart(bookId: string): boolean {
     const index = this.data.cart.findIndex(b => b.id === bookId);
     if (index === -1) return false;
     this.data.cart.splice(index, 1);
+    this.save();
     return true;
   }
 
   public clearCart(): void {
     this.data.cart = [];
+    this.save();
   }
 
   public getOrders(): Order[] {
@@ -113,6 +127,7 @@ class DataStore {
 
   public addOrder(order: Order): void {
     this.data.orders.push(order);
+    this.save();
   }
 
   public resetData(): void {
@@ -121,6 +136,7 @@ class DataStore {
       cart: [],
       orders: []
     };
+    this.save();
   }
 }
 
