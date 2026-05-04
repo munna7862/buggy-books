@@ -20,10 +20,11 @@ const defaultUsers: Record<string, UserRecord> = {
 const MOCK_USERS: Record<string, UserRecord> = storage.get('users') || defaultUsers;
 
 const setAuthCookie = (res: Response, token: string) => {
+  const isProd = process.env.NODE_ENV === 'production';
   res.cookie('token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
     maxAge: 3600000 // 1 hour
   });
 };
