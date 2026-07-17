@@ -6,6 +6,7 @@ import Checkout from './pages/Checkout';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import BookDetail from './pages/BookDetail';
+import Profile from './pages/Profile';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './AuthContext';
 import NotificationCenter from './components/NotificationCenter';
@@ -32,6 +33,7 @@ function Header() {
           <>
             <Link to="/cart" className="nav-link">Cart</Link>
             <Link to="/checkout" className="nav-link">Checkout</Link>
+            <Link to="/profile" className="nav-link" id="nav-profile-link">Profile</Link>
             <button onClick={logout} className="nav-link" style={{background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem'}}>
               Logout
             </button>
@@ -79,6 +81,11 @@ function App() {
               <Route path="/checkout" element={
                 <ProtectedRoute>
                   <Checkout />
+                </ProtectedRoute>
+              } />
+              <Route path="/profile" element={
+                <ProtectedRoute>
+                  <Profile />
                 </ProtectedRoute>
               } />
             </Routes>

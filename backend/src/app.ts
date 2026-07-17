@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
+import path from 'path';
 import apiRoutes from './routes/api';
 import { correlationIdMiddleware } from './middleware/correlationId';
 import { logger, loggerStore } from './utils/logger';
@@ -68,6 +69,9 @@ const limiter = rateLimit({
 
 // Apply rate limiter to all routes
 app.use(limiter);
+
+// Serve uploads statically
+app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
 
 // API Routes
 app.use('/api', apiRoutes);

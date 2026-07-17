@@ -8,6 +8,7 @@ const chaosConfigSchema = z.object({
   inventoryDelayMs: z.number().int().min(0).max(30000).optional(),
   jwtExpirySeconds: z.number().int().min(1).max(86400).optional(),
   websocketDropRate: z.number().min(0).max(1).optional(),
+  uploadFailureRate: z.number().min(0).max(1).optional(),
 }).strict(); // reject unknown keys
 
 export const updateConfig = (req: Request, res: Response) => {

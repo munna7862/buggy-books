@@ -8,6 +8,7 @@ import * as authController from '../controllers/authController';
 import * as cartController from '../controllers/cartController';
 import * as checkoutController from '../controllers/checkoutController';
 import * as testController from '../controllers/testController';
+import * as profileController from '../controllers/profileController';
 
 const router = Router();
 
@@ -57,6 +58,9 @@ router.post('/checkout/process', authenticateToken, checkoutController.processCh
 router.get('/orders', authenticateToken, checkoutController.getOrders);
 
 router.get('/inventory/report', bookController.getInventoryReport);
+
+router.get('/profile', authenticateToken, profileController.getProfile);
+router.post('/profile/upload', profileController.handleAvatarUpload, authenticateToken, profileController.uploadAvatar);
 
 // --- Testing / Chaos API Routes ---
 router.post('/test/config', testController.updateConfig);

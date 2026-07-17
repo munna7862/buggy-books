@@ -44,10 +44,10 @@ describe('JWT Expiration and Silent Refresh Integration Flow', () => {
   });
 
   it('should deny access to protected routes if access token is expired', async () => {
-    // 1. Set short JWT expiry (e.g. 1 second) via chaos config
+    // 1. Set short JWT expiry (e.g. 3 seconds) via chaos config
     await request(app)
       .post('/api/test/config')
-      .send({ jwtExpirySeconds: 1 });
+      .send({ jwtExpirySeconds: 3 });
 
     // 2. Login to get short-lived tokens
     const loginRes = await request(app)
@@ -63,8 +63,8 @@ describe('JWT Expiration and Silent Refresh Integration Flow', () => {
       .set('Cookie', [accessTokenCookie]);
     expect(firstCartRes.status).toBe(200);
 
-    // 4. Wait for 1.2 seconds for the token to expire
-    await new Promise(resolve => setTimeout(resolve, 1200));
+    // 4. Wait for 3.2 seconds for the token to expire
+    await new Promise(resolve => setTimeout(resolve, 3200));
 
     // 5. Request again - should return 403 Forbidden (Expired)
     const secondCartRes = await request(app)

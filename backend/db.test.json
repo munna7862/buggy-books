@@ -145,6 +145,7 @@
     "checkoutFailureRate": 0.15,
     "inventoryDelayMs": 3000,
     "jwtExpirySeconds": 900,
-    "websocketDropRate": 0
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0
   }
 }
