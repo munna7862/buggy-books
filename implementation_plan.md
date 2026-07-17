@@ -105,7 +105,7 @@ We have categorized the top 10 improvement areas into **Backend Enhancements**, 
 
 ---
 
-### Area 8: Automated Accessibility (a11y) Violation Injector (Medium Priority)
+### Area 8: [COMPLETED] Automated Accessibility (a11y) Violation Injector (Medium Priority)
 #### [MODIFY] [testController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/testController.ts)
 #### [MODIFY] [App.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/App.tsx)
 
@@ -120,7 +120,7 @@ We have categorized the top 10 improvement areas into **Backend Enhancements**, 
 
 ---
 
-### Area 9: Visual Regression Chaos Injector (Medium Priority)
+### Area 9: [COMPLETED] Visual Regression Chaos Injector (Medium Priority)
 #### [MODIFY] [testController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/testController.ts)
 #### [MODIFY] [index.css](file:///c:/BuggyBooks/buggy-books/frontend/src/index.css)
 
