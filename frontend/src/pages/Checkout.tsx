@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { useChaos } from '../ChaosContext';
 import { api } from '../api';
 import OrderSummary from '../components/OrderSummary';
 
@@ -13,6 +15,9 @@ interface ValidationErrors {
 }
 
 export default function Checkout() {
+  const { config } = useChaos();
+  const injectA11yViolations = config?.injectA11yViolations;
+
   const [total, setTotal] = useState(0);
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   
@@ -186,33 +191,35 @@ export default function Checkout() {
             <h3>Shipping Details</h3>
             
             <div className="input-group-rnd-9182">
-              <label className="lbl-t1">First Name</label>
+              <label className="lbl-t1" {...(!injectA11yViolations ? { htmlFor: 'txt_f1' } : {})}>First Name</label>
               <input 
                 type="text" 
                 name="txt_f1" 
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 className={`input-field-general ${errors.firstName ? 'input-error' : ''}`} 
+                {...(!injectA11yViolations ? { id: 'txt_f1' } : {})}
                 required 
               />
               {errors.firstName && <span className="field-error-msg">{errors.firstName}</span>}
             </div>
 
             <div className="input-group-rnd-9182">
-              <label className="lbl-t1">Last Name</label>
+              <label className="lbl-t1" {...(!injectA11yViolations ? { htmlFor: 'txt_f2' } : {})}>Last Name</label>
               <input 
                 type="text" 
                 name="txt_f2" 
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 className={`input-field-general ${errors.lastName ? 'input-error' : ''}`} 
+                {...(!injectA11yViolations ? { id: 'txt_f2' } : {})}
                 required 
               />
               {errors.lastName && <span className="field-error-msg">{errors.lastName}</span>}
             </div>
 
             <div className="input-group-rnd-9182">
-              <label className="lbl-t1">Shipping Address</label>
+              <label className="lbl-t1" {...(!injectA11yViolations ? { htmlFor: 'txt_addr_12' } : {})}>Shipping Address</label>
               <input 
                 type="text" 
                 name="txt_addr_12" 
@@ -220,13 +227,14 @@ export default function Checkout() {
                 onChange={(e) => setAddress(e.target.value)}
                 placeholder="123 Buggy Lane"
                 className={`input-field-general ${errors.address ? 'input-error' : ''}`} 
+                {...(!injectA11yViolations ? { id: 'txt_addr_12' } : {})}
                 required 
               />
               {errors.address && <span className="field-error-msg">{errors.address}</span>}
             </div>
 
             <div className="input-group-rnd-9182">
-              <label className="lbl-t1">City</label>
+              <label className="lbl-t1" {...(!injectA11yViolations ? { htmlFor: 'txt_city_34' } : {})}>City</label>
               <input 
                 type="text" 
                 name="txt_city_34" 
@@ -234,6 +242,7 @@ export default function Checkout() {
                 onChange={(e) => setCity(e.target.value)}
                 placeholder="Stack City"
                 className={`input-field-general ${errors.city ? 'input-error' : ''}`} 
+                {...(!injectA11yViolations ? { id: 'txt_city_34' } : {})}
                 required 
               />
               {errors.city && <span className="field-error-msg">{errors.city}</span>}
@@ -246,7 +255,7 @@ export default function Checkout() {
             <h3>Billing & Payment</h3>
 
             <div className="input-group-rnd-9182">
-              <label className="lbl-t1">Credit Card Number</label>
+              <label className="lbl-t1" {...(!injectA11yViolations ? { htmlFor: 'txt_c99' } : {})}>Credit Card Number</label>
               <input 
                 type="text" 
                 name="txt_c99" 
@@ -254,6 +263,7 @@ export default function Checkout() {
                 onChange={(e) => setCreditCard(e.target.value)}
                 placeholder="16-digit card number"
                 className={`input-field-general secure-field ${errors.creditCard ? 'input-error' : ''}`} 
+                {...(!injectA11yViolations ? { id: 'txt_c99' } : {})}
                 required 
               />
               {errors.creditCard && <span className="field-error-msg">{errors.creditCard}</span>}

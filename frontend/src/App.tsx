@@ -10,6 +10,7 @@ import Profile from './pages/Profile';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './AuthContext';
 import NotificationCenter from './components/NotificationCenter';
+import { ChaosProvider } from './ChaosContext';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -53,8 +54,9 @@ function Header() {
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <div className="app-container">
+      <ChaosProvider>
+        <BrowserRouter>
+          <div className="app-container">
           <Toaster position="bottom-right" toastOptions={{
             style: {
               background: 'var(--bg)',
@@ -92,6 +94,7 @@ function App() {
           </main>
         </div>
       </BrowserRouter>
+      </ChaosProvider>
     </AuthProvider>
   )
 }
