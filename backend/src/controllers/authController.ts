@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import { JWT_SECRET } from '../config';
 
 import { storage } from '../data/storage';
+import { logger } from '../utils/logger';
 
 const SALT_ROUNDS = 10;
 
@@ -33,11 +34,13 @@ export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
+    logger.warn('Login attempt failed: Missing username or password');
     return res.status(400).json({ error: 'Bad Request: Username and password required' });
   }
 
   const user = MOCK_USERS[username];
   if (!user) {
+    logger.warn(`Login attempt failed: Invalid credentials for user ${username}`, { attemptedUsername: username });
     return res.status(401).json({ error: 'Unauthorized: Invalid credentials' });
   }
 
@@ -45,8 +48,10 @@ export const login = async (req: Request, res: Response) => {
   if (isValid) {
     const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
     setAuthCookie(res, token);
+    logger.info(`User login successful: ${username}`, { username });
     res.json({ message: 'Login successful', username });
   } else {
+    logger.warn(`Login attempt failed: Invalid credentials for user ${username}`, { attemptedUsername: username });
     res.status(401).json({ error: 'Unauthorized: Invalid credentials' });
   }
 };
@@ -55,10 +60,12 @@ export const register = async (req: Request, res: Response) => {
   const { username, password, fullName } = req.body;
 
   if (!username || !password) {
+    logger.warn('Registration attempt failed: Missing username or password');
     return res.status(400).json({ error: 'Bad Request: Username and password required' });
   }
 
   if (MOCK_USERS[username]) {
+    logger.warn(`Registration attempt failed: Username ${username} already exists`, { attemptedUsername: username });
     return res.status(409).json({ error: 'Conflict: Username already exists' });
   }
 
@@ -68,10 +75,13 @@ export const register = async (req: Request, res: Response) => {
 
   const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
   setAuthCookie(res, token);
+  logger.info(`User registration successful: ${username}`, { username });
   res.status(201).json({ message: 'Registration successful', username });
 };
 
 export const logout = (req: Request, res: Response) => {
+  const username = req.user?.username;
   res.clearCookie('token');
+  logger.info(`User logged out: ${username || 'anonymous'}`, { username });
   res.json({ message: 'Logged out successfully' });
 };

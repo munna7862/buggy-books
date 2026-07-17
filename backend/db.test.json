@@ -1,13 +1,13 @@
 {
   "users": {
     "admin": {
-      "passwordHash": "$2b$10$ym74zJ9n0us1W8TGK6rFF.AR8ojFd8uk1ggXnV4UTfOa5vhhHkVJi"
+      "passwordHash": "$2b$10$GnRxChsiqMtfqbYJ9bShg.MOZQLxJhKASWLlccGXzI3lPAEH6.aDu"
     },
     "testuser": {
-      "passwordHash": "$2b$10$HCb.3JxZt5S0wP9Ck//ocuwguMWa8C/KGe0kNWrUx.86GMkNSPapi"
+      "passwordHash": "$2b$10$kWeHMXpl13paxqjQCjlvM.V3PP5F2lIDTn8583Y0Lf20Xloci309y"
     },
     "test_new_user": {
-      "passwordHash": "$2b$10$tqJZT3.A644jzbicpShPyOXeFqau/uh4eg78S0sgoSQHKEALxpzZO"
+      "passwordHash": "$2b$10$8pwgvGSRYebmFvJthHlmHOCWgBWB3OhXF5rVehGWD6UQVclQX0c6K"
     }
   },
   "dataStore": {
@@ -148,26 +148,30 @@
         "image": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=600&auto=format&fit=crop"
       }
     ],
-    "cart": [],
-    "orders": [
-      {
-        "id": "d6a31b26-fc30-4510-addd-051051a6b339",
-        "items": [
-          {
-            "id": "1",
-            "title": "The Great Buggy Gatsby",
-            "author": "F. Scott Fitzgerald",
-            "price": 10.99,
-            "genre": "Classic",
-            "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
-            "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
-          }
-        ],
-        "total": 10.99,
-        "customerName": "Jane Doe",
-        "date": "2026-05-03T07:10:43.354Z"
-      }
-    ]
+    "cart": {
+      "admin": []
+    },
+    "orders": {
+      "admin": [
+        {
+          "id": "33edc5ee-64c7-47e1-be02-3d6779dbf3c9",
+          "items": [
+            {
+              "id": "1",
+              "title": "The Great Buggy Gatsby",
+              "author": "F. Scott Fitzgerald",
+              "price": 10.99,
+              "genre": "Classic",
+              "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+              "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+            }
+          ],
+          "total": 10.99,
+          "customerName": "Jane Doe",
+          "date": "2026-07-17T10:43:00.334Z"
+        }
+      ]
+    }
   },
   "chaosStore": {
     "checkoutFailureRate": 0,
