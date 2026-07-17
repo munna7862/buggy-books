@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useChaos } from '../ChaosContext';
 import { api } from '../api';
 import toast from 'react-hot-toast';

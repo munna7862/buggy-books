@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
+
 import { useChaos } from '../ChaosContext';
 import { api } from '../api';
 import OrderSummary from '../components/OrderSummary';
