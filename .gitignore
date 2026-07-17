@@ -3,3 +3,9 @@ node_modules
 .env.*
 !.env.example
 uploads/
+
+# TypeScript build output
+backend/dist/
+
+# Docker
+.dockerignore
