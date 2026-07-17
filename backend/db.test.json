@@ -147,6 +147,7 @@
     "jwtExpirySeconds": 900,
     "websocketDropRate": 0,
     "uploadFailureRate": 0,
-    "injectA11yViolations": false
+    "injectA11yViolations": false,
+    "visualChaos": false
   }
 }

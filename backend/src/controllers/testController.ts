@@ -10,6 +10,7 @@ const chaosConfigSchema = z.object({
   websocketDropRate: z.number().min(0).max(1).optional(),
   uploadFailureRate: z.number().min(0).max(1).optional(),
   injectA11yViolations: z.boolean().optional(),
+  visualChaos: z.boolean().optional(),
 }).strict(); // reject unknown keys
 
 export const updateConfig = (req: Request, res: Response) => {
