@@ -7,6 +7,7 @@ interface ChaosConfig {
   websocketDropRate?: number;
   uploadFailureRate?: number;
   injectA11yViolations?: boolean;
+  visualChaos?: boolean;
 }
 
 interface ChaosContextType {
@@ -41,6 +42,24 @@ export function ChaosProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(interval);
   }, []);
 
+  // Toggle the a11y violation body class
+  useEffect(() => {
+    if (config.injectA11yViolations) {
+      document.body.classList.add('a11y-violations-active');
+    } else {
+      document.body.classList.remove('a11y-violations-active');
+    }
+  }, [config.injectA11yViolations]);
+
+  // Toggle the visual chaos body class
+  useEffect(() => {
+    if (config.visualChaos) {
+      document.body.classList.add('visual-chaos-active');
+    } else {
+      document.body.classList.remove('visual-chaos-active');
+    }
+  }, [config.visualChaos]);
+
   return (
     <ChaosContext.Provider value={{ config }}>
       {children}
@@ -49,3 +68,4 @@ export function ChaosProvider({ children }: { children: React.ReactNode }) {
 }
 
 export const useChaos = () => useContext(ChaosContext);
+

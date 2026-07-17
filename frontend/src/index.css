@@ -1265,3 +1265,42 @@ code {
   color: #ef4444;
   text-align: center;
 }
+
+/* ===================================================
+   Visual Regression Chaos Mode
+   Activated by toggling visualChaos via POST /api/test/config
+   Each rule introduces a deliberate, measurable layout
+   defect detectable by screenshot/snapshot diff tools.
+   =================================================== */
+
+/* 1. Checkout primary submit button shifts right by 15px */
+body.visual-chaos-active .submit-action-btn.primary-x2 {
+  margin-left: 15px !important;
+}
+
+/* 2. Book card text line height is skewed to spread content */
+body.visual-chaos-active .info-cell-beta p,
+body.visual-chaos-active .info-cell-beta h3 {
+  line-height: 3.2 !important;
+}
+
+/* 3. Book cover images are slightly blurred */
+body.visual-chaos-active .catalog-book-cover {
+  filter: blur(1.5px) !important;
+}
+
+/* 4. Search bar container shifts left, overlapping the margin */
+body.visual-chaos-active .catalog-search-form {
+  transform: translateX(-18px) !important;
+}
+
+/* 5. Price tags rotate and shift to appear misaligned */
+body.visual-chaos-active .price-tag-value {
+  display: inline-block;
+  transform: rotate(-3deg) translateX(8px) !important;
+}
+
+/* 6. Book cards develop a reddish border — clearly visible in snapshot diffs */
+body.visual-chaos-active .complex-item-box-alpha {
+  border-color: hsl(0, 85%, 60%) !important;
+}
