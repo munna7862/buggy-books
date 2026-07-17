@@ -6,24 +6,7 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
  * - On 401, clears the stale storage and redirects to /login automatically.
  * - Includes credentials for httpOnly cookies.
  */
-const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
-  const mergedOptions = {
-    ...options,
-    credentials: 'include' as RequestCredentials,
-    headers: {
-      'Content-Type': 'application/json',
-      ...(options?.headers || {})
-    }
-  };
-
-  const res = await fetch(url, mergedOptions);
-
-  if (res.status === 401) {
-    localStorage.removeItem('authUser');
-    window.location.href = '/login';
-    return;
-  }
-
+const processResponse = async (res: Response): Promise<any> => {
   const contentType = res.headers.get('content-type');
   let data: any;
 
@@ -43,6 +26,56 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
   }
 
   return data;
+};
+
+const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
+  const mergedOptions = {
+    ...options,
+    credentials: 'include' as RequestCredentials,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options?.headers || {})
+    }
+  };
+
+  const res = await fetch(url, mergedOptions);
+
+  if (res.status === 401) {
+    // If the refresh request itself fails with 401/403, redirect to login
+    if (url.includes('/auth/refresh')) {
+      localStorage.removeItem('authUser');
+      window.location.href = '/login';
+      return;
+    }
+
+    try {
+      // Attempt silent refresh
+      const refreshRes = await fetch(`${BASE_URL}/auth/refresh`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      if (refreshRes.ok) {
+        // Retry original request
+        const retryRes = await fetch(url, mergedOptions);
+        if (retryRes.status === 401) {
+          localStorage.removeItem('authUser');
+          window.location.href = '/login';
+          return;
+        }
+        return processResponse(retryRes);
+      }
+    } catch (err) {
+      console.error('Silent token refresh failed:', err);
+    }
+
+    localStorage.removeItem('authUser');
+    window.location.href = '/login';
+    return;
+  }
+
+  return processResponse(res);
 };
 
 export const api = {

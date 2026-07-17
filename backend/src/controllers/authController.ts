@@ -5,6 +5,7 @@ import { JWT_SECRET } from '../config';
 
 import { storage } from '../data/storage';
 import { logger } from '../utils/logger';
+import { chaosStore } from '../data/chaosStore';
 
 const SALT_ROUNDS = 10;
 
@@ -20,13 +21,20 @@ const defaultUsers: Record<string, UserRecord> = {
 
 const MOCK_USERS: Record<string, UserRecord> = storage.get('users') || defaultUsers;
 
-const setAuthCookie = (res: Response, token: string) => {
+const setAuthCookies = (res: Response, token: string, refreshToken: string) => {
   const isProd = process.env.NODE_ENV === 'production';
   res.cookie('token', token, {
     httpOnly: true,
     secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
     maxAge: 3600000 // 1 hour
+  });
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    path: '/api/auth/refresh',
+    maxAge: 30 * 24 * 3600 * 1000 // 30 days
   });
 };
 
@@ -46,8 +54,10 @@ export const login = async (req: Request, res: Response) => {
 
   const isValid = await bcrypt.compare(password, user.passwordHash);
   if (isValid) {
-    const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-    setAuthCookie(res, token);
+    const expiry = chaosStore.getConfig().jwtExpirySeconds;
+    const token = jwt.sign({ username, type: 'access' }, JWT_SECRET, { expiresIn: expiry });
+    const refreshToken = jwt.sign({ username, type: 'refresh' }, JWT_SECRET, { expiresIn: '30d' });
+    setAuthCookies(res, token, refreshToken);
     logger.info(`User login successful: ${username}`, { username });
     res.json({ message: 'Login successful', username });
   } else {
@@ -73,8 +83,10 @@ export const register = async (req: Request, res: Response) => {
   MOCK_USERS[username] = { passwordHash, fullName };
   storage.set('users', MOCK_USERS);
 
-  const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: '1h' });
-  setAuthCookie(res, token);
+  const expiry = chaosStore.getConfig().jwtExpirySeconds;
+  const token = jwt.sign({ username, type: 'access' }, JWT_SECRET, { expiresIn: expiry });
+  const refreshToken = jwt.sign({ username, type: 'refresh' }, JWT_SECRET, { expiresIn: '30d' });
+  setAuthCookies(res, token, refreshToken);
   logger.info(`User registration successful: ${username}`, { username });
   res.status(201).json({ message: 'Registration successful', username });
 };
@@ -82,6 +94,39 @@ export const register = async (req: Request, res: Response) => {
 export const logout = (req: Request, res: Response) => {
   const username = req.user?.username;
   res.clearCookie('token');
+  res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
   logger.info(`User logged out: ${username || 'anonymous'}`, { username });
   res.json({ message: 'Logged out successfully' });
+};
+
+export const refresh = (req: Request, res: Response) => {
+  const refreshToken = req.cookies?.refreshToken;
+
+  if (!refreshToken) {
+    logger.warn('Refresh failed: Missing refresh token cookie');
+    return res.status(401).json({ error: 'Unauthorized: Refresh token required' });
+  }
+
+  jwt.verify(refreshToken, JWT_SECRET, (err: any, decoded: any) => {
+    if (err || decoded?.type !== 'refresh') {
+      logger.warn('Refresh failed: Invalid or expired refresh token');
+      return res.status(403).json({ error: 'Forbidden: Invalid refresh token' });
+    }
+
+    const username = decoded.username;
+    const expiry = chaosStore.getConfig().jwtExpirySeconds;
+    
+    const newToken = jwt.sign({ username, type: 'access' }, JWT_SECRET, { expiresIn: expiry });
+    
+    const isProd = process.env.NODE_ENV === 'production';
+    res.cookie('token', newToken, {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? 'none' : 'lax',
+      maxAge: 3600000 // 1 hour
+    });
+
+    logger.info(`Token silently refreshed for user: ${username}`, { username });
+    res.json({ success: true, username });
+  });
 };

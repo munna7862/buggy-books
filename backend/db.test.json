@@ -1,13 +1,13 @@
 {
   "users": {
     "admin": {
-      "passwordHash": "$2b$10$GnRxChsiqMtfqbYJ9bShg.MOZQLxJhKASWLlccGXzI3lPAEH6.aDu"
+      "passwordHash": "$2b$10$uW8jE5eHzUOWhXrBkJGP/OeE/AbgnhOPbl8v0/v/rczMpGscYXHVW"
     },
     "testuser": {
-      "passwordHash": "$2b$10$kWeHMXpl13paxqjQCjlvM.V3PP5F2lIDTn8583Y0Lf20Xloci309y"
+      "passwordHash": "$2b$10$l8QSsC/qGs7.od2Uf6HtOONeobQigfs43NzaxZ3em2EUCPpgSQ0k6"
     },
     "test_new_user": {
-      "passwordHash": "$2b$10$8pwgvGSRYebmFvJthHlmHOCWgBWB3OhXF5rVehGWD6UQVclQX0c6K"
+      "passwordHash": "$2b$10$aH1oYG6X6ocdalOXNMY8NurSmkNmkCb1efAPencedgIuLV0lo0vl2"
     }
   },
   "dataStore": {
@@ -148,33 +148,12 @@
         "image": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=600&auto=format&fit=crop"
       }
     ],
-    "cart": {
-      "admin": []
-    },
-    "orders": {
-      "admin": [
-        {
-          "id": "33edc5ee-64c7-47e1-be02-3d6779dbf3c9",
-          "items": [
-            {
-              "id": "1",
-              "title": "The Great Buggy Gatsby",
-              "author": "F. Scott Fitzgerald",
-              "price": 10.99,
-              "genre": "Classic",
-              "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
-              "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
-            }
-          ],
-          "total": 10.99,
-          "customerName": "Jane Doe",
-          "date": "2026-07-17T10:43:00.334Z"
-        }
-      ]
-    }
+    "cart": {},
+    "orders": {}
   },
   "chaosStore": {
-    "checkoutFailureRate": 0,
-    "inventoryDelayMs": 3000
+    "checkoutFailureRate": 0.15,
+    "inventoryDelayMs": 3000,
+    "jwtExpirySeconds": 900
   }
 }
