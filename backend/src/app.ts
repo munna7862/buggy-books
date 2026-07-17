@@ -1,14 +1,34 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import morgan from 'morgan';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 import apiRoutes from './routes/api';
+import { correlationIdMiddleware } from './middleware/correlationId';
+import { logger, loggerStore } from './utils/logger';
 
 const app = express();
 
 app.use(cookieParser());
+app.use(correlationIdMiddleware);
+
+// Structured request logging
+app.use((req, res, next) => {
+  const start = Date.now();
+  const store = loggerStore.getStore();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    loggerStore.run(store || {}, () => {
+      logger.info(`${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms`, {
+        method: req.method,
+        url: req.originalUrl,
+        statusCode: res.statusCode,
+        durationMs: duration
+      });
+    });
+  });
+  next();
+});
 
 // Security Headers
 app.use(helmet());
@@ -32,10 +52,7 @@ app.use(cors({
   credentials: true
 }));
 
-// Add request logging (only if not in test env)
-if (process.env.NODE_ENV !== 'test') {
-  app.use(morgan('dev'));
-}
+// Legacy logging removed (replaced by structured request logger above)
 
 // Parse JSON payloads
 app.use(express.json());
@@ -65,12 +82,16 @@ app.use((req, res) => {
 
 // Centralized error handler
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  if (process.env.NODE_ENV !== 'test') {
-    console.error(err.stack);
-  }
+  const correlationId = res.getHeader('x-correlation-id');
+  logger.error(err.message || 'Something went wrong', {
+    stack: err.stack,
+    status: err.status || 500,
+  });
+
   res.status(err.status || 500).json({
     error: 'Internal Server Error',
-    message: err.message || 'Something went wrong'
+    message: err.message || 'Something went wrong',
+    correlationId
   });
 });
 
