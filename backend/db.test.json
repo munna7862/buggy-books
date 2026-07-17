@@ -1,15 +1,5 @@
 {
-  "users": {
-    "admin": {
-      "passwordHash": "$2b$10$uW8jE5eHzUOWhXrBkJGP/OeE/AbgnhOPbl8v0/v/rczMpGscYXHVW"
-    },
-    "testuser": {
-      "passwordHash": "$2b$10$l8QSsC/qGs7.od2Uf6HtOONeobQigfs43NzaxZ3em2EUCPpgSQ0k6"
-    },
-    "test_new_user": {
-      "passwordHash": "$2b$10$aH1oYG6X6ocdalOXNMY8NurSmkNmkCb1efAPencedgIuLV0lo0vl2"
-    }
-  },
+  "users": null,
   "dataStore": {
     "books": [
       {
@@ -154,6 +144,7 @@
   "chaosStore": {
     "checkoutFailureRate": 0.15,
     "inventoryDelayMs": 3000,
-    "jwtExpirySeconds": 900
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0
   }
 }

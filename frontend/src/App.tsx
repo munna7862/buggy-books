@@ -8,6 +8,7 @@ import Register from './pages/Register';
 import BookDetail from './pages/BookDetail';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './AuthContext';
+import NotificationCenter from './components/NotificationCenter';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
@@ -41,6 +42,7 @@ function Header() {
             <Link to="/register" className="nav-link">Sign Up</Link>
           </>
         )}
+        <NotificationCenter />
       </nav>
     </header>
   );

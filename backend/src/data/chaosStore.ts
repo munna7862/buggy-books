@@ -4,6 +4,7 @@ export interface ChaosConfig {
   checkoutFailureRate: number; // 0.0 to 1.0 (default 0.15)
   inventoryDelayMs: number;    // milliseconds (default 3000)
   jwtExpirySeconds: number;    // seconds (default 900)
+  websocketDropRate: number;   // 0.0 to 1.0 (default 0.0)
 }
 
 class ChaosStore {
@@ -12,7 +13,8 @@ class ChaosStore {
   private readonly defaultConfig: ChaosConfig = {
     checkoutFailureRate: 0.15,
     inventoryDelayMs: 3000,
-    jwtExpirySeconds: 900
+    jwtExpirySeconds: 900,
+    websocketDropRate: 0.0
   };
 
   constructor() {
