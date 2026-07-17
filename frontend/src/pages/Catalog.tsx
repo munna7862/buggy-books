@@ -109,37 +109,33 @@ export default function Catalog() {
       {/* Book Grid */}
       <div className="layout-wrapper-xyz987">
         {books.map((b) => (
-          <table key={b.id} className="complex-item-box-alpha">
-            <tbody>
-              <tr>
-                <td className="image-cell-omega">
-                  <Link to={`/books/${b.id}`}>
-                    <img src={b.image} alt={b.title} className="catalog-book-cover" />
-                  </Link>
-                </td>
-                <td className="info-cell-beta">
-                  {b.genre && <span className="book-genre-tag">{b.genre}</span>}
-                  <h3 className="title-variant-2">
-                    <Link to={`/books/${b.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                      {b.title}
-                    </Link>
-                  </h3>
-                  <p className="author-meta-tag">{b.author}</p>
-                  <p className="price-tag-value">${b.price.toFixed(2)}</p>
-                  <button
-                    className="action-btn-primary dynamic-l1"
-                    onClick={() => handleAddToCart(b.id)}
-                    disabled={addingId === b.id}
-                    id={`add-to-cart-${b.id}`}
-                  >
-                    {addingId === b.id ? (
-                      <><span className="spinner"></span> Processing...</>
-                    ) : 'Add to Cart'}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div key={b.id} className="complex-item-box-alpha">
+            <div className="image-cell-omega">
+              <Link to={`/books/${b.id}`}>
+                <img src={b.image} alt={b.title} className="catalog-book-cover" />
+              </Link>
+            </div>
+            <div className="info-cell-beta">
+              {b.genre && <span className="book-genre-tag">{b.genre}</span>}
+              <h3 className="title-variant-2">
+                <Link to={`/books/${b.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
+                  {b.title}
+                </Link>
+              </h3>
+              <p className="author-meta-tag">{b.author}</p>
+              <p className="price-tag-value">${b.price.toFixed(2)}</p>
+              <button
+                className="action-btn-primary dynamic-l1"
+                onClick={() => handleAddToCart(b.id)}
+                disabled={addingId === b.id}
+                id={`add-to-cart-${b.id}`}
+              >
+                {addingId === b.id ? (
+                  <><span className="spinner"></span> Processing...</>
+                ) : 'Add to Cart'}
+              </button>
+            </div>
+          </div>
         ))}
       </div>
 

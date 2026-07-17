@@ -1,19 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
-  --text: #475569;
-  --text-h: #0f172a;
-  --bg: #f8fafc;
-  --nav-bg: rgba(255, 255, 255, 0.7);
-  --border: #e2e8f0;
-  --code-bg: #e2e8f0;
-  --accent: #6366f1;
-  --accent-hover: #4f46e5;
-  --accent-bg: rgba(99, 102, 241, 0.1);
-  --accent-border: rgba(99, 102, 241, 0.5);
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --hue: 250;
+  --primary: hsl(var(--hue), 85%, 60%);
+  --primary-hover: hsl(var(--hue), 85%, 50%);
+  --primary-glow: hsla(var(--hue), 85%, 60%, 0.15);
+  
+  --secondary: hsl(280, 80%, 60%);
+  --secondary-hover: hsl(280, 80%, 50%);
+  
+  --bg-gradient: radial-gradient(circle at top right, hsla(var(--hue), 80%, 95%, 0.5), transparent 60%),
+                 radial-gradient(circle at bottom left, hsla(280, 80%, 95%, 0.5), transparent 60%);
+  
+  --bg: hsl(210, 40%, 98%);
+  --card-bg: hsla(0, 0%, 100%, 0.85);
+  --nav-bg: hsla(0, 0%, 100%, 0.7);
+  
+  --text: hsl(215, 15%, 35%);
+  --text-h: hsl(220, 30%, 10%);
+  
+  --border: hsla(215, 20%, 90%, 0.8);
+  --border-hover: hsla(var(--hue), 85%, 60%, 0.3);
+  --code-bg: hsla(215, 20%, 90%, 0.5);
+  
+  --accent: var(--primary);
+  --accent-hover: var(--primary-hover);
+  --accent-bg: var(--primary-glow);
+  --accent-border: hsla(var(--hue), 85%, 60%, 0.35);
+  
+  --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 20px -5px rgba(0, 0, 0, 0.08), 0 2px 6px -2px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.12), 0 5px 15px -5px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 0 25px 0 hsla(var(--hue), 85%, 60%, 0.12);
 
   --sans: 'Inter', system-ui, -apple-system, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
@@ -26,18 +44,27 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #94a3b8;
-    --text-h: #f1f5f9;
-    --bg: #0f172a;
-    --nav-bg: rgba(15, 23, 42, 0.75);
-    --border: #1e293b;
-    --code-bg: #1e293b;
-    --accent: #818cf8;
-    --accent-hover: #a5b4fc;
-    --accent-bg: rgba(129, 140, 248, 0.15);
-    --accent-border: rgba(129, 140, 248, 0.5);
-    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+    --bg-gradient: radial-gradient(circle at top right, hsla(var(--hue), 40%, 15%, 0.4), transparent 60%),
+                   radial-gradient(circle at bottom left, hsla(280, 40%, 15%, 0.4), transparent 60%);
+    --bg: hsl(220, 40%, 6%);
+    --card-bg: hsla(220, 30%, 10%, 0.7);
+    --nav-bg: hsla(220, 40%, 6%, 0.75);
+    
+    --text: hsl(215, 15%, 70%);
+    --text-h: hsl(210, 20%, 95%);
+    
+    --border: hsla(215, 20%, 16%, 0.6);
+    --border-hover: hsla(var(--hue), 70%, 50%, 0.4);
+    --code-bg: hsla(215, 20%, 16%, 0.5);
+    
+    --accent: hsl(var(--hue), 85%, 70%);
+    --accent-hover: hsl(var(--hue), 85%, 80%);
+    --accent-bg: hsla(var(--hue), 85%, 70%, 0.15);
+    --accent-border: hsla(var(--hue), 85%, 70%, 0.4);
+    
+    --shadow-sm: 0 2px 8px -2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 10px 20px -5px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -353,72 +380,66 @@ code {
   background: var(--code-bg);
 }
 
-/* Step 2: Catalog Grid Styles mapping intentionally weird DOM to a beautiful UI */
+/* Step 2: Catalog Grid Styles */
 
 .layout-wrapper-xyz987 {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  padding: 1rem 0;
+  gap: 2.5rem;
+  padding: 1.5rem 0;
 }
 
 .complex-item-box-alpha {
-  display: block; /* override table behavior */
-  background: var(--bg);
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 20px;
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: default;
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
 .complex-item-box-alpha:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md);
-  border-color: var(--accent-border);
-}
-
-.complex-item-box-alpha tbody, 
-.complex-item-box-alpha tr {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.complex-item-box-alpha td {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border-color: var(--border-hover);
 }
 
 .image-cell-omega {
-  background: var(--code-bg);
-  display: flex !important;
+  background: linear-gradient(180deg, var(--code-bg), transparent);
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1.5rem !important;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
 }
 
 .catalog-book-cover {
   width: 140px;
   height: 210px;
   object-fit: cover;
-  border-radius: 4px;
-  box-shadow: var(--shadow-sm);
-  transition: transform 0.3s;
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .complex-item-box-alpha:hover .catalog-book-cover {
-  transform: scale(1.05);
+  transform: scale(1.06) rotate(1deg);
 }
 
 .info-cell-beta {
-  padding: 1.5rem !important;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  flex-grow: 1;
 }
 
 .title-variant-2 {
