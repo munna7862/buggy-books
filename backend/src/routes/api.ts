@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config';
+import { loggerStore } from '../utils/logger';
 
 import * as bookController from '../controllers/bookController';
 import * as authController from '../controllers/authController';
@@ -27,8 +28,14 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   }
 
   jwt.verify(token, JWT_SECRET, (err: any, user: any) => {
-    if (err) return res.status(403).json({ error: 'Forbidden: Invalid token' });
+    if (err || user?.type !== 'access') return res.status(403).json({ error: 'Forbidden: Invalid token' });
     req.user = user;
+    
+    const store = loggerStore.getStore();
+    if (store && user?.username) {
+      store.username = user.username;
+    }
+    
     next();
   });
 };
@@ -39,6 +46,7 @@ router.get('/books/:id', bookController.getBookById);
 router.post('/login', authController.login);
 router.post('/register', authController.register);
 router.post('/logout', authController.logout);
+router.post('/auth/refresh', authController.refresh);
 
 router.get('/cart', authenticateToken, cartController.getCart);
 router.post('/cart', authenticateToken, cartController.addToCart);

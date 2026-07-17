@@ -6,6 +6,7 @@ import { chaosStore } from '../data/chaosStore';
 const chaosConfigSchema = z.object({
   checkoutFailureRate: z.number().min(0).max(1).optional(),
   inventoryDelayMs: z.number().int().min(0).max(30000).optional(),
+  jwtExpirySeconds: z.number().int().min(1).max(86400).optional(),
 }).strict(); // reject unknown keys
 
 export const updateConfig = (req: Request, res: Response) => {
