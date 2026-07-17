@@ -146,6 +146,7 @@
     "inventoryDelayMs": 3000,
     "jwtExpirySeconds": 900,
     "websocketDropRate": 0,
-    "uploadFailureRate": 0
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false
   }
 }

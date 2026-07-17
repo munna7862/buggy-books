@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
+import { useChaos } from '../ChaosContext';
 import { api } from '../api';
 import toast from 'react-hot-toast';
 
@@ -15,6 +16,9 @@ interface Book {
 const PAGE_LIMIT = 8;
 
 export default function Catalog() {
+  const { config } = useChaos();
+  const injectA11yViolations = config?.injectA11yViolations;
+
   const [books, setBooks] = useState<Book[]>([]);
   const [addingId, setAddingId] = useState<string | null>(null);
   const [query, setQuery] = useState('');
@@ -75,12 +79,12 @@ export default function Catalog() {
       <form onSubmit={handleSearch} className="catalog-search-form">
         <input
           type="text"
-          className="catalog-search-input"
           placeholder="Search by title, author, or genre..."
+          className="catalog-search-input"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
-          aria-label="Search books"
           id="book-search-input"
+          {...(!injectA11yViolations ? { 'aria-label': 'Search books' } : {})}
         />
         <button type="submit" className="catalog-search-btn" id="book-search-btn">Search</button>
         {query && (
@@ -97,7 +101,10 @@ export default function Catalog() {
 
       {/* Result Count */}
       {!loading && (
-        <p className="catalog-result-count">
+        <p 
+          className="catalog-result-count"
+          style={injectA11yViolations ? { color: '#eaeaea', background: '#ffffff', padding: '4px' } : undefined}
+        >
           {query
             ? `${total} result${total !== 1 ? 's' : ''} for "${query}"`
             : `${total} books available`}
@@ -112,7 +119,11 @@ export default function Catalog() {
           <div key={b.id} className="complex-item-box-alpha">
             <div className="image-cell-omega">
               <Link to={`/books/${b.id}`}>
-                <img src={b.image} alt={b.title} className="catalog-book-cover" />
+                <img 
+                  src={b.image} 
+                  className="catalog-book-cover" 
+                  {...(!injectA11yViolations ? { alt: b.title } : {})}
+                />
               </Link>
             </div>
             <div className="info-cell-beta">

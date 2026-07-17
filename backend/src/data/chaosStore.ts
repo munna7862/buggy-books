@@ -6,6 +6,7 @@ export interface ChaosConfig {
   jwtExpirySeconds: number;    // seconds (default 900)
   websocketDropRate: number;   // 0.0 to 1.0 (default 0.0)
   uploadFailureRate: number;   // 0.0 to 1.0 (default 0.0)
+  injectA11yViolations: boolean; // default false
 }
 
 class ChaosStore {
@@ -16,7 +17,8 @@ class ChaosStore {
     inventoryDelayMs: 3000,
     jwtExpirySeconds: 900,
     websocketDropRate: 0.0,
-    uploadFailureRate: 0.0
+    uploadFailureRate: 0.0,
+    injectA11yViolations: false
   };
 
   constructor() {

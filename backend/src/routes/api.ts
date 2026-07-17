@@ -63,6 +63,7 @@ router.get('/profile', authenticateToken, profileController.getProfile);
 router.post('/profile/upload', profileController.handleAvatarUpload, authenticateToken, profileController.uploadAvatar);
 
 // --- Testing / Chaos API Routes ---
+router.get('/test/config', testController.getConfig);
 router.post('/test/config', testController.updateConfig);
 router.post('/test/reset', testController.resetData);
 

@@ -2,8 +2,12 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../api';
 import { useAuth } from '../AuthContext';
+import { useChaos } from '../ChaosContext';
 
 export default function Login() {
+  const { config } = useChaos();
+  const injectA11yViolations = config?.injectA11yViolations;
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -52,7 +56,7 @@ export default function Login() {
         {/* Form intentionally uses anti-pattern names/attributes for QA automation practice */}
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="auth-input-group">
-            <label className="auth-label">Username</label>
+            <label className="auth-label" {...(!injectA11yViolations ? { htmlFor: 'txt_usr_77' } : {})}>Username</label>
             <input
               type="text"
               name="txt_usr_77"
@@ -60,12 +64,13 @@ export default function Login() {
               placeholder="Enter your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              {...(!injectA11yViolations ? { id: 'txt_usr_77' } : {})}
               required
             />
           </div>
 
           <div className="auth-input-group">
-            <label className="auth-label">Password</label>
+            <label className="auth-label" {...(!injectA11yViolations ? { htmlFor: 'txt_pwd_99' } : {})}>Password</label>
             <input
               type="password"
               name="txt_pwd_99"
@@ -73,6 +78,7 @@ export default function Login() {
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              {...(!injectA11yViolations ? { id: 'txt_pwd_99' } : {})}
               required
             />
           </div>

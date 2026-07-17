@@ -9,6 +9,7 @@ const chaosConfigSchema = z.object({
   jwtExpirySeconds: z.number().int().min(1).max(86400).optional(),
   websocketDropRate: z.number().min(0).max(1).optional(),
   uploadFailureRate: z.number().min(0).max(1).optional(),
+  injectA11yViolations: z.boolean().optional(),
 }).strict(); // reject unknown keys
 
 export const updateConfig = (req: Request, res: Response) => {
@@ -28,4 +29,8 @@ export const resetData = (req: Request, res: Response) => {
   dataStore.resetData();
   chaosStore.resetConfig();
   res.json({ success: true, message: 'Test state reset successfully' });
+};
+
+export const getConfig = (req: Request, res: Response) => {
+  res.json(chaosStore.getConfig());
 };
