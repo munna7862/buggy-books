@@ -1,43 +1,52 @@
 # 🤖 BuggyBooks Agent Development & QA Rules
 
-This document outlines the workflow and rules that all AI assistants must follow when implementing new features, backend modifications, or QA automation in the BuggyBooks codebase.
+This document outlines the workflow, architecture conventions, and test rules that all AI assistants must follow when modifying the BuggyBooks codebase or writing automation suites.
 
 ---
 
 ## 🔄 Core Workflow Rules
 
-Every new feature implementation, bugfix, or test automation addition must follow this strict sequence:
+Every development or QA task must strictly follow this lifecycle:
+
+```mermaid
+graph TD
+    A[Create Feature Branch] --> B[Implement Frontend/Backend Dev]
+    B --> C[Write Unit/Component Tests]
+    C --> D[Add Specs to test_cases_catalog.md]
+    D --> E[Write Playwright E2E/API Tests]
+    E --> F[Run Verification Suite Locally]
+    F --> G[Commit, Push & Create PR]
+```
 
 1. **Branch Isolation**:
-   * NEVER make changes directly on the `main` branch.
-   * Always create and check out a descriptive feature branch (e.g., `feature/feature-name` or `bugfix/issue-name`) before modifying code.
+   * **NEVER** modify code directly on `main`.
+   * Create a branch matching `feature/<name>`, `bugfix/<name>`, or `test/<name>`.
 
-2. **Feature Development**:
-   * Implement code changes cleanly in their respective backend (`/backend`) or frontend (`/frontend`) directories.
-   * Adhere to the existing architecture: use standard Express controllers/data stores for the backend and React/Vite/CSS variables for the frontend.
+2. **Feature Implementation**:
+   * Maintain architecture patterns: Express controllers, models, and JSON stores in `/backend`; React, TypeScript, HSL design system, and custom styling in `/frontend`.
 
-3. **Unit & Component Testing**:
-   * Implement comprehensive unit tests for new backend logic (using **Jest** in `/backend`).
-   * Implement component tests for new UI/page views (using **Vitest + React Testing Library + MSW** in `/frontend`).
-   * Ensure test coverage is maximized for the newly added functions.
+3. **Multi-Tier Testing Hierarchy**:
+   * **Backend Logic**: Write Jest unit tests in the `/backend` directory.
+   * **Frontend UI Component Logic**: Write Vitest + React Testing Library tests in `/frontend`. Use **Mock Service Worker (MSW)** in `src/mocks/server.ts` to mock API endpoints in component tests. Do not call live backend services in component unit tests.
+   * **E2E/API Integration Logic**: Write Playwright tests in `playwright-e2e`.
 
-4. **Master Catalog Registration**:
-   * Before writing Playwright tests, document the manual/automation test cases in [specs/test_cases_catalog.md](file:///c:/BuggyBooks/buggy-books/specs/test_cases_catalog.md).
-   * Specify the correct Target Coverage (e.g. `Playwright UI`, `Playwright API`, `Frontend Component (Vitest)`, or `Backend Unit (Jest)`).
+4. **Test Catalog Synchronization**:
+   * Prior to writing E2E code, append new test definitions to [test_cases_catalog.md](file:///c:/BuggyBooks/buggy-books/specs/test_cases_catalog.md).
+   * Specify: ID, Title, Description, Priority, Target Coverage, and Status.
 
-5. **Playwright E2E/API Testing**:
-   * Implement End-to-End or API test specs under `playwright-e2e/src/tests/` matching the categorizations in the catalog.
-   * Register the test path in `playwright-e2e/src/config/playwright.config.ts` if using specific tests configuration.
+5. **Playwright Spec Naming & Structure**:
+   * Place specs under `playwright-e2e/src/tests/` matching their categories: `ui/` or `api/` (e.g. `UserManagement/`, `BookCatalog/`, `Checkout/`, `CartAndInventory/`, `ChaosAndTesting/`).
+   * Test files must follow the format `Test_00X_<FeatureName>.spec.ts` (using 3-digit serial numbering).
+   * If `USE_SPECIFIC_TESTS` is active, register the test path in [playwright.config.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/config/playwright.config.ts).
 
-6. **State Reset & Test Isolation**:
-   * All new Playwright tests must call the `POST /api/test/reset` endpoint in `beforeEach` and/or `afterAll` hooks to ensure clean state and prevent flaky cross-test regressions.
+6. **Test Isolation & Reset Handling**:
+   * E2E/API test suites must perform a state reset using `POST /api/test/reset` in `beforeEach` and `afterAll` hooks to maintain test isolation and prevent database state leaks.
 
-7. **Verification & Clean Run**:
-   * Spin up local development servers (`npm run dev`).
-   * Execute unit/component tests (`npm test` in `/backend` and `/frontend`).
-   * Run Playwright tests using `npx playwright test`.
-   * Verify all tests complete with ✅ success.
+7. **Local Verification Checklists**:
+   * Compile and build code without TypeScript warnings.
+   * Verify all Jest/Vitest tests pass (`npm run test` or `npm test`).
+   * Verify Playwright tests pass by running local dev servers (`npm run dev`).
 
-8. **Review & PR Creation**:
-   * Conduct a final review of code diffs for quality, comments, and structure.
-   * Commit and push the branch to remote, and prepare a Pull Request for review. Do not merge directly to `main` without PR build validation.
+8. **Deployment & Pull Request Policy**:
+   * Push the final code to the remote repository.
+   * Open a PR so that the continuous integration (CI) pipeline runs verification tests against GitHub Actions before merging to `main`.
