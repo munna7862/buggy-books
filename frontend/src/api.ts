@@ -1,5 +1,23 @@
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
+// --- CSRF Token Management ---
+let csrfToken: string | null = null;
+
+const fetchCsrfToken = async (): Promise<string> => {
+  if (csrfToken) return csrfToken;
+  try {
+    const res = await fetch(`${BASE_URL}/csrf-token`, { credentials: 'include' });
+    if (res.ok) {
+      const data = await res.json();
+      csrfToken = data.csrfToken;
+      return csrfToken!;
+    }
+  } catch (err) {
+    console.error('Failed to fetch CSRF token:', err);
+  }
+  return '';
+};
+
 /**
  * Fix #5: Centralized request helper.
  * - Always checks res.ok and throws a descriptive Error on failure.
@@ -30,11 +48,23 @@ const processResponse = async (res: Response): Promise<any> => {
 
 const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
   const isFormData = options?.body instanceof FormData;
+  const isMutating = options?.method && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(options.method);
+
+  // Fetch CSRF token for mutating requests (skip for auth endpoints)
+  let csrfHeader: Record<string, string> = {};
+  if (isMutating && !url.includes('/login') && !url.includes('/register') && !url.includes('/logout') && !url.includes('/auth/refresh')) {
+    const token = await fetchCsrfToken();
+    if (token) {
+      csrfHeader = { 'x-csrf-token': token };
+    }
+  }
+
   const mergedOptions = {
     ...options,
     credentials: 'include' as RequestCredentials,
     headers: {
       ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+      ...csrfHeader,
       ...(options?.headers || {})
     }
   };
