@@ -1,47 +1,15 @@
-import { useEffect, useState } from 'react';
-import { api } from '../api';
+import { useCart } from '../hooks/useCart';
 import { Link } from 'react-router-dom';
-import toast from 'react-hot-toast';
-import type { CartItem } from '@buggybooks/types';
 
 export default function Cart() {
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [removingId, setRemovingId] = useState<string | null>(null);
-  const [clearing, setClearing] = useState(false);
-
-  useEffect(() => {
-    api.getCart().then(setCart).catch(console.error);
-  }, []);
-
-  const handleRemove = async (bookId: string) => {
-    setRemovingId(bookId);
-    try {
-      const updatedCart = await api.removeFromCart(bookId);
-      setCart(updatedCart);
-      toast.success('Item removed from cart');
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to remove item');
-    } finally {
-      setRemovingId(null);
-    }
-  };
-
-  const handleClearAll = async () => {
-    setClearing(true);
-    try {
-      await api.clearCart();
-      setCart([]);
-      toast.success('Cart cleared');
-    } catch (err) {
-      console.error(err);
-      toast.error('Failed to clear cart');
-    } finally {
-      setClearing(false);
-    }
-  };
-
-  const total = cart.reduce((acc, item) => acc + item.price, 0);
+  const {
+    cart,
+    removingId,
+    clearing,
+    total,
+    removeFromCart,
+    clearCart
+  } = useCart();
 
   return (
     <div>
@@ -58,7 +26,7 @@ export default function Cart() {
                   <span>${item.price.toFixed(2)}</span>
                   <button
                     className="cart-remove-btn"
-                    onClick={() => handleRemove(item.id)}
+                    onClick={() => removeFromCart(item.id)}
                     disabled={removingId === item.id}
                   >
                     {removingId === item.id ? '...' : '✕'}
@@ -71,7 +39,7 @@ export default function Cart() {
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
             <button
               className="cart-clear-btn"
-              onClick={handleClearAll}
+              onClick={clearCart}
               disabled={clearing}
             >
               {clearing ? 'Clearing...' : 'Clear All'}

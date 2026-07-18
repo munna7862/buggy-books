@@ -16,7 +16,6 @@
     "jsx": "react-jsx",
 
     /* Path aliases */
-    "baseUrl": ".",
     "paths": {
       "@buggybooks/types": ["../shared/types"],
       "@buggybooks/types/*": ["../shared/types/*"]

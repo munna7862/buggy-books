@@ -29,11 +29,12 @@ const processResponse = async (res: Response): Promise<any> => {
 };
 
 const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
+  const isFormData = options?.body instanceof FormData;
   const mergedOptions = {
     ...options,
     credentials: 'include' as RequestCredentials,
     headers: {
-      'Content-Type': 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...(options?.headers || {})
     }
   };
@@ -137,6 +138,17 @@ export const api = {
     return apiRequest(`${BASE_URL}/checkout/process`, {
       method: 'POST',
       body: JSON.stringify(payload),
+    });
+  },
+
+  getProfile: async () => {
+    return apiRequest(`${BASE_URL}/profile`);
+  },
+
+  uploadAvatar: async (formData: FormData) => {
+    return apiRequest(`${BASE_URL}/profile/upload`, {
+      method: 'POST',
+      body: formData,
     });
   },
 };
