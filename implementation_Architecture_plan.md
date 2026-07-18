@@ -64,29 +64,13 @@ The codebase is functional and ships value, but suffers from several recurring s
 
 ---
 
-### 5. Frontend: Normalize CSS Class Naming Convention
+### 5. Frontend: Normalize CSS Class Naming Convention [COMPLETED]
 
 **Layer**: Frontend
 **Severity**: 🔴 Must-Do
 **Problem**: CSS class names are a chaotic mix of naming conventions with no consistency:
 
-| Pattern | Examples | Files |
-|---|---|---|
-| Random suffixed | `layout-wrapper-xyz987`, `complex-item-box-alpha`, `image-cell-omega`, `info-cell-beta` | [Catalog.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/pages/Catalog.tsx#L117-L129) |
-| Random numbered | `input-group-rnd-9182`, `form-container-xyz`, `action-btn-primary dynamic-l1` | [Checkout.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/pages/Checkout.tsx#L188-L193) |
-| Semantic BEM-ish | `auth-card`, `auth-input`, `auth-submit-btn`, `cart-list`, `cart-item` | [Login.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/pages/Login.tsx), [Cart.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/pages/Cart.tsx) |
-| Obfuscated | `title-variant-2`, `author-meta-tag`, `price-tag-value`, `lbl-t1`, `submit-action-btn primary-x2` | Various |
-
-> [!IMPORTANT]
-> I understand that some of this obfuscation is **intentional** for the "BuggyBooks" QA testing practice app — the randomized names/IDs exist to challenge testers. If that is the case, this item should be **documented clearly** (e.g., in a `CONTRIBUTING.md` or `ARCHITECTURE.md`), and the "QA-challenge" classes should be separated from the "real design system" classes via a naming convention (e.g., prefix intentionally tricky selectors with `qa-` or `chaos-`).
-
-#### Implementation Steps
-
-1. **Decide** on a naming convention: BEM (`block__element--modifier`) or component-scoped (CSS Modules)
-2. **Create** `frontend/src/styles/` directory with partials: `_variables.css`, `_base.css`, `_components.css`, `_pages.css`
-3. **Refactor** the 28KB monolithic [index.css](file:///c:/BuggyBooks/buggy-books/frontend/src/index.css) into organized partials
-4. **Rename** classes following the chosen convention, documenting any intentionally obfuscated names for the QA testing purpose
-5. **Co-locate** component-specific styles: `components/NotificationCenter/NotificationCenter.css`
+**Status**: Completed. Split monolithic `index.css` into organized CSS partials (`_variables.css`, `_base.css`, `_layout.css`, `_components.css`, `_pages.css`) under `frontend/src/styles/` imported dynamically by the entry point. Created a frontend styling [ARCHITECTURE.md](file:///c:/BuggyBooks/buggy-books/frontend/ARCHITECTURE.md) documenting core BEM naming standards alongside the intentionally tricky selectors preserved for QA testing.
 
 ---
 
@@ -253,7 +237,7 @@ The [catalog.page.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/pages
 | 2 | Backend Service Layer [DONE] | Backend | 🔴 Must-Do | High | Enables unit testing, SRP |
 | 3 | Centralized Error Handling [DONE] | Backend | 🔴 Must-Do | Medium | Consistent API responses, DRY |
 | 4 | Frontend Hooks + Component Architecture [DONE] | Frontend | 🔴 Must-Do | High | Maintainability, testability |
-| 5 | CSS Naming Convention | Frontend | 🔴 Must-Do | Medium | Developer experience, maintainability |
+| 5 | CSS Naming Convention [DONE] | Frontend | 🔴 Must-Do | Medium | Developer experience, maintainability |
 | 6 | Decouple POM Cross-Instantiation | Playwright | 🟡 Good-to-Have | Low | Reusable POMs, clean test architecture |
 | 7 | Eliminate Duplicate Assertions | Playwright | 🟡 Good-to-Have | Low | 50% less test code, clean reports |
 | 8 | Replace XPath with Resilient Selectors | Playwright | 🟡 Good-to-Have | Medium | Test stability, readability |
