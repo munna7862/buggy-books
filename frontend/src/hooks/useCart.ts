@@ -2,8 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { api } from '../api';
 import toast from 'react-hot-toast';
 import type { CartItem } from '@buggybooks/types';
+import { useAuth } from '../AuthContext';
 
 export function useCart() {
+  let isAuthenticated = true;
+  try {
+    const auth = useAuth();
+    isAuthenticated = auth.isAuthenticated;
+  } catch (e) {
+    // Default to true when used outside AuthProvider (e.g. in some unit tests)
+  }
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [addingId, setAddingId] = useState<string | null>(null);
@@ -11,6 +19,7 @@ export function useCart() {
   const [clearing, setClearing] = useState(false);
 
   const fetchCart = useCallback(async () => {
+    if (!isAuthenticated) return;
     setLoading(true);
     try {
       const items = await api.getCart();
@@ -20,11 +29,15 @@ export function useCart() {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
+    if (isAuthenticated) {
+      fetchCart();
+    } else {
+      setCart([]);
+    }
+  }, [isAuthenticated, fetchCart]);
 
   const addToCart = useCallback(async (bookId: string) => {
     setAddingId(bookId);
