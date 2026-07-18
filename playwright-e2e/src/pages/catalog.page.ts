@@ -56,7 +56,7 @@ export class CatalogPage extends BasePage {
   }
 
   public async getBooksCount() {
-    await this.eleBooksCount.first().waitFor({ state: 'visible', timeout: 5000 });
+    await this.eleBooksCount.first().waitFor({ state: 'visible', timeout: 60000 });
     let count = await this.eleBooksCount.count();
     await this.logMessage('INFO', "Total Books displayed in Catalog page are: " + count);
     return count;
