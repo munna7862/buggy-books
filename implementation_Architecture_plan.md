@@ -32,37 +32,13 @@ The codebase is functional and ships value, but suffers from several recurring s
 
 ---
 
-### 2. Backend: Introduce a Service Layer (Separate Business Logic from Controllers)
+### 2. Backend: Introduce a Service Layer (Separate Business Logic from Controllers) [COMPLETED]
 
 **Layer**: Backend
 **Severity**: 🔴 Critical
 **Problem**: Controllers directly contain business logic, data access, validation, and response formatting. The [authController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/authController.ts) is 142 lines and handles JWT creation, bcrypt hashing, cookie setting, user lookup, chaos config reads — all in one file with no separation.
 
-```
-Current:  Route → Controller (business logic + data access + response)
-Desired:  Route → Controller (request/response only) → Service (business logic) → Repository (data access)
-```
-
-**Impact**: Untestable in isolation. You can't unit-test "does registration reject duplicate users?" without spinning up Express. The `MOCK_USERS` object is module-level mutable state shared across requests.
-
-#### Implementation Steps
-
-1. **Create** `backend/src/services/` directory with:
-   - `auth.service.ts` — login/register/refresh logic (pure functions, no `req`/`res`)
-   - `book.service.ts` — getBooks, getBookById, getInventoryReport
-   - `cart.service.ts` — cart CRUD operations
-   - `checkout.service.ts` — processCheckout logic
-   - `profile.service.ts` — getProfile, uploadAvatar logic
-2. **Create** `backend/src/repositories/` directory:
-   - `user.repository.ts` — wraps `storage.get('users')` / `storage.set('users')`
-   - `book.repository.ts` — wraps `dataStore` methods
-3. **Refactor** each controller to:
-   - Parse request params/body
-   - Call service method
-   - Return formatted response
-   - Handle errors via centralized error handler
-4. **Move** the auth middleware `authenticateToken` from [api.ts](file:///c:/BuggyBooks/buggy-books/backend/src/routes/api.ts#L24-L42) into `middleware/auth.middleware.ts`
-5. **Move** the `declare global { namespace Express { ... } }` type augmentation from [api.ts](file:///c:/BuggyBooks/buggy-books/backend/src/routes/api.ts#L15-L21) into a dedicated `backend/src/types/express.d.ts`
+**Status**: Completed. Introduced `UserRepository` to wrap state storage, extracted all core business logic out of controllers into standalone `AuthService`, `BookService`, `CartService`, `CheckoutService`, and `ProfileService`, and simplified controllers to focus only on handling requests and responses.
 
 ---
 
@@ -291,7 +267,7 @@ The [catalog.page.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/pages
 | # | Improvement | Layer | Priority | Effort | Impact |
 |---|---|---|---|---|---|
 | 1 | Shared TypeScript Types [DONE] | Cross-cutting | 🔴 Must-Do | Medium | Eliminates type drift across layers |
-| 2 | Backend Service Layer | Backend | 🔴 Must-Do | High | Enables unit testing, SRP |
+| 2 | Backend Service Layer [DONE] | Backend | 🔴 Must-Do | High | Enables unit testing, SRP |
 | 3 | Centralized Error Handling [DONE] | Backend | 🔴 Must-Do | Medium | Consistent API responses, DRY |
 | 4 | Frontend Hooks + Component Architecture | Frontend | 🔴 Must-Do | High | Maintainability, testability |
 | 5 | CSS Naming Convention | Frontend | 🔴 Must-Do | Medium | Developer experience, maintainability |

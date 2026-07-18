@@ -1,22 +1,7 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import { config, JWT_SECRET } from '../config';
-
-import { storage } from '../data/storage';
+import { authService } from '../services/auth.service';
 import { logger } from '../utils/logger';
-import { chaosStore } from '../data/chaosStore';
-import type { UserRecord } from '@buggybooks/types';
-import { BadRequestError, UnauthorizedError, ConflictError, ForbiddenError } from '../errors/app-error';
-
-const SALT_ROUNDS = 10;
-
-const defaultUsers: Record<string, UserRecord> = {
-  admin: { passwordHash: bcrypt.hashSync('password123', SALT_ROUNDS) },
-  testuser: { passwordHash: bcrypt.hashSync('buggybooks', SALT_ROUNDS) },
-};
-
-const MOCK_USERS: Record<string, UserRecord> = storage.get('users') || defaultUsers;
+import { config } from '../config';
 
 const setAuthCookies = (res: Response, token: string, refreshToken: string) => {
   const isProd = config.isProduction;
@@ -37,55 +22,16 @@ const setAuthCookies = (res: Response, token: string, refreshToken: string) => {
 
 export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
-
-  if (!username || !password) {
-    logger.warn('Login attempt failed: Missing username or password');
-    throw new BadRequestError('Bad Request: Username and password required');
-  }
-
-  const user = MOCK_USERS[username];
-  if (!user) {
-    logger.warn(`Login attempt failed: Invalid credentials for user ${username}`, { attemptedUsername: username });
-    throw new UnauthorizedError('Unauthorized: Invalid credentials');
-  }
-
-  const isValid = await bcrypt.compare(password, user.passwordHash);
-  if (isValid) {
-    const expiry = chaosStore.getConfig().jwtExpirySeconds;
-    const token = jwt.sign({ username, type: 'access' }, JWT_SECRET, { expiresIn: expiry });
-    const refreshToken = jwt.sign({ username, type: 'refresh' }, JWT_SECRET, { expiresIn: '30d' });
-    setAuthCookies(res, token, refreshToken);
-    logger.info(`User login successful: ${username}`, { username });
-    res.json({ message: 'Login successful', username });
-  } else {
-    logger.warn(`Login attempt failed: Invalid credentials for user ${username}`, { attemptedUsername: username });
-    throw new UnauthorizedError('Unauthorized: Invalid credentials');
-  }
+  const result = await authService.login(username, password);
+  setAuthCookies(res, result.token, result.refreshToken);
+  res.json({ message: 'Login successful', username: result.username });
 };
 
 export const register = async (req: Request, res: Response) => {
   const { username, password, fullName } = req.body;
-
-  if (!username || !password) {
-    logger.warn('Registration attempt failed: Missing username or password');
-    throw new BadRequestError('Bad Request: Username and password required');
-  }
-
-  if (MOCK_USERS[username]) {
-    logger.warn(`Registration attempt failed: Username ${username} already exists`, { attemptedUsername: username });
-    throw new ConflictError('Conflict: Username already exists');
-  }
-
-  const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
-  MOCK_USERS[username] = { passwordHash, fullName };
-  storage.set('users', MOCK_USERS);
-
-  const expiry = chaosStore.getConfig().jwtExpirySeconds;
-  const token = jwt.sign({ username, type: 'access' }, JWT_SECRET, { expiresIn: expiry });
-  const refreshToken = jwt.sign({ username, type: 'refresh' }, JWT_SECRET, { expiresIn: '30d' });
-  setAuthCookies(res, token, refreshToken);
-  logger.info(`User registration successful: ${username}`, { username });
-  res.status(201).json({ message: 'Registration successful', username });
+  const result = await authService.register(username, password, fullName);
+  setAuthCookies(res, result.token, result.refreshToken);
+  res.status(201).json({ message: 'Registration successful', username: result.username });
 };
 
 export const logout = (req: Request, res: Response) => {
@@ -96,46 +42,21 @@ export const logout = (req: Request, res: Response) => {
   res.json({ message: 'Logged out successfully' });
 };
 
-export const refresh = (req: Request, res: Response) => {
+export const refresh = async (req: Request, res: Response) => {
   const refreshToken = req.cookies?.refreshToken;
+  const result = authService.refresh(refreshToken);
+  
+  const isProd = config.isProduction;
+  res.cookie('token', result.token, {
+    httpOnly: true,
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
+    maxAge: 3600000 // 1 hour
+  });
 
-  if (!refreshToken) {
-    logger.warn('Refresh failed: Missing refresh token cookie');
-    throw new UnauthorizedError('Unauthorized: Refresh token required');
-  }
-
-  try {
-    const decoded = jwt.verify(refreshToken, JWT_SECRET) as any;
-    if (decoded?.type !== 'refresh') {
-      throw new ForbiddenError('Forbidden: Invalid refresh token');
-    }
-
-    const username = decoded.username;
-    const expiry = chaosStore.getConfig().jwtExpirySeconds;
-    
-    const newToken = jwt.sign({ username, type: 'access' }, JWT_SECRET, { expiresIn: expiry });
-    
-    const isProd = config.isProduction;
-    res.cookie('token', newToken, {
-      httpOnly: true,
-      secure: isProd,
-      sameSite: isProd ? 'none' : 'lax',
-      maxAge: 3600000 // 1 hour
-    });
-
-    logger.info(`Token silently refreshed for user: ${username}`, { username });
-    res.json({ success: true, username });
-  } catch (err) {
-    logger.warn('Refresh failed: Invalid or expired refresh token');
-    throw new ForbiddenError('Forbidden: Invalid refresh token');
-  }
+  res.json({ success: true, username: result.username });
 };
 
 export const resetUsers = () => {
-  for (const username in MOCK_USERS) {
-    if (!defaultUsers[username]) {
-      delete MOCK_USERS[username];
-    }
-  }
-  storage.set('users', MOCK_USERS);
+  authService.resetUsers();
 };

@@ -1,38 +1,21 @@
 import { Request, Response } from 'express';
-import { dataStore } from '../data/dataStore';
-import { chaosStore } from '../data/chaosStore';
-import { NotFoundError } from '../errors/app-error';
+import { bookService } from '../services/book.service';
 
 export const getBooks = (req: Request, res: Response) => {
-  const q = (req.query.q as string) || '';
-  const page = Math.max(1, parseInt(req.query.page as string) || 1);
-  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit as string) || 8));
-
-  // If no query params for pagination, return raw list (backward compat)
-  if (!req.query.page && !req.query.q && !req.query.limit) {
-    return res.json(dataStore.getBooks());
-  }
-
-  res.json(dataStore.getBooksPaginated(q, page, limit));
+  const result = bookService.getBooks(
+    req.query.q as string,
+    req.query.page as string,
+    req.query.limit as string
+  );
+  res.json(result);
 };
 
 export const getBookById = (req: Request, res: Response) => {
-  const book = dataStore.getBookById(req.params.id);
-  if (!book) {
-    throw new NotFoundError('Not Found: Book does not exist');
-  }
+  const book = bookService.getBookById(req.params.id);
   res.json(book);
 };
 
-export const getInventoryReport = (req: Request, res: Response) => {
-  const delay = chaosStore.getConfig().inventoryDelayMs;
-  setTimeout(() => {
-    const books = dataStore.getBooks();
-    res.json({
-      totalBooks: books.length,
-      totalValue: books.reduce((acc, b) => acc + b.price, 0),
-      timestamp: new Date().toISOString()
-    });
-  }, delay);
+export const getInventoryReport = async (req: Request, res: Response) => {
+  const report = await bookService.getInventoryReport();
+  res.json(report);
 };
-
