@@ -1,0 +1,13 @@
+[2026-07-19 02:11:08] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-19 02:11:08] INFO: 📤 Request Payload: "{\"username\":\"logincontent17843928685513234@\",\"password\":\"johna123@\"}"
+[2026-07-19 02:11:08] ERROR: ❌ Login with unsupported content type Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "7d3df861-eee9-4823-af40-6c8b6021a1cd"
+}
+[2026-07-19 02:11:08] ERROR: ❌ Login with unsupported content type Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "7d3df861-eee9-4823-af40-6c8b6021a1cd"
+}
+[2026-07-19 02:11:08] INFO:  Unsupported login content type status Success !! Actual and Expected Values are:: true

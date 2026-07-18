@@ -1,0 +1,16 @@
+[2026-07-19 02:10:48] INFO: Network interception enabled with mode: api-only
+[2026-07-19 02:10:50] INFO: Total Books displayed in Catalog page are: 8
+[2026-07-19 02:10:50] INFO:  Verifying if Books count in Catalog page is correct Success !! Actual and Expected Values are:: 8
+[2026-07-19 02:10:50] INFO: Clicking on Pagination button number 2
+[2026-07-19 02:10:52] INFO: Checking if Pagination button number 2 is active after click
+[2026-07-19 02:10:52] INFO: Attribute class has value: page-btn page-btn-active
+[2026-07-19 02:10:52] INFO: Pagination button number 2 class attribute after click: page-btn page-btn-active
+[2026-07-19 02:10:52] INFO: Total Books displayed in Catalog page are: 7
+[2026-07-19 02:10:52] INFO:  Verifying if Books count in Catalog page is correct Success !! Actual and Expected Values are:: 7
+[2026-07-19 02:10:52] INFO: Clicking on Pagination button number 1
+[2026-07-19 02:10:54] INFO: Checking if Pagination button number 1 is active after click
+[2026-07-19 02:10:54] INFO: Attribute class has value: page-btn page-btn-active
+[2026-07-19 02:10:54] INFO: Pagination button number 1 class attribute after click: page-btn page-btn-active
+[2026-07-19 02:10:54] INFO: Total Books displayed in Catalog page are: 8
+[2026-07-19 02:10:54] INFO:  Verifying if Books count in Catalog page is correct Success !! Actual and Expected Values are:: 8
+[2026-07-19 02:10:56] INFO: Captured 10 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_001_In-796fe-y-Books-Count-in-pagination-Google-Chrome/network-log.json

@@ -1,0 +1,51 @@
+[2026-07-19 02:10:51] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-19 02:10:51] INFO: 📤 Request Payload: {
+  "username": "cartuser178439285160881293@",
+  "password": "Password123!",
+  "fullName": "Cart Test User"
+}
+[2026-07-19 02:10:52] INFO: ✅ Register user for Cart test Success! Status: 201 Created
+[2026-07-19 02:10:52] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "cartuser178439285160881293@"
+}
+[2026-07-19 02:10:52] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-19 02:10:52] INFO: 📤 Request Payload: {
+  "username": "cartuser178439285160881293@",
+  "password": "Password123!"
+}
+[2026-07-19 02:10:52] INFO: ✅ Login user for Cart test Success! Status: 200 OK
+[2026-07-19 02:10:52] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "cartuser178439285160881293@"
+}
+[2026-07-19 02:10:52] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-07-19 02:10:52] INFO: 📤 Request Payload: {
+  "bookId": "3"
+}
+[2026-07-19 02:10:52] INFO: ✅ Add book 3 to cart Success! Status: 200 OK
+[2026-07-19 02:10:52] INFO: 📥 Response Payload: [
+  {
+    "id": "3",
+    "title": "1984 Bugs",
+    "author": "George Orwell",
+    "price": 12,
+    "genre": "Dystopian",
+    "description": "Big Bug is watching your code.",
+    "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-07-19 02:10:52] INFO: Remote server detected. Skipping server reload step.
+[2026-07-19 02:10:52] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/cart
+[2026-07-19 02:10:52] INFO: ✅ Get cart after restart Success! Status: 200 OK
+[2026-07-19 02:10:52] INFO: 📥 Response Payload: [
+  {
+    "id": "3",
+    "title": "1984 Bugs",
+    "author": "George Orwell",
+    "price": 12,
+    "genre": "Dystopian",
+    "description": "Big Bug is watching your code.",
+    "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=600&auto=format&fit=crop"
+  }
+]
