@@ -1,0 +1,205 @@
+/* Button States & Animations */
+.action-btn-primary, .submit-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+.action-btn-primary:not(:disabled):hover,
+.submit-action-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  filter: brightness(1.1);
+}
+
+.action-btn-primary:active,
+.submit-action-btn:active {
+  transform: translateY(0);
+}
+
+.action-btn-primary:disabled,
+.submit-action-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  background: var(--border);
+  color: var(--text);
+}
+
+/* Spinner Animation */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: currentColor;
+  animation: spin 0.8s linear infinite;
+}
+
+/* WebSocket Notification Center Styles */
+.ws-bell-btn {
+  background: none;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.ws-bell-btn:hover {
+  background-color: var(--code-bg);
+  transform: scale(1.05);
+}
+
+.ws-bell-btn:active {
+  transform: scale(0.95);
+}
+
+.ws-status-dot {
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.ws-notification-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 320px;
+  max-height: 400px;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+  overflow: hidden;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  animation: slideUpFade 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ws-dropdown-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ws-dropdown-header h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.ws-dropdown-body {
+  padding: 0.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 320px;
+}
+
+.ws-no-events {
+  padding: 2rem 1rem;
+  text-align: center;
+  color: var(--text-light);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.ws-event-item {
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: all 0.2s ease;
+}
+
+.ws-event-item p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--text-h);
+}
+
+.ws-event-time {
+  font-size: 0.7rem;
+  color: var(--text-light);
+  align-self: flex-end;
+}
+
+.evt-purchase {
+  border-color: rgba(16, 185, 129, 0.15);
+  background: rgba(16, 185, 129, 0.05);
+}
+.evt-sale {
+  border-color: rgba(245, 158, 11, 0.15);
+  background: rgba(245, 158, 11, 0.05);
+}
+.evt-views {
+  border-color: rgba(99, 102, 241, 0.15);
+  background: rgba(99, 102, 241, 0.05);
+}
+.evt-stock {
+  border-color: rgba(239, 68, 68, 0.15);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.ws-event-item:hover {
+  transform: translateX(2px);
+  filter: brightness(1.05);
+}
+
+/* ===== Deliberate QA Visual Regression Chaos Mode ===== */
+body.visual-chaos-active .submit-action-btn.primary-x2 {
+  margin-left: 15px !important;
+}
+
+body.visual-chaos-active .info-cell-beta p,
+body.visual-chaos-active .info-cell-beta h3 {
+  line-height: 3.2 !important;
+}
+
+body.visual-chaos-active .catalog-book-cover {
+  filter: blur(1.5px) !important;
+}
+
+body.visual-chaos-active .catalog-search-form {
+  transform: translateX(-18px) !important;
+}
+
+body.visual-chaos-active .price-tag-value {
+  display: inline-block;
+  transform: rotate(-3deg) translateX(8px) !important;
+}
+
+body.visual-chaos-active .complex-item-box-alpha {
+  border-color: hsl(0, 85%, 60%) !important;
+}
