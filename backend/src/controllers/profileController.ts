@@ -3,13 +3,13 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
-import { JWT_SECRET } from '../config';
+import { config, JWT_SECRET } from '../config';
 import { chaosStore } from '../data/chaosStore';
 import { logger } from '../utils/logger';
 import { storage } from '../data/storage';
 
 // Ensure uploads folder exists inside workspace root (outside src/ to avoid build triggers)
-const UPLOADS_DIR = path.resolve(__dirname, '../../uploads');
+const UPLOADS_DIR = config.uploadsDir;
 if (!fs.existsSync(UPLOADS_DIR)) {
   fs.mkdirSync(UPLOADS_DIR, { recursive: true });
 }

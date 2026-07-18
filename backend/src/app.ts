@@ -7,6 +7,7 @@ import path from 'path';
 import apiRoutes from './routes/api';
 import { correlationIdMiddleware } from './middleware/correlationId';
 import { logger, loggerStore } from './utils/logger';
+import { config } from './config';
 
 const app = express();
 
@@ -37,14 +38,8 @@ app.use(helmet());
 // Enable CORS with restricted but flexible origins
 app.use(cors({
   origin: (origin, callback) => {
-    const allowedOrigins = [
-      'http://localhost:5173',
-      'https://buggy-books-fe.onrender.com' // Your specific Render URL
-    ];
-    
-    // Allow requests with no origin (like mobile apps or curl) 
-    // or origins that match our list or are render subdomains
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.onrender.com')) {
+    const allowed: readonly string[] = config.cors.allowedOrigins;
+    if (!origin || allowed.includes(origin) || origin.endsWith(config.cors.wildcardSuffix)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
@@ -60,13 +55,13 @@ app.use(express.json());
 
 // Real-world production rate limiter (600 max per IP per minute)
 const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 1 minute
-  max: 600,
+  windowMs: config.rateLimit.windowMs,
+  max: config.rateLimit.max,
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
   skip: (req) => {
-    return process.env.NODE_ENV === 'test' || req.headers['x-bypass-rate-limit'] === 'true';
+    return config.isTest || req.headers['x-bypass-rate-limit'] === 'true';
   }
 });
 
@@ -74,7 +69,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Serve uploads statically
-app.use('/uploads', express.static(path.resolve(__dirname, '../uploads')));
+app.use('/uploads', express.static(config.uploadsDir));
 
 // API Routes
 app.use('/api', apiRoutes);

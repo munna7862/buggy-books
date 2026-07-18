@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
+import { config } from '../config';
 
-const filename = process.env.NODE_ENV === 'test' ? 'db.test.json' : 'db.json';
+const filename = config.isTest ? 'db.test.json' : 'db.json';
 const DB_PATH = path.join(__dirname, '../../', filename);
 
 export interface DbSchema {
