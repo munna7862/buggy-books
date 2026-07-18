@@ -1,5 +1,6 @@
 import winston from 'winston';
 import { AsyncLocalStorage } from 'async_hooks';
+import { config } from '../config';
 
 export interface LogStore {
   correlationId?: string;
@@ -29,12 +30,12 @@ const format = winston.format.combine(
 const transports = [
   new winston.transports.Console({
     // In test environment, we keep the console quiet to avoid cluttered test outputs
-    silent: process.env.NODE_ENV === 'test',
+    silent: config.isTest,
   }),
 ];
 
 export const logger = winston.createLogger({
-  level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+  level: config.nodeEnv === 'development' ? 'debug' : 'info',
   format,
   transports,
 });

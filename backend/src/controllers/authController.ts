@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { JWT_SECRET } from '../config';
+import { config, JWT_SECRET } from '../config';
 
 import { storage } from '../data/storage';
 import { logger } from '../utils/logger';
@@ -18,7 +18,7 @@ const defaultUsers: Record<string, UserRecord> = {
 const MOCK_USERS: Record<string, UserRecord> = storage.get('users') || defaultUsers;
 
 const setAuthCookies = (res: Response, token: string, refreshToken: string) => {
-  const isProd = process.env.NODE_ENV === 'production';
+  const isProd = config.isProduction;
   res.cookie('token', token, {
     httpOnly: true,
     secure: isProd,

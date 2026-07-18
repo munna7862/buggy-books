@@ -3,8 +3,9 @@ import { Server } from 'socket.io';
 import app from './app';
 import { chaosStore } from './data/chaosStore';
 import { logger } from './utils/logger';
+import { config } from './config';
 
-const PORT = process.env.PORT || 4000;
+const PORT = config.port;
 
 // Wrap express app in http server
 const server = http.createServer(app);
@@ -12,7 +13,7 @@ const server = http.createServer(app);
 // Attach Socket.io
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:5173', 'https://buggy-books-fe.onrender.com'],
+    origin: [...config.cors.allowedOrigins],
     credentials: true
   }
 });
