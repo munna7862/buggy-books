@@ -1,0 +1,19 @@
+# Node
+node_modules/
+npm-debug.log*
+
+# Playwright
+playwright-report/
+reports/
+test-results/
+
+# Logs
+logs/
+*.log
+
+# Env
+.env
+.env.*
+
+# OS
+.DS_Store
