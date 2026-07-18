@@ -1,0 +1,17 @@
+{
+  "book": {
+    "id": 1
+  },
+  "payment": {
+    "firstName": "john",
+    "lastName": "cena",
+    "cardNumber": "4532015112830366"
+  },
+  "expected": {
+    "addToCartMessage": "Added to cart!",
+    "bookPrice": "$10.99",
+    "cartTotal": "Total: $10.99",
+    "checkoutTotal": "$10.99",
+    "paymentSuccessMessage": "Payment Successful! Thank you for your order."
+  }
+}

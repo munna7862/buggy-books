@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "sourceMap": false,
+      "target": "es2019",
+      "module": "commonjs",
+      "removeComments": true,
+      "noImplicitAny": false,
+      "esModuleInterop": true,
+      "resolveJsonModule": true,
+      "strictPropertyInitialization": true,
+      "strictNullChecks": true,
+      "types": ["node"]
+    }
+  }
