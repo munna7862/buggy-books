@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { envConfig } from '../../config/env.config';
-import apiUtil from '../../utils/api.util';
-import { CommonFunctions } from '../../utils/common.util';
-import testData from '../../test-data/api/Test_001_BooksApi.json';
+import { envConfig } from '../../../config/env.config';
+import apiUtil from '../../../utils/api.util';
+import { CommonFunctions } from '../../../utils/common.util';
+import testData from '../../../test-data/api/Test_001_BooksApi.json';
 
 const commonUtil = new CommonFunctions();
 const BOOKS_URL = `${envConfig.apiBaseUrl}/api/books`;
@@ -204,7 +204,4 @@ test.describe('Books API - List and Security', () => {
     expect(response.data.length).toBe(testData.expectedAllBooksCount);
     expect(Array.isArray(response.data)).toBeTruthy();
   });
-
-
-
 });

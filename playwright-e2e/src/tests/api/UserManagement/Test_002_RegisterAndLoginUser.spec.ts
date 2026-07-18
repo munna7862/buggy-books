@@ -1,8 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { envConfig } from '../../config/env.config';
-import apiUtil from '../../utils/api.util';
-import { CommonFunctions } from '../../utils/common.util';
-import testData from '../../test-data/api/Test_002_RegisterAndLoginUser.json';
+import { envConfig } from '../../../config/env.config';
+import apiUtil from '../../../utils/api.util';
+import { CommonFunctions } from '../../../utils/common.util';
+import testData from '../../../test-data/api/Test_002_RegisterAndLoginUser.json';
 
 const commonUtil = new CommonFunctions();
 const REGISTER_URL = `${envConfig.apiBaseUrl}/api/register`;
@@ -330,5 +330,20 @@ test.describe('Login API - Positive, Negative and Security', () => {
     });
 
     await validateStatusIn(response.status, testData.unsupportedContentTypeStatus, 'Unsupported login content type status');
+  });
+
+  test('Testcase 13: Security: GET /api/cart without auth cookies should return 401 Unauthorized', async () => {
+    const response = await apiUtil.makeRequest({
+      method: 'GET',
+      url: `${envConfig.apiBaseUrl}/api/cart`,
+      headers: {}, // No credentials/cookies
+      responseType: 'full',
+      logMessage: 'Request /api/cart without authentication'
+    });
+
+    await commonUtil.compareTwoValues(response.status, 401, 'Response status code should be 401');
+    expect(response.status).toBe(401);
+    await commonUtil.compareTwoValues(response.data?.error, 'Unauthorized: Token required', 'Error message for missing token');
+    expect(response.data?.error).toBe('Unauthorized: Token required');
   });
 });

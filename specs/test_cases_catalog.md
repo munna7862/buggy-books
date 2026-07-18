@@ -44,9 +44,9 @@ This document provides a detailed list of test cases in English for the BuggyBoo
 
 | ID | Title | Description | Covered |
 |:---|:---|:---|:---|
-| **API_AUTH_01** | `POST /api/login` Success | Send valid credentials. Verify 200 OK and that `Set-Cookie` header contains a valid JWT token. | **Yes**<br>- File: `api/Test_002_RegisterAndLoginUser.spec.ts`<br>- Test: `Testcase 7: Positive and Contract` |
-| **API_AUTH_02** | `POST /api/register` Conflict | Send a username that already exists. Verify 409 Conflict. | **Yes**<br>- File: `api/Test_002_RegisterAndLoginUser.spec.ts`<br>- Test: `Testcase 3: Duplicate usernames` |
-| **API_AUTH_03** | Protected Route Access | Attempt `GET /api/cart` without a cookie. Verify 401 Unauthorized. | **No** |
+| **API_AUTH_01** | `POST /api/login` Success | Send valid credentials. Verify 200 OK and that `Set-Cookie` header contains a valid JWT token. | **Yes**<br>- File: `api/UserManagement/Test_002_RegisterAndLoginUser.spec.ts`<br>- Test: `Testcase 7: Positive and Contract` |
+| **API_AUTH_02** | `POST /api/register` Conflict | Send a username that already exists. Verify 409 Conflict. | **Yes**<br>- File: `api/UserManagement/Test_002_RegisterAndLoginUser.spec.ts`<br>- Test: `Testcase 3: Duplicate usernames` |
+| **API_AUTH_03** | Protected Route Access | Attempt `GET /api/cart` without a cookie. Verify 401 Unauthorized. | **Yes**<br>- File: `api/UserManagement/Test_002_RegisterAndLoginUser.spec.ts`<br>- Test: `Testcase 13: Security: GET /api/cart without auth cookies should return 401 Unauthorized` |
 
 ### **Suite: Cart & Inventory**
 
