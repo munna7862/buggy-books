@@ -1,0 +1,16 @@
+[2026-07-19 00:14:02] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-19 00:14:02] INFO: 📤 Request Payload: {
+  "username": "johndoe178438584115698172@",
+  "password": "wrongPassword123@"
+}
+[2026-07-19 00:14:02] ERROR: ❌ Login with incorrect password Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "93b73d4c-68f8-4d6d-884f-419740220341"
+}
+[2026-07-19 00:14:02] ERROR: ❌ Login with incorrect password Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "93b73d4c-68f8-4d6d-884f-419740220341"
+}
+[2026-07-19 00:14:02] INFO:  Incorrect password status Success !! Actual and Expected Values are:: true

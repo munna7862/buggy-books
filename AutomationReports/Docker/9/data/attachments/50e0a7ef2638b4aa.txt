@@ -1,0 +1,35 @@
+[2026-07-19 00:13:40] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-19 00:13:40] INFO: 📤 Request Payload: {
+  "username": "cartuser178438582018614173@",
+  "password": "Password123!",
+  "fullName": "Cart Test User"
+}
+[2026-07-19 00:13:40] INFO: ✅ Register user for Cart test Success! Status: 201 Created
+[2026-07-19 00:13:40] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "cartuser178438582018614173@"
+}
+[2026-07-19 00:13:40] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-19 00:13:40] INFO: 📤 Request Payload: {
+  "username": "cartuser178438582018614173@",
+  "password": "Password123!"
+}
+[2026-07-19 00:13:41] INFO: ✅ Login user for Cart test Success! Status: 200 OK
+[2026-07-19 00:13:41] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "cartuser178438582018614173@"
+}
+[2026-07-19 00:13:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-07-19 00:13:41] INFO: 📤 Request Payload: {
+  "bookId": "3"
+}
+[2026-07-19 00:13:41] ERROR: ❌ Add book 3 to cart Failed! Status: 403 Forbidden | Response: {
+  "error": "Internal Server Error",
+  "errorName": "ForbiddenError",
+  "correlationId": "d8b890a7-f391-4c03-9613-a927915e7762"
+}
+[2026-07-19 00:13:41] ERROR: ❌ Add book 3 to cart Failed! Status: 403 Forbidden | Response: {
+  "error": "Internal Server Error",
+  "errorName": "ForbiddenError",
+  "correlationId": "d8b890a7-f391-4c03-9613-a927915e7762"
+}
