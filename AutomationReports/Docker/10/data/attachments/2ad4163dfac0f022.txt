@@ -1,0 +1,16 @@
+[2026-07-19 00:36:26] INFO: Network interception enabled with mode: api-only
+[2026-07-19 00:36:26] INFO: Clicking on Login link
+[2026-07-19 00:36:26] INFO: Entering username: autoTestUserJujhR
+[2026-07-19 00:36:26] INFO: Entering password: AutoTest@123
+[2026-07-19 00:36:26] INFO: Clicking on Sign In button
+[2026-07-19 00:36:27] INFO: Verifying landing on Checkout Page
+[2026-07-19 00:36:27] INFO: Checking if Checkout label is visible
+
+[Failure Hook] Capturing state for failing test: "Testcase 2: Login With Registered User and Logout"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-07-19 00:37:27] INFO: Captured 27 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-b0c52--Registered-User-and-Logout-Google-Chrome/network-log.json

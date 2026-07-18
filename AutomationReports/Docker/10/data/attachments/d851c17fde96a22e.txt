@@ -1,0 +1,58 @@
+[2026-07-19 00:36:14] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/books?page=2&limit=5
+[2026-07-19 00:36:14] INFO: ✅ Get paged books list for Standard page 2 Success! Status: 200 OK
+[2026-07-19 00:36:14] INFO: 📥 Response Payload: {
+  "books": [
+    {
+      "id": "6",
+      "title": "Harry Potter and the Goblet of Fire Events",
+      "author": "J.K. Rowling",
+      "price": 19.99,
+      "genre": "Fantasy",
+      "description": "Asynchronous magic tournaments and event loop chaos.",
+      "image": "https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "7",
+      "title": "The Hitchhiker's Guide to the API",
+      "author": "Douglas Adams",
+      "price": 11.5,
+      "genre": "Sci-Fi",
+      "description": "The answer to life, the universe, and REST endpoints is 42.",
+      "image": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "8",
+      "title": "Moby Stack Overflow",
+      "author": "Herman Melville",
+      "price": 8.99,
+      "genre": "Classic",
+      "description": "Captain Ahab's obsessive pursuit of the white stack trace.",
+      "image": "https://images.unsplash.com/photo-1623018035782-b269248df916?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "9",
+      "title": "War and Parse",
+      "author": "Leo Tolstoy",
+      "price": 17.99,
+      "genre": "Classic",
+      "description": "An epic battle between JSON and XML parsers.",
+      "image": "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "10",
+      "title": "Crime and Refactoring",
+      "author": "Fyodor Dostoevsky",
+      "price": 14.5,
+      "genre": "Thriller",
+      "description": "A developer's guilt-ridden journey of merging to production.",
+      "image": "https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?q=80&w=600&auto=format&fit=crop"
+    }
+  ],
+  "total": 15,
+  "page": 2,
+  "totalPages": 3,
+  "limit": 5
+}
+[2026-07-19 00:36:14] INFO:  Status code should be 200 for Standard page 2 Success !! Actual and Expected Values are:: 200
+[2026-07-19 00:36:14] INFO:  Response page should be 2 for Standard page 2 Success !! Actual and Expected Values are:: 2
+[2026-07-19 00:36:14] INFO:  Books array length should be less than or equal to limit 5 Success !! Actual and Expected Values are:: true

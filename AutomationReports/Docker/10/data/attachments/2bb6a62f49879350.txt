@@ -1,0 +1,12 @@
+[2026-07-19 00:36:27] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-19 00:36:27] INFO: 📤 Request Payload: {
+  "username": "security178438718544224669@",
+  "password": "johna123@",
+  "fullName": "<script>alert(\"xss\")</script>"
+}
+[2026-07-19 00:36:27] INFO: ✅ Security validation for script tag in fullName Success! Status: 201 Created
+[2026-07-19 00:36:27] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "security178438718544224669@"
+}
+[2026-07-19 00:36:27] INFO:  Security status for script tag in fullName Success !! Actual and Expected Values are:: true
