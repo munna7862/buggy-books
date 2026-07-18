@@ -1,0 +1,7 @@
+[2026-07-19 01:07:29] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/inventory/report
+[2026-07-19 01:07:32] INFO: ✅ Get inventory report Success! Status: 200 OK
+[2026-07-19 01:07:32] INFO: 📥 Response Payload: {
+  "totalBooks": 15,
+  "totalValue": 196.91000000000003,
+  "timestamp": "2026-07-18T15:37:32.168Z"
+}
