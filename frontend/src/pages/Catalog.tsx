@@ -1,66 +1,35 @@
-import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useChaos } from '../ChaosContext';
-import { api } from '../api';
-import toast from 'react-hot-toast';
-import type { Book } from '@buggybooks/types';
-
-const PAGE_LIMIT = 8;
+import { useBooks } from '../hooks/useBooks';
+import { useCart } from '../hooks/useCart';
 
 export default function Catalog() {
   const { config } = useChaos();
   const injectA11yViolations = config?.injectA11yViolations;
 
-  const [books, setBooks] = useState<Book[]>([]);
-  const [addingId, setAddingId] = useState<string | null>(null);
-  const [query, setQuery] = useState('');
-  const [inputValue, setInputValue] = useState('');
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const {
+    books,
+    query,
+    inputValue,
+    setInputValue,
+    page,
+    totalPages,
+    total,
+    loading,
+    search,
+    changePage
+  } = useBooks();
 
-  const fetchBooks = useCallback(() => {
-    setLoading(true);
-    api.getBooks({ q: query, page, limit: PAGE_LIMIT })
-      .then((data) => {
-        if (Array.isArray(data)) {
-          setBooks(data);
-          setTotalPages(1);
-          setTotal(data.length);
-        } else {
-          setBooks(data.books);
-          setTotalPages(data.totalPages);
-          setTotal(data.total);
-        }
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, [query, page]);
-
-  useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks]);
+  const { addToCart, addingId } = useCart();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    setPage(1);
-    setQuery(inputValue);
+    search(inputValue);
   };
 
-  const handleAddToCart = (id: string) => {
-    setAddingId(id);
-    const delay = Math.floor(Math.random() * 3000) + 500;
-    setTimeout(() => {
-      api.addToCart(id).then(() => {
-        setAddingId(null);
-        toast.success('Added to cart!');
-      }).catch((err) => {
-        console.error(err);
-        setAddingId(null);
-        toast.error('Failed to add to cart.');
-      });
-    }, delay);
+  const handleClear = () => {
+    setInputValue('');
+    search('');
   };
 
   return (
@@ -84,7 +53,7 @@ export default function Catalog() {
             type="button"
             className="catalog-clear-btn"
             id="book-search-clear-btn"
-            onClick={() => { setInputValue(''); setQuery(''); setPage(1); }}
+            onClick={handleClear}
           >
             Clear
           </button>
@@ -129,7 +98,7 @@ export default function Catalog() {
               <p className="price-tag-value">${b.price.toFixed(2)}</p>
               <button
                 className="action-btn-primary dynamic-l1"
-                onClick={() => handleAddToCart(b.id)}
+                onClick={() => addToCart(b.id)}
                 disabled={addingId === b.id}
                 id={`add-to-cart-${b.id}`}
               >
@@ -155,7 +124,7 @@ export default function Catalog() {
           <button
             className="page-btn"
             id="pagination-prev"
-            onClick={() => setPage(p => Math.max(1, p - 1))}
+            onClick={() => changePage(Math.max(1, page - 1))}
             disabled={page === 1}
           >
             ← Prev
@@ -165,7 +134,7 @@ export default function Catalog() {
               key={p}
               className={`page-btn ${p === page ? 'page-btn-active' : ''}`}
               id={`pagination-page-${p}`}
-              onClick={() => setPage(p)}
+              onClick={() => changePage(p)}
             >
               {p}
             </button>
@@ -173,7 +142,7 @@ export default function Catalog() {
           <button
             className="page-btn"
             id="pagination-next"
-            onClick={() => setPage(p => Math.min(totalPages, p + 1))}
+            onClick={() => changePage(Math.min(totalPages, page + 1))}
             disabled={page === totalPages}
           >
             Next →
@@ -183,4 +152,3 @@ export default function Catalog() {
     </div>
   );
 }
-

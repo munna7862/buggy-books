@@ -52,7 +52,7 @@ The codebase is functional and ships value, but suffers from several recurring s
 
 ---
 
-### 4. Frontend: Establish a Proper Component Architecture with Hooks Separation
+### 4. Frontend: Establish a Proper Component Architecture with Hooks Separation [COMPLETED]
 
 **Layer**: Frontend
 **Severity**: 🔴 Critical
@@ -60,24 +60,7 @@ The codebase is functional and ships value, but suffers from several recurring s
 
 [Profile.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/pages/Profile.tsx#L4) also directly uses `fetch()` instead of the [centralized api.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/api.ts) wrapper — bypassing the token refresh interceptor entirely.
 
-**Impact**: Untestable logic. Inconsistent API call patterns. Growing page components become unmaintainable.
-
-#### Implementation Steps
-
-1. **Create** `frontend/src/hooks/` directory:
-   - `useBooks.ts` — encapsulates book fetching, pagination, search state
-   - `useCart.ts` — encapsulates cart CRUD operations
-   - `useCheckout.ts` — encapsulates wizard state, validation, submission
-   - `useProfile.ts` — encapsulates profile fetch and avatar upload
-2. **Add** profile endpoints to [api.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/api.ts) (currently missing `getProfile` and `uploadAvatar`)
-3. **Extract** checkout validation into `frontend/src/utils/validators.ts`
-4. **Break** Checkout.tsx into sub-components:
-   - `CheckoutWizard.tsx` (orchestrator)
-   - `ShippingStep.tsx`
-   - `PaymentStep.tsx`
-   - `ConfirmStep.tsx`
-   - `WizardStepper.tsx` (progress bar)
-5. **Establish** rule: Pages are **composition roots** (assemble components + hooks); Components are **pure rendering**; Hooks encapsulate **state + side effects**
+**Status**: Completed. Created custom hooks (`useBooks`, `useCart`, `useCheckout`, `useProfile`) to handle all component states, validation rules, and network side-effects. Refactored the monolithic `Checkout.tsx` by splitting the form wizard into sub-components (`WizardStepper`, `ShippingStep`, `PaymentStep`, `ConfirmStep`), and migrated all fetch endpoints to use the central api interceptors.
 
 ---
 
@@ -269,7 +252,7 @@ The [catalog.page.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/pages
 | 1 | Shared TypeScript Types [DONE] | Cross-cutting | 🔴 Must-Do | Medium | Eliminates type drift across layers |
 | 2 | Backend Service Layer [DONE] | Backend | 🔴 Must-Do | High | Enables unit testing, SRP |
 | 3 | Centralized Error Handling [DONE] | Backend | 🔴 Must-Do | Medium | Consistent API responses, DRY |
-| 4 | Frontend Hooks + Component Architecture | Frontend | 🔴 Must-Do | High | Maintainability, testability |
+| 4 | Frontend Hooks + Component Architecture [DONE] | Frontend | 🔴 Must-Do | High | Maintainability, testability |
 | 5 | CSS Naming Convention | Frontend | 🔴 Must-Do | Medium | Developer experience, maintainability |
 | 6 | Decouple POM Cross-Instantiation | Playwright | 🟡 Good-to-Have | Low | Reusable POMs, clean test architecture |
 | 7 | Eliminate Duplicate Assertions | Playwright | 🟡 Good-to-Have | Low | 50% less test code, clean reports |
