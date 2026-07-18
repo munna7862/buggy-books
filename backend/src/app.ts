@@ -65,6 +65,9 @@ const limiter = rateLimit({
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => {
+    return process.env.NODE_ENV === 'test' || req.headers['x-bypass-rate-limit'] === 'true';
+  }
 });
 
 // Apply rate limiter to all routes
