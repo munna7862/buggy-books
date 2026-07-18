@@ -74,6 +74,7 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
   if (res.status === 401 && !url.includes('/login') && !url.includes('/register')) {
     // If the refresh request itself fails with 401/403, redirect to login
     if (url.includes('/auth/refresh')) {
+      csrfToken = null;
       localStorage.removeItem('authUser');
       window.location.href = '/login';
       return;
@@ -88,6 +89,7 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
       });
 
       if (refreshRes.ok) {
+        csrfToken = null; // Clear cached token for the refreshed session
         // Retry original request
         const retryRes = await fetch(url, mergedOptions);
         if (retryRes.status === 401) {
@@ -101,6 +103,7 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
       console.error('Silent token refresh failed:', err);
     }
 
+    csrfToken = null;
     localStorage.removeItem('authUser');
     window.location.href = '/login';
     return;
@@ -111,6 +114,7 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
 
 export const api = {
   login: async (username: string, password: string) => {
+    csrfToken = null;
     return apiRequest(`${BASE_URL}/login`, {
       method: 'POST',
       body: JSON.stringify({ username, password }),
@@ -118,6 +122,7 @@ export const api = {
   },
 
   register: async (username: string, password: string, fullName?: string) => {
+    csrfToken = null;
     return apiRequest(`${BASE_URL}/register`, {
       method: 'POST',
       body: JSON.stringify({ username, password, fullName }),
@@ -125,6 +130,7 @@ export const api = {
   },
 
   logout: async () => {
+    csrfToken = null;
     return apiRequest(`${BASE_URL}/logout`, { method: 'POST' });
   },
 
