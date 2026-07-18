@@ -27,6 +27,17 @@ test.describe('Register New User', () => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     await page.goto(envConfig.baseUrl);
 
+    if (!username) {
+      username = TestData.USER_NAME + commonFunctions.generateRandomString(5);
+      fullName = TestData.FULL_NAME + commonFunctions.generateRandomString(5);
+      await test.step('Register User for Login Test', async () => {
+        await signUpPage.clickSignUp();
+        await signUpPage.registerNewUser(fullName, username, TestData.PASSWORD, TestData.PASSWORD);
+        await page.waitForTimeout(1000);
+        await catalogPage.clickLogout();
+      });
+    }
+
     await test.step('Perform Login', async () => {
       await catalogPage.clickNavigateLink("Login");
       const isLogin = await signUpPage.login(username, TestData.PASSWORD);
