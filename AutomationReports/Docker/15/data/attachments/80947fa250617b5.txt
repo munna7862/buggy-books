@@ -1,0 +1,37 @@
+[2026-07-19 02:23:52] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-19 02:23:52] INFO: 📤 Request Payload: {
+  "username": "johndoe178439363291578751@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-07-19 02:23:53] INFO: ✅ Register a new valid user Success! Status: 201 Created
+[2026-07-19 02:23:53] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe178439363291578751@"
+}
+[2026-07-19 02:23:53] INFO:  Response status Success !! Actual and Expected Values are:: 201
+[2026-07-19 02:23:53] INFO:  Registration response is an object Success !! Actual and Expected Values are:: object
+[2026-07-19 02:23:53] INFO:  Registration response is not null Success !! Actual and Expected Values are:: true
+[2026-07-19 02:23:53] INFO:  Message is a string Success !! Actual and Expected Values are:: string
+[2026-07-19 02:23:53] INFO:  Username is a string Success !! Actual and Expected Values are:: string
+[2026-07-19 02:23:53] INFO:  Registration message Success !! Actual and Expected Values are:: Registration successful
+[2026-07-19 02:23:53] INFO:  Registered username matches request Success !! Actual and Expected Values are:: johndoe178439363291578751@
+[2026-07-19 02:23:53] INFO:  Response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","username"]
+[2026-07-19 02:23:53] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-19 02:23:53] INFO: 📤 Request Payload: {
+  "username": "johndoe178439363291578751@",
+  "password": "johna123@"
+}
+[2026-07-19 02:23:53] INFO: ✅ Login with newly registered user Success! Status: 200 OK
+[2026-07-19 02:23:53] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "johndoe178439363291578751@"
+}
+[2026-07-19 02:23:53] INFO:  Login response status after registration Success !! Actual and Expected Values are:: 200
+[2026-07-19 02:23:53] INFO:  Login response is an object Success !! Actual and Expected Values are:: object
+[2026-07-19 02:23:53] INFO:  Login response is not null Success !! Actual and Expected Values are:: true
+[2026-07-19 02:23:53] INFO:  Login message is a string Success !! Actual and Expected Values are:: string
+[2026-07-19 02:23:53] INFO:  Login username is a string Success !! Actual and Expected Values are:: string
+[2026-07-19 02:23:53] INFO:  Login message Success !! Actual and Expected Values are:: Login successful
+[2026-07-19 02:23:53] INFO:  Logged in username matches request Success !! Actual and Expected Values are:: johndoe178439363291578751@
+[2026-07-19 02:23:53] INFO:  Login response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","username"]

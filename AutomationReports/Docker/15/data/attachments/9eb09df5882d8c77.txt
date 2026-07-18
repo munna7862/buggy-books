@@ -1,0 +1,8 @@
+[2026-07-19 02:25:08] INFO: Network interception enabled with mode: api-only
+[2026-07-19 02:25:08] INFO: Clicking on Login link
+[2026-07-19 02:25:08] INFO: Entering username: admin
+[2026-07-19 02:25:08] INFO: Entering password: wrongPassword123@
+[2026-07-19 02:25:08] INFO: Clicking on Sign In button
+[2026-07-19 02:25:10] INFO: Getting error banner text
+[2026-07-19 02:25:10] INFO:  Verifying if error message is correct Success !! Actual and Expected Values are:: Unauthorized: Invalid credentials
+[2026-07-19 02:25:12] INFO: Captured 8 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-ec610-e-3-Login-Validation-Errors-Google-Chrome/network-log.json

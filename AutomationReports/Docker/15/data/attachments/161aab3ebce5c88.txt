@@ -1,0 +1,10 @@
+[2026-07-19 02:23:57] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/login
+[2026-07-19 02:23:57] ERROR: ❌ Attempt login endpoint with unsupported GET method Failed! Status: 404 Not Found | Response: {
+  "error": "Not Found",
+  "message": "The requested route /api/login was not found on this server. Make sure your API URL is correct."
+}
+[2026-07-19 02:23:57] ERROR: ❌ Attempt login endpoint with unsupported GET method Failed! Status: 404 Not Found | Response: {
+  "error": "Not Found",
+  "message": "The requested route /api/login was not found on this server. Make sure your API URL is correct."
+}
+[2026-07-19 02:23:57] INFO:  Unsupported login method status Success !! Actual and Expected Values are:: true
