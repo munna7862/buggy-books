@@ -130,3 +130,12 @@ export const refresh = (req: Request, res: Response) => {
     res.json({ success: true, username });
   });
 };
+
+export const resetUsers = () => {
+  for (const username in MOCK_USERS) {
+    if (!defaultUsers[username]) {
+      delete MOCK_USERS[username];
+    }
+  }
+  storage.set('users', MOCK_USERS);
+};

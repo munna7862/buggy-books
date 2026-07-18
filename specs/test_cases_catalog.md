@@ -59,9 +59,9 @@ This document provides a detailed list of test cases in English for the BuggyBoo
 
 | ID | Title | Description | Covered |
 |:---|:---|:---|:---|
-| **API_TEST_01** | Global Reset | Call `POST /api/test/reset`. Verify all users (except defaults) and all carts are cleared. | **No** |
-| **API_CHAOS_01** | Inject Checkout Failures | Set `checkoutFailureRate` to 1.0 via `/api/test/config`. Verify all checkout attempts return 500. | **No** |
-| **API_CHAOS_02** | Inject API Latency | Set `inventoryDelayMs` to 3000. Verify `/api/inventory/report` takes at least 3 seconds to respond. | **No** |
+| **API_TEST_01** | Global Reset | Call `POST /api/test/reset`. Verify all users (except defaults) and all carts are cleared. | **Yes**<br>- File: `api/ChaosAndTesting/Test_001_ChaosAndTestingApi.spec.ts`<br>- Test: `API_TEST_01: Global reset clears all non-default users and carts` |
+| **API_CHAOS_01** | Inject Checkout Failures | Set `checkoutFailureRate` to 1.0 via `/api/test/config`. Verify all checkout attempts return 500. | **Yes**<br>- File: `api/ChaosAndTesting/Test_001_ChaosAndTestingApi.spec.ts`<br>- Test: `API_CHAOS_01: Inject checkout failures` |
+| **API_CHAOS_02** | Inject API Latency | Set `inventoryDelayMs` to 3000. Verify `/api/inventory/report` takes at least 3 seconds to respond. | **Yes**<br>- File: `api/ChaosAndTesting/Test_001_ChaosAndTestingApi.spec.ts`<br>- Test: `API_CHAOS_02: Inject API latency` |
 
 ---
 

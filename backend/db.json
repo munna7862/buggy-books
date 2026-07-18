@@ -5,48 +5,6 @@
     },
     "testuser": {
       "passwordHash": "$2b$10$fdhhYryAWo99lpx8tpHQSO9gSGodqWWhbe07UO44V6AVtIv915nbS"
-    },
-    "johndoe178435523620993838@": {
-      "passwordHash": "$2b$10$4wuisYTw9aulV/cfbAQxjuw1cvQCI0sklLSx.0nhgXiD.VKnJ7oa.",
-      "fullName": "john doe"
-    },
-    "johndoe178435523648491351@": {
-      "passwordHash": "$2b$10$sBFFzkROJkmuulIPd55cEeQnlj3jOuyQxp3uV5nquQKG3ZWBF2jxq",
-      "fullName": "john doe"
-    },
-    "security178435523620482504@": {
-      "passwordHash": "$2b$10$W5YYtuQJU0RUCQTLqywIIOPoeXXaKXFjIdgVp93jADfTfl6zOqZGS"
-    },
-    "security178435523620490128@": {
-      "passwordHash": "$2b$10$onBL4nqzgX68JU6P62z7D.4pvsoBhCVDsX4LLvriwIB4mJTvCwzKu",
-      "fullName": "<script>alert(\"xss\")</script>"
-    },
-    "security178435523620481926@": {
-      "passwordHash": "$2b$10$9j8vdC5enc5HAJLVTUgg2uuIgJWiK/Jd28/4cjJXwutkVNOUwM2US"
-    },
-    "johndoe178435523684270909@": {
-      "passwordHash": "$2b$10$CzH9zpEI15TvGY1R9RENUe126TTyaMl3W2UtqUCTiHE7.4ZGhnxzi",
-      "fullName": "john doe"
-    },
-    "cartuser178435559495754524@": {
-      "passwordHash": "$2b$10$.8565Frg/1EP/HP9kTD1Fua04mbXLKIYzRkdpZ12HazBq0S5Tj1fW",
-      "fullName": "Cart Test User"
-    },
-    "cartuser178435559982990208@": {
-      "passwordHash": "$2b$10$2WwlzOHcVBUY9yuBN91BpO.4ofPAsPFBsGyvqfqkmd1jox0cQoRbO",
-      "fullName": "Cart Test User"
-    },
-    "cartuser178435560496041852@": {
-      "passwordHash": "$2b$10$jBi3izZ64udVdIgj43MTQuYwSOc0zbTd.X.cNqIA4wiwObjaS.pjq",
-      "fullName": "Cart Test User"
-    },
-    "cartuser178435560972386029@": {
-      "passwordHash": "$2b$10$oyyAAD.age4zYnY/BktwGu35oVndgoWjG8mkhccrJ51ktUvinTB6u",
-      "fullName": "Cart Test User"
-    },
-    "cartuser178435566199893302@": {
-      "passwordHash": "$2b$10$wyAqp7w2FgqWtM2Li2pOs.ShKLUHoNgluA6k.8VAz6YanhtIwjvsK",
-      "fullName": "Cart Test User"
     }
   },
   "dataStore": {
@@ -187,38 +145,16 @@
         "image": "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=600&auto=format&fit=crop"
       }
     ],
-    "cart": {
-      "cartuser178435566199893302@": [
-        {
-          "id": "3",
-          "title": "1984 Bugs",
-          "author": "George Orwell",
-          "price": 12,
-          "genre": "Dystopian",
-          "description": "Big Bug is watching your code.",
-          "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=600&auto=format&fit=crop"
-        }
-      ]
-    },
-    "orders": [
-      {
-        "id": "5da628b4-42a9-4e72-992b-9037ec012277",
-        "items": [
-          {
-            "id": "8",
-            "title": "Moby Stack Overflow",
-            "author": "Herman Melville",
-            "price": 8.99,
-            "genre": "Classic",
-            "description": "Captain Ahab's obsessive pursuit of the white stack trace.",
-            "image": "https://images.unsplash.com/photo-1623018035782-b269248df916?q=80&w=600&auto=format&fit=crop"
-          }
-        ],
-        "total": 8.99,
-        "customerName": "a qw",
-        "date": "2026-05-03T07:46:16.421Z"
-      }
-    ]
+    "cart": {},
+    "orders": {}
   },
-  "chaosStore": null
+  "chaosStore": {
+    "checkoutFailureRate": 0.15,
+    "inventoryDelayMs": 3000,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": false
+  }
 }
