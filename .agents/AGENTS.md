@@ -15,7 +15,8 @@ graph TD
     C --> D[Add Specs to test_cases_catalog.md]
     D --> E[Write Playwright E2E/API Tests]
     E --> F[Run Verification Suite Locally]
-    F --> G[Commit, Push & Create PR]
+    F --> G[Perform Final Code & QA Review]
+    G --> H[Commit, Push & Create PR]
 ```
 
 1. **Branch Isolation**:
@@ -47,6 +48,12 @@ graph TD
    * Verify all Jest/Vitest tests pass (`npm run test` or `npm test`).
    * Verify Playwright tests pass by running local dev servers (`npm run dev`).
 
-8. **Deployment & Pull Request Policy**:
-   * Push the final code to the remote repository.
+8. **Final Code & QA Review**:
+   * Before pushing, perform a thorough review of all code diffs.
+   * Verify file cleanliness: remove any temporary debug statements, console logs, or unused variables.
+   * Ensure code structure is properly formatted and includes clear explanatory comments where necessary.
+   * Re-confirm that all unit/component test files and E2E specs are fully synchronized.
+
+9. **Deployment & Pull Request Policy**:
+   * Commit and push the final branch to the remote repository.
    * Open a PR so that the continuous integration (CI) pipeline runs verification tests against GitHub Actions before merging to `main`.
