@@ -17,15 +17,15 @@ This skill guides the agent to autonomously generate Page Objects, write E2E tes
 When requested to create a Page Object for a page (e.g. catalog or login):
 1. **Launch & Capture Snapshot:** Execute the save-snapshot CLI script in the `playwright-e2e` directory:
    - **For public pages:**
-     `npm run save-snapshot <url> <page-name>`
+     `npx ts-node scripts/save-snapshot.ts <url> <page-name>`
    - **For pages requiring interactive actions (SSO, MFA, scroll to load):**
      Run in headful mode using:
-     `npm run save-snapshot <url> <page-name> -- --interactive`
+     `npx ts-node scripts/save-snapshot.ts <url> <page-name> --interactive`
      *(Wait for the user to confirm completion in the terminal).*
 2. **Read Cleaned HTML:** Load the captured HTML snapshot from `playwright-e2e/reports/snapshots/<page-name>.html` and the accessibility tree YAML from `playwright-e2e/reports/snapshots/<page-name>.yaml`.
 3. **Draft the POM Class:**
    - Extend `BasePage` imported from `../core/base/base.page`.
-   - Declare locators as private getters returning `Locator` using `@playwright/test`.
+   - Declare locators as private getters returning `Locator` using `@playwright/test` (e.g., `private get txtUsername(): Locator`).
    - Implement public action methods using custom `BasePage` wrappers (`this.doClick`, `this.doEnterText`, `this.doGetText`, etc.) with meaningful descriptive logs.
 4. **Save Page Object:** Write the TypeScript file directly to `playwright-e2e/src/pages/<page-name>.page.ts`.
 
@@ -33,7 +33,7 @@ When requested to create a Page Object for a page (e.g. catalog or login):
 When requested to write E2E tests:
 1. **Analyze existing POMs (for UI):** Check page object classes in `playwright-e2e/src/pages/` to identify reusable methods. Specs must not contain inline selectors.
 2. **Draft the Spec:**
-   - Import `test` from `../../../core/base/base.test` (extended custom fixture) and `expect` from `@playwright/test`.
+   - Import `test` from `../../../core/base/base.fixture` (extended custom fixture) and `expect` from `@playwright/test`.
    - Group test steps using `await test.step(...)`.
    - **For API Tests:**
      - Utilize Playwright's native `request` context.
@@ -47,12 +47,13 @@ When a test fails or when requested to "heal a failure":
 1. **Load Failure Context:** Read the generated failure metadata from:
    - `playwright-e2e/reports/snapshots/failure-context.json` (contains the failing locator and error traceback)
    - `playwright-e2e/reports/snapshots/failure-dom.html` (contains the cleaned DOM at failure point)
+   - `playwright-e2e/reports/snapshots/failure-aria.yaml` (contains the accessibility tree ARIA snapshot at failure point)
 2. **Diagnose Selector Changes:**
    - Compare the failing locator from `failure-context.json` against the elements inside `failure-dom.html`.
    - Match the target selector to its updated element attributes.
 3. **Patch Code:** Automatically locate the corresponding Page Object (or test spec) file and update the broken selector.
 4. **Rerun & Verify:** Run the spec using Playwright to confirm the healed test passes:
-   `$env:HEADLESS="true"; npx playwright test <TestName>.spec.ts --config=src/config/playwright.config.ts`
+   `npx cross-env HEADLESS=true npx playwright test src/tests/ui/<FeatureName>/<TestName>.spec.ts --config=src/config/playwright.config.ts`
 
 ---
 
