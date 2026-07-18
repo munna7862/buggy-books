@@ -1,0 +1,60 @@
+[2026-07-19 00:40:55] INFO: Network interception enabled with mode: api-only
+[2026-07-19 00:40:55] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-07-19 00:40:55] INFO: Clicking on Login link
+[2026-07-19 00:40:55] INFO: Entering username: admin
+[2026-07-19 00:40:55] INFO: Entering password: password123
+[2026-07-19 00:40:55] INFO: Clicking on Sign In button
+[2026-07-19 00:40:56] INFO: Verifying landing on Checkout Page
+[2026-07-19 00:40:56] INFO: Checking if Checkout label is visible
+[2026-07-19 00:40:57] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-19 00:40:57] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-07-19 00:40:57] INFO: Clicking on Cart link
+[2026-07-19 00:41:02] INFO: Clicking on Catalog link
+[2026-07-19 00:41:02] INFO: Clicking on Add to Cart button for book id: 2
+[2026-07-19 00:41:02] INFO: Waiting for cart status message: Added to cart!
+[2026-07-19 00:41:04] INFO: Cart status message "Added to cart!" is visible
+[2026-07-19 00:41:04] INFO: Clicking on Cart link
+[2026-07-19 00:41:04] INFO: Getting cart item text
+[2026-07-19 00:41:04] INFO: Getting cart total text
+[2026-07-19 00:41:04] INFO: Clicking on Logout button
+[2026-07-19 00:41:04] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-07-19 00:41:04] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-07-19 00:41:04] INFO: Entering username: admin
+[2026-07-19 00:41:04] INFO: Entering password: password123
+[2026-07-19 00:41:04] INFO: Clicking on Sign In button
+[2026-07-19 00:41:05] INFO: Verifying landing on Checkout Page
+[2026-07-19 00:41:05] INFO: Checking if Checkout label is visible
+[2026-07-19 00:41:06] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-19 00:41:06] INFO:  Verifying if user logged in successfully again Success !! Actual and Expected Values are:: true
+[2026-07-19 00:41:06] INFO: Clicking on Cart link
+[2026-07-19 00:41:06] INFO: Getting cart item text
+[2026-07-19 00:41:06] INFO: Getting cart total text
+[2026-07-19 00:41:06] INFO: Clicking on cart total heading
+[2026-07-19 00:41:06] INFO: Clicking on Proceed to Checkout button
+[2026-07-19 00:41:06] INFO: Waiting for checkout order total amount: $15.50
+[2026-07-19 00:41:07] INFO: Entering first name: johv
+[2026-07-19 00:41:07] INFO: Entering last name: cena
+[2026-07-19 00:41:07] INFO: Entering shipping address: 123 Buggy Lane
+[2026-07-19 00:41:07] INFO: Entering city: Stack City
+[2026-07-19 00:41:07] INFO: Clicking on Next Step button
+[2026-07-19 00:41:07] INFO: Entering card number
+[2026-07-19 00:41:07] INFO: Entering card expiry: 12/30
+[2026-07-19 00:41:07] INFO: Entering card CVV: 123
+[2026-07-19 00:41:07] INFO: Checking if Next Step button is visible - Element is visible
+[2026-07-19 00:41:07] INFO: Clicking on Next Step button on Payment page
+[2026-07-19 00:41:07] WARN: Invalid card entered; retrying with valid card number
+[2026-07-19 00:41:07] INFO: Entering card number
+[2026-07-19 00:41:07] INFO: Entering card expiry: 12/30
+[2026-07-19 00:41:07] INFO: Entering card CVV: 123
+[2026-07-19 00:41:07] INFO: Checking if Next Step button is visible - Element is visible
+[2026-07-19 00:41:07] INFO: Clicking on Next Step button on Payment page
+[2026-07-19 00:41:07] INFO: Waiting for confirmation message containing: Payment Successful! Thank you for your order.
+[2026-07-19 00:42:07] WARN: Payment attempt 1 did not complete successfully. Retrying payment.
+[2026-07-19 00:42:07] INFO: Checking if Next Step button is visible - Element is not visible
+[2026-07-19 00:42:07] INFO: Clicking on Complete Payment button on Confirm page
+[2026-07-19 00:42:07] INFO: Waiting for confirmation message containing: Payment Successful! Thank you for your order.
+[2026-07-19 00:43:07] WARN: Payment attempt 2 did not complete successfully. Retrying payment.
+[2026-07-19 00:43:07] INFO: Checking if Next Step button is visible - Element is not visible
+[2026-07-19 00:43:07] INFO: Clicking on Complete Payment button on Confirm page
+[2026-07-19 00:43:07] INFO: Waiting for confirmation message containing: Payment Successful! Thank you for your order.
+[2026-07-19 00:44:07] INFO: Captured 89 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_002_CartP-51a4b-sts-across-logout-and-login-Google-Chrome/network-log.json
