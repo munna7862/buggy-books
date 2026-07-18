@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 import { dataStore } from '../data/dataStore';
 import { chaosStore } from '../data/chaosStore';
-import { resetUsers } from './authController';
+import { authService } from '../services/auth.service';
 
 const chaosConfigSchema = z.object({
   checkoutFailureRate: z.number().min(0).max(1).optional(),
@@ -23,7 +23,7 @@ export const updateConfig = (req: Request, res: Response) => {
 export const resetData = (req: Request, res: Response) => {
   dataStore.resetData();
   chaosStore.resetConfig();
-  resetUsers();
+  authService.resetUsers();
   res.json({ success: true, message: 'Test state reset successfully' });
 };
 

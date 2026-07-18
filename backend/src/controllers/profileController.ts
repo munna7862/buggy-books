@@ -4,10 +4,8 @@ import path from 'path';
 import fs from 'fs';
 import jwt from 'jsonwebtoken';
 import { config, JWT_SECRET } from '../config';
-import { chaosStore } from '../data/chaosStore';
-import { logger } from '../utils/logger';
-import { storage } from '../data/storage';
-import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from '../errors/app-error';
+import { profileService } from '../services/profile.service';
+import { BadRequestError } from '../errors/app-error';
 
 // Ensure uploads folder exists inside workspace root (outside src/ to avoid build triggers)
 const UPLOADS_DIR = config.uploadsDir;
@@ -71,66 +69,17 @@ export const handleAvatarUpload = (req: Request, res: Response, next: any) => {
 
 export const getProfile = (req: Request, res: Response) => {
   const username = req.user?.username;
-
-  if (!username) {
-    throw new UnauthorizedError('Unauthorized: Session required');
-  }
-
-  const defaultUsers: Record<string, any> = {
-    admin: { fullName: 'Admin User' },
-    testuser: { fullName: 'Test User' }
-  };
-  const users = storage.get('users') || defaultUsers;
-  const user = users[username];
-
-  if (!user) {
-    throw new NotFoundError('User not found');
-  }
-
-  res.json({
-    username,
-    fullName: user.fullName || (username === 'admin' ? 'Admin User' : username === 'testuser' ? 'Test User' : 'Anonymous User'),
-    avatarUrl: user.avatarUrl || null
-  });
+  const profile = profileService.getProfile(username);
+  res.json(profile);
 };
 
 export const uploadAvatar = (req: Request, res: Response) => {
   const username = req.user?.username;
-
-  if (!username) {
-    logger.warn('Avatar upload failed: Unauthenticated user');
-    throw new UnauthorizedError('Unauthorized: Session required');
-  }
-
-  // Chaos failure injection
-  const failureRate = chaosStore.getConfig().uploadFailureRate;
-  if (failureRate > 0 && Math.random() < failureRate) {
-    logger.warn(`Chaos: Simulating profile upload failure for user ${username} (rate: ${failureRate})`);
-    throw new InternalServerError('Internal Server Error: Upload service failed');
-  }
-
-  if (!req.file) {
-    logger.warn(`Avatar upload failed: Missing file in payload for user ${username}`);
-    throw new BadRequestError('Bad Request: No file uploaded');
-  }
-
-  const defaultUsers: Record<string, any> = {
-    admin: { fullName: 'Admin User' },
-    testuser: { fullName: 'Test User' }
-  };
-  const users = storage.get('users') || defaultUsers;
-  if (!users[username]) {
-    throw new NotFoundError('User not found');
-  }
-
-  const fileUrl = `/uploads/${req.file.filename}`;
-  users[username].avatarUrl = fileUrl;
-  storage.set('users', users);
-
-  logger.info(`Avatar uploaded successfully for user: ${username} -> ${fileUrl}`, { username, fileUrl });
+  const filename = req.file?.filename;
+  const result = profileService.uploadAvatar(username, filename);
   res.json({
     success: true,
     message: 'Avatar uploaded successfully',
-    avatarUrl: fileUrl
+    avatarUrl: result.avatarUrl
   });
 };
