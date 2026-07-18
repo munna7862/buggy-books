@@ -1,0 +1,14 @@
+[2026-07-18 21:27:05] INFO: Network interception enabled with mode: api-only
+[2026-07-18 21:27:05] INFO: Clicking on Login link
+[2026-07-18 21:27:05] INFO: Entering username: admin
+[2026-07-18 21:27:05] INFO: Entering password: wrongPassword123@
+[2026-07-18 21:27:05] INFO: Clicking on Sign In button
+
+[Failure Hook] Capturing state for failing test: "Testcase 3: Login Validation Errors"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-07-18 21:32:05] INFO: Captured 8 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-ec610-e-3-Login-Validation-Errors-Google-Chrome-retry1/network-log.json

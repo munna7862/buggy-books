@@ -1,0 +1,37 @@
+[2026-07-18 21:00:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-18 21:00:33] INFO: ✅ Reset state before test Success! Status: 200 OK
+[2026-07-18 21:00:33] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-07-18 21:00:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-07-18 21:00:33] INFO: 📤 Request Payload: {
+  "inventoryDelayMs": 3000
+}
+[2026-07-18 21:00:33] INFO: ✅ Configure inventory report latency to 3000ms Success! Status: 200 OK
+[2026-07-18 21:00:33] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 0.15,
+    "inventoryDelayMs": 3000,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": false
+  }
+}
+[2026-07-18 21:00:33] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/inventory/report
+[2026-07-18 21:00:36] INFO: ✅ Get inventory report under latency injection Success! Status: 200 OK
+[2026-07-18 21:00:36] INFO: 📥 Response Payload: {
+  "totalBooks": 15,
+  "totalValue": 196.91000000000003,
+  "timestamp": "2026-07-18T11:30:36.695Z"
+}
+[2026-07-18 21:00:36] INFO: Inventory report request took: 3083 ms
+[2026-07-18 21:00:36] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-18 21:00:36] INFO: ✅ Final state reset Success! Status: 200 OK
+[2026-07-18 21:00:36] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}

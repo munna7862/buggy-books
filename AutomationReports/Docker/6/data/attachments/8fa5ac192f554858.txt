@@ -1,0 +1,11 @@
+[2026-07-18 21:21:46] INFO: Network interception enabled with mode: api-only
+[2026-07-18 21:21:46] ERROR: ❌ Failed to load authentication state: Error: ENOENT: no such file or directory, open '/__w/buggy-books/buggy-books/auth-state.json'
+
+[Failure Hook] Capturing state for failing test: "Testcase 2: Login Using Saved Session Storage"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-07-18 21:21:46] INFO: Captured 0 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-35a7d-Using-Saved-Session-Storage-Google-Chrome-retry1/network-log.json

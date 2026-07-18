@@ -1,0 +1,6 @@
+[2026-07-18 21:11:10] INFO: Network interception enabled with mode: api-only
+[2026-07-18 21:11:11] INFO: Clicking on Login link
+[2026-07-18 21:11:11] INFO: Entering username: admin
+[2026-07-18 21:11:11] INFO: Entering password: password123
+[2026-07-18 21:11:11] INFO: Clicking on Sign In button
+[2026-07-18 21:16:10] INFO: Captured 8 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-a2773--1-Login-With-Existing-User-Google-Chrome/network-log.json

@@ -1,0 +1,15 @@
+[2026-07-18 21:16:07] INFO: Network interception enabled with mode: api-only
+[2026-07-18 21:16:07] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-07-18 21:16:08] INFO: Clicking on Login link
+[2026-07-18 21:16:08] INFO: Entering username: admin
+[2026-07-18 21:16:08] INFO: Entering password: password123
+[2026-07-18 21:16:08] INFO: Clicking on Sign In button
+
+[Failure Hook] Capturing state for failing test: "Testcase 1: Complete checkout after cart persists across logout and login"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-07-18 21:21:07] INFO: Captured 8 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_002_CartP-51a4b-sts-across-logout-and-login-Google-Chrome-retry1/network-log.json

@@ -1,0 +1,16 @@
+[2026-07-18 21:00:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-18 21:00:41] INFO: 📤 Request Payload: {
+  "username": "unregistered178437423681672388@",
+  "password": "johna123@"
+}
+[2026-07-18 21:00:41] ERROR: ❌ Login with unregistered user Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "32b98934-32ce-4cb7-83e0-6ef579b649c4"
+}
+[2026-07-18 21:00:41] ERROR: ❌ Login with unregistered user Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "32b98934-32ce-4cb7-83e0-6ef579b649c4"
+}
+[2026-07-18 21:00:41] INFO:  Status code for unregistered user Success !! Actual and Expected Values are:: true
