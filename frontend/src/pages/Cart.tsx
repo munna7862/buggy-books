@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react';
 import { api } from '../api';
 import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
-
-interface CartItem {
-  id: string;
-  title: string;
-  price: number;
-}
+import type { CartItem } from '@buggybooks/types';
 
 export default function Cart() {
   const [cart, setCart] = useState<CartItem[]>([]);

@@ -3,15 +3,7 @@ import { Link } from 'react-router-dom';
 import { useChaos } from '../ChaosContext';
 import { api } from '../api';
 import toast from 'react-hot-toast';
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  price: number;
-  image: string;
-  genre?: string;
-}
+import type { Book } from '@buggybooks/types';
 
 const PAGE_LIMIT = 8;
 

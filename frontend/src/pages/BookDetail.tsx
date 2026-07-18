@@ -2,16 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../api';
 import toast from 'react-hot-toast';
-
-interface Book {
-  id: string;
-  title: string;
-  author: string;
-  price: number;
-  image: string;
-  genre?: string;
-  description?: string;
-}
+import type { Book } from '@buggybooks/types';
 
 export default function BookDetail() {
   const { id } = useParams<{ id: string }>();

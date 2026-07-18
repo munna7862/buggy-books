@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react';
 import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
-
-interface BookstoreEvent {
-  id: string;
-  message: string;
-  type: string;
-  timestamp: string;
-}
+import type { BookstoreEvent } from '@buggybooks/types';
 
 const BASE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 // Resolve root domain origin for Socket.io mapping

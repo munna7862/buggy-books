@@ -9,6 +9,12 @@
       "resolveJsonModule": true,
       "strictPropertyInitialization": true,
       "strictNullChecks": true,
+      "baseUrl": ".",
+      "paths": {
+        "@buggybooks/types": ["../shared/types"],
+        "@buggybooks/types/*": ["../shared/types/*"]
+      },
       "types": ["node"]
-    }
+    },
+    "include": ["src/**/*", "../shared/**/*"]
   }
