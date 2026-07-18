@@ -1,59 +1,351 @@
-# 🤖 BuggyBooks Agent Development & QA Rules
+# 🤖 BuggyBooks AI Development & QA Guidelines
 
-This document outlines the workflow, architecture conventions, and test rules that all AI assistants must follow when modifying the BuggyBooks codebase or writing automation suites.
+This document defines the mandatory workflow, architecture standards, testing strategy, and quality gates that every AI agent must follow when contributing to the BuggyBooks codebase.
+
+Failure to follow these rules results in an incomplete implementation.
 
 ---
 
-## 🔄 Core Workflow Rules
+# Guiding Principles
 
-Every development or QA task must strictly follow this lifecycle:
+Every change must satisfy these objectives:
+
+- Keep changes minimal and scoped to the requested task.
+- Preserve existing architecture and coding conventions.
+- Never introduce untested functionality.
+- Ensure all affected documentation remains synchronized.
+- Leave the repository in a releasable state.
+
+---
+
+# Development Lifecycle
+
+Every feature, bug fix, refactor, or test implementation must follow this workflow.
 
 ```mermaid
 graph TD
-    A[Create Feature Branch] --> B[Implement Frontend/Backend Dev]
-    B --> C[Write Unit/Component Tests]
-    C --> D[Add Specs to test_cases_catalog.md]
-    D --> E[Write Playwright E2E/API Tests]
-    E --> F[Run Verification Suite Locally]
-    F --> G[Perform Final Code & QA Review]
-    G --> H[Commit, Push & Create PR]
+    A[Create Feature Branch]
+    --> B[Implement Code]
+    --> C[Write Unit/Component Tests]
+    --> D[Update Test Catalog]
+    --> E[Write Playwright Tests]
+    --> F[Run Local Verification]
+    --> G[Review Code]
+    --> H[Commit & Push]
+    --> I[Create Pull Request]
 ```
 
-1. **Branch Isolation**:
-   * **NEVER** modify code directly on `main`.
-   * Create a branch matching `feature/<name>`, `bugfix/<name>`, or `test/<name>`.
+No step may be skipped.
 
-2. **Feature Implementation**:
-   * Maintain architecture patterns: Express controllers, models, and JSON stores in `/backend`; React, TypeScript, HSL design system, and custom styling in `/frontend`.
+---
 
-3. **Multi-Tier Testing Hierarchy**:
-   * **Backend Logic**: Write Jest unit tests in the `/backend` directory.
-   * **Frontend UI Component Logic**: Write Vitest + React Testing Library tests in `/frontend`. Use **Mock Service Worker (MSW)** in `src/mocks/server.ts` to mock API endpoints in component tests. Do not call live backend services in component unit tests.
-   * **E2E/API Integration Logic**: Write Playwright tests in `playwright-e2e`.
+# 1. Branch Policy
 
-4. **Test Catalog Synchronization**:
-   * Prior to writing E2E code, append new test definitions to [test_cases_catalog.md](file:///c:/BuggyBooks/buggy-books/specs/test_cases_catalog.md).
-   * Specify: ID, Title, Description, Priority, Target Coverage, and Status.
+AI agents **must never** modify `main` directly.
 
-5. **Playwright Spec Naming & Structure**:
-   * Place specs under `playwright-e2e/src/tests/` matching their categories: `ui/` or `api/` (e.g. `UserManagement/`, `BookCatalog/`, `Checkout/`, `CartAndInventory/`, `ChaosAndTesting/`).
-   * Test files must follow the format `Test_00X_<FeatureName>.spec.ts` (using 3-digit serial numbering).
-   * If `USE_SPECIFIC_TESTS` is active, register the test path in [playwright.config.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/config/playwright.config.ts).
+Create one of the following branches:
 
-6. **Test Isolation & Reset Handling**:
-   * E2E/API test suites must perform a state reset using `POST /api/test/reset` in `beforeEach` and `afterAll` hooks to maintain test isolation and prevent database state leaks.
+```text
+feature/<feature-name>
+bugfix/<bug-name>
+test/<feature-name>
+refactor/<area-name>
+```
 
-7. **Local Verification Checklists**:
-   * Compile and build code without TypeScript warnings.
-   * Verify all Jest/Vitest tests pass (`npm run test` or `npm test`).
-   * Verify Playwright tests pass by running local dev servers (`npm run dev`).
+Each branch should contain a single logical change.
 
-8. **Final Code & QA Review**:
-   * Before pushing, perform a thorough review of all code diffs.
-   * Verify file cleanliness: remove any temporary debug statements, console logs, or unused variables.
-   * Ensure code structure is properly formatted and includes clear explanatory comments where necessary.
-   * Re-confirm that all unit/component test files and E2E specs are fully synchronized.
+---
 
-9. **Deployment & Pull Request Policy**:
-   * Commit and push the final branch to the remote repository.
-   * Open a PR so that the continuous integration (CI) pipeline runs verification tests against GitHub Actions before merging to `main`.
+# 2. Architecture Rules
+
+Maintain existing project architecture.
+
+## Backend
+
+Located in:
+
+```text
+/backend
+```
+
+Use:
+
+- Express controllers
+- Models
+- Services (if applicable)
+- JSON data stores
+
+Avoid introducing new architectural patterns unless explicitly requested.
+
+## Frontend
+
+Located in:
+
+```text
+/frontend
+```
+
+Use:
+
+- React
+- TypeScript
+- Existing HSL design system
+- Existing styling conventions
+
+Do not introduce additional UI frameworks or styling libraries.
+
+---
+
+# 3. Testing Strategy
+
+Every code change must include appropriate automated tests.
+
+## Backend
+
+Framework:
+
+- Jest
+
+Location:
+
+```text
+/backend
+```
+
+Test:
+
+- Business logic
+- Controllers
+- Utilities
+- Services
+
+## Frontend Component Tests
+
+Frameworks:
+
+- Vitest
+- React Testing Library
+
+API mocking:
+
+```text
+src/mocks/server.ts
+```
+
+Requirements:
+
+- Use Mock Service Worker (MSW)
+- Never call live backend services
+- Verify rendering
+- Verify user interactions
+- Verify error states
+- Verify loading states
+
+## Playwright Integration Tests
+
+Location:
+
+```text
+playwright-e2e/src/tests/
+```
+
+Purpose:
+
+- End-to-end UI flows
+- API integration
+- Cross-layer validation
+
+---
+
+# 4. Test Case Catalog
+
+Before creating a Playwright test, update:
+
+```text
+specs/test_cases_catalog.md
+```
+
+Each entry must include:
+
+- Test ID
+- Title
+- Description
+- Priority
+- Coverage Area
+- Status
+
+Documentation must remain synchronized with implementation.
+
+---
+
+# 5. Playwright Organization
+
+Store tests using the existing feature structure.
+
+```text
+playwright-e2e/
+└── src/
+    └── tests/
+        ├── ui/
+        │   ├── UserManagement/
+        │   ├── BookCatalog/
+        │   ├── Checkout/
+        │   └── CartAndInventory/
+        └── api/
+            └── ChaosAndTesting/
+```
+
+File naming convention:
+
+```text
+Test_001_Login.spec.ts
+Test_002_Checkout.spec.ts
+Test_003_CreateBook.spec.ts
+```
+
+Always use a three-digit sequence.
+
+If `USE_SPECIFIC_TESTS` is enabled, register the new spec in:
+
+```text
+playwright.config.ts
+```
+
+---
+
+# 6. Test Isolation
+
+Every Playwright suite must reset application state.
+
+Required:
+
+```text
+beforeEach
+    POST /api/test/reset
+
+afterAll
+    POST /api/test/reset
+```
+
+Tests must never depend on execution order or previously created data.
+
+---
+
+# 7. Local Verification
+
+Before committing, verify:
+
+## Build
+
+- TypeScript compiles successfully
+- No build errors
+- No TypeScript warnings
+
+## Unit Tests
+
+Run:
+
+```bash
+npm test
+```
+
+or
+
+```bash
+npm run test
+```
+
+All tests must pass.
+
+## Playwright
+
+- Start local development servers.
+- Execute the relevant Playwright suites.
+- Ensure all tests pass.
+
+---
+
+# 8. Code Quality Review
+
+Before committing:
+
+Remove:
+
+- Debug code
+- Temporary files
+- `console.log` statements
+- Commented-out code
+- Unused imports
+- Unused variables
+
+Verify:
+
+- Formatting
+- Lint compliance
+- Consistent naming
+- Readable code
+- Meaningful comments where business logic is non-obvious
+
+Avoid unnecessary refactoring outside the requested scope.
+
+---
+
+# 9. Documentation Synchronization
+
+Whenever behavior changes, update any affected documentation, including:
+
+- `specs/test_cases_catalog.md`
+- README files
+- API documentation
+- Developer guides
+- Architecture documentation
+
+Documentation should reflect the implementation at the time of the commit.
+
+---
+
+# 10. Pull Request Requirements
+
+Before opening a PR:
+
+- All local tests pass.
+- Documentation is updated.
+- No unrelated files are modified.
+- Changes are reviewed for correctness.
+- CI is expected to pass without additional fixes.
+
+Push the feature branch and create a Pull Request.
+
+Merge only after successful GitHub Actions validation.
+
+---
+
+# 11. Prohibited Actions
+
+AI agents must **not**:
+
+- Modify `main` directly.
+- Bypass failing tests.
+- Skip writing required tests.
+- Disable existing tests to make CI pass.
+- Remove functionality unless explicitly requested.
+- Introduce unrelated refactoring.
+- Commit secrets, credentials, or API keys.
+- Leave TODOs as a substitute for implementation.
+- Modify generated files unless explicitly required.
+
+---
+
+# Definition of Done
+
+A task is complete only when all of the following are true:
+
+- Code implementation is complete.
+- Unit/component tests are added.
+- Playwright tests are added where applicable.
+- Test catalog is updated.
+- Documentation is synchronized.
+- All local verification passes.
+- Code review checklist is satisfied.
+- Changes are committed to a feature branch.
+- A Pull Request is ready for CI validation.
