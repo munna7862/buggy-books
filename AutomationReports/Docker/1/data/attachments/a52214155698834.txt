@@ -1,0 +1,22 @@
+[2026-07-18 14:51:37] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/books?page=1&limit=1
+[2026-07-18 14:51:38] INFO: ✅ Get paged books list for Minimum limit Success! Status: 200 OK
+[2026-07-18 14:51:38] INFO: 📥 Response Payload: {
+  "books": [
+    {
+      "id": "1",
+      "title": "The Great Buggy Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "price": 10.99,
+      "genre": "Classic",
+      "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+      "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+    }
+  ],
+  "total": 15,
+  "page": 1,
+  "totalPages": 15,
+  "limit": 1
+}
+[2026-07-18 14:51:38] INFO:  Status code should be 200 for Minimum limit Success !! Actual and Expected Values are:: 200
+[2026-07-18 14:51:38] INFO:  Response page should be 1 for Minimum limit Success !! Actual and Expected Values are:: 1
+[2026-07-18 14:51:38] INFO:  Books array length should be less than or equal to limit 1 Success !! Actual and Expected Values are:: true
