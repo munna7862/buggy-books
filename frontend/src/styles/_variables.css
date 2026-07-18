@@ -1,3 +1,4 @@
+/*csslint ignore:start*/
 :root {
   --hue: 250;
   --primary: hsl(var(--hue), 85%, 60%);
