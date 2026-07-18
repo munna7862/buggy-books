@@ -1,0 +1,90 @@
+[
+  {
+    "id": "1784373667088-1",
+    "startedAt": "2026-07-18T11:21:07.088Z",
+    "url": "https://buggy-books.onrender.com/socket.io/?EIO=4&transport=polling&t=a0d8id92",
+    "method": "GET",
+    "resourceType": "xhr",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+      "accept": "*/*",
+      "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\"",
+      "accept-language": "en-US",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "postData": null
+  },
+  {
+    "id": "1784373667089-2",
+    "startedAt": "2026-07-18T11:21:07.089Z",
+    "url": "https://buggy-books.onrender.com/api/books?page=1&limit=8",
+    "method": "GET",
+    "resourceType": "fetch",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\"",
+      "content-type": "application/json",
+      "sec-ch-ua-mobile": "?0",
+      "accept-language": "en-US"
+    },
+    "postData": null
+  },
+  {
+    "id": "1784373667089-3",
+    "startedAt": "2026-07-18T11:21:07.089Z",
+    "url": "https://buggy-books.onrender.com/api/cart",
+    "method": "GET",
+    "resourceType": "fetch",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\"",
+      "content-type": "application/json",
+      "sec-ch-ua-mobile": "?0",
+      "accept-language": "en-US"
+    },
+    "postData": null
+  },
+  {
+    "id": "1784373667089-4",
+    "startedAt": "2026-07-18T11:21:07.089Z",
+    "url": "https://buggy-books.onrender.com/api/test/config",
+    "method": "GET",
+    "resourceType": "fetch",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\"",
+      "accept-language": "en-US",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "postData": null
+  },
+  {
+    "id": "1784373670082-5",
+    "startedAt": "2026-07-18T11:21:10.082Z",
+    "url": "https://buggy-books.onrender.com/api/test/config",
+    "method": "GET",
+    "resourceType": "fetch",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/150.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Not;A=Brand\";v=\"8\", \"Chromium\";v=\"150\", \"Google Chrome\";v=\"150\"",
+      "accept-language": "en-US",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "postData": null
+  }
+]

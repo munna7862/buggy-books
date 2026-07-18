@@ -1,0 +1,10 @@
+[2026-07-18 20:51:32] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:51:32] INFO: 📤 Request Payload: {
+  "username": "johndoe17843736920308885@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-07-18 20:51:32] ERROR: ❌ Register a new valid user Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:51:32] ERROR: ❌ Register a new valid user Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:51:32] ERROR:  Response status Failed!! Expected Value:: 201 || Actual Value:: 429
+[2026-07-18 20:51:32] ERROR:  Response status Failed!! Expected Value:: 201 || Actual Value:: 429

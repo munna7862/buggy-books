@@ -1,0 +1,9 @@
+[2026-07-18 20:51:50] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:51:50] INFO: 📤 Request Payload: {
+  "username": "security178437371015387108@",
+  "password": "johna123@",
+  "fullName": "<script>alert(\"xss\")</script>"
+}
+[2026-07-18 20:51:50] ERROR: ❌ Security validation for script tag in fullName Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:51:50] ERROR: ❌ Security validation for script tag in fullName Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:51:50] INFO:  Security status for script tag in fullName Success !! Actual and Expected Values are:: true

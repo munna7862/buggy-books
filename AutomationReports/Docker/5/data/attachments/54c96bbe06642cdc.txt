@@ -1,0 +1,10 @@
+[2026-07-18 20:51:52] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:51:52] INFO: 📤 Request Payload: {
+  "username": "johndoe17843737129699195@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-07-18 20:51:53] ERROR: ❌ Register test user setup Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:51:53] ERROR: ❌ Register test user setup Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:51:53] ERROR:  Registration setup status Failed!! Expected Value:: 201 || Actual Value:: 429
+[2026-07-18 20:51:53] ERROR:  Registration setup status Failed!! Expected Value:: 201 || Actual Value:: 429

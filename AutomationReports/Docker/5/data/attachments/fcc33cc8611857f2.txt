@@ -1,0 +1,18 @@
+[2026-07-18 20:50:59] INFO: Network interception enabled with mode: api-only
+[2026-07-18 20:51:00] INFO: Clicking on Sign Up link
+[2026-07-18 20:51:00] INFO: Entering full name: autoTestUserf9pib
+[2026-07-18 20:51:00] INFO: Entering username: autoTestUserQqSut
+[2026-07-18 20:51:00] INFO: Entering password: AutoTest@123
+[2026-07-18 20:51:00] INFO: Entering confirming password: AutoTest@123
+[2026-07-18 20:51:00] INFO: Clicking on Create Account button
+[2026-07-18 20:51:01] INFO: Verifying landing on Checkout Page
+[2026-07-18 20:51:01] INFO: Checking if Checkout label is visible
+
+[Failure Hook] Capturing state for failing test: "Testcase 1: Register New User"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-07-18 20:52:01] INFO: Captured 15 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-cd0d1-estcase-1-Register-New-User-Google-Chrome/network-log.json

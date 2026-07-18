@@ -1,0 +1,8 @@
+[2026-07-18 20:51:50] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:51:50] INFO: 📤 Request Payload: {
+  "username": "security178437371015347102@",
+  "password": "johna123@"
+}
+[2026-07-18 20:51:50] ERROR: ❌ Security validation for SQL injection pattern in username Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:51:50] ERROR: ❌ Security validation for SQL injection pattern in username Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:51:50] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true
