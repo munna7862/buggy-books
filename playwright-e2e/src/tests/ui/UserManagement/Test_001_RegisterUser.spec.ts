@@ -42,5 +42,30 @@ test.describe('Register New User', () => {
     await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
+  test('Testcase 3: Password Strength Indicator', async ({ signUpPage, commonFunctions, page, networkInterceptor }) => {
+    // networkInterceptor fixture automatically captures network logs (no direct usage needed)
+    await page.goto(envConfig.baseUrl);
+
+    await test.step('Navigate to SignUp Page', async () => {
+      await signUpPage.clickSignUp();
+    });
+
+    await test.step('Type simple password and verify weak label', async () => {
+      await signUpPage.enterPassword('123');
+      const strengthText = await signUpPage.getPwdStrengthText();
+      let isWeak = await commonFunctions.compareTwoValues(strengthText, 'Weak', 'Verifying if password strength is Weak');
+      expect(isWeak).toBeTruthy();
+    });
+
+    await test.step('Type complex password and verify strong label', async () => {
+      await signUpPage.enterPassword('ComplexPass123!');
+      const strengthText = await signUpPage.getPwdStrengthText();
+      let isStrong = await commonFunctions.compareTwoValues(strengthText, 'Strong', 'Verifying if password strength is Strong');
+      expect(isStrong).toBeTruthy();
+    });
+    await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
+  });
+
 });
+
 

@@ -40,7 +40,7 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
 
   const res = await fetch(url, mergedOptions);
 
-  if (res.status === 401) {
+  if (res.status === 401 && !url.includes('/login') && !url.includes('/register')) {
     // If the refresh request itself fails with 401/403, redirect to login
     if (url.includes('/auth/refresh')) {
       localStorage.removeItem('authUser');

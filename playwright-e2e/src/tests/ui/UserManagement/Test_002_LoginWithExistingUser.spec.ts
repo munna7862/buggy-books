@@ -60,5 +60,24 @@ test.describe('Login With Existing User', () => {
     }
   });
 
+  test('Testcase 3: Login Validation Errors', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+    // networkInterceptor fixture automatically captures network logs (no direct usage needed)
+    await page.goto(envConfig.baseUrl);
+
+    await test.step('Attempt Login with Wrong Password', async () => {
+      await catalogPage.clickNavigateLink("Login");
+      const { userName } = getLoginCredentials();
+      await signUpPage.loginWithInvalidCredentials(userName, "wrongPassword123@");
+    });
+
+    await test.step('Verify Error Message', async () => {
+      const errorText = await signUpPage.getErrorBannerText();
+      let isErrorVerified = await commonFunctions.compareTwoValues(errorText, "Unauthorized: Invalid credentials", "Verifying if error message is correct");
+      expect(isErrorVerified).toBeTruthy();
+    });
+    await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
+  });
+
 });
+
 

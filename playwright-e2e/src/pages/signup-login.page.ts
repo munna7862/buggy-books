@@ -26,8 +26,24 @@ export class SignUpPage extends BasePage {
   private get btnSignIn(): Locator {
     return this.page.locator("//button[@name='btn_submit_login_rnd']");
   }
+  private get eleErrorBanner(): Locator {
+    return this.page.locator('.error-banner');
+  }
+  private get elePwdStrengthText(): Locator {
+    return this.page.locator('.pwd-text');
+  }
 
   // Add methods to interact with the Sign Up page elements
+  public async getErrorBannerText(): Promise<string> {
+    await this.eleErrorBanner.waitFor({ state: 'visible', timeout: 5000 });
+    return (await this.doGetText(this.eleErrorBanner, "Getting error banner text")) || '';
+  }
+
+  public async getPwdStrengthText(): Promise<string> {
+    await this.elePwdStrengthText.waitFor({ state: 'visible', timeout: 5000 });
+    return (await this.doGetText(this.elePwdStrengthText, "Getting password strength text")) || '';
+  }
+
   public async clickSignUp() {
     await this.doClick(this.lblSignUpPage, "Clicking on Sign Up link");
   }
@@ -73,5 +89,12 @@ export class SignUpPage extends BasePage {
     const catalogPage = new CatalogPage(this.page);
     return await catalogPage.verifyCheckoutPage();
   }
+
+  public async loginWithInvalidCredentials(username: string, password: string) {
+    await this.enterUsername(username);
+    await this.enterPassword(password);
+    await this.clickSignIn();
+  }
+
 
 }
