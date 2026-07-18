@@ -15,16 +15,9 @@ const chaosConfigSchema = z.object({
 }).strict(); // reject unknown keys
 
 export const updateConfig = (req: Request, res: Response) => {
-  try {
-    const validConfig = chaosConfigSchema.parse(req.body);
-    chaosStore.updateConfig(validConfig);
-    res.json({ success: true, config: chaosStore.getConfig() });
-  } catch (error) {
-    if (error instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Bad Request: Validation failed', details: error.issues });
-    }
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
+  const validConfig = chaosConfigSchema.parse(req.body);
+  chaosStore.updateConfig(validConfig);
+  res.json({ success: true, config: chaosStore.getConfig() });
 };
 
 export const resetData = (req: Request, res: Response) => {

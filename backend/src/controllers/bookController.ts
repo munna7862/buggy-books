@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { dataStore } from '../data/dataStore';
 import { chaosStore } from '../data/chaosStore';
+import { NotFoundError } from '../errors/app-error';
 
 export const getBooks = (req: Request, res: Response) => {
   const q = (req.query.q as string) || '';
@@ -18,7 +19,7 @@ export const getBooks = (req: Request, res: Response) => {
 export const getBookById = (req: Request, res: Response) => {
   const book = dataStore.getBookById(req.params.id);
   if (!book) {
-    return res.status(404).json({ error: 'Not Found: Book does not exist' });
+    throw new NotFoundError('Not Found: Book does not exist');
   }
   res.json(book);
 };

@@ -7,6 +7,7 @@ import { config, JWT_SECRET } from '../config';
 import { chaosStore } from '../data/chaosStore';
 import { logger } from '../utils/logger';
 import { storage } from '../data/storage';
+import { UnauthorizedError, NotFoundError, BadRequestError, InternalServerError } from '../errors/app-error';
 
 // Ensure uploads folder exists inside workspace root (outside src/ to avoid build triggers)
 const UPLOADS_DIR = config.uploadsDir;
@@ -59,13 +60,10 @@ const uploadConfig = multer({
 export const handleAvatarUpload = (req: Request, res: Response, next: any) => {
   uploadConfig(req, res, (err: any) => {
     if (err) {
-      if (err instanceof multer.MulterError) {
-        if (err.code === 'LIMIT_FILE_SIZE') {
-          return res.status(400).json({ error: 'Bad Request: File size exceeds the 2MB limit' });
-        }
-        return res.status(400).json({ error: `Bad Request: Upload error (${err.message})` });
+      if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return next(new BadRequestError('Bad Request: File size exceeds the 2MB limit'));
       }
-      return res.status(400).json({ error: `Bad Request: ${err.message}` });
+      return next(new BadRequestError(`Bad Request: ${err.message}`));
     }
     next();
   });
@@ -75,7 +73,7 @@ export const getProfile = (req: Request, res: Response) => {
   const username = req.user?.username;
 
   if (!username) {
-    return res.status(401).json({ error: 'Unauthorized: Session required' });
+    throw new UnauthorizedError('Unauthorized: Session required');
   }
 
   const defaultUsers: Record<string, any> = {
@@ -86,7 +84,7 @@ export const getProfile = (req: Request, res: Response) => {
   const user = users[username];
 
   if (!user) {
-    return res.status(404).json({ error: 'User not found' });
+    throw new NotFoundError('User not found');
   }
 
   res.json({
@@ -101,19 +99,19 @@ export const uploadAvatar = (req: Request, res: Response) => {
 
   if (!username) {
     logger.warn('Avatar upload failed: Unauthenticated user');
-    return res.status(401).json({ error: 'Unauthorized: Session required' });
+    throw new UnauthorizedError('Unauthorized: Session required');
   }
 
   // Chaos failure injection
   const failureRate = chaosStore.getConfig().uploadFailureRate;
   if (failureRate > 0 && Math.random() < failureRate) {
     logger.warn(`Chaos: Simulating profile upload failure for user ${username} (rate: ${failureRate})`);
-    return res.status(500).json({ error: 'Internal Server Error: Upload service failed' });
+    throw new InternalServerError('Internal Server Error: Upload service failed');
   }
 
   if (!req.file) {
     logger.warn(`Avatar upload failed: Missing file in payload for user ${username}`);
-    return res.status(400).json({ error: 'Bad Request: No file uploaded' });
+    throw new BadRequestError('Bad Request: No file uploaded');
   }
 
   const defaultUsers: Record<string, any> = {
@@ -122,7 +120,7 @@ export const uploadAvatar = (req: Request, res: Response) => {
   };
   const users = storage.get('users') || defaultUsers;
   if (!users[username]) {
-    return res.status(404).json({ error: 'User not found' });
+    throw new NotFoundError('User not found');
   }
 
   const fileUrl = `/uploads/${req.file.filename}`;

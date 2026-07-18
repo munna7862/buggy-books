@@ -2,6 +2,7 @@ import { Router, Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config';
 import { loggerStore } from '../utils/logger';
+import { asyncHandler } from '../utils/asyncHandler';
 
 import * as bookController from '../controllers/bookController';
 import * as authController from '../controllers/authController';
@@ -42,29 +43,29 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
 };
 
 // --- Standard API Routes ---
-router.get('/books', bookController.getBooks);
-router.get('/books/:id', bookController.getBookById);
-router.post('/login', authController.login);
-router.post('/register', authController.register);
-router.post('/logout', authController.logout);
-router.post('/auth/refresh', authController.refresh);
+router.get('/books', asyncHandler(bookController.getBooks));
+router.get('/books/:id', asyncHandler(bookController.getBookById));
+router.post('/login', asyncHandler(authController.login));
+router.post('/register', asyncHandler(authController.register));
+router.post('/logout', asyncHandler(authController.logout));
+router.post('/auth/refresh', asyncHandler(authController.refresh));
 
-router.get('/cart', authenticateToken, cartController.getCart);
-router.post('/cart', authenticateToken, cartController.addToCart);
-router.delete('/cart', authenticateToken, cartController.clearCart);
-router.delete('/cart/:bookId', authenticateToken, cartController.removeFromCart);
+router.get('/cart', authenticateToken, asyncHandler(cartController.getCart));
+router.post('/cart', authenticateToken, asyncHandler(cartController.addToCart));
+router.delete('/cart', authenticateToken, asyncHandler(cartController.clearCart));
+router.delete('/cart/:bookId', authenticateToken, asyncHandler(cartController.removeFromCart));
 
-router.post('/checkout/process', authenticateToken, checkoutController.processCheckout);
-router.get('/orders', authenticateToken, checkoutController.getOrders);
+router.post('/checkout/process', authenticateToken, asyncHandler(checkoutController.processCheckout));
+router.get('/orders', authenticateToken, asyncHandler(checkoutController.getOrders));
 
-router.get('/inventory/report', bookController.getInventoryReport);
+router.get('/inventory/report', asyncHandler(bookController.getInventoryReport));
 
-router.get('/profile', authenticateToken, profileController.getProfile);
-router.post('/profile/upload', profileController.handleAvatarUpload, authenticateToken, profileController.uploadAvatar);
+router.get('/profile', authenticateToken, asyncHandler(profileController.getProfile));
+router.post('/profile/upload', profileController.handleAvatarUpload, authenticateToken, asyncHandler(profileController.uploadAvatar));
 
 // --- Testing / Chaos API Routes ---
-router.get('/test/config', testController.getConfig);
-router.post('/test/config', testController.updateConfig);
-router.post('/test/reset', testController.resetData);
+router.get('/test/config', asyncHandler(testController.getConfig));
+router.post('/test/config', asyncHandler(testController.updateConfig));
+router.post('/test/reset', asyncHandler(testController.resetData));
 
 export default router;
