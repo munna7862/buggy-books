@@ -1,0 +1,23 @@
+[2026-07-18 23:58:58] INFO: Network interception enabled with mode: api-only
+[2026-07-18 23:58:58] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-07-18 23:58:59] INFO: Clicking on Login link
+[2026-07-18 23:58:59] INFO: Entering username: admin
+[2026-07-18 23:58:59] INFO: Entering password: password123
+[2026-07-18 23:58:59] INFO: Clicking on Sign In button
+[2026-07-18 23:59:00] INFO: Verifying landing on Checkout Page
+[2026-07-18 23:59:00] INFO: Checking if Checkout label is visible
+[2026-07-18 23:59:01] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-18 23:59:01] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-07-18 23:59:01] INFO: Clicking on Cart link
+[2026-07-18 23:59:06] INFO: Clicking on Catalog link
+[2026-07-18 23:59:06] INFO: Clicking on Add to Cart button for book id: 1
+[2026-07-18 23:59:06] INFO: Waiting for cart status message: Added to cart!
+
+[Failure Hook] Capturing state for failing test: "Testcase 1: Complete book purchase successfully"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-07-19 00:00:06] INFO: Captured 36 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_001_Compl-3bb11--book-purchase-successfully-Google-Chrome/network-log.json

@@ -1,0 +1,12 @@
+[2026-07-18 23:58:56] INFO: Network interception enabled with mode: api-only
+[2026-07-18 23:58:56] INFO: Clicking on Sign Up link
+[2026-07-18 23:58:56] INFO: Entering full name: autoTestUserUuaVZ
+[2026-07-18 23:58:57] INFO: Entering username: autoTestUserkzZif
+[2026-07-18 23:58:57] INFO: Entering password: AutoTest@123
+[2026-07-18 23:58:57] INFO: Entering confirming password: AutoTest@123
+[2026-07-18 23:58:57] INFO: Clicking on Create Account button
+[2026-07-18 23:58:57] INFO: Verifying landing on Checkout Page
+[2026-07-18 23:58:57] INFO: Checking if Checkout label is visible
+[2026-07-18 23:58:58] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-18 23:58:58] INFO:  Verifying if user registered successfully Success !! Actual and Expected Values are:: true
+[2026-07-18 23:59:00] INFO: Captured 10 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-cd0d1-estcase-1-Register-New-User-Google-Chrome/network-log.json

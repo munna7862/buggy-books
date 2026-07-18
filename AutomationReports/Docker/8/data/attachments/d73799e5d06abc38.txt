@@ -1,0 +1,47 @@
+[2026-07-18 23:59:09] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-18 23:59:09] INFO: ✅ Reset state before test Success! Status: 200 OK
+[2026-07-18 23:59:09] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-07-18 23:59:09] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 23:59:09] INFO: 📤 Request Payload: {
+  "username": "chaosuser178438494941061257@",
+  "password": "Password123!",
+  "fullName": "Chaos Test User"
+}
+[2026-07-18 23:59:09] INFO: ✅ Register user for reset test Success! Status: 201 Created
+[2026-07-18 23:59:09] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "chaosuser178438494941061257@"
+}
+[2026-07-18 23:59:09] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-18 23:59:09] INFO: 📤 Request Payload: {
+  "username": "chaosuser178438494941061257@",
+  "password": "Password123!"
+}
+[2026-07-18 23:59:10] INFO: ✅ Login user for reset test Success! Status: 200 OK
+[2026-07-18 23:59:10] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "chaosuser178438494941061257@"
+}
+[2026-07-18 23:59:10] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-07-18 23:59:10] INFO: 📤 Request Payload: {
+  "bookId": "3"
+}
+[2026-07-18 23:59:10] ERROR: ❌ Add book 3 to cart Failed! Status: 403 Forbidden | Response: {
+  "error": "Internal Server Error",
+  "errorName": "ForbiddenError",
+  "correlationId": "67a92436-6b5f-4962-a217-429563c7f438"
+}
+[2026-07-18 23:59:10] ERROR: ❌ Add book 3 to cart Failed! Status: 403 Forbidden | Response: {
+  "error": "Internal Server Error",
+  "errorName": "ForbiddenError",
+  "correlationId": "67a92436-6b5f-4962-a217-429563c7f438"
+}
+[2026-07-18 23:59:10] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-18 23:59:10] INFO: ✅ Final state reset Success! Status: 200 OK
+[2026-07-18 23:59:10] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}

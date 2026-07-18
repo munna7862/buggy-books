@@ -1,0 +1,15 @@
+[2026-07-18 23:59:23] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-18 23:59:23] INFO: 📤 Request Payload: {
+  "username": "loginmissingpass178438495975578411@"
+}
+[2026-07-18 23:59:23] ERROR: ❌ Login with missing password Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "f895f8ac-e3e5-440b-a334-0148a9e37ee3"
+}
+[2026-07-18 23:59:23] ERROR: ❌ Login with missing password Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "f895f8ac-e3e5-440b-a334-0148a9e37ee3"
+}
+[2026-07-18 23:59:23] INFO:  Status code for missing password Success !! Actual and Expected Values are:: true
