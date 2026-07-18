@@ -7,6 +7,7 @@ import { storage } from '../data/storage';
 import { logger } from '../utils/logger';
 import { chaosStore } from '../data/chaosStore';
 import type { UserRecord } from '@buggybooks/types';
+import { BadRequestError, UnauthorizedError, ConflictError, ForbiddenError } from '../errors/app-error';
 
 const SALT_ROUNDS = 10;
 
@@ -39,13 +40,13 @@ export const login = async (req: Request, res: Response) => {
 
   if (!username || !password) {
     logger.warn('Login attempt failed: Missing username or password');
-    return res.status(400).json({ error: 'Bad Request: Username and password required' });
+    throw new BadRequestError('Bad Request: Username and password required');
   }
 
   const user = MOCK_USERS[username];
   if (!user) {
     logger.warn(`Login attempt failed: Invalid credentials for user ${username}`, { attemptedUsername: username });
-    return res.status(401).json({ error: 'Unauthorized: Invalid credentials' });
+    throw new UnauthorizedError('Unauthorized: Invalid credentials');
   }
 
   const isValid = await bcrypt.compare(password, user.passwordHash);
@@ -58,7 +59,7 @@ export const login = async (req: Request, res: Response) => {
     res.json({ message: 'Login successful', username });
   } else {
     logger.warn(`Login attempt failed: Invalid credentials for user ${username}`, { attemptedUsername: username });
-    res.status(401).json({ error: 'Unauthorized: Invalid credentials' });
+    throw new UnauthorizedError('Unauthorized: Invalid credentials');
   }
 };
 
@@ -67,12 +68,12 @@ export const register = async (req: Request, res: Response) => {
 
   if (!username || !password) {
     logger.warn('Registration attempt failed: Missing username or password');
-    return res.status(400).json({ error: 'Bad Request: Username and password required' });
+    throw new BadRequestError('Bad Request: Username and password required');
   }
 
   if (MOCK_USERS[username]) {
     logger.warn(`Registration attempt failed: Username ${username} already exists`, { attemptedUsername: username });
-    return res.status(409).json({ error: 'Conflict: Username already exists' });
+    throw new ConflictError('Conflict: Username already exists');
   }
 
   const passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
@@ -100,13 +101,13 @@ export const refresh = (req: Request, res: Response) => {
 
   if (!refreshToken) {
     logger.warn('Refresh failed: Missing refresh token cookie');
-    return res.status(401).json({ error: 'Unauthorized: Refresh token required' });
+    throw new UnauthorizedError('Unauthorized: Refresh token required');
   }
 
-  jwt.verify(refreshToken, JWT_SECRET, (err: any, decoded: any) => {
-    if (err || decoded?.type !== 'refresh') {
-      logger.warn('Refresh failed: Invalid or expired refresh token');
-      return res.status(403).json({ error: 'Forbidden: Invalid refresh token' });
+  try {
+    const decoded = jwt.verify(refreshToken, JWT_SECRET) as any;
+    if (decoded?.type !== 'refresh') {
+      throw new ForbiddenError('Forbidden: Invalid refresh token');
     }
 
     const username = decoded.username;
@@ -114,7 +115,7 @@ export const refresh = (req: Request, res: Response) => {
     
     const newToken = jwt.sign({ username, type: 'access' }, JWT_SECRET, { expiresIn: expiry });
     
-    const isProd = process.env.NODE_ENV === 'production';
+    const isProd = config.isProduction;
     res.cookie('token', newToken, {
       httpOnly: true,
       secure: isProd,
@@ -124,7 +125,10 @@ export const refresh = (req: Request, res: Response) => {
 
     logger.info(`Token silently refreshed for user: ${username}`, { username });
     res.json({ success: true, username });
-  });
+  } catch (err) {
+    logger.warn('Refresh failed: Invalid or expired refresh token');
+    throw new ForbiddenError('Forbidden: Invalid refresh token');
+  }
 };
 
 export const resetUsers = () => {

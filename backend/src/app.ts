@@ -8,6 +8,7 @@ import apiRoutes from './routes/api';
 import { correlationIdMiddleware } from './middleware/correlationId';
 import { logger, loggerStore } from './utils/logger';
 import { config } from './config';
+import { errorHandler } from './middleware/error.middleware';
 
 const app = express();
 
@@ -83,18 +84,6 @@ app.use((req, res) => {
 });
 
 // Centralized error handler
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const correlationId = res.getHeader('x-correlation-id');
-  logger.error(err.message || 'Something went wrong', {
-    stack: err.stack,
-    status: err.status || 500,
-  });
-
-  res.status(err.status || 500).json({
-    error: 'Internal Server Error',
-    message: err.message || 'Something went wrong',
-    correlationId
-  });
-});
+app.use(errorHandler);
 
 export default app;
