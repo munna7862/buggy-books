@@ -1,0 +1,112 @@
+[2026-07-18 23:10:01] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/books?page=1&limit=5
+[2026-07-18 23:10:01] INFO: ✅ Get books for page 1 Success! Status: 200 OK
+[2026-07-18 23:10:01] INFO: 📥 Response Payload: {
+  "books": [
+    {
+      "id": "1",
+      "title": "The Great Buggy Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "price": 10.99,
+      "genre": "Classic",
+      "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+      "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "2",
+      "title": "To Kill a Mockingbird Exception",
+      "author": "Harper Lee",
+      "price": 15.5,
+      "genre": "Classic",
+      "description": "A coming-of-age tale with unhandled exceptions.",
+      "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "3",
+      "title": "1984 Bugs",
+      "author": "George Orwell",
+      "price": 12,
+      "genre": "Dystopian",
+      "description": "Big Bug is watching your code.",
+      "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "4",
+      "title": "Pride and Prejudice and Performance Issues",
+      "author": "Jane Austen",
+      "price": 9.99,
+      "genre": "Classic",
+      "description": "A tale of love, society, and slow query performance.",
+      "image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "5",
+      "title": "The Null and the Furious",
+      "author": "Cormac McCarthy",
+      "price": 13.99,
+      "genre": "Thriller",
+      "description": "Null pointer exceptions wreak havoc on the open road.",
+      "image": "https://images.unsplash.com/photo-1476275466078-4007374efbbe?q=80&w=600&auto=format&fit=crop"
+    }
+  ],
+  "total": 15,
+  "page": 1,
+  "totalPages": 3,
+  "limit": 5
+}
+[2026-07-18 23:10:01] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/books?page=2&limit=5
+[2026-07-18 23:10:01] INFO: ✅ Get books for page 2 Success! Status: 200 OK
+[2026-07-18 23:10:01] INFO: 📥 Response Payload: {
+  "books": [
+    {
+      "id": "6",
+      "title": "Harry Potter and the Goblet of Fire Events",
+      "author": "J.K. Rowling",
+      "price": 19.99,
+      "genre": "Fantasy",
+      "description": "Asynchronous magic tournaments and event loop chaos.",
+      "image": "https://images.unsplash.com/photo-1589998059171-988d887df646?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "7",
+      "title": "The Hitchhiker's Guide to the API",
+      "author": "Douglas Adams",
+      "price": 11.5,
+      "genre": "Sci-Fi",
+      "description": "The answer to life, the universe, and REST endpoints is 42.",
+      "image": "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "8",
+      "title": "Moby Stack Overflow",
+      "author": "Herman Melville",
+      "price": 8.99,
+      "genre": "Classic",
+      "description": "Captain Ahab's obsessive pursuit of the white stack trace.",
+      "image": "https://images.unsplash.com/photo-1623018035782-b269248df916?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "9",
+      "title": "War and Parse",
+      "author": "Leo Tolstoy",
+      "price": 17.99,
+      "genre": "Classic",
+      "description": "An epic battle between JSON and XML parsers.",
+      "image": "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "10",
+      "title": "Crime and Refactoring",
+      "author": "Fyodor Dostoevsky",
+      "price": 14.5,
+      "genre": "Thriller",
+      "description": "A developer's guilt-ridden journey of merging to production.",
+      "image": "https://images.unsplash.com/photo-1506880018603-83d5b814b5a6?q=80&w=600&auto=format&fit=crop"
+    }
+  ],
+  "total": 15,
+  "page": 2,
+  "totalPages": 3,
+  "limit": 5
+}
+[2026-07-18 23:10:01] INFO: Last item on page 1 ID: 5
+[2026-07-18 23:10:01] INFO: First item on page 2 ID: 6
