@@ -1,0 +1,10 @@
+[2026-07-18 16:53:16] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 16:53:16] INFO: 📤 Request Payload: {
+  "username": "emptypass178435939681999838@",
+  "password": "",
+  "fullName": "john doe"
+}
+[2026-07-18 16:53:17] ERROR: ❌ Register user with empty password Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 16:53:17] ERROR: ❌ Register user with empty password Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 16:53:17] ERROR:  Status code for empty password Failed!! Expected Value:: true || Actual Value:: false
+[2026-07-18 16:53:17] ERROR:  Status code for empty password Failed!! Expected Value:: true || Actual Value:: false

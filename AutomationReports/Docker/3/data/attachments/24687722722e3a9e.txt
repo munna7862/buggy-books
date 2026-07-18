@@ -1,0 +1,72 @@
+[2026-07-18 16:53:01] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-18 16:53:01] INFO: ✅ Reset state before test Success! Status: 200 OK
+[2026-07-18 16:53:01] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-07-18 16:53:01] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 16:53:01] INFO: 📤 Request Payload: {
+  "username": "chaosuser17843593816238804@",
+  "password": "Password123!",
+  "fullName": "Chaos Checkout User"
+}
+[2026-07-18 16:53:01] INFO: ✅ Register user for chaos checkout Success! Status: 201 Created
+[2026-07-18 16:53:01] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "chaosuser17843593816238804@"
+}
+[2026-07-18 16:53:01] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-18 16:53:01] INFO: 📤 Request Payload: {
+  "username": "chaosuser17843593816238804@",
+  "password": "Password123!"
+}
+[2026-07-18 16:53:02] INFO: ✅ Login user for chaos checkout Success! Status: 200 OK
+[2026-07-18 16:53:02] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "chaosuser17843593816238804@"
+}
+[2026-07-18 16:53:02] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-07-18 16:53:02] INFO: 📤 Request Payload: {
+  "bookId": "1"
+}
+[2026-07-18 16:53:02] INFO: ✅ Add book to cart Success! Status: 200 OK
+[2026-07-18 16:53:02] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-07-18 16:53:02] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-07-18 16:53:02] INFO: 📤 Request Payload: {
+  "checkoutFailureRate": 1
+}
+[2026-07-18 16:53:02] INFO: ✅ Configure checkout failure rate to 1.0 Success! Status: 200 OK
+[2026-07-18 16:53:02] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 1,
+    "inventoryDelayMs": 3000,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": false
+  }
+}
+[2026-07-18 16:53:02] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/checkout/process
+[2026-07-18 16:53:02] INFO: 📤 Request Payload: {
+  "firstName": "John",
+  "lastName": "Doe",
+  "creditCard": "1234567890123456"
+}
+[2026-07-18 16:53:02] ERROR: ❌ Perform checkout under chaos injection Failed! Status: 500 Internal Server Error | Response: {
+  "error": "Internal Server Error: Payment Gateway Timeout"
+}
+[2026-07-18 16:53:02] ERROR: ❌ Perform checkout under chaos injection Failed! Status: 500 Internal Server Error | Response: {
+  "error": "Internal Server Error: Payment Gateway Timeout"
+}

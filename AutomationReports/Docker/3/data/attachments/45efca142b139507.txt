@@ -1,0 +1,8 @@
+[2026-07-18 16:53:25] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 16:53:25] INFO: 📤 Request Payload: {
+  "username": "security178435940524823660@",
+  "password": "johna123@"
+}
+[2026-07-18 16:53:25] ERROR: ❌ Security validation for oversized username Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 16:53:25] ERROR: ❌ Security validation for oversized username Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 16:53:25] INFO:  Security status for oversized username Success !! Actual and Expected Values are:: true
