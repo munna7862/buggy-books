@@ -9,3 +9,8 @@ backend/dist/
 
 # Docker
 .dockerignore
+
+# Local test databases
+backend/db.test.*.json
+backend/db.test.*.json.tmp
+

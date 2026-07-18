@@ -146,6 +146,13 @@ These test cases verify the logic, security, and integrity of backend endpoints 
 | **API_LOG_03** | Error Body Correlation ID Mapping | Trigger a server-side error. Verify that the JSON response body contains the exact same `correlationId`. | Regression | Playwright API | **No** |
 | **API_LOG_04** | User Context Log Association | Login, add an item to the cart, and checkout. Inspect the server logs for that correlation ID and verify that the logs contain the correct `username` field. | E2E | Playwright API / Log Analysis | **No** |
 
+### **Suite: Database Persistence & Concurrency**
+| ID | Title | Description | Priority | Target Coverage | Covered |
+|:---|:---|:---|:---|:---|:---|
+| **API_DB_01** | Basic Get/Set Operations | Set a value in the schema and verify that it is retrieved correctly and written to the filesystem. | Smoke | Jest Unit Test | **Yes**<br>- File: `src/__tests__/storage.test.ts`<br>- Test: `should successfully get and set values` |
+| **API_DB_02** | Queue Concurrency and Serialization | Perform multiple rapid concurrent sets. Verify that only the final value is persisted in order, without blocking the event loop or causing corruption. | Smoke | Jest Unit Test | **Yes**<br>- File: `src/__tests__/storage.test.ts`<br>- Test: `should handle rapid concurrent sets and serialize the latest state correctly` |
+| **API_DB_03** | Parallel Write Resilience | Fire 100 sets in parallel and verify that no errors or file locking contentions are thrown, event loop is not blocked, and database remains intact. | Regression | Jest Unit Test | **Yes**<br>- File: `src/__tests__/storage.test.ts`<br>- Test: `should not block the event loop or throw during parallel writes` |
+
 ---
 
 ## 3. Frontend Component Mocking Test Cases (Vitest)
