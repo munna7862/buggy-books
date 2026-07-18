@@ -1,35 +1,14 @@
 
 
-export interface Book {
-  id: string;
-  title: string;
-  author: string;
-  price: number;
-  image: string;
-  genre?: string;
-  description?: string;
-}
+import type { Book, PaginatedBooks } from '@buggybooks/types';
+import type { Order } from '@buggybooks/types';
+
+export type { Book, PaginatedBooks, Order };
 
 export interface AppData {
   books: Book[];
   cart: Record<string, Book[]>;
   orders: Record<string, Order[]>;
-}
-
-export interface Order {
-  id: string;
-  items: Book[];
-  total: number;
-  customerName: string;
-  date: string;
-}
-
-export interface PaginatedBooks {
-  books: Book[];
-  total: number;
-  page: number;
-  totalPages: number;
-  limit: number;
 }
 
 import { storage } from './storage';

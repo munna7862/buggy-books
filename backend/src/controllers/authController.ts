@@ -6,13 +6,9 @@ import { JWT_SECRET } from '../config';
 import { storage } from '../data/storage';
 import { logger } from '../utils/logger';
 import { chaosStore } from '../data/chaosStore';
+import type { UserRecord } from '@buggybooks/types';
 
 const SALT_ROUNDS = 10;
-
-interface UserRecord {
-  passwordHash: string;
-  fullName?: string;
-}
 
 const defaultUsers: Record<string, UserRecord> = {
   admin: { passwordHash: bcrypt.hashSync('password123', SALT_ROUNDS) },

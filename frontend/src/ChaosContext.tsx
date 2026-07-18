@@ -1,17 +1,8 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
-interface ChaosConfig {
-  checkoutFailureRate?: number;
-  inventoryDelayMs?: number;
-  jwtExpirySeconds?: number;
-  websocketDropRate?: number;
-  uploadFailureRate?: number;
-  injectA11yViolations?: boolean;
-  visualChaos?: boolean;
-}
+import type { ChaosConfig } from '@buggybooks/types';
 
 interface ChaosContextType {
-  config: ChaosConfig;
+  config: Partial<ChaosConfig>;
 }
 
 const ChaosContext = createContext<ChaosContextType>({ config: {} });
@@ -19,7 +10,7 @@ const ChaosContext = createContext<ChaosContextType>({ config: {} });
 const BASE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 export function ChaosProvider({ children }: { children: React.ReactNode }) {
-  const [config, setConfig] = useState<ChaosConfig>({});
+  const [config, setConfig] = useState<Partial<ChaosConfig>>({});
 
   const fetchConfig = () => {
     fetch(`${BASE_API_URL}/test/config`)
