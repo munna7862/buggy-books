@@ -58,10 +58,10 @@ app.use(cors({
 // Parse JSON payloads
 app.use(express.json());
 
-// Basic rate limiter (60 max per IP per minute)
+// Real-world production rate limiter (600 max per IP per minute)
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000, // 1 minute
-  max: 60,
+  max: 600,
   message: 'Too many requests, please try again later.',
   standardHeaders: true,
   legacyHeaders: false,
