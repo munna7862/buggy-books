@@ -1,0 +1,13 @@
+[2026-07-18 20:30:14] INFO: Network interception enabled with mode: api-only
+[2026-07-18 20:30:14] INFO: Clicking on Login link
+[2026-07-18 20:30:14] INFO: Entering username: autoTestUserkPbSO
+[2026-07-18 20:30:14] INFO: Entering password: AutoTest@123
+[2026-07-18 20:30:14] INFO: Clicking on Sign In button
+[2026-07-18 20:30:15] INFO: Verifying landing on Checkout Page
+[2026-07-18 20:30:15] INFO: Checking if Checkout label is visible
+[2026-07-18 20:30:16] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-18 20:30:16] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-07-18 20:30:16] INFO: Clicking on Logout button
+[2026-07-18 20:30:16] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-07-18 20:30:16] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-07-18 20:30:18] INFO: Captured 10 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-b0c52--Registered-User-and-Logout-Google-Chrome/network-log.json

@@ -1,0 +1,27 @@
+[2026-07-18 20:30:18] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-18 20:30:18] INFO: ✅ Reset state before test Success! Status: 200 OK
+[2026-07-18 20:30:18] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-07-18 20:30:18] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:30:18] INFO: 📤 Request Payload: {
+  "username": "chaosuser178437241899215055@",
+  "password": "Password123!",
+  "fullName": "Chaos Checkout User"
+}
+[2026-07-18 20:30:19] INFO: ✅ Register user for chaos checkout Success! Status: 201 Created
+[2026-07-18 20:30:19] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "chaosuser178437241899215055@"
+}
+[2026-07-18 20:30:19] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-18 20:30:19] INFO: 📤 Request Payload: {
+  "username": "chaosuser178437241899215055@",
+  "password": "Password123!"
+}
+[2026-07-18 20:30:19] ERROR: ❌ Login user for chaos checkout Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:19] ERROR: ❌ Login user for chaos checkout Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:19] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-18 20:30:19] ERROR: ❌ Final state reset Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:19] ERROR: ❌ Final state reset Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."

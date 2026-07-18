@@ -1,0 +1,5 @@
+[2026-07-18 20:30:44] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:30:44] ERROR: ❌ Attempt register endpoint with unsupported GET method Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:44] ERROR: ❌ Attempt register endpoint with unsupported GET method Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:44] ERROR:  Unsupported method status Failed!! Expected Value:: true || Actual Value:: false
+[2026-07-18 20:30:44] ERROR:  Unsupported method status Failed!! Expected Value:: true || Actual Value:: false

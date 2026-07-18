@@ -1,0 +1,20 @@
+[2026-07-18 20:30:42] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:30:42] INFO: 📤 Request Payload: {
+  "username": "johndoe178437244235735967@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-07-18 20:30:42] ERROR: ❌ Register original user for duplicate validation Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:42] ERROR: ❌ Register original user for duplicate validation Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:42] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:30:42] INFO: 📤 Request Payload: {
+  "username": "johndoe178437244235735967@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-07-18 20:30:42] ERROR: ❌ Register duplicate username Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:42] ERROR: ❌ Register duplicate username Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:42] ERROR:  Initial registration response status Failed!! Expected Value:: 201 || Actual Value:: 429
+[2026-07-18 20:30:42] ERROR:  Initial registration response status Failed!! Expected Value:: 201 || Actual Value:: 429
+[2026-07-18 20:30:42] ERROR:  Duplicate registration status Failed!! Expected Value:: true || Actual Value:: false
+[2026-07-18 20:30:42] ERROR:  Duplicate registration status Failed!! Expected Value:: true || Actual Value:: false

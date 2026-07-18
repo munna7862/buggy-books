@@ -1,0 +1,6 @@
+[2026-07-18 20:30:48] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:30:48] INFO: 📤 Request Payload: "{\"username\":\"johndoe178437244871846133@\",\"password\":\"johna123@\",\"fullName\":\"john doe\"}"
+[2026-07-18 20:30:48] ERROR: ❌ Register user with unsupported content type Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:48] ERROR: ❌ Register user with unsupported content type Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:48] ERROR:  Unsupported content type status Failed!! Expected Value:: true || Actual Value:: false
+[2026-07-18 20:30:48] ERROR:  Unsupported content type status Failed!! Expected Value:: true || Actual Value:: false

@@ -1,0 +1,10 @@
+[2026-07-18 20:29:54] INFO: Network interception enabled with mode: api-only
+
+[Failure Hook] Capturing state for failing test: "Testcase: Verify Books Count in pagination"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-07-18 20:30:00] INFO: Captured 4 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_001_In-796fe-y-Books-Count-in-pagination-Google-Chrome/network-log.json

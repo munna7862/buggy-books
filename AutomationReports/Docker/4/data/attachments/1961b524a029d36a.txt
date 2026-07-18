@@ -1,0 +1,9 @@
+[2026-07-18 20:30:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-18 20:30:33] INFO: 📤 Request Payload: {
+  "username": "missingpass178437243335076219@",
+  "fullName": "john doe"
+}
+[2026-07-18 20:30:33] ERROR: ❌ Register user with missing password Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:33] ERROR: ❌ Register user with missing password Failed! Status: 429 Too Many Requests | Response: "Too many requests, please try again later."
+[2026-07-18 20:30:33] ERROR:  Status code for missing password Failed!! Expected Value:: true || Actual Value:: false
+[2026-07-18 20:30:33] ERROR:  Status code for missing password Failed!! Expected Value:: true || Actual Value:: false
