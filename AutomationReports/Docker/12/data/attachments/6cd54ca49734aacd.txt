@@ -1,0 +1,77 @@
+[2026-07-19 01:32:40] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-19 01:32:41] INFO: ✅ Reset state before test Success! Status: 200 OK
+[2026-07-19 01:32:41] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-07-19 01:32:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-19 01:32:41] INFO: 📤 Request Payload: {
+  "username": "chaosuser178439056100935711@",
+  "password": "Password123!",
+  "fullName": "Chaos Test User"
+}
+[2026-07-19 01:32:41] INFO: ✅ Register user for reset test Success! Status: 201 Created
+[2026-07-19 01:32:41] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "chaosuser178439056100935711@"
+}
+[2026-07-19 01:32:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-19 01:32:41] INFO: 📤 Request Payload: {
+  "username": "chaosuser178439056100935711@",
+  "password": "Password123!"
+}
+[2026-07-19 01:32:41] INFO: ✅ Login user for reset test Success! Status: 200 OK
+[2026-07-19 01:32:41] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "chaosuser178439056100935711@"
+}
+[2026-07-19 01:32:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-07-19 01:32:41] INFO: 📤 Request Payload: {
+  "bookId": "3"
+}
+[2026-07-19 01:32:41] INFO: ✅ Add book 3 to cart Success! Status: 200 OK
+[2026-07-19 01:32:41] INFO: 📥 Response Payload: [
+  {
+    "id": "3",
+    "title": "1984 Bugs",
+    "author": "George Orwell",
+    "price": 12,
+    "genre": "Dystopian",
+    "description": "Big Bug is watching your code.",
+    "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-07-19 01:32:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-07-19 01:32:41] INFO: ✅ Call Global Reset Success! Status: 200 OK
+[2026-07-19 01:32:41] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-07-19 01:32:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-19 01:32:41] INFO: 📤 Request Payload: {
+  "username": "chaosuser178439056100935711@",
+  "password": "Password123!"
+}
+[2026-07-19 01:32:41] ERROR: ❌ Attempt login with deleted user Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "be04358f-bc68-4957-93d1-15de39b16336"
+}
+[2026-07-19 01:32:41] ERROR: ❌ Attempt login with deleted user Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "be04358f-bc68-4957-93d1-15de39b16336"
+}
+[2026-07-19 01:32:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-07-19 01:32:41] INFO: 📤 Request Payload: {
+  "username": "testuser",
+  "password": "buggybooks"
+}
+[2026-07-19 01:32:42] INFO: ✅ Login default testuser Success! Status: 200 OK
+[2026-07-19 01:32:42] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "testuser"
+}
+[2026-07-19 01:32:42] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/cart
+[2026-07-19 01:32:42] INFO: ✅ Get default testuser cart post-reset Success! Status: 200 OK
+[2026-07-19 01:32:42] INFO: 📥 Response Payload: []

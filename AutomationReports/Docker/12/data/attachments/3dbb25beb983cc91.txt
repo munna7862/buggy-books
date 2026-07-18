@@ -1,0 +1,58 @@
+[2026-07-19 01:32:36] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/books?page=1&limit=5
+[2026-07-19 01:32:36] INFO: ✅ Get paged books list for Standard page 1 Success! Status: 200 OK
+[2026-07-19 01:32:36] INFO: 📥 Response Payload: {
+  "books": [
+    {
+      "id": "1",
+      "title": "The Great Buggy Gatsby",
+      "author": "F. Scott Fitzgerald",
+      "price": 10.99,
+      "genre": "Classic",
+      "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+      "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "2",
+      "title": "To Kill a Mockingbird Exception",
+      "author": "Harper Lee",
+      "price": 15.5,
+      "genre": "Classic",
+      "description": "A coming-of-age tale with unhandled exceptions.",
+      "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "3",
+      "title": "1984 Bugs",
+      "author": "George Orwell",
+      "price": 12,
+      "genre": "Dystopian",
+      "description": "Big Bug is watching your code.",
+      "image": "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "4",
+      "title": "Pride and Prejudice and Performance Issues",
+      "author": "Jane Austen",
+      "price": 9.99,
+      "genre": "Classic",
+      "description": "A tale of love, society, and slow query performance.",
+      "image": "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?q=80&w=600&auto=format&fit=crop"
+    },
+    {
+      "id": "5",
+      "title": "The Null and the Furious",
+      "author": "Cormac McCarthy",
+      "price": 13.99,
+      "genre": "Thriller",
+      "description": "Null pointer exceptions wreak havoc on the open road.",
+      "image": "https://images.unsplash.com/photo-1476275466078-4007374efbbe?q=80&w=600&auto=format&fit=crop"
+    }
+  ],
+  "total": 15,
+  "page": 1,
+  "totalPages": 3,
+  "limit": 5
+}
+[2026-07-19 01:32:36] INFO:  Status code should be 200 for Standard page 1 Success !! Actual and Expected Values are:: 200
+[2026-07-19 01:32:36] INFO:  Response page should be 1 for Standard page 1 Success !! Actual and Expected Values are:: 1
+[2026-07-19 01:32:36] INFO:  Books array length should be less than or equal to limit 5 Success !! Actual and Expected Values are:: true

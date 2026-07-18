@@ -1,0 +1,30 @@
+[2026-07-19 01:32:26] INFO: Network interception enabled with mode: api-only
+[2026-07-19 01:32:26] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-07-19 01:32:26] INFO: Clicking on Login link
+[2026-07-19 01:32:26] INFO: Entering username: admin
+[2026-07-19 01:32:26] INFO: Entering password: password123
+[2026-07-19 01:32:26] INFO: Clicking on Sign In button
+[2026-07-19 01:32:27] INFO: Verifying landing on Checkout Page
+[2026-07-19 01:32:27] INFO: Checking if Checkout label is visible
+[2026-07-19 01:32:36] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-19 01:32:36] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-07-19 01:32:36] INFO: Clicking on Cart link
+[2026-07-19 01:32:41] INFO: Clicking on Catalog link
+[2026-07-19 01:32:42] INFO: Clicking on Add to Cart button for book id: 1
+[2026-07-19 01:32:42] INFO: Waiting for cart status message: Added to cart!
+[2026-07-19 01:32:45] INFO: Cart status message "Added to cart!" is visible
+[2026-07-19 01:32:45] INFO: Clicking on Cart link
+[2026-07-19 01:32:45] INFO: Getting cart item text
+[2026-07-19 01:32:45] INFO: Getting cart total text
+[2026-07-19 01:32:45] INFO: Clicking on cart total heading
+[2026-07-19 01:32:45] INFO: Clicking on Proceed to Checkout button
+[2026-07-19 01:32:46] INFO: Waiting for checkout order total amount: $10.99
+
+[Failure Hook] Capturing state for failing test: "Testcase 1: Complete book purchase successfully"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-07-19 01:33:46] INFO: Captured 43 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_001_Compl-3bb11--book-purchase-successfully-Google-Chrome/network-log.json
