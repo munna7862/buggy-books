@@ -1,0 +1,56 @@
+[2026-07-19 01:56:28] INFO: Network interception enabled with mode: api-only
+[2026-07-19 01:56:28] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-07-19 01:56:29] INFO: Clicking on Login link
+[2026-07-19 01:56:29] INFO: Entering username: admin
+[2026-07-19 01:56:29] INFO: Entering password: password123
+[2026-07-19 01:56:29] INFO: Clicking on Sign In button
+[2026-07-19 01:56:30] INFO: Verifying landing on Checkout Page
+[2026-07-19 01:56:30] INFO: Checking if Checkout label is visible
+[2026-07-19 01:56:31] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-19 01:56:31] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-07-19 01:56:31] INFO: Clicking on Cart link
+[2026-07-19 01:56:36] INFO: Clicking on Catalog link
+[2026-07-19 01:56:36] INFO: Clicking on Add to Cart button for book id: 2
+[2026-07-19 01:56:36] INFO: Waiting for cart status message: Added to cart!
+[2026-07-19 01:56:38] INFO: Cart status message "Added to cart!" is visible
+[2026-07-19 01:56:38] INFO: Clicking on Cart link
+[2026-07-19 01:56:38] INFO: Getting cart item text
+[2026-07-19 01:56:38] INFO: Getting cart total text
+[2026-07-19 01:56:38] INFO: Clicking on Logout button
+[2026-07-19 01:56:39] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-07-19 01:56:39] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-07-19 01:56:39] INFO: Entering username: admin
+[2026-07-19 01:56:39] INFO: Entering password: password123
+[2026-07-19 01:56:39] INFO: Clicking on Sign In button
+[2026-07-19 01:56:40] INFO: Verifying landing on Checkout Page
+[2026-07-19 01:56:40] INFO: Checking if Checkout label is visible
+[2026-07-19 01:56:41] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-19 01:56:41] INFO:  Verifying if user logged in successfully again Success !! Actual and Expected Values are:: true
+[2026-07-19 01:56:41] INFO: Clicking on Cart link
+[2026-07-19 01:56:41] INFO: Getting cart item text
+[2026-07-19 01:56:41] INFO: Getting cart total text
+[2026-07-19 01:56:41] INFO: Clicking on cart total heading
+[2026-07-19 01:56:41] INFO: Clicking on Proceed to Checkout button
+[2026-07-19 01:56:41] INFO: Waiting for checkout order total amount: $15.50
+[2026-07-19 01:56:41] INFO: Entering first name: johv
+[2026-07-19 01:56:41] INFO: Entering last name: cena
+[2026-07-19 01:56:41] INFO: Entering shipping address: 123 Buggy Lane
+[2026-07-19 01:56:41] INFO: Entering city: Stack City
+[2026-07-19 01:56:41] INFO: Clicking on Next Step button
+[2026-07-19 01:56:41] INFO: Entering card number
+[2026-07-19 01:56:41] INFO: Entering card expiry: 12/30
+[2026-07-19 01:56:41] INFO: Entering card CVV: 123
+[2026-07-19 01:56:41] INFO: Checking if Next Step button is visible - Element is visible
+[2026-07-19 01:56:41] INFO: Clicking on Next Step button on Payment page
+[2026-07-19 01:56:41] WARN: Invalid card entered; retrying with valid card number
+[2026-07-19 01:56:41] INFO: Entering card number
+[2026-07-19 01:56:41] INFO: Entering card expiry: 12/30
+[2026-07-19 01:56:41] INFO: Entering card CVV: 123
+[2026-07-19 01:56:41] INFO: Checking if Next Step button is visible - Element is visible
+[2026-07-19 01:56:41] INFO: Clicking on Next Step button on Payment page
+[2026-07-19 01:56:42] INFO: Waiting for confirmation message containing: Payment Successful! Thank you for your order.
+[2026-07-19 01:56:42] INFO: Payment completed successfully after correcting card number.
+[2026-07-19 01:56:42] INFO: Clicking on Logout button
+[2026-07-19 01:56:42] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-07-19 01:56:42] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-07-19 01:56:42] INFO: Captured 29 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_002_CartP-51a4b-sts-across-logout-and-login-Google-Chrome/network-log.json

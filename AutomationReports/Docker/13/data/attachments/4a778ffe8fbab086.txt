@@ -1,0 +1,37 @@
+[2026-07-19 01:56:17] INFO: Network interception enabled with mode: api-only
+[2026-07-19 01:56:17] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-07-19 01:56:17] INFO: Clicking on Login link
+[2026-07-19 01:56:18] INFO: Entering username: admin
+[2026-07-19 01:56:18] INFO: Entering password: password123
+[2026-07-19 01:56:18] INFO: Clicking on Sign In button
+[2026-07-19 01:56:19] INFO: Verifying landing on Checkout Page
+[2026-07-19 01:56:19] INFO: Checking if Checkout label is visible
+[2026-07-19 01:56:19] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-19 01:56:19] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-07-19 01:56:19] INFO: Clicking on Cart link
+[2026-07-19 01:56:25] INFO: Clicking on Catalog link
+[2026-07-19 01:56:25] INFO: Clicking on Add to Cart button for book id: 1
+[2026-07-19 01:56:25] INFO: Waiting for cart status message: Added to cart!
+[2026-07-19 01:56:27] INFO: Cart status message "Added to cart!" is visible
+[2026-07-19 01:56:27] INFO: Clicking on Cart link
+[2026-07-19 01:56:27] INFO: Getting cart item text
+[2026-07-19 01:56:27] INFO: Getting cart total text
+[2026-07-19 01:56:27] INFO: Clicking on cart total heading
+[2026-07-19 01:56:27] INFO: Clicking on Proceed to Checkout button
+[2026-07-19 01:56:27] INFO: Waiting for checkout order total amount: $10.99
+[2026-07-19 01:56:27] INFO: Entering first name: john
+[2026-07-19 01:56:27] INFO: Entering last name: cena
+[2026-07-19 01:56:27] INFO: Entering shipping address: 123 Buggy Lane
+[2026-07-19 01:56:27] INFO: Entering city: Stack City
+[2026-07-19 01:56:27] INFO: Clicking on Next Step button
+[2026-07-19 01:56:27] INFO: Entering card number
+[2026-07-19 01:56:27] INFO: Entering card expiry: 12/30
+[2026-07-19 01:56:27] INFO: Entering card CVV: 123
+[2026-07-19 01:56:27] INFO: Checking if Next Step button is visible - Element is visible
+[2026-07-19 01:56:27] INFO: Clicking on Next Step button on Payment page
+[2026-07-19 01:56:28] INFO: Waiting for confirmation message containing: Payment Successful! Thank you for your order.
+[2026-07-19 01:56:28] INFO: Payment completed successfully and order confirmation message is displayed.
+[2026-07-19 01:56:28] INFO: Clicking on Logout button
+[2026-07-19 01:56:28] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-07-19 01:56:28] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-07-19 01:56:28] INFO: Captured 22 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_001_Compl-3bb11--book-purchase-successfully-Google-Chrome/network-log.json
