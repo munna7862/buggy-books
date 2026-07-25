@@ -82,5 +82,7 @@ When generating or updating selectors, always adhere to this prioritization:
 - **Native Browser Dialog Handling:** When testing actions that trigger browser dialogs (`window.alert`, `window.confirm`, `window.prompt` or dirty navigation interceptors), set up a single-use dialog handler using `page.once('dialog', async dialog => { ... })` *before* executing the triggering action. Explicitly accept (`await dialog.accept()`) or dismiss (`await dialog.dismiss()`) and verify the dialog message text.
 - **Multi-Step Wizard Testing:** For multi-step wizard flows, verify stepper progress state classes (e.g. `step-active`, `step-completed`), step container visibility, and history preservation (retrieving typed values after clicking Back/Next) through encapsulated Page Object getters.
 - **Asynchronous Network Synchronization:** When performing actions that mutate backend state (such as adding items to cart, step transitions, or form submissions), set up specific `waitForResponse` or toast status message waiters to guarantee state settling before proceeding to navigation or assertions.
+- **Frontend Component MSW API Mocking:** For frontend component tests using Vitest + React Testing Library + MSW, import `server` from `src/mocks/server.ts` and `http`, `HttpResponse` from `msw`. To test custom error states or empty API returns, override specific endpoint handlers per test using `server.use(http.get/post(...))` and ensure `server.resetHandlers()` resets handlers after each test.
+
 
 

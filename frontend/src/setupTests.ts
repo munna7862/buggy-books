@@ -2,7 +2,8 @@ import '@testing-library/jest-dom';
 import { vi } from 'vitest';
 
 // Mock global fetch to handle ChaosProvider's configuration polling and Catalog book loading cleanly in tests
-(globalThis as any).fetch = vi.fn().mockImplementation((url: string) => {
+(globalThis as any).fetch = vi.fn().mockImplementation((input: any) => {
+  const url = typeof input === 'string' ? input : input?.url || input?.toString() || '';
   if (url.includes('/test/config')) {
     const configData = {
       checkoutFailureRate: 0.15,
@@ -31,6 +32,14 @@ import { vi } from 'vitest';
     };
     return Promise.resolve(
       new Response(JSON.stringify(booksData), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    );
+  }
+  if (url.includes('/csrf-token')) {
+    return Promise.resolve(
+      new Response(JSON.stringify({ csrfToken: 'mock-csrf-token' }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
       })
