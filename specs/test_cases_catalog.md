@@ -101,10 +101,11 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 *Spec Source: [websocket_event_and_resilience_tests.md](file:///c:/BuggyBooks/buggy-books/specs/websocket_event_and_resilience_tests.md)*
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **WS_CONN_01** | WebSocket State Indicator | Open page. Assert that `ws-status-dot` is present and contains the class `status-connected` (indicating successful handshakes). | Smoke | Playwright UI | **No** |
-| **WS_EVENT_01** | Broadcasted Event Reception | Click the bell button to open the dropdown. Assert that mock bookstore events (e.g. view, purchase, sale) populate the list inside the dropdown. | Smoke | Playwright UI | **No** |
-| **WS_EVENT_02** | Hot-Toast Alert Trigger | Listen for incoming events. Assert that if the event type is `purchase` or `sale`, a toast notification banner is rendered. | Regression | Playwright UI | **No** |
-| **WS_RESIL_01** | Automatic Connection Recovery | Configure `websocketDropRate: 1.0` via chaos config. Verify that when disconnected, the client changes state to disconnected and attempts auto-reconnection. | Critical | Playwright UI | **No** |
+| **WS_CONN_01** | WebSocket State Indicator | Open page. Assert that `ws-status-dot` is present and contains the class `status-connected` (indicating successful handshakes). | Smoke | Playwright UI | **Yes**<br>- File: `WebSockets/Test_008_WebSocketResilienceValidation.spec.ts`<br>- Test: `WS_CONN_01: WebSocket State Indicator` |
+| **WS_EVENT_01** | Broadcasted Event Reception | Click the bell button to open the dropdown. Assert that mock bookstore events (e.g. view, purchase, sale) populate the list inside the dropdown. | Smoke | Playwright UI | **Yes**<br>- File: `WebSockets/Test_008_WebSocketResilienceValidation.spec.ts`<br>- Test: `WS_EVENT_01: Broadcasted Event Reception` |
+| **WS_EVENT_02** | Hot-Toast Alert Trigger | Listen for incoming events. Assert that if the event type is `purchase` or `sale`, a toast notification banner is rendered. | Regression | Playwright UI | **Yes**<br>- File: `WebSockets/Test_008_WebSocketResilienceValidation.spec.ts`<br>- Test: `WS_EVENT_02: Hot-Toast Alert Trigger` |
+| **WS_RESIL_01** | Automatic Connection Recovery | Configure `websocketDropRate: 1.0` via chaos config. Verify that when disconnected, the client changes state to disconnected and attempts auto-reconnection. | Critical | Playwright UI | **Yes**<br>- File: `WebSockets/Test_008_WebSocketResilienceValidation.spec.ts`<br>- Test: `WS_RESIL_01: Automatic Connection Recovery` |
+
 
 ---
 
