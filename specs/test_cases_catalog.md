@@ -165,10 +165,11 @@ These test cases isolate frontend logic and UI pages by mocking backend API resp
 *Spec Source: [dockerization_and_ci_tests.md](file:///c:/BuggyBooks/buggy-books/specs/dockerization_and_ci_tests.md)*
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **MSW_01** | Mock Books Endpoint | In a Vitest component test, import `server` from `src/mocks/server.ts`. Assert `GET /api/books` returns the 3 mock books without a real backend. | Smoke | Frontend Component (Vitest) | **No** |
-| **MSW_02** | Mock Login Success | POST to `/api/login` with `testuser/password123`. Assert mock returns `200` with username. | Smoke | Frontend Component (Vitest) | **No** |
-| **MSW_03** | Override Handler Per Test | Override `GET /api/books` to return an empty array in a specific test. Assert the Catalog renders the "No books found" empty state. | Regression | Frontend Component (Vitest) | **No** |
-| **MSW_04** | Override Checkout to Always Fail | Override `POST /api/checkout/process` to return 500. Assert the Checkout component shows the error banner. | Regression | Frontend Component (Vitest) | **No** |
+| **MSW_01** | Mock Books Endpoint | In a Vitest component test, import `server` from `src/mocks/server.ts`. Assert `GET /api/books` returns the 3 mock books without a real backend. | Smoke | Frontend Component (Vitest) | **Yes**<br>- File: `frontend/src/__tests__/msw-api-mocking.test.tsx`<br>- Test: `MSW_01: Mock Books Endpoint returns the 3 mock books` |
+| **MSW_02** | Mock Login Success | POST to `/api/login` with `testuser/password123`. Assert mock returns `200` with username. | Smoke | Frontend Component (Vitest) | **Yes**<br>- File: `frontend/src/__tests__/msw-api-mocking.test.tsx`<br>- Test: `MSW_02: Mock Login Success returns 200 with username` |
+| **MSW_03** | Override Handler Per Test | Override `GET /api/books` to return an empty array in a specific test. Assert the Catalog renders the "No books found" empty state. | Regression | Frontend Component (Vitest) | **Yes**<br>- File: `frontend/src/__tests__/msw-api-mocking.test.tsx`<br>- Test: `MSW_03: Override Handler Per Test - GET /api/books returns empty array` |
+| **MSW_04** | Override Checkout to Always Fail | Override `POST /api/checkout/process` to return 500. Assert the Checkout component shows the error banner. | Regression | Frontend Component (Vitest) | **Yes**<br>- File: `frontend/src/__tests__/msw-api-mocking.test.tsx`<br>- Test: `MSW_04: Override Checkout to Always Fail - POST /api/checkout/process returns 500` |
+
 
 ---
 
