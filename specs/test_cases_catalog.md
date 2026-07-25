@@ -60,8 +60,9 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 *Spec Source: [jwt_expiration_and_refresh_tests.md](file:///c:/BuggyBooks/buggy-books/specs/jwt_expiration_and_refresh_tests.md)*
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **UI_REF_01** | Transparent Client Request Retry | Set access token to expire in 2 seconds. Trigger an action in the UI (e.g. Add to Cart) after 3 seconds. Verify the action completes successfully (API client silently refreshed the token and retried). | Regression | Playwright UI | **No** |
-| **UI_REF_02** | Session Expiry Redirection | Set access and refresh tokens to be invalid/expired. Trigger any UI action. Verify that the user is logged out and redirected to `/login`. | Smoke | Playwright UI | **No** |
+| **UI_REF_01** | Transparent Client Request Retry | Set access token to expire in 2 seconds. Trigger an action in the UI (e.g. Add to Cart) after 3 seconds. Verify the action completes successfully (API client silently refreshed the token and retried). | Regression | Playwright UI | **Yes**<br>- File: `Refresh/Test_006_JwtRefreshValidation.spec.ts`<br>- Test: `UI_REF_01: Transparent Client Request Retry` |
+| **UI_REF_02** | Session Expiry Redirection | Set access and refresh tokens to be invalid/expired. Trigger any UI action. Verify that the user is logged out and redirected to `/login`. | Smoke | Playwright UI | **Yes**<br>- File: `Refresh/Test_006_JwtRefreshValidation.spec.ts`<br>- Test: `UI_REF_02: Session Expiry Redirection` |
+
 
 ### **Suite: Accessibility (a11y) Scans**
 *Spec Source: [a11y_violation_injector_tests.md](file:///c:/BuggyBooks/buggy-books/specs/a11y_violation_injector_tests.md)*
