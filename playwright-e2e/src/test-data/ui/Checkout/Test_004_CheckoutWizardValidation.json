@@ -1,0 +1,30 @@
+{
+  "USER_PREFIX": "wiz_user_",
+  "PASSWORD": "Password123!",
+  "SHIPPING": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "address": "123 Buggy Lane",
+    "city": "Stack City"
+  },
+  "INVALID_PAYMENT": {
+    "creditCard": "1234",
+    "expiry": "99/99",
+    "cvv": "12"
+  },
+  "VALID_PAYMENT": {
+    "creditCard": "4111222233334444",
+    "expiry": "12/28",
+    "cvv": "123"
+  },
+  "ERRORS": {
+    "firstName": "First name is required",
+    "lastName": "Last name is required",
+    "address": "Address must be at least 5 characters",
+    "city": "City is required",
+    "creditCard": "Credit card must be exactly 16 digits",
+    "expiry": "Expiry date must be in MM/YY format",
+    "cvv": "CVV must be exactly 3 digits"
+  },
+  "DIRTY_DIALOG_MSG": "You have unsaved changes. Are you sure you want to leave the checkout wizard?"
+}
