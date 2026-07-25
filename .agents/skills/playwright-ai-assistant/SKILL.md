@@ -91,6 +91,14 @@ When generating or updating selectors, always adhere to this prioritization:
 - **GitHub Workflow Matrix Synchronization:** When adding new UI test suite subdirectories inside `playwright-e2e/src/tests/ui/`, update the matrix shard definitions in `.github/workflows/playwright-docker.yml` so Docker CI runs all test suites.
 - **Accessibility (a11y) Scan Testing:** When running WCAG accessibility scans, import `AxeBuilder` from `@axe-core/playwright`. Under normal state (`injectA11yViolations: false`), verify 0 violations exist. Under chaos mode (`injectA11yViolations: true`), target specific rules (`image-alt`, `label`, `color-contrast`) or container targets and assert that Axe detects the expected violations.
 - **WebSockets Event & Resilience Testing:** When testing real-time socket connections (Socket.IO), verify connection status indicators (`#ws-status-dot` class `status-connected`), event stream updates inside dropdown containers, and hot-toast alerts triggered by user purchases. For resilience testing, inject `websocketDropRate: 1.0` via chaos API config, assert disconnection/reconnection status classes (`status-disconnected` / `status-reconnecting`), and reset `websocketDropRate: 0` in a `finally` block.
+- **UI Styling & Layout Testing:** When testing CSS layout and styling correctness:
+  - **Selector Existence Checks:** Assert DOM element existence using `page.locator(selector).count()` and verify `count > 0`. Never directly assert against element visibility for selector-preservation checks.
+  - **Computed CSS Evaluation:** Read computed style properties using `page.locator(selector).evaluate(el => getComputedStyle(el).propertyName)`. For root CSS variables, use `page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--variable-name').trim())`.
+  - **Grid Layout Verification:** Verify responsive grid layouts by evaluating `getComputedStyle(el).gridTemplateColumns` after changing viewport with `page.setViewportSize({ width, height })`. For `repeat(auto-fill, minmax(280px, 1fr))`, assert the computed value includes `"280px"` (browsers compute the string representation).
+  - **Hover Animation Verification:** Trigger hover using `page.locator(selector).hover()`. After an `await page.waitForTimeout(600)` delay for CSS transition completion, evaluate the `transform` computed style on the hover-targeted child element and assert it includes `"matrix"` (indicating CSS scale/rotate transforms are active).
+  - **Dark/Light Mode CSS Variables:** Emulate color schemes using `page.emulateMedia({ colorScheme: 'dark' | 'light' })` before navigation. After page load, evaluate the CSS variable from `document.documentElement` and assert the exact HSL string (e.g., `hsl(210, 40%, 98%)`) matches the expected value from the design system.
+
+
 
 
 

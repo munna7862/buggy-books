@@ -78,10 +78,10 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 *Spec Source: [ui_styling_and_transition_tests.md](file:///c:/BuggyBooks/buggy-books/specs/ui_styling_and_transition_tests.md)*
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **UI_STYLE_01** | Retained Automation Selectors | Search and list books. Assert that all legacy automation classnames and element IDs exist on the new semantic `div` nodes. | Smoke | Playwright UI | **No** |
-| **UI_STYLE_02** | Catalog Grid Layout Responsiveness | Emulate desktop, tablet, and mobile viewports. Verify that cards align to their correct grid patterns (`repeat(auto-fill, minmax(280px, 1fr))`). | Regression | Playwright UI | **No** |
-| **UI_STYLE_03** | Hover Animation CSS Verification | Trigger a hover state on a book card. Assert that the scale and transform styles are applied to the cover image. | Regression | Playwright UI | **No** |
-| **UI_STYLE_04** | HSL CSS Variable Theme Verification | Emulate light and dark mode preferences. Assert that root variables (like `--bg` and `--card-bg`) resolve to their correct HSL values. | Regression | Playwright UI | **No** |
+| **UI_STYLE_01** | Retained Automation Selectors | Search and list books. Assert that all legacy automation classnames and element IDs exist on the new semantic `div` nodes. | Smoke | Playwright UI | **Yes**<br>- File: `Styling/Test_009_UIStyleAndLayoutValidation.spec.ts`<br>- Test: `UI_STYLE_01: Retained Automation Selectors` |
+| **UI_STYLE_02** | Catalog Grid Layout Responsiveness | Emulate desktop, tablet, and mobile viewports. Verify that cards align to their correct grid patterns (`repeat(auto-fill, minmax(280px, 1fr))`). | Regression | Playwright UI | **Yes**<br>- File: `Styling/Test_009_UIStyleAndLayoutValidation.spec.ts`<br>- Test: `UI_STYLE_02: Catalog Grid Layout Responsiveness` |
+| **UI_STYLE_03** | Hover Animation CSS Verification | Trigger a hover state on a book card. Assert that the scale and transform styles are applied to the cover image. | Regression | Playwright UI | **Yes**<br>- File: `Styling/Test_009_UIStyleAndLayoutValidation.spec.ts`<br>- Test: `UI_STYLE_03: Hover Animation CSS Verification` |
+| **UI_STYLE_04** | HSL CSS Variable Theme Verification | Emulate light and dark mode preferences. Assert that root variables (like `--bg` and `--card-bg`) resolve to their correct HSL values. | Regression | Playwright UI | **Yes**<br>- File: `Styling/Test_009_UIStyleAndLayoutValidation.spec.ts`<br>- Test: `UI_STYLE_04: HSL CSS Variable Theme Verification` |
 
 ### **Suite: Visual Regression & Layout Chaos**
 *Spec Source: [visual_regression_chaos_tests.md](file:///c:/BuggyBooks/buggy-books/specs/visual_regression_chaos_tests.md)*
