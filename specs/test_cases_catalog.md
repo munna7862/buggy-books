@@ -21,9 +21,10 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 |:---|:---|:---|:---|:---|:---|
 | **UI_CAT_01** | Initial Catalog Load | Verify that exactly 8 books are displayed on the first page of the catalog. | Smoke | Playwright UI | **Yes**<br>- File: `BookCatalog/Test_001_InitialCatalog.spec.ts`<br>- Test: `Verify Books Count in pagination` |
 | **UI_CAT_02** | Pagination Navigation | Click the "2" or "Next" button in the pagination bar. Verify that new books are loaded and URL contains `page=2`. | Regression | Playwright UI | **Yes**<br>- File: `BookCatalog/Test_001_InitialCatalog.spec.ts`<br>- Test: `Verify Next Page Navigation` |
-| **UI_CAT_03** | Search Filtering | Type "Mockingbird" in the search bar and submit. Verify that the list updates to show the matching book. | Regression | Playwright UI | **No** |
-| **UI_CAT_04** | Search - No Results | Search for a gibberish string and submit. Verify a "No books found" message is displayed. | Regression | Playwright UI | **No** |
-| **UI_CAT_05** | Book Detail View | Click on the book cover or title. Verify the description, author, and price match the catalog data. | Smoke | Playwright UI | **No** |
+| **UI_CAT_03** | Search Filtering | Type "Mockingbird" in the search bar and submit. Verify that the list updates to show the matching book. | Regression | Playwright UI | **Yes**<br>- File: `BookCatalog/Test_002_SearchAndDetailCatalog.spec.ts`<br>- Test: `UI_CAT_03: Search Filtering` |
+| **UI_CAT_04** | Search - No Results | Search for a gibberish string and submit. Verify a "No books found" message is displayed. | Regression | Playwright UI | **Yes**<br>- File: `BookCatalog/Test_002_SearchAndDetailCatalog.spec.ts`<br>- Test: `UI_CAT_04: Search - No Results` |
+| **UI_CAT_05** | Book Detail View | Click on the book cover or title. Verify the description, author, and price match the catalog data. | Smoke | Playwright UI | **Yes**<br>- File: `BookCatalog/Test_002_SearchAndDetailCatalog.spec.ts`<br>- Test: `UI_CAT_05: Book Detail View` |
+
 
 ### **Suite: Cart & Checkout**
 | ID | Title | Description | Priority | Target Coverage | Covered |
