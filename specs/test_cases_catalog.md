@@ -137,10 +137,11 @@ These test cases verify the logic, security, and integrity of backend endpoints 
 | **API_TEST_01** | Global Reset | Call `POST /api/test/reset`. Verify all users (except defaults) and all carts are cleared. | Smoke | Playwright API | **Yes**<br>- File: `api/ChaosAndTesting/Test_001_ChaosAndTestingApi.spec.ts`<br>- Test: `API_TEST_01: Global reset clears all non-default users and carts` |
 | **API_CHAOS_01** | Inject Checkout Failures | Set `checkoutFailureRate` to 1.0 via `/api/test/config`. Verify all checkout attempts return 500. | Smoke | Playwright API | **Yes**<br>- File: `api/ChaosAndTesting/Test_001_ChaosAndTestingApi.spec.ts`<br>- Test: `API_CHAOS_01: Inject checkout failures` |
 | **API_CHAOS_02** | Inject API Latency | Set `inventoryDelayMs` to 3000. Verify `/api/inventory/report` takes at least 3 seconds to respond. | Smoke | Playwright API | **Yes**<br>- File: `api/ChaosAndTesting/Test_001_ChaosAndTestingApi.spec.ts`<br>- Test: `API_CHAOS_02: Inject API latency` |
-| **API_VIS_01** | Toggle visualChaos Config via API | `POST /api/test/config` with `{ "visualChaos": true }`. Assert 200 and `config.visualChaos === true`. | Smoke | Playwright API | **No** |
-| **API_VIS_02** | Default visualChaos is False | `GET /api/test/config` after reset. Assert `visualChaos === false`. | Smoke | Playwright API | **No** |
-| **API_VIS_03** | Invalid Type Rejected | `POST /api/test/config` with `{ "visualChaos": "yes" }`. Assert 400 and validation error in body. | Regression | Playwright API | **No** |
-| **API_VIS_04** | Combine with Other Chaos Params | Set `{ "visualChaos": true, "checkoutFailureRate": 0.5 }` in one request. Assert both fields are saved correctly. | Regression | Playwright API | **No** |
+| **API_VIS_01** | Toggle visualChaos Config via API | `POST /api/test/config` with `{ "visualChaos": true }`. Assert 200 and `config.visualChaos === true`. | Smoke | Playwright API | **Yes**<br>- File: `api/ChaosAndTesting/Test_002_VisualChaosApi.spec.ts`<br>- Test: `API_VIS_01: Toggle visualChaos Config via API` |
+| **API_VIS_02** | Default visualChaos is False | `GET /api/test/config` after reset. Assert `visualChaos === false`. | Smoke | Playwright API | **Yes**<br>- File: `api/ChaosAndTesting/Test_002_VisualChaosApi.spec.ts`<br>- Test: `API_VIS_02: Default visualChaos is False` |
+| **API_VIS_03** | Invalid Type Rejected | `POST /api/test/config` with `{ "visualChaos": "yes" }`. Assert 400 and validation error in body. | Regression | Playwright API | **Yes**<br>- File: `api/ChaosAndTesting/Test_002_VisualChaosApi.spec.ts`<br>- Test: `API_VIS_03: Invalid Type Rejected` |
+| **API_VIS_04** | Combine with Other Chaos Params | Set `{ "visualChaos": true, "checkoutFailureRate": 0.5 }` in one request. Assert both fields are saved correctly. | Regression | Playwright API | **Yes**<br>- File: `api/ChaosAndTesting/Test_002_VisualChaosApi.spec.ts`<br>- Test: `API_VIS_04: Combine with Other Chaos Params` |
+
 
 ### **Suite: Structured JSON Logging & Correlation**
 *Spec Source: [logging_and_correlation_tests.md](file:///c:/BuggyBooks/buggy-books/specs/logging_and_correlation_tests.md)*

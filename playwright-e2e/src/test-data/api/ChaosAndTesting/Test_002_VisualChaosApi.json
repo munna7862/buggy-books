@@ -1,0 +1,16 @@
+{
+  "INVALID_TYPE_PAYLOAD": {
+    "visualChaos": "yes"
+  },
+  "TOGGLE_PAYLOAD": {
+    "visualChaos": true
+  },
+  "COMBINED_PAYLOAD": {
+    "visualChaos": true,
+    "checkoutFailureRate": 0.5
+  },
+  "RESET_PAYLOAD": {
+    "visualChaos": false,
+    "checkoutFailureRate": 0.15
+  }
+}
