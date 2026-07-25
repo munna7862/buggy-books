@@ -5,33 +5,60 @@ export class CheckoutPage extends BasePage {
   private static readonly DEFAULT_SHIPPING_ADDRESS = '123 Buggy Lane';
   private static readonly DEFAULT_SHIPPING_CITY = 'Stack City';
 
-  private readonly checkoutSummary: Locator;
-  private readonly firstNameInput: Locator;
-  private readonly lastNameInput: Locator;
-  private readonly shippingAddressInput: Locator;
-  private readonly cityInput: Locator;
-  private readonly cardNumberInput: Locator;
-  private readonly expiryInput: Locator;
-  private readonly cvvInput: Locator;
-  private readonly nextStepButton: Locator;
-  private readonly finalSubmitButton: Locator;
-  private readonly orderConfirmationMessage: Locator;
+  // Locators
+  private get checkoutSummary(): Locator {
+    return this.page.getByRole('main');
+  }
+
+  private get firstNameInput(): Locator {
+    return this.page.locator('input[name="txt_f1"], input[name="firstName"]');
+  }
+
+  private get lastNameInput(): Locator {
+    return this.page.locator('input[name="txt_f2"], input[name="lastName"]');
+  }
+
+  private get shippingAddressInput(): Locator {
+    return this.page.locator('input[name="txt_addr_12"], input[placeholder="123 Buggy Lane"]');
+  }
+
+  private get cityInput(): Locator {
+    return this.page.locator('input[name="txt_city_34"], input[placeholder="Stack City"]');
+  }
+
+  private get cardNumberInput(): Locator {
+    return this.page.locator('input[name="creditCard"], input[name="txt_c99"], input[placeholder="16-digit card number"]');
+  }
+
+  private get expiryInput(): Locator {
+    return this.page.locator('input[name="txt_exp_56"], input[placeholder="MM/YY"]');
+  }
+
+  private get cvvInput(): Locator {
+    return this.page.locator('input[name="txt_cvv_78"], input[placeholder="3 digits"]');
+  }
+
+  private get nextStepButton(): Locator {
+    return this.page.locator('button#wizard-next-btn');
+  }
+
+  private get finalSubmitButton(): Locator {
+    return this.page.getByRole('button', { name: 'Complete Payment' });
+  }
+
+  private get orderConfirmationMessage(): Locator {
+    return this.page.locator('.payment-success-card');
+  }
+
+  private get fieldErrorMessages(): Locator {
+    return this.page.locator('.field-error-msg');
+  }
 
   constructor(page: Page) {
     super(page);
-    this.checkoutSummary = this.page.getByRole('main');
-    this.firstNameInput = this.page.locator('input[name="txt_f1"], input[name="firstName"]');
-    this.lastNameInput = this.page.locator('input[name="txt_f2"], input[name="lastName"]');
-    this.shippingAddressInput = this.page.locator('input[name="txt_addr_12"], input[placeholder="123 Buggy Lane"]');
-    this.cityInput = this.page.locator('input[name="txt_city_34"], input[placeholder="Stack City"]');
-    this.cardNumberInput = this.page.locator('input[name="creditCard"], input[name="txt_c99"], input[placeholder="16-digit card number"]');
-    this.expiryInput = this.page.locator('input[name="txt_exp_56"], input[placeholder="MM/YY"]');
-    this.cvvInput = this.page.locator('input[name="txt_cvv_78"], input[placeholder="3 digits"]');
-    this.nextStepButton = this.page.locator('button#wizard-next-btn');
-    this.finalSubmitButton = this.page.getByRole('button', { name: 'Complete Payment' });
-    this.orderConfirmationMessage = this.page.locator('.payment-success-card');
   }
 
+  // Actions and Interaction Methods
   public async getOrderTotalAmountText(): Promise<string> {
     await this.logMessage('INFO', 'Getting checkout order total amount');
     await this.checkoutSummary.waitFor({ state: 'visible', timeout: 60000 });
@@ -76,6 +103,15 @@ export class CheckoutPage extends BasePage {
   public async clickNextStep(): Promise<void> {
     await this.doClick(this.nextStepButton, 'Clicking on Next Step button');
     await this.cardNumberInput.waitFor({ state: 'visible', timeout: 60000 });
+  }
+
+  public async clickNextStepWithoutValidationWait(): Promise<void> {
+    await this.doClick(this.nextStepButton, 'Clicking on Next Step button to trigger validation');
+  }
+
+  public async getFieldErrors(): Promise<string[]> {
+    await this.fieldErrorMessages.first().waitFor({ state: 'visible', timeout: 10000 });
+    return await this.fieldErrorMessages.allTextContents();
   }
 
   public async clickFinalSubmit(): Promise<void> {

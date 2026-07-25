@@ -30,9 +30,10 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
 | **UI_CART_01** | Add to Cart from Catalog | Click "Add to Cart" on a book. Verify that the item is successfully added to the cart (toast/badge updates). | Smoke | Playwright UI | **Yes**<br>- File: `Checkout/Test_001_CompleteBookPurchase.spec.ts` (`Testcase 1`) & `Checkout/Test_002_CartPersistenceCheckout.spec.ts` (`Testcase 1`) |
-| **UI_CART_02** | Remove Item from Cart | Navigate to `/cart`. Click "Remove" on an item. Verify the item disappears and the total price updates. | Regression | Playwright UI | **No** *(Note: Existing tests only clear cart in bulk via "Clear All")* |
-| **UI_CART_03** | User Cart Isolation | **(Critical)** Login as User A, add items. Logout. Login as User B. Verify User B's cart is empty. | Regression | Playwright UI | **No** |
-| **UI_CHECK_01** | Checkout Form Validation | Attempt to submit the checkout form with empty fields. Verify inline validation error tags appear. | Regression | Playwright UI | **No** |
+| **UI_CART_02** | Remove Item from Cart | Navigate to `/cart`. Click "Remove" on an item. Verify the item disappears and the total price updates. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_003_CartAndCheckoutValidation.spec.ts`<br>- Test: `UI_CART_02: Remove Item from Cart` |
+| **UI_CART_03** | User Cart Isolation | **(Critical)** Login as User A, add items. Logout. Login as User B. Verify User B's cart is empty. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_003_CartAndCheckoutValidation.spec.ts`<br>- Test: `UI_CART_03: User Cart Isolation` |
+| **UI_CHECK_01** | Checkout Form Validation | Attempt to submit the checkout form with empty fields. Verify inline validation error tags appear. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_003_CartAndCheckoutValidation.spec.ts`<br>- Test: `UI_CHECK_01: Checkout Form Validation` |
+
 | **UI_CHECK_02** | Successful Order Placement | Complete the checkout form and submit. Verify that the payment successful message appears and the cart is cleared. | Smoke | Playwright UI | **Yes**<br>- File: `Checkout/Test_001_CompleteBookPurchase.spec.ts` (`Testcase 1`) & `Checkout/Test_002_CartPersistenceCheckout.spec.ts` (`Testcase 1`) |
 
 ### **Suite: Multi-Step Checkout Wizard**

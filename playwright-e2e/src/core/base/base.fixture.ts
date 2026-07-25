@@ -2,6 +2,8 @@ import { logger } from '../logger/logger';
 import { SignUpPage } from '../../pages/signup-login.page';
 import { CatalogPage } from '../../pages/catalog.page';
 import { BookDetailPage } from '../../pages/book-detail.page';
+import { CartPage } from '../../pages/cart.page';
+import { CheckoutPage } from '../../pages/checkout.page';
 import { CommonFunctions } from '../../utils/common.util';
 import { NetworkInterceptor } from '../network/network.interceptor';
 import { writeFile } from 'fs/promises';
@@ -12,6 +14,8 @@ type TestFixtures = {
   signUpPage: SignUpPage;
   catalogPage: CatalogPage;
   bookDetailPage: BookDetailPage;
+  cartPage: CartPage;
+  checkoutPage: CheckoutPage;
   commonFunctions: CommonFunctions;
   networkInterceptor: NetworkInterceptor;
 };
@@ -47,11 +51,20 @@ export const test = base.extend<TestFixtures>({
     await use(new BookDetailPage(page));
   },
 
+  cartPage: async ({ page }, use) => {
+    await use(new CartPage(page));
+  },
+
+  checkoutPage: async ({ page }, use) => {
+    await use(new CheckoutPage(page));
+  },
+
   commonFunctions: async ({ }, use) => {
     await use(new CommonFunctions());
   }
 
 });
+
 
 
 test.afterEach(async ({ page }, testInfo) => {
