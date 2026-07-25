@@ -1,0 +1,18 @@
+{
+  "USER_PREFIX": "ws_user_",
+  "PASSWORD": "Password123!",
+  "SHIPPING_DATA": {
+    "firstName": "Web",
+    "lastName": "SocketUser",
+    "address": "777 Realtime Way",
+    "city": "Adelaide",
+    "postalCode": "5000",
+    "cardNumber": "4111222233334444"
+  },
+  "ENABLE_WS_CHAOS": {
+    "websocketDropRate": 1.0
+  },
+  "DISABLE_WS_CHAOS": {
+    "websocketDropRate": 0
+  }
+}

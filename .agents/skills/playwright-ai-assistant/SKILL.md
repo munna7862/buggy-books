@@ -90,6 +90,8 @@ When generating or updating selectors, always adhere to this prioritization:
 - **UI Transparent Refresh & Session Redirection:** When testing client-side token retry logic on the UI level, inject short access token expirations (`jwtExpirySeconds: 2`), wait for token expiry, and verify UI actions complete silently without forced logouts. For session expiry tests, clear auth cookies, invoke protected UI actions/navigation, and assert user redirection to `/login`.
 - **GitHub Workflow Matrix Synchronization:** When adding new UI test suite subdirectories inside `playwright-e2e/src/tests/ui/`, update the matrix shard definitions in `.github/workflows/playwright-docker.yml` so Docker CI runs all test suites.
 - **Accessibility (a11y) Scan Testing:** When running WCAG accessibility scans, import `AxeBuilder` from `@axe-core/playwright`. Under normal state (`injectA11yViolations: false`), verify 0 violations exist. Under chaos mode (`injectA11yViolations: true`), target specific rules (`image-alt`, `label`, `color-contrast`) or container targets and assert that Axe detects the expected violations.
+- **WebSockets Event & Resilience Testing:** When testing real-time socket connections (Socket.IO), verify connection status indicators (`#ws-status-dot` class `status-connected`), event stream updates inside dropdown containers, and hot-toast alerts triggered by user purchases. For resilience testing, inject `websocketDropRate: 1.0` via chaos API config, assert disconnection/reconnection status classes (`status-disconnected` / `status-reconnecting`), and reset `websocketDropRate: 0` in a `finally` block.
+
 
 
 

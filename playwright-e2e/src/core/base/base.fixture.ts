@@ -5,6 +5,7 @@ import { BookDetailPage } from '../../pages/book-detail.page';
 import { CartPage } from '../../pages/cart.page';
 import { CheckoutPage } from '../../pages/checkout.page';
 import { ProfilePage } from '../../pages/profile.page';
+import { NotificationCenterComponent } from '../../pages/notification-center.component';
 import { CommonFunctions } from '../../utils/common.util';
 import { NetworkInterceptor } from '../network/network.interceptor';
 import { writeFile } from 'fs/promises';
@@ -18,6 +19,7 @@ type TestFixtures = {
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
   profilePage: ProfilePage;
+  notificationCenter: NotificationCenterComponent;
   commonFunctions: CommonFunctions;
   networkInterceptor: NetworkInterceptor;
 };
@@ -65,20 +67,18 @@ export const test = base.extend<TestFixtures>({
     await use(new ProfilePage(page));
   },
 
+  notificationCenter: async ({ page }, use) => {
+    await use(new NotificationCenterComponent(page));
+  },
+
   commonFunctions: async ({ }, use) => {
     await use(new CommonFunctions());
   }
 
 });
 
-
-
-
 test.afterEach(async ({ page }, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {
     await captureFailureState(page, testInfo);
   }
 });
-
-
-
