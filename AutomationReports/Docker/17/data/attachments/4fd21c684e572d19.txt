@@ -1,0 +1,16 @@
+[2026-07-25 16:18:50] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-07-25 16:18:50] INFO: 📤 Request Payload: {
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-07-25 16:18:51] ERROR: ❌ Register user with missing username Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "90c94c50-a839-4535-9f55-e6f3e8462ab1"
+}
+[2026-07-25 16:18:51] ERROR: ❌ Register user with missing username Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "90c94c50-a839-4535-9f55-e6f3e8462ab1"
+}
+[2026-07-25 16:18:51] INFO:  Status code for missing username Success !! Actual and Expected Values are:: true
