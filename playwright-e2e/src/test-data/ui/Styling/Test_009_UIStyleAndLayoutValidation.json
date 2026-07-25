@@ -1,0 +1,30 @@
+{
+  "SELECTORS": {
+    "GRID_WRAPPER": ".layout-wrapper-xyz987",
+    "BOOK_CARD": ".complex-item-box-alpha",
+    "BOOK_COVER": ".catalog-book-cover",
+    "INFO_CELL": ".info-cell-beta",
+    "PRICE_TAG": ".price-tag-value",
+    "SEARCH_INPUT": "#book-search-input",
+    "SEARCH_BTN": "#book-search-btn",
+    "SEARCH_CLEAR_BTN": "#book-search-clear-btn"
+  },
+  "EXPECTED_HOVER_TRANSFORM_CONTAINS": "matrix",
+  "CSS_VARIABLES": {
+    "BG": "--bg",
+    "CARD_BG": "--card-bg"
+  },
+  "LIGHT_MODE": {
+    "BG": "#f8fafc",
+    "CARD_BG_NOTE": "Chrome resolves hsl(210, 40%, 98%) -> #f8fafc"
+  },
+  "DARK_MODE": {
+    "BG": "#090d15",
+    "CARD_BG_NOTE": "Chrome resolves hsl(220, 40%, 6%) -> #090d15"
+  },
+  "VIEWPORTS": {
+    "DESKTOP": { "width": 1280, "height": 800 },
+    "TABLET": { "width": 768, "height": 1024 },
+    "MOBILE": { "width": 375, "height": 812 }
+  }
+}
