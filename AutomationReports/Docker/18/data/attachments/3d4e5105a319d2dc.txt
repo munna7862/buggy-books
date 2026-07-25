@@ -1,0 +1,10 @@
+[2026-07-25 19:36:46] INFO: Filling search input with: the
+[2026-07-25 19:36:46] INFO: Clicking Search button
+[2026-07-25 19:36:48] INFO:  Verifying .layout-wrapper-xyz987 grid wrapper selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-07-25 19:36:48] INFO:  Verifying .complex-item-box-alpha book card selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-07-25 19:36:48] INFO:  Verifying .catalog-book-cover image selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-07-25 19:36:48] INFO:  Verifying .info-cell-beta info cell selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-07-25 19:36:48] INFO:  Verifying .price-tag-value price tag selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-07-25 19:36:48] INFO:  Verifying #book-search-input selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-07-25 19:36:48] INFO:  Verifying #book-search-btn selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-07-25 19:36:48] INFO:  Verifying #book-search-clear-btn selector exists in DOM after search Success !! Actual and Expected Values are:: true

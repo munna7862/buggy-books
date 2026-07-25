@@ -1,0 +1,23 @@
+[2026-07-25 19:37:53] INFO: Network interception enabled with mode: api-only
+[2026-07-25 19:37:53] INFO: Clicking on Sign Up link
+[2026-07-25 19:37:53] INFO: Entering full name: autoTestUserb08s5
+[2026-07-25 19:37:53] INFO: Entering username: autoTestUserGogn5
+[2026-07-25 19:37:53] INFO: Entering password: AutoTest@123
+[2026-07-25 19:37:53] INFO: Entering confirming password: AutoTest@123
+[2026-07-25 19:37:53] INFO: Clicking on Create Account button
+[2026-07-25 19:37:54] INFO: Verifying landing on Checkout Page
+[2026-07-25 19:37:54] INFO: Checking if Checkout label is visible
+[2026-07-25 19:37:55] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-25 19:37:56] INFO: Clicking on Logout button
+[2026-07-25 19:37:56] INFO: Clicking on Login link
+[2026-07-25 19:37:56] INFO: Entering username: autoTestUserGogn5
+[2026-07-25 19:37:56] INFO: Entering password: AutoTest@123
+[2026-07-25 19:37:56] INFO: Clicking on Sign In button
+[2026-07-25 19:37:57] INFO: Verifying landing on Checkout Page
+[2026-07-25 19:37:57] INFO: Checking if Checkout label is visible
+[2026-07-25 19:37:58] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-07-25 19:37:58] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-07-25 19:37:58] INFO: Clicking on Logout button
+[2026-07-25 19:37:58] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-07-25 19:37:58] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-07-25 19:38:00] INFO: Captured 16 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-b0c52--Registered-User-and-Logout-Google-Chrome-retry1/network-log.json

@@ -1,0 +1,2 @@
+[2026-07-25 19:36:51] INFO:  Verifying .catalog-book-cover has transform CSS property before hover (value: none) Success !! Actual and Expected Values are:: true
+[2026-07-25 19:36:52] INFO:  Verifying .catalog-book-cover transform contains matrix values after hover (value: matrix(1.05984, 0.0184995, -0.0184995, 1.05984, 0, 0)) Success !! Actual and Expected Values are:: true
