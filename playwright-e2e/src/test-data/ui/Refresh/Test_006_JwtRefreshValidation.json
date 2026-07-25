@@ -1,0 +1,6 @@
+{
+  "USER_PREFIX": "refresh_ui_user_",
+  "PASSWORD": "Password123!",
+  "LOGIN_URL_PATH": "/login",
+  "PROFILE_URL_PATH": "/profile"
+}

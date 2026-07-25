@@ -40,19 +40,20 @@ jobs:
         run: |
           test_selection="${{ github.event.inputs.test_selection || 'ALL' }}"
           if [ "$test_selection" = "ALL" ]; then
-            # ALL: 4 shards - 1 for API, 3 for UI folders (BookCatalog, Checkout, UserManagement)
-            matrix='{"shard":[{"index":1,"total":4,"folder":"api","workers":1},{"index":2,"total":4,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":4,"folder":"ui/Checkout","workers":1},{"index":4,"total":4,"folder":"ui/UserManagement","workers":1}]}'
+            # ALL: 6 shards - 1 for API, 5 for UI folders (BookCatalog, Checkout, UserManagement, Profile, Refresh)
+            matrix='{"shard":[{"index":1,"total":6,"folder":"api","workers":2},{"index":2,"total":6,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":6,"folder":"ui/Checkout","workers":1},{"index":4,"total":6,"folder":"ui/UserManagement","workers":1},{"index":5,"total":6,"folder":"ui/Profile","workers":1},{"index":6, "total":6,"folder":"ui/Refresh","workers":1}]}'
           elif [ "$test_selection" = "UI" ]; then
-            # UI: 3 shards - one per folder (BookCatalog, Checkout, UserManagement) with 1 worker each
-            matrix='{"shard":[{"index":1,"total":3,"folder":"ui/BookCatalog","workers":1},{"index":2,"total":3,"folder":"ui/Checkout","workers":1},{"index":3,"total":3,"folder":"ui/UserManagement","workers":1}]}'
+            # UI: 5 shards - one per UI folder (BookCatalog, Checkout, UserManagement, Profile, Refresh)
+            matrix='{"shard":[{"index":1,"total":5,"folder":"ui/BookCatalog","workers":1},{"index":2,"total":5,"folder":"ui/Checkout","workers":1},{"index":3,"total":5,"folder":"ui/UserManagement","workers":1},{"index":4,"total":5,"folder":"ui/Profile","workers":1},{"index":5,"total":5,"folder":"ui/Refresh","workers":1}]}'
           elif [ "$test_selection" = "API" ]; then
             # API: 1 shard with 2 workers
             matrix='{"shard":[{"index":1,"total":1,"folder":"api","workers":2}]}'
           else
             # Default to ALL
-            matrix='{"shard":[{"index":1,"total":4,"folder":"api","workers":1},{"index":2,"total":4,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":4,"folder":"ui/Checkout","workers":1},{"index":4,"total":4,"folder":"ui/UserManagement","workers":1}]}'
+            matrix='{"shard":[{"index":1,"total":6,"folder":"api","workers":2},{"index":2,"total":6,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":6,"folder":"ui/Checkout","workers":1},{"index":4,"total":6,"folder":"ui/UserManagement","workers":1},{"index":5,"total":6,"folder":"ui/Profile","workers":1},{"index":6,"total":6,"folder":"ui/Refresh","workers":1}]}'
           fi
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
+
       
       - name: Set workers output
         id: set-workers
