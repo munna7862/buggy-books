@@ -1,0 +1,7 @@
+{
+  "CUSTOM_CORRELATION_ID": "custom-correlation-uuid-99999",
+  "USER_PREFIX": "log_user_",
+  "PASSWORD": "Password123!",
+  "FULL_NAME": "Logging Test User",
+  "UUIDV4_REGEX": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+}

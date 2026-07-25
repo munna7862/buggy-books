@@ -147,10 +147,11 @@ These test cases verify the logic, security, and integrity of backend endpoints 
 *Spec Source: [logging_and_correlation_tests.md](file:///c:/BuggyBooks/buggy-books/specs/logging_and_correlation_tests.md)*
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **API_LOG_01** | Correlation ID Header Generation | Send any HTTP request. Verify `x-correlation-id` is returned in response headers and is a valid UUIDv4. | Smoke | Playwright API | **No** |
-| **API_LOG_02** | Correlation ID Header Preservation | Send a request with a custom `x-correlation-id` header. Verify the API preserves it and returns the exact same ID. | Regression | Playwright API | **No** |
-| **API_LOG_03** | Error Body Correlation ID Mapping | Trigger a server-side error. Verify that the JSON response body contains the exact same `correlationId`. | Regression | Playwright API | **No** |
-| **API_LOG_04** | User Context Log Association | Login, add an item to the cart, and checkout. Inspect the server logs for that correlation ID and verify that the logs contain the correct `username` field. | E2E | Playwright API / Log Analysis | **No** |
+| **API_LOG_01** | Correlation ID Header Generation | Send any HTTP request. Verify `x-correlation-id` is returned in response headers and is a valid UUIDv4. | Smoke | Playwright API | **Yes**<br>- File: `api/Logging/Test_001_LoggingAndCorrelationApi.spec.ts`<br>- Test: `API_LOG_01: Correlation ID Header Generation` |
+| **API_LOG_02** | Correlation ID Header Preservation | Send a request with a custom `x-correlation-id` header. Verify the API preserves it and returns the exact same ID. | Regression | Playwright API | **Yes**<br>- File: `api/Logging/Test_001_LoggingAndCorrelationApi.spec.ts`<br>- Test: `API_LOG_02: Correlation ID Header Preservation` |
+| **API_LOG_03** | Error Body Correlation ID Mapping | Trigger a server-side error. Verify that the JSON response body contains the exact same `correlationId`. | Regression | Playwright API | **Yes**<br>- File: `api/Logging/Test_001_LoggingAndCorrelationApi.spec.ts`<br>- Test: `API_LOG_03: Error Body Correlation ID Mapping` |
+| **API_LOG_04** | User Context Log Association | Login, add an item to the cart, and checkout. Inspect the server logs for that correlation ID and verify that the logs contain the correct `username` field. | E2E | Playwright API / Log Analysis | **Yes**<br>- File: `api/Logging/Test_001_LoggingAndCorrelationApi.spec.ts`<br>- Test: `API_LOG_04: User Context Log Association` |
+
 
 ### **Suite: Database Persistence & Concurrency**
 | ID | Title | Description | Priority | Target Coverage | Covered |
