@@ -86,6 +86,8 @@ When generating or updating selectors, always adhere to this prioritization:
 - **File Upload Automation:** When testing file upload components, set file inputs via encapsulated POM methods using `locator.setInputFiles(filePath)`. For validation and chaos testing, generate test fixture files locally, verify HTTP response status codes (200, 400, 500), and reset chaos configuration flags in a `finally` block.
 - **API Security & Refresh Token Automation:** For API test cases verifying JWT tokens and security headers, parse `Set-Cookie` response headers for `token` and `refreshToken` parameters and security flags (`HttpOnly`). When testing dynamic token expiry (`jwtExpirySeconds`), wait for token expiry before invoking protected endpoints and verify 403 Forbidden statuses.
 - **Visual Chaos API Testing:** When testing chaos configuration endpoints (`/api/test/config`), verify boolean toggles (`visualChaos: true/false`), strict type validation rejections (400 Bad Request for string inputs), default configuration state after calling reset (`/api/test/reset`), and combined multi-field chaos updates.
+- **Structured Logging & Correlation ID Testing:** When testing request tracing, validate that responses automatically populate the `x-correlation-id` header matching UUIDv4 format (`/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i`), custom `x-correlation-id` headers are preserved across API invocations, and error payloads return matching `correlationId` fields in the JSON response body.
+
 
 
 
