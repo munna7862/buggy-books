@@ -54,9 +54,34 @@ export class CheckoutPage extends BasePage {
     return this.page.locator('.field-error-msg');
   }
 
+  private get stepIndicator1(): Locator {
+    return this.page.locator('#step-indicator-1');
+  }
+
+  private get stepIndicator2(): Locator {
+    return this.page.locator('#step-indicator-2');
+  }
+
+  private get stepIndicator3(): Locator {
+    return this.page.locator('#step-indicator-3');
+  }
+
+  private get backStepButton(): Locator {
+    return this.page.locator('button#wizard-back-btn');
+  }
+
+  private get wizardStep1Content(): Locator {
+    return this.page.locator('#wizard-step-1');
+  }
+
+  private get wizardStep2Content(): Locator {
+    return this.page.locator('#wizard-step-2');
+  }
+
   constructor(page: Page) {
     super(page);
   }
+
 
   // Actions and Interaction Methods
   public async getOrderTotalAmountText(): Promise<string> {
@@ -113,6 +138,42 @@ export class CheckoutPage extends BasePage {
     await this.fieldErrorMessages.first().waitFor({ state: 'visible', timeout: 10000 });
     return await this.fieldErrorMessages.allTextContents();
   }
+
+  public async isStepIndicatorActive(stepNumber: 1 | 2 | 3): Promise<boolean> {
+    const locator = stepNumber === 1 ? this.stepIndicator1 : stepNumber === 2 ? this.stepIndicator2 : this.stepIndicator3;
+    await locator.waitFor({ state: 'visible', timeout: 10000 });
+    const classAttr = await locator.getAttribute('class') ?? '';
+    return classAttr.includes('step-active');
+  }
+
+  public async isShippingStepVisible(): Promise<boolean> {
+    return await this.wizardStep1Content.isVisible().catch(() => false);
+  }
+
+  public async isPaymentStepVisible(): Promise<boolean> {
+    return await this.wizardStep2Content.isVisible().catch(() => false);
+  }
+
+  public async clickBackStep(): Promise<void> {
+    await this.doClick(this.backStepButton, 'Clicking on Back step button');
+  }
+
+  public async getFirstNameInputValue(): Promise<string> {
+    return await this.firstNameInput.inputValue();
+  }
+
+  public async getCardNumberInputValue(): Promise<string> {
+    return await this.cardNumberInput.inputValue();
+  }
+
+  public async getExpiryInputValue(): Promise<string> {
+    return await this.expiryInput.inputValue();
+  }
+
+  public async getCvvInputValue(): Promise<string> {
+    return await this.cvvInput.inputValue();
+  }
+
 
   public async clickFinalSubmit(): Promise<void> {
     if (await this.doesElementExist(this.nextStepButton, 'Checking if Next Step button is visible')) {

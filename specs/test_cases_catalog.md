@@ -40,10 +40,11 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 *Spec Source: [checkout_wizard_and_validation_tests.md](file:///c:/BuggyBooks/buggy-books/specs/checkout_wizard_and_validation_tests.md)*
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **UI_WIZ_01** | Stepper Transition Validation | Complete Step 1 shipping, click Next. Verify `step-indicator-2` is active, shipping inputs are hidden, and payment inputs appear. | Smoke | Playwright UI | **No** |
-| **UI_WIZ_02** | Validation Messaging Validation | Submit blank fields on Step 1, and invalid inputs on Step 2. Verify all inline error message nodes become visible with exact error texts. | Regression | Playwright UI | **No** |
-| **UI_WIZ_03** | Wizard Back Step History preservation | Go to Step 2, type in card inputs, click Back. Click Next. Assert card inputs are preserved and error banners are cleared. | Regression | Playwright UI | **No** |
-| **UI_WIZ_04** | Dirty Navigation Alert Dialog | Fill First Name input. Click "Catalog" link in the navbar. Assert that a native browser `confirm` dialog is triggered, and navigation is blocked unless accepted. | Critical | Playwright UI | **No** |
+| **UI_WIZ_01** | Stepper Transition Validation | Complete Step 1 shipping, click Next. Verify `step-indicator-2` is active, shipping inputs are hidden, and payment inputs appear. | Smoke | Playwright UI | **Yes**<br>- File: `Checkout/Test_004_CheckoutWizardValidation.spec.ts`<br>- Test: `UI_WIZ_01: Stepper Transition Validation` |
+| **UI_WIZ_02** | Validation Messaging Validation | Submit blank fields on Step 1, and invalid inputs on Step 2. Verify all inline error message nodes become visible with exact error texts. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_004_CheckoutWizardValidation.spec.ts`<br>- Test: `UI_WIZ_02: Validation Messaging Validation` |
+| **UI_WIZ_03** | Wizard Back Step History preservation | Go to Step 2, type in card inputs, click Back. Click Next. Assert card inputs are preserved and error banners are cleared. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_004_CheckoutWizardValidation.spec.ts`<br>- Test: `UI_WIZ_03: Wizard Back Step History preservation` |
+| **UI_WIZ_04** | Dirty Navigation Alert Dialog | Fill First Name input. Click "Catalog" link in the navbar. Assert that a native browser `confirm` dialog is triggered, and navigation is blocked unless accepted. | Critical | Playwright UI | **Yes**<br>- File: `Checkout/Test_004_CheckoutWizardValidation.spec.ts`<br>- Test: `UI_WIZ_04: Dirty Navigation Alert Dialog` |
+
 
 ### **Suite: Profile Picture Upload**
 *Spec Source: [file_upload_and_validation_tests.md](file:///c:/BuggyBooks/buggy-books/specs/file_upload_and_validation_tests.md)*
