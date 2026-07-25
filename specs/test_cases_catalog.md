@@ -115,9 +115,9 @@ These test cases verify the logic, security, and integrity of backend endpoints 
 | **API_AUTH_01** | `POST /api/login` Success | Send valid credentials. Verify 200 OK and that `Set-Cookie` header contains a valid JWT token. | Smoke | Playwright API | **Yes**<br>- File: `api/UserManagement/Test_001_RegisterAndLoginUser.spec.ts`<br>- Test: `Testcase 7: Positive and Contract` |
 | **API_AUTH_02** | `POST /api/register` Conflict | Send a username that already exists. Verify 409 Conflict. | Smoke | Playwright API | **Yes**<br>- File: `api/UserManagement/Test_001_RegisterAndLoginUser.spec.ts`<br>- Test: `Testcase 3: Duplicate usernames` |
 | **API_AUTH_03** | Protected Route Access | Attempt `GET /api/cart` without a cookie. Verify 401 Unauthorized. | Smoke | Playwright API | **Yes**<br>- File: `api/UserManagement/Test_001_RegisterAndLoginUser.spec.ts`<br>- Test: `Testcase 13: Security: GET /api/cart without auth cookies should return 401 Unauthorized` |
-| **API_REF_01** | Dynamic Access Token Expiry | Inject `jwtExpirySeconds: 2` via chaos configuration. Request a protected route after 3 seconds. Verify `403 Forbidden` response is returned. | Smoke | Playwright API | **No** |
-| **API_REF_02** | Refresh Token Issuance | Login. Verify that both access `token` and `refreshToken` cookies are returned with security and `httpOnly` flags set. | Smoke | Playwright API | **No** |
-| **API_REF_03** | Silent Token Refresh | Request `/api/auth/refresh` using the `refreshToken` cookie. Verify status is `200` and a new `token` cookie is returned. | Regression | Playwright API | **No** |
+| **API_REF_01** | Dynamic Access Token Expiry | Inject `jwtExpirySeconds: 2` via chaos configuration. Request a protected route after 3 seconds. Verify `403 Forbidden` response is returned. | Smoke | Playwright API | **Yes**<br>- File: `api/UserManagement/Test_002_TokenRefreshAndProfileApi.spec.ts`<br>- Test: `API_REF_01: Dynamic Access Token Expiry` |
+| **API_REF_02** | Refresh Token Issuance | Login. Verify that both access `token` and `refreshToken` cookies are returned with security and `httpOnly` flags set. | Smoke | Playwright API | **Yes**<br>- File: `api/UserManagement/Test_002_TokenRefreshAndProfileApi.spec.ts`<br>- Test: `API_REF_02: Refresh Token Issuance` |
+| **API_REF_03** | Silent Token Refresh | Request `/api/auth/refresh` using the `refreshToken` cookie. Verify status is `200` and a new `token` cookie is returned. | Regression | Playwright API | **Yes**<br>- File: `api/UserManagement/Test_002_TokenRefreshAndProfileApi.spec.ts`<br>- Test: `API_REF_03: Silent Token Refresh` |
 
 ### **Suite: Cart & Inventory**
 | ID | Title | Description | Priority | Target Coverage | Covered |
@@ -128,7 +128,8 @@ These test cases verify the logic, security, and integrity of backend endpoints 
 ### **Suite: File Upload API**
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **API_UPL_01** | Unauthorized Session Check | Attempt upload without cookie tokens. Assert that status code `401` is returned. | Regression | Playwright API | **No** |
+| **API_UPL_01** | Unauthorized Session Check | Attempt upload without cookie tokens. Assert that status code `401` is returned. | Regression | Playwright API | **Yes**<br>- File: `api/UserManagement/Test_002_TokenRefreshAndProfileApi.spec.ts`<br>- Test: `API_UPL_01: Unauthorized Session Check` |
+
 
 ### **Suite: Chaos & Testing Utilities**
 | ID | Title | Description | Priority | Target Coverage | Covered |
