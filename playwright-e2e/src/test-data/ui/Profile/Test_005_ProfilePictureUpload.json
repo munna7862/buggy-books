@@ -1,0 +1,8 @@
+{
+  "USER_PREFIX": "profile_user_",
+  "PASSWORD": "Password123!",
+  "SUCCESS_MSG": "Avatar updated successfully!",
+  "INVALID_EXT_ERR": "Bad Request: Only JPEG, JPG, and PNG images are allowed!",
+  "LARGE_SIZE_ERR": "Bad Request: File size exceeds the 2MB limit",
+  "CHAOS_FAILURE_ERR": "Internal Server Error: Upload service failed"
+}

@@ -50,10 +50,11 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 *Spec Source: [file_upload_and_validation_tests.md](file:///c:/BuggyBooks/buggy-books/specs/file_upload_and_validation_tests.md)*
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **UI_UPL_01** | Valid Profile Picture Upload | Choose a valid PNG/JPEG image under 2MB. Click Upload. Assert that the preview image source points to the new path, and a success message renders. | Smoke | Playwright UI | **No** |
-| **UI_UPL_02** | File Extension Filter Validation | Choose an invalid file format (e.g. `document.txt`). Assert that the upload fails with `400` and displays warning element. | Smoke | Playwright UI | **No** |
-| **UI_UPL_03** | File Size Limit Validation | Choose an image file larger than 2MB. Assert that the upload fails with `400` and displays a file size limit warning. | Smoke | Playwright UI | **No** |
-| **UI_UPL_04** | Upload Chaos Failure Recovery | Configure `uploadFailureRate: 1.0` via chaos config. Submit a valid file. Assert that status code `500` is returned, and an error banner displays. | Regression | Playwright UI | **No** |
+| **UI_UPL_01** | Valid Profile Picture Upload | Choose a valid PNG/JPEG image under 2MB. Click Upload. Assert that the preview image source points to the new path, and a success message renders. | Smoke | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_01: Valid Profile Picture Upload` |
+| **UI_UPL_02** | File Extension Filter Validation | Choose an invalid file format (e.g. `document.txt`). Assert that the upload fails with `400` and displays warning element. | Smoke | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_02: File Extension Filter Validation` |
+| **UI_UPL_03** | File Size Limit Validation | Choose an image file larger than 2MB. Assert that the upload fails with `400` and displays a file size limit warning. | Smoke | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_03: File Size Limit Validation` |
+| **UI_UPL_04** | Upload Chaos Failure Recovery | Configure `uploadFailureRate: 1.0` via chaos config. Submit a valid file. Assert that status code `500` is returned, and an error banner displays. | Regression | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_04: Upload Chaos Failure Recovery` |
+
 
 ### **Suite: JWT Expiration & Silent Refresh UI**
 *Spec Source: [jwt_expiration_and_refresh_tests.md](file:///c:/BuggyBooks/buggy-books/specs/jwt_expiration_and_refresh_tests.md)*

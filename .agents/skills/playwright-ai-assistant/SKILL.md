@@ -83,6 +83,8 @@ When generating or updating selectors, always adhere to this prioritization:
 - **Multi-Step Wizard Testing:** For multi-step wizard flows, verify stepper progress state classes (e.g. `step-active`, `step-completed`), step container visibility, and history preservation (retrieving typed values after clicking Back/Next) through encapsulated Page Object getters.
 - **Asynchronous Network Synchronization:** When performing actions that mutate backend state (such as adding items to cart, step transitions, or form submissions), set up specific `waitForResponse` or toast status message waiters to guarantee state settling before proceeding to navigation or assertions.
 - **Frontend Component MSW API Mocking:** For frontend component tests using Vitest + React Testing Library + MSW, import `server` from `src/mocks/server.ts` and `http`, `HttpResponse` from `msw`. To test custom error states or empty API returns, override specific endpoint handlers per test using `server.use(http.get/post(...))` and ensure `server.resetHandlers()` resets handlers after each test.
+- **File Upload Automation:** When testing file upload components, set file inputs via encapsulated POM methods using `locator.setInputFiles(filePath)`. For validation and chaos testing, generate test fixture files locally, verify HTTP response status codes (200, 400, 500), and reset chaos configuration flags in a `finally` block.
+
 
 
 
