@@ -68,10 +68,11 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 *Spec Source: [a11y_violation_injector_tests.md](file:///c:/BuggyBooks/buggy-books/specs/a11y_violation_injector_tests.md)*
 | ID | Title | Description | Priority | Target Coverage | Covered |
 |:---|:---|:---|:---|:---|:---|
-| **A11Y_01** | Standard Accessibility Compliance | Verify that when `injectA11yViolations` is `false`, the book catalog, login screen, and checkout step forms pass Axe scans with zero violations. | Smoke | Playwright UI | **No** |
-| **A11Y_02** | Image Alternative Text Scan Failure | Enable `injectA11yViolations: true`. Scan the Book Catalog. Assert that Axe detects `image-alt` failures on catalog images. | Regression | Playwright UI | **No** |
-| **A11Y_03** | Orphaned Form Label Scan Failure | Enable `injectA11yViolations: true`. Scan the Login page. Assert that Axe detects `label` (orphaned labels without htmlFor-id link) violations. | Regression | Playwright UI | **No** |
-| **A11Y_04** | Text Color Contrast Scan Failure | Enable `injectA11yViolations: true`. Scan the Catalog summary text. Assert that Axe flags a color contrast ratio regression on the books count tag. | Regression | Playwright UI | **No** |
+| **A11Y_01** | Standard Accessibility Compliance | Verify that when `injectA11yViolations` is `false`, the book catalog, login screen, and checkout step forms pass Axe scans with zero violations. | Smoke | Playwright UI | **Yes**<br>- File: `A11y/Test_007_A11yScanValidation.spec.ts`<br>- Test: `A11Y_01: Standard Accessibility Compliance` |
+| **A11Y_02** | Image Alternative Text Scan Failure | Enable `injectA11yViolations: true`. Scan the Book Catalog. Assert that Axe detects `image-alt` failures on catalog images. | Regression | Playwright UI | **Yes**<br>- File: `A11y/Test_007_A11yScanValidation.spec.ts`<br>- Test: `A11Y_02: Image Alternative Text Scan Failure` |
+| **A11Y_03** | Orphaned Form Label Scan Failure | Enable `injectA11yViolations: true`. Scan the Login page. Assert that Axe detects `label` (orphaned labels without htmlFor-id link) violations. | Regression | Playwright UI | **Yes**<br>- File: `A11y/Test_007_A11yScanValidation.spec.ts`<br>- Test: `A11Y_03: Orphaned Form Label Scan Failure` |
+| **A11Y_04** | Text Color Contrast Scan Failure | Enable `injectA11yViolations: true`. Scan the Catalog summary text. Assert that Axe flags a color contrast ratio regression on the books count tag. | Regression | Playwright UI | **Yes**<br>- File: `A11y/Test_007_A11yScanValidation.spec.ts`<br>- Test: `A11Y_04: Text Color Contrast Scan Failure` |
+
 
 ### **Suite: Modern UI Styling & Layout**
 *Spec Source: [ui_styling_and_transition_tests.md](file:///c:/BuggyBooks/buggy-books/specs/ui_styling_and_transition_tests.md)*
