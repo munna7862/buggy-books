@@ -3,7 +3,7 @@ import { expect, Locator } from '@playwright/test';
 
 export class CatalogPage extends BasePage {
 
-  // Define locators for the Sign Up page elements
+  // Locators
   private get btnLogout(): Locator {
     return this.page.locator("//button[text()='Logout']");
   }
@@ -28,8 +28,32 @@ export class CatalogPage extends BasePage {
     return this.page.getByRole('status');
   }
 
+  private get inputSearch(): Locator {
+    return this.page.locator('#book-search-input');
+  }
 
-  // Add methods to interact with the Sign Up page elements
+  private get btnSearch(): Locator {
+    return this.page.locator('#book-search-btn');
+  }
+
+  private get btnClearSearch(): Locator {
+    return this.page.locator('#book-search-clear-btn');
+  }
+
+  private get eleResultCount(): Locator {
+    return this.page.locator('.catalog-result-count');
+  }
+
+  private get eleEmptyCatalog(): Locator {
+    return this.page.locator('.catalog-empty');
+  }
+
+  private getBookTitleLink(bookId: string | number): Locator {
+    return this.page.locator(`.info-cell-beta a[href="/books/${bookId}"]`);
+  }
+
+
+  // Actions and Interaction Methods
   public async navigateToCatalog(baseUrl: string): Promise<void> {
     await this.logMessage('INFO', `Navigating to catalog page: ${baseUrl}`);
     await this.page.goto(baseUrl);
@@ -62,6 +86,10 @@ export class CatalogPage extends BasePage {
     return count;
   }
 
+  public async getDisplayedBooksCount(): Promise<number> {
+    return await this.eleBooksCount.count();
+  }
+
   public async clickPaginationButton(btnNumber: number) {
     await this.doClick(this.getpaginationButton(btnNumber), `Clicking on Pagination button number ${btnNumber}`);
     for (let i = 0; i < 5; i++) { // Retry mechanism to handle potential timing issues
@@ -75,6 +103,36 @@ export class CatalogPage extends BasePage {
         await this.logMessage('WARN', `Pagination button number ${btnNumber} is not active yet. Retrying... (${i + 1}/5)`);
       }
     }
+  }
+
+  public async searchBooks(term: string): Promise<void> {
+    await this.doEnterText(this.inputSearch, term, `Filling search input with: ${term}`);
+    await this.doClick(this.btnSearch, `Clicking Search button`);
+    await this.eleResultCount.or(this.eleEmptyCatalog).first().waitFor({ state: 'visible', timeout: 30000 });
+  }
+
+  public async clearSearch(): Promise<void> {
+    await this.doClick(this.btnClearSearch, `Clicking Clear search button`);
+    await this.btnClearSearch.waitFor({ state: 'hidden', timeout: 10000 });
+    await this.page.waitForResponse(res => res.url().includes('/api/books') && res.status() === 200);
+  }
+
+
+
+  public async getResultCountText(): Promise<string> {
+    return await this.doGetText(this.eleResultCount, `Getting catalog result count text`);
+  }
+
+  public async getEmptyStateText(): Promise<string> {
+    return await this.doGetText(this.eleEmptyCatalog, `Getting catalog empty state text`);
+  }
+
+  public async clickBookTitle(bookId: string | number): Promise<void> {
+    await this.doClick(this.getBookTitleLink(bookId), `Clicking on book title link for book ID: ${bookId}`);
+  }
+
+  public async getFirstBookTitle(): Promise<string> {
+    return await this.doGetText(this.page.locator('.title-variant-2 a').first(), `Getting first book title in catalog`);
   }
 
   public async clickAddToCartForBook(bookId: number): Promise<void> {

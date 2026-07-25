@@ -1,6 +1,7 @@
 import { logger } from '../logger/logger';
 import { SignUpPage } from '../../pages/signup-login.page';
 import { CatalogPage } from '../../pages/catalog.page';
+import { BookDetailPage } from '../../pages/book-detail.page';
 import { CommonFunctions } from '../../utils/common.util';
 import { NetworkInterceptor } from '../network/network.interceptor';
 import { writeFile } from 'fs/promises';
@@ -10,6 +11,7 @@ import { captureFailureState } from './failure-hook';
 type TestFixtures = {
   signUpPage: SignUpPage;
   catalogPage: CatalogPage;
+  bookDetailPage: BookDetailPage;
   commonFunctions: CommonFunctions;
   networkInterceptor: NetworkInterceptor;
 };
@@ -41,11 +43,16 @@ export const test = base.extend<TestFixtures>({
     await use(new CatalogPage(page));
   },
 
+  bookDetailPage: async ({ page }, use) => {
+    await use(new BookDetailPage(page));
+  },
+
   commonFunctions: async ({ }, use) => {
     await use(new CommonFunctions());
   }
 
 });
+
 
 test.afterEach(async ({ page }, testInfo) => {
   if (testInfo.status !== testInfo.expectedStatus) {

@@ -73,7 +73,10 @@ When generating or updating selectors, always adhere to this prioritization:
    - **BANNED:** **Absolutely no absolute XPaths** (e.g. `/html/body/div[1]/div[2]...`).
 
 ### 2.2 Formatting and Design Rules
+- **Locator Placement:** ALL locators (private getters and dynamic locator methods) MUST be placed at the top of the Page Object class, before any public action methods.
 - **Encapsulation:** Never write raw selectors directly inside spec files. All selectors must be declared in POMs as private getters.
+- **Assertion Pattern:** Do NOT use multiple hard `expect(...)` assertions scattered inside test steps. Always use soft assertions via `commonFunctions.compareTwoValues(actual, expected, message)` to log results, collect boolean validation flags, and execute a single consolidated hard assertion (e.g., `expect(isCountValid && isTitleValid).toBeTruthy()`) at the end of the test case.
 - **Indentation:** Use exactly 2 spaces for indentation (no tabs).
 - **Single-Line Signatures:** Keep class methods and function parameter definitions on a single line.
 - **Custom wrappers:** Always call custom base wrappers (`this.doClick`, `this.doEnterText`, `this.doGetText`) rather than native locator operations.
+

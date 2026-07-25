@@ -1,0 +1,12 @@
+{
+  "SEARCH_QUERY": "Mockingbird",
+  "EXPECTED_MATCHING_TITLE": "To Kill a Mockingbird Exception",
+  "EXPECTED_SEARCH_COUNT": 1,
+  "GIBBERISH_QUERY": "xyz999nonexistent",
+  "EXPECTED_EMPTY_MESSAGE_SUBSTRING": "No books found",
+  "TARGET_BOOK_ID": "2",
+  "TARGET_BOOK_TITLE": "To Kill a Mockingbird Exception",
+  "TARGET_BOOK_AUTHOR": "by Harper Lee",
+  "TARGET_BOOK_PRICE": "$15.50",
+  "TARGET_BOOK_DESCRIPTION": "A coming-of-age tale with unhandled exceptions."
+}
