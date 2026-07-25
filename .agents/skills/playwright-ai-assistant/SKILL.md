@@ -85,6 +85,8 @@ When generating or updating selectors, always adhere to this prioritization:
 - **Frontend Component MSW API Mocking:** For frontend component tests using Vitest + React Testing Library + MSW, import `server` from `src/mocks/server.ts` and `http`, `HttpResponse` from `msw`. To test custom error states or empty API returns, override specific endpoint handlers per test using `server.use(http.get/post(...))` and ensure `server.resetHandlers()` resets handlers after each test.
 - **File Upload Automation:** When testing file upload components, set file inputs via encapsulated POM methods using `locator.setInputFiles(filePath)`. For validation and chaos testing, generate test fixture files locally, verify HTTP response status codes (200, 400, 500), and reset chaos configuration flags in a `finally` block.
 - **API Security & Refresh Token Automation:** For API test cases verifying JWT tokens and security headers, parse `Set-Cookie` response headers for `token` and `refreshToken` parameters and security flags (`HttpOnly`). When testing dynamic token expiry (`jwtExpirySeconds`), wait for token expiry before invoking protected endpoints and verify 403 Forbidden statuses.
+- **Visual Chaos API Testing:** When testing chaos configuration endpoints (`/api/test/config`), verify boolean toggles (`visualChaos: true/false`), strict type validation rejections (400 Bad Request for string inputs), default configuration state after calling reset (`/api/test/reset`), and combined multi-field chaos updates.
+
 
 
 
