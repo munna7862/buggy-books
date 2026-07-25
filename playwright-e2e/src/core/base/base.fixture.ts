@@ -4,6 +4,7 @@ import { CatalogPage } from '../../pages/catalog.page';
 import { BookDetailPage } from '../../pages/book-detail.page';
 import { CartPage } from '../../pages/cart.page';
 import { CheckoutPage } from '../../pages/checkout.page';
+import { ProfilePage } from '../../pages/profile.page';
 import { CommonFunctions } from '../../utils/common.util';
 import { NetworkInterceptor } from '../network/network.interceptor';
 import { writeFile } from 'fs/promises';
@@ -16,6 +17,7 @@ type TestFixtures = {
   bookDetailPage: BookDetailPage;
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
+  profilePage: ProfilePage;
   commonFunctions: CommonFunctions;
   networkInterceptor: NetworkInterceptor;
 };
@@ -59,11 +61,16 @@ export const test = base.extend<TestFixtures>({
     await use(new CheckoutPage(page));
   },
 
+  profilePage: async ({ page }, use) => {
+    await use(new ProfilePage(page));
+  },
+
   commonFunctions: async ({ }, use) => {
     await use(new CommonFunctions());
   }
 
 });
+
 
 
 
