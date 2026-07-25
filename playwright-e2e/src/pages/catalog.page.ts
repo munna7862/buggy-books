@@ -145,12 +145,15 @@ export class CatalogPage extends BasePage {
 
   public async waitForCartStatusMessage(expectedMessage: string): Promise<void> {
     await this.logMessage('INFO', `Waiting for cart status message: ${expectedMessage}`);
-    await expect(this.page.getByRole('status').filter({ hasText: expectedMessage })).toBeVisible({ timeout: 60000 });
+    await expect(this.page.getByRole('status').filter({ hasText: expectedMessage }).first()).toBeVisible({ timeout: 60000 });
     await this.logMessage('INFO', `Cart status message "${expectedMessage}" is visible`);
   }
 
   public async addBookToCart(bookId: number): Promise<void> {
+    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/cart') && res.status() === 200);
     await this.clickAddToCartForBook(bookId);
+    await responsePromise;
+    await this.waitForCartStatusMessage('added to cart');
   }
 
 }

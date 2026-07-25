@@ -1,0 +1,10 @@
+{
+  "USER_A_PREFIX": "user_a_cart_",
+  "USER_B_PREFIX": "user_b_cart_",
+  "PASSWORD": "Password123!",
+  "EXPECTED_EMPTY_CART_MSG": "Your cart is empty.",
+  "FIRST_NAME_ERR": "First name is required",
+  "LAST_NAME_ERR": "Last name is required",
+  "ADDRESS_ERR": "Address must be at least 5 characters",
+  "CITY_ERR": "City is required"
+}
