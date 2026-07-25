@@ -1,0 +1,16 @@
+{
+  "RULES": {
+    "IMAGE_ALT": "image-alt",
+    "LABEL": "label",
+    "COLOR_CONTRAST": "color-contrast"
+  },
+  "SELECTORS": {
+    "RESULT_COUNT": ".catalog-result-count"
+  },
+  "ENABLE_A11Y_CHAOS": {
+    "injectA11yViolations": true
+  },
+  "DISABLE_A11Y_CHAOS": {
+    "injectA11yViolations": false
+  }
+}
