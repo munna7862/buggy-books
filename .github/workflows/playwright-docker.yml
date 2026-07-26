@@ -40,17 +40,17 @@ jobs:
         run: |
           test_selection="${{ github.event.inputs.test_selection || 'ALL' }}"
           if [ "$test_selection" = "ALL" ]; then
-            # ALL: 9 shards - 1 for API, 8 for UI folders (BookCatalog, Checkout, UserManagement, Profile, Refresh, A11y, WebSockets, Styling)
-            matrix='{"shard":[{"index":1,"total":9,"folder":"api","workers":2},{"index":2,"total":9,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":9,"folder":"ui/Checkout","workers":1},{"index":4,"total":9,"folder":"ui/UserManagement","workers":1},{"index":5,"total":9,"folder":"ui/Profile","workers":1},{"index":6,"total":9,"folder":"ui/Refresh","workers":1},{"index":7,"total":9,"folder":"ui/A11y","workers":1},{"index":8,"total":9,"folder":"ui/WebSockets","workers":1},{"index":9,"total":9,"folder":"ui/Styling","workers":1}]}'
+            # ALL: 10 shards - 1 for API, 9 for UI folders (BookCatalog, Checkout, UserManagement, Profile, Refresh, A11y, WebSockets, Styling, VisualRegression)
+            matrix='{"shard":[{"index":1,"total":10,"folder":"api","workers":2},{"index":2,"total":10,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":10,"folder":"ui/Checkout","workers":1},{"index":4,"total":10,"folder":"ui/UserManagement","workers":1},{"index":5,"total":10,"folder":"ui/Profile","workers":1},{"index":6,"total":10,"folder":"ui/Refresh","workers":1},{"index":7,"total":10,"folder":"ui/A11y","workers":1},{"index":8,"total":10,"folder":"ui/WebSockets","workers":1},{"index":9,"total":10,"folder":"ui/Styling","workers":1},{"index":10,"total":10,"folder":"ui/VisualRegression","workers":1}]}'
           elif [ "$test_selection" = "UI" ]; then
-            # UI: 8 shards - one per UI folder (BookCatalog, Checkout, UserManagement, Profile, Refresh, A11y, WebSockets, Styling)
-            matrix='{"shard":[{"index":1,"total":8,"folder":"ui/BookCatalog","workers":1},{"index":2,"total":8,"folder":"ui/Checkout","workers":1},{"index":3,"total":8,"folder":"ui/UserManagement","workers":1},{"index":4,"total":8,"folder":"ui/Profile","workers":1},{"index":5,"total":8,"folder":"ui/Refresh","workers":1},{"index":6,"total":8,"folder":"ui/A11y","workers":1},{"index":7,"total":8,"folder":"ui/WebSockets","workers":1},{"index":8,"total":8,"folder":"ui/Styling","workers":1}]}'
+            # UI: 9 shards - one per UI folder (BookCatalog, Checkout, UserManagement, Profile, Refresh, A11y, WebSockets, Styling, VisualRegression)
+            matrix='{"shard":[{"index":1,"total":9,"folder":"ui/BookCatalog","workers":1},{"index":2,"total":9,"folder":"ui/Checkout","workers":1},{"index":3,"total":9,"folder":"ui/UserManagement","workers":1},{"index":4,"total":9,"folder":"ui/Profile","workers":1},{"index":5,"total":9,"folder":"ui/Refresh","workers":1},{"index":6,"total":9,"folder":"ui/A11y","workers":1},{"index":7,"total":9,"folder":"ui/WebSockets","workers":1},{"index":8,"total":9,"folder":"ui/Styling","workers":1},{"index":9,"total":9,"folder":"ui/VisualRegression","workers":1}]}'
           elif [ "$test_selection" = "API" ]; then
             # API: 1 shard with 2 workers
             matrix='{"shard":[{"index":1,"total":1,"folder":"api","workers":2}]}'
           else
             # Default to ALL
-            matrix='{"shard":[{"index":1,"total":9,"folder":"api","workers":2},{"index":2,"total":9,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":9,"folder":"ui/Checkout","workers":1},{"index":4,"total":9,"folder":"ui/UserManagement","workers":1},{"index":5,"total":9,"folder":"ui/Profile","workers":1},{"index":6,"total":9,"folder":"ui/Refresh","workers":1},{"index":7,"total":9,"folder":"ui/A11y","workers":1},{"index":8,"total":9,"folder":"ui/WebSockets","workers":1},{"index":9,"total":9,"folder":"ui/Styling","workers":1}]}'
+            matrix='{"shard":[{"index":1,"total":10,"folder":"api","workers":2},{"index":2,"total":10,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":10,"folder":"ui/Checkout","workers":1},{"index":4,"total":10,"folder":"ui/UserManagement","workers":1},{"index":5,"total":10,"folder":"ui/Profile","workers":1},{"index":6,"total":10,"folder":"ui/Refresh","workers":1},{"index":7,"total":10,"folder":"ui/A11y","workers":1},{"index":8,"total":10,"folder":"ui/WebSockets","workers":1},{"index":9,"total":10,"folder":"ui/Styling","workers":1},{"index":10,"total":10,"folder":"ui/VisualRegression","workers":1}]}'
           fi
           echo "matrix=$matrix" >> $GITHUB_OUTPUT
 

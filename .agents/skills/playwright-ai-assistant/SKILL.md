@@ -97,6 +97,10 @@ When generating or updating selectors, always adhere to this prioritization:
   - **Grid Layout Verification:** Verify responsive grid layouts by evaluating `getComputedStyle(el).gridTemplateColumns` after changing viewport with `page.setViewportSize({ width, height })`. For `repeat(auto-fill, minmax(280px, 1fr))`, assert the computed value includes `"280px"` (browsers compute the string representation).
   - **Hover Animation Verification:** Trigger hover using `page.locator(selector).hover()`. After an `await page.waitForTimeout(600)` delay for CSS transition completion, evaluate the `transform` computed style on the hover-targeted child element and assert it includes `"matrix"` (indicating CSS scale/rotate transforms are active).
   - **Dark/Light Mode CSS Variables:** Emulate color schemes using `page.emulateMedia({ colorScheme: 'dark' | 'light' })` before navigation. After page load, evaluate the CSS variable from `document.documentElement` and assert the exact HSL string (e.g., `hsl(210, 40%, 98%)`) matches the expected value from the design system.
+- **Visual Regression & Layout Chaos Testing:** When testing visual layouts under QA chaos injections:
+  - **Screenshot Comparison (toHaveScreenshot):** Establish a baseline screenshot using standard assertion matching (`expect(page).toHaveScreenshot('filename.png', { maxDiffPixelRatio: 0.05 })`). Assert screenshot mismatch when visual chaos is enabled using `expect(page).not.toHaveScreenshot('filename.png', { maxDiffPixelRatio: 0.05 })`.
+  - **Chaos style changes validation:** Under layout chaos, assert specific computed styles such as `border-color` (e.g. `rgb(242, 36, 36)`), `filter` (e.g. `blur(1.5px)`), `transform` (e.g. checking for displacement/rotation containing matrices), `margin-left` adjustments, and `line-height` scaling factors relative to font sizes.
+  - **Reset/Cleanup Isolation:** Always use the `test.afterEach` hooks or `finally` blocks to invoke `/api/test/reset` to restore visual layouts to their default state so succeeding tests run on standard baselines.
 
 
 

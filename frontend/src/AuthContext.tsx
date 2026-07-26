@@ -13,8 +13,8 @@ const AUTH_USER_KEY = 'authUser';
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [username, setUsername] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => !!localStorage.getItem(AUTH_USER_KEY));
+  const [username, setUsername] = useState<string | null>(() => localStorage.getItem(AUTH_USER_KEY));
 
   useEffect(() => {
     const savedUser = localStorage.getItem(AUTH_USER_KEY);
