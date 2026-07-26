@@ -2,6 +2,8 @@ import { expect } from '@playwright/test';
 import { test } from '../../../core/base/base.fixture';
 import { envConfig, getLoginCredentials } from '../../../config/env.config';
 import TestData from '../../../test-data/ui/VisualRegression/Test_010_VisualRegressionChaos.json';
+import { SignUpPage } from '../../../pages/signup-login.page';
+import { CatalogPage } from '../../../pages/catalog.page';
 
 const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 const RESET_URL = `${envConfig.apiBaseUrl}/api/test/reset`;
@@ -172,10 +174,13 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
       });
 
       await page.goto(envConfig.baseUrl);
-      await page.evaluate((user) => localStorage.setItem('authUser', user), testUser);
-      await page.reload();
+      const catalogPage = new CatalogPage(page);
+      await catalogPage.clickNavigateLink("Login");
+      const signUpPage = new SignUpPage(page);
+      await signUpPage.login(testUser, 'Password123!');
+
       await page.waitForSelector('body.visual-chaos-active');
-      await page.goto(`${envConfig.baseUrl}checkout`);
+      await catalogPage.clickNavigateLink("Checkout");
       await page.waitForSelector('#wizard-next-btn');
 
       const marginLeft = await page.locator('#wizard-next-btn').evaluate(
