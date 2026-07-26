@@ -9,15 +9,26 @@ function loadTestSuite() {
   console.log(`USE_SPECIFIC_TESTS: ${envConfig.USE_SPECIFIC_TESTS}`);
   const specificTests = [
     "**/playwright-e2e/src/tests/ui/BookCatalog/Test_001_InitialCatalog.spec.ts",
+    "**/playwright-e2e/src/tests/ui/BookCatalog/Test_002_SearchAndDetailCatalog.spec.ts",
     "**/playwright-e2e/src/tests/ui/Checkout/Test_001_CompleteBookPurchase.spec.ts",
     "**/playwright-e2e/src/tests/ui/Checkout/Test_002_CartPersistenceCheckout.spec.ts",
+    "**/playwright-e2e/src/tests/ui/Checkout/Test_003_CartAndCheckoutValidation.spec.ts",
+    "**/playwright-e2e/src/tests/ui/Checkout/Test_004_CheckoutWizardValidation.spec.ts",
     "**/playwright-e2e/src/tests/ui/UserManagement/Test_001_RegisterUser.spec.ts",
     "**/playwright-e2e/src/tests/ui/UserManagement/Test_002_LoginWithExistingUser.spec.ts",
+    "**/playwright-e2e/src/tests/ui/Profile/Test_005_ProfilePictureUpload.spec.ts",
+    "**/playwright-e2e/src/tests/ui/Refresh/Test_006_JwtRefreshValidation.spec.ts",
+    "**/playwright-e2e/src/tests/ui/A11y/Test_007_A11yScanValidation.spec.ts",
+    "**/playwright-e2e/src/tests/ui/WebSockets/Test_008_WebSocketResilienceValidation.spec.ts",
+    "**/playwright-e2e/src/tests/ui/Styling/Test_009_UIStyleAndLayoutValidation.spec.ts",
+    "**/playwright-e2e/src/tests/ui/VisualRegression/Test_010_VisualRegressionChaos.spec.ts",
     "**/playwright-e2e/src/tests/api/BookCatalog/Test_001_BooksApi.spec.ts",
-    "**/playwright-e2e/src/tests/api/UserManagement/Test_001_RegisterAndLoginUser.spec.ts",
     "**/playwright-e2e/src/tests/api/CartAndInventory/Test_001_CartAndInventoryApi.spec.ts",
     "**/playwright-e2e/src/tests/api/ChaosAndTesting/Test_001_ChaosAndTestingApi.spec.ts",
-    "**/playwright-e2e/src/tests/ui/Styling/Test_009_UIStyleAndLayoutValidation.spec.ts"
+    "**/playwright-e2e/src/tests/api/ChaosAndTesting/Test_002_VisualChaosApi.spec.ts",
+    "**/playwright-e2e/src/tests/api/Logging/Test_001_LoggingAndCorrelationApi.spec.ts",
+    "**/playwright-e2e/src/tests/api/UserManagement/Test_001_RegisterAndLoginUser.spec.ts",
+    "**/playwright-e2e/src/tests/api/UserManagement/Test_002_TokenRefreshAndProfileApi.spec.ts"
   ];
 
   if (envConfig.USE_SPECIFIC_TESTS === true) {

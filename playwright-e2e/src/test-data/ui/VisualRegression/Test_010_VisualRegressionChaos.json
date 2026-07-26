@@ -1,0 +1,24 @@
+{
+  "ENABLE_VISUAL_CHAOS": {
+    "visualChaos": true
+  },
+  "DISABLE_VISUAL_CHAOS": {
+    "visualChaos": false
+  },
+  "SELECTORS": {
+    "BOOK_CARD": ".complex-item-box-alpha",
+    "BOOK_COVER": ".catalog-book-cover",
+    "SEARCH_FORM": ".catalog-search-form",
+    "PRICE_TAG": ".price-tag-value",
+    "CHECKOUT_BTN": "#wizard-next-btn",
+    "INFO_CELL_H3": ".info-cell-beta h3"
+  },
+  "EXPECTED_CHAOS": {
+    "BORDER_COLOR": "rgb(242, 36, 36)",
+    "BLUR_FILTER": "blur(1.5px)",
+    "SEARCH_FORM_TRANSFORM": "matrix(1, 0, 0, 1, -18, 0)",
+    "PRICE_TAG_TRANSFORM_CONTAINS": "rotate(-3deg)",
+    "CHECKOUT_BTN_MARGIN_LEFT": "15px",
+    "INFO_CELL_H3_LINE_HEIGHT": "3.2"
+  }
+}
