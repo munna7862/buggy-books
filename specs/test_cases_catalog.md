@@ -178,34 +178,11 @@ These test cases isolate frontend logic and UI pages by mocking backend API resp
 | **MSW_04** | Override Checkout to Always Fail | Override `POST /api/checkout/process` to return 500. Assert the Checkout component shows the error banner. | Regression | Frontend Component (Vitest) | **Yes**<br>- File: `frontend/src/__tests__/msw-api-mocking.test.tsx`<br>- Test: `MSW_04: Override Checkout to Always Fail - POST /api/checkout/process returns 500` |
 
 
----
 
-## 4. DevOps & CI/CD Verification (Infrastructure Automation)
-These test cases are run at deployment/CI run-time to verify environmental integrity. They are checked via GitHub Actions and Docker scripts.
-
-### **Suite: Dockerization & Environment**
-*Spec Source: [dockerization_and_ci_tests.md](file:///c:/BuggyBooks/buggy-books/specs/dockerization_and_ci_tests.md)*
-| ID | Title | Description | Priority | Target Coverage | Covered |
-|:---|:---|:---|:---|:---|:---|
-| **DOCKER_01** | Full Stack Boot | Run `docker-compose up --build`. Assert both `buggy-books-backend` and `buggy-books-frontend` containers are running and healthy. | Smoke | DevOps Infrastructure | **No** |
-| **DOCKER_02** | Backend Health Check | With containers running, `GET http://localhost:4000/api/books`. Assert `200 OK` and JSON array in body. | Smoke | DevOps Infrastructure | **No** |
-| **DOCKER_03** | Frontend Reachable | `GET http://localhost:5173`. Assert `200 OK` and HTML response contains `BuggyBooks`. | Smoke | DevOps Infrastructure | **No** |
-| **DOCKER_04** | JWT_SECRET Required | Start backend container without `JWT_SECRET` env var. Assert container exits with a fatal error log. | Regression | DevOps Infrastructure | **No** |
-| **DOCKER_05** | Graceful Restart | Run `docker-compose restart backend`. Assert backend recovers and responds to health checks within 15 seconds. | Regression | DevOps Infrastructure | **No** |
-
-### **Suite: CI/CD Pipeline Checks**
-*Spec Source: [dockerization_and_ci_tests.md](file:///c:/BuggyBooks/buggy-books/specs/dockerization_and_ci_tests.md)*
-| ID | Title | Description | Priority | Target Coverage | Covered |
-|:---|:---|:---|:---|:---|:---|
-| **CI_01** | CI Pipeline Triggers on Push | Push a commit to `feature/**`. Assert GitHub Actions workflow `CI` runs automatically. | Smoke | CI/CD Pipeline | **No** |
-| **CI_02** | Backend Tests Pass in CI | Assert `Backend Tests (Jest)` job completes with ✅ and all tests pass. | Smoke | CI/CD Pipeline | **No** |
-| **CI_03** | Frontend Tests Pass in CI | Assert `Frontend Tests (Vitest)` job completes with ✅ and all tests pass. | Smoke | CI/CD Pipeline | **No** |
-| **CI_04** | CI Fails on Broken Test | Intentionally break a test. Push to branch. Assert the CI workflow fails and marks the PR as blocked. | Regression | CI/CD Pipeline | **No** |
-| **CI_05** | TypeScript Build Verified in CI | Assert `Backend TypeScript Build` job produces no compilation errors. | Regression | CI/CD Pipeline | **No** |
 
 ---
 
-## 5. End-to-End (E2E) Journey
+## 4. End-to-End (E2E) Journey
 
 ### **Scenario: The New Customer Journey**
 1. **Register**: Create a new account.
