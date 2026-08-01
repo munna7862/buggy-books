@@ -80,10 +80,22 @@ app.use((req, res, next) => {
 app.use(helmet());
 
 // Enable CORS with restricted but flexible origins
+const isAllowedOrigin = (origin: string): boolean => {
+  const allowed: readonly string[] = config.cors.allowedOrigins;
+  if (allowed.includes(origin)) return true;
+  try {
+    const hostname = new URL(origin).hostname;
+    return hostname === 'localhost' ||
+           hostname === 'buggy-books-fe.onrender.com' ||
+           /^([a-z0-9-]+\.)*onrender\.com$/.test(hostname);
+  } catch {
+    return false;
+  }
+};
+
 app.use(cors({
   origin: (origin, callback) => {
-    const allowed: readonly string[] = config.cors.allowedOrigins;
-    if (!origin || allowed.includes(origin) || origin.endsWith(config.cors.wildcardSuffix)) {
+    if (!origin || isAllowedOrigin(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
