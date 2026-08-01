@@ -4,8 +4,8 @@
     "password": "Password123!"
   },
   "search": {
-    "searchTerm": "Harry Potter",
-    "bookId": 1
+    "searchTerm": "Mockingbird",
+    "bookId": 2
   },
   "payment": {
     "firstName": "Alex",
