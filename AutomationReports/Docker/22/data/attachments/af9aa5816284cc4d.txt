@@ -1,0 +1,25 @@
+[2026-08-01 21:13:33] INFO: Network interception enabled with mode: api-only
+[2026-08-01 21:13:33] INFO: Clicking on Sign Up link
+[2026-08-01 21:13:33] INFO: Entering full name: Full profile_user_lc9Ed
+[2026-08-01 21:13:33] INFO: Entering username: profile_user_lc9Ed
+[2026-08-01 21:13:33] INFO: Entering password: Password123!
+[2026-08-01 21:13:33] INFO: Entering confirming password: Password123!
+[2026-08-01 21:13:33] INFO: Clicking on Create Account button
+[2026-08-01 21:13:34] INFO: Verifying landing on Checkout Page
+[2026-08-01 21:13:34] INFO: Checking if Checkout label is visible
+[2026-08-01 21:13:36] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 21:13:36] INFO: Clicking on Profile navbar link
+[2026-08-01 21:13:36] INFO: Selecting file for avatar upload: /__w/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/valid_avatar.png
+[2026-08-01 21:13:36] INFO: Clicking Upload Image button
+[2026-08-01 21:13:37] INFO: Getting upload error message text
+[2026-08-01 21:13:37] ERROR:  Verifying upload chaos 500 error message Failed!! Expected Value:: true || Actual Value:: false
+[2026-08-01 21:13:37] ERROR:  Verifying upload chaos 500 error message Failed!! Expected Value:: true || Actual Value:: false
+
+[Failure Hook] Capturing state for failing test: "UI_UPL_04: Upload Chaos Failure Recovery"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-08-01 21:13:37] INFO: Captured 13 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_005_Profil-2412f-load-Chaos-Failure-Recovery-Google-Chrome/network-log.json

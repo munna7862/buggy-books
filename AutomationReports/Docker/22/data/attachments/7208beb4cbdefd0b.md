@@ -1,0 +1,59 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: 🛒
+    - status [ref=e6]: A user from Mumbai just purchased "Moby Stack Overflow"!
+  - banner [ref=e7]:
+    - link "BuggyBooks" [ref=e8] [cursor=pointer]:
+      - /url: /
+      - heading "BuggyBooks" [level=2] [ref=e9]
+    - navigation [ref=e10]:
+      - link "Catalog" [ref=e11] [cursor=pointer]:
+        - /url: /
+      - link "Cart" [ref=e12] [cursor=pointer]:
+        - /url: /cart
+      - link "Checkout" [ref=e13] [cursor=pointer]:
+        - /url: /checkout
+      - link "Profile" [ref=e14] [cursor=pointer]:
+        - /url: /profile
+      - button "Logout" [ref=e15] [cursor=pointer]
+      - button "Toggle notifications" [ref=e17] [cursor=pointer]:
+        - text: 🔔
+        - 'generic "Live Feed: Connected" [ref=e18]'
+  - main [ref=e19]:
+    - generic [ref=e20]:
+      - heading "Checkout" [level=1] [ref=e21]
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - generic [ref=e24]: "1"
+          - generic [ref=e25]: Shipping
+        - generic [ref=e27]:
+          - generic [ref=e28]: "2"
+          - generic [ref=e29]: Payment
+        - generic [ref=e31]:
+          - generic [ref=e32]: "3"
+          - generic [ref=e33]: Confirm
+      - generic [ref=e35]:
+        - heading "Secure Order Summary" [level=3] [ref=e36]
+        - paragraph [ref=e37]: "Total to pay: $0.00"
+      - generic [ref=e38]:
+        - generic [ref=e39]:
+          - heading "Shipping Details" [level=3] [ref=e40]
+          - generic [ref=e41]:
+            - generic [ref=e42]: First Name
+            - textbox "First Name" [ref=e43]
+          - generic [ref=e44]:
+            - generic [ref=e45]: Last Name
+            - textbox "Last Name" [ref=e46]
+          - generic [ref=e47]:
+            - generic [ref=e48]: Shipping Address
+            - textbox "Shipping Address" [ref=e49]:
+              - /placeholder: 123 Buggy Lane
+          - generic [ref=e50]:
+            - generic [ref=e51]: City
+            - textbox "City" [ref=e52]:
+              - /placeholder: Stack City
+        - button "Next Step" [ref=e54] [cursor=pointer]
+```

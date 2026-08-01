@@ -1,0 +1,29 @@
+[2026-08-01 21:13:39] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-01 21:13:39] INFO: 📤 Request Payload: {
+  "username": "johndoe17855846194850160959e@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-08-01 21:13:39] INFO: ✅ Register original user for duplicate validation Success! Status: 201 Created
+[2026-08-01 21:13:39] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe17855846194850160959e@"
+}
+[2026-08-01 21:13:39] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-01 21:13:39] INFO: 📤 Request Payload: {
+  "username": "johndoe17855846194850160959e@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-08-01 21:13:39] ERROR: ❌ Register duplicate username Failed! Status: 409 Conflict | Response: {
+  "error": "Conflict: Username already exists",
+  "errorName": "ConflictError",
+  "correlationId": "9b85b82f-5cba-4294-89ba-0a185fcdf2cd"
+}
+[2026-08-01 21:13:39] ERROR: ❌ Register duplicate username Failed! Status: 409 Conflict | Response: {
+  "error": "Conflict: Username already exists",
+  "errorName": "ConflictError",
+  "correlationId": "9b85b82f-5cba-4294-89ba-0a185fcdf2cd"
+}
+[2026-08-01 21:13:39] INFO:  Initial registration response status Success !! Actual and Expected Values are:: 201
+[2026-08-01 21:13:39] INFO:  Duplicate registration status Success !! Actual and Expected Values are:: true

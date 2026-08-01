@@ -1,0 +1,14 @@
+[2026-08-01 21:13:38] INFO: Network interception enabled with mode: api-only
+[2026-08-01 21:13:38] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 21:13:38] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-01 21:13:38] INFO: Filling search input with: Mockingbird
+[2026-08-01 21:13:38] INFO: Clicking Search button
+[2026-08-01 21:13:39] INFO:  Verifying search results books count Success !! Actual and Expected Values are:: 1
+[2026-08-01 21:13:39] INFO: Getting catalog result count text
+[2026-08-01 21:13:39] INFO:  Verifying result count text contains search query Success !! Actual and Expected Values are:: true
+[2026-08-01 21:13:39] INFO: Getting first book title in catalog
+[2026-08-01 21:13:39] INFO:  Verifying search result book title Success !! Actual and Expected Values are:: To Kill a Mockingbird Exception
+[2026-08-01 21:13:39] INFO: Clicking Clear search button
+[2026-08-01 21:13:39] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-01 21:13:39] INFO:  Verifying catalog count after search clear Success !! Actual and Expected Values are:: 8
+[2026-08-01 21:13:39] INFO: Captured 8 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_002_Se-34cdb--UI-CAT-03-Search-Filtering-Google-Chrome-retry1/network-log.json

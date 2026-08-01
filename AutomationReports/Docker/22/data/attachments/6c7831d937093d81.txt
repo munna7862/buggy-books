@@ -1,0 +1,54 @@
+[2026-08-01 21:13:37] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-01 21:13:37] INFO: 📤 Request Payload: {
+  "username": "user_log_1785584617300_8a974710",
+  "password": "Password123!",
+  "fullName": "Logging Test User"
+}
+[2026-08-01 21:13:37] INFO: ✅ Register user with custom correlation ID Success! Status: 201 Created
+[2026-08-01 21:13:37] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "user_log_1785584617300_8a974710"
+}
+[2026-08-01 21:13:37] INFO:  Verifying user registration status is 201 Success !! Actual and Expected Values are:: 201
+[2026-08-01 21:13:37] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-01 21:13:37] INFO: 📤 Request Payload: {
+  "username": "user_log_1785584617300_8a974710",
+  "password": "Password123!"
+}
+[2026-08-01 21:13:38] INFO: ✅ Login user with custom correlation ID Success! Status: 200 OK
+[2026-08-01 21:13:38] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "user_log_1785584617300_8a974710"
+}
+[2026-08-01 21:13:38] INFO:  Verifying user login status is 200 Success !! Actual and Expected Values are:: 200
+[2026-08-01 21:13:38] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-08-01 21:13:38] INFO: 📤 Request Payload: {
+  "bookId": "1"
+}
+[2026-08-01 21:13:38] INFO: ✅ Add book 1 to cart with custom correlation ID Success! Status: 200 OK
+[2026-08-01 21:13:38] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-08-01 21:13:38] INFO:  Verifying add to cart status is 200 Success !! Actual and Expected Values are:: 200
+[2026-08-01 21:13:38] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/checkout/process
+[2026-08-01 21:13:38] INFO: 📤 Request Payload: {
+  "firstName": "LogUser",
+  "lastName": "Test",
+  "creditCard": "4111222233334444"
+}
+[2026-08-01 21:13:38] INFO: ✅ Process checkout with custom correlation ID Success! Status: 200 OK
+[2026-08-01 21:13:38] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Order processed successfully",
+  "orderId": "b0a16dbd-e921-49a4-8936-7e0770610170"
+}
+[2026-08-01 21:13:38] INFO:  Verifying process checkout status is 200 Success !! Actual and Expected Values are:: 200
+[2026-08-01 21:13:38] INFO:  Verifying correlation ID preserved in checkout response Success !! Actual and Expected Values are:: custom-correlation-uuid-99999_user_flow

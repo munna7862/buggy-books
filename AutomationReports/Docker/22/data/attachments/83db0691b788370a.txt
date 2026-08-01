@@ -1,0 +1,8 @@
+[2026-08-01 21:13:47] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/profile/upload
+[2026-08-01 21:13:47] ERROR: ❌ Attempt POST /api/profile/upload without auth cookies Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Token required"
+}
+[2026-08-01 21:13:47] ERROR: ❌ Attempt POST /api/profile/upload without auth cookies Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Token required"
+}
+[2026-08-01 21:13:47] INFO:  Verifying 401 Unauthorized for unauthenticated upload request Success !! Actual and Expected Values are:: 401

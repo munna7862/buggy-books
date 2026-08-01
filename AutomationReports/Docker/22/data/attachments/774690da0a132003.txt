@@ -1,0 +1,9 @@
+[2026-08-01 21:18:41] INFO: Clicking on Login link
+[2026-08-01 21:18:41] INFO: Entering username: chaosUser_1785584921305
+[2026-08-01 21:18:41] INFO: Entering password: Password123!
+[2026-08-01 21:18:41] INFO: Clicking on Sign In button
+[2026-08-01 21:18:42] INFO: Verifying landing on Checkout Page
+[2026-08-01 21:18:42] INFO: Checking if Checkout label is visible
+[2026-08-01 21:18:43] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 21:18:43] INFO: Clicking on Checkout link
+[2026-08-01 21:18:43] INFO:  Asserting checkout button has margin-left: 15px, actual: 15px Success !! Actual and Expected Values are:: true
