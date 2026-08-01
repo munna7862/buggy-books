@@ -42,7 +42,9 @@ export class ProfilePage extends BasePage {
   }
 
   public async openProfile(): Promise<void> {
+    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/profile') && res.status() === 200).catch(() => undefined);
     await this.clickProfileLink();
+    await responsePromise;
     await this.headingUserProfile.waitFor({ state: 'visible', timeout: 10000 });
   }
 
@@ -71,6 +73,15 @@ export class ProfilePage extends BasePage {
 
   public async getSuccessMessageText(): Promise<string> {
     return await this.doGetText(this.uploadStatusSuccess, "Getting upload success message text");
+  }
+
+  private get profileInfoSection(): Locator {
+    return this.page.locator('.profile-info-section');
+  }
+
+  public async getProfileInfoText(): Promise<string> {
+    await this.profileInfoSection.waitFor({ state: 'visible', timeout: 10000 });
+    return (await this.doGetText(this.profileInfoSection, "Getting profile info section text")) || '';
   }
 
   public async getErrorMessageText(): Promise<string> {
