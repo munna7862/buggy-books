@@ -29,11 +29,17 @@ test.describe('Protected Route Access Guard', () => {
 
     for (const route of TestData.protectedRoutes) {
       await test.step(`Verify unauthenticated direct access to ${route.name} (${route.path}) redirects to login`, async () => {
-        await page.goto(envConfig.baseUrl);
-        await page.evaluate((targetPath) => {
-          window.history.pushState({}, '', targetPath);
-          window.dispatchEvent(new Event('popstate'));
-        }, route.path);
+        const targetUrl = `${envConfig.baseUrl}${route.path}`;
+        const response = await page.goto(targetUrl).catch(() => null);
+
+        // Fallback for static hosts prior to _redirects deployment
+        if (!response || response.status() === 404 || !page.url().includes(route.expectedRedirect)) {
+          await page.goto(envConfig.baseUrl);
+          await page.evaluate((targetPath) => {
+            window.history.pushState({}, '', targetPath);
+            window.dispatchEvent(new Event('popstate'));
+          }, route.path);
+        }
 
         const isLoginPageLoaded = await signUpPage.verifyLoginPageLoaded();
         const currentUrl = page.url();
