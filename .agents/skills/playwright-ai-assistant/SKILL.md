@@ -47,3 +47,12 @@ This skill provides core capabilities for generating Page Objects, writing E2E t
 3. Update the selector inside the corresponding Page Object private getter.
 4. Rerun targeted spec in headless mode to confirm the fix:
    `npx cross-env HEADLESS=true npx playwright test <target-spec-path> --config=src/config/playwright.config.ts`
+
+### 4. Git & Pull Request Delivery (MANDATORY)
+1. Always create a dedicated branch from latest `main`: `git checkout main && git pull origin main && git checkout -b <type>/<name>`.
+2. Commit changes with conventional commits (`feat:`, `fix:`, `refactor:`) and push to remote (`git push -u origin <branch-name>`).
+3. Open a Pull Request using GitHub CLI:
+   `gh pr create --title "<type>(<scope>): <summary>" --body "<structured description>" --head <branch-name> --base main`
+4. PR body MUST include **📌 Summary of Changes** and **🧪 Verification** results.
+5. If follow-up changes or fixes are pushed, update the existing PR description using `gh pr edit <pr-number> --body-file <path>`.
+
