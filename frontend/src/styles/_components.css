@@ -27,16 +27,16 @@
   color: var(--text);
 }
 
+.action-btn-primary:active,
+.submit-action-btn:active {
+  transform: translateY(0);
+}
+
 .action-btn-primary:not(:disabled):hover,
 .submit-action-btn:not(:disabled):hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
   filter: brightness(1.1);
-}
-
-.action-btn-primary:active,
-.submit-action-btn:active {
-  transform: translateY(0);
 }
 
 /* Spinner Animation */

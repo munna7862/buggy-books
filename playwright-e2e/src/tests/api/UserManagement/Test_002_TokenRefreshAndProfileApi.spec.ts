@@ -12,8 +12,10 @@ const CART_URL = `${envConfig.apiBaseUrl}/api/cart`;
 const UPLOAD_URL = `${envConfig.apiBaseUrl}/api/profile/upload`;
 const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 
+import { randomBytes } from 'crypto';
+
 function uniqueUsername(prefix: string = 'tokenuser'): string {
-  return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+  return `${prefix}_${Date.now()}_${randomBytes(4).toString('hex')}`;
 }
 
 test.describe('Token Refresh and Profile Upload API Suite', () => {

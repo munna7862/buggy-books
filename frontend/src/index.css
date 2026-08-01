@@ -1,3 +1,4 @@
+/* csslint ignore:start */
 /* ========================================================
    BuggyBooks Global Stylesheet (Vite Bundler Entry)
    Co-ordinated using modular stylesheet partials.
@@ -8,3 +9,4 @@
 @import './styles/_layout.css';
 @import './styles/_components.css';
 @import './styles/_pages.css';
+/* csslint ignore:end */

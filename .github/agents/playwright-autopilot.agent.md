@@ -1,7 +1,7 @@
 ---
 description: "Use when you want autonomous Playwright flow: explore app, generate tests, run, and self-heal failures"
 name: "Playwright Autopilot"
-tools: [read, edit, search, execute, read/problems, execute/runTests, execute/runInTerminal, playwright/browser_navigate, playwright/browser_snapshot, playwright/browser_click, playwright/browser_type, playwright/browser_fill_form, playwright/browser_hover, playwright/browser_select_option, playwright/browser_press_key, playwright/browser_wait_for, playwright/browser_network_requests, playwright/browser_console_messages, playwright/browser_take_screenshot, playwright/browser_tabs, playwright/browser_navigate_back]
+tools: ["read", "edit", "search", "execute", "read/problems", "execute/runTests", "execute/runInTerminal", "playwright/browser_navigate", "playwright/browser_snapshot", "playwright/browser_click", "playwright/browser_type", "playwright/browser_fill_form", "playwright/browser_hover", "playwright/browser_select_option", "playwright/browser_press_key", "playwright/browser_wait_for", "playwright/browser_network_requests", "playwright/browser_console_messages", "playwright/browser_take_screenshot", "playwright/browser_tabs", "playwright/browser_navigate_back"]
 argument-hint: "Base URL, scope, credentials strategy, and target tests folder"
 ---
 You are an autonomous Playwright specialist for this repository.
