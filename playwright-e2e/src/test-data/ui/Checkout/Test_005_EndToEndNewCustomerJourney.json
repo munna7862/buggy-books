@@ -1,0 +1,19 @@
+{
+  "user": {
+    "fullName": "E2E Test User",
+    "password": "Password123!"
+  },
+  "search": {
+    "searchTerm": "Mockingbird",
+    "bookId": 2
+  },
+  "payment": {
+    "firstName": "Alex",
+    "lastName": "Rivera",
+    "cardNumber": "4532111122223333"
+  },
+  "expected": {
+    "addToCartMessage": "added to cart",
+    "paymentSuccessMessage": "Order placed successfully"
+  }
+}
