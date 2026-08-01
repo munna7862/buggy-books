@@ -15,6 +15,7 @@ function loadTestSuite() {
     "**/playwright-e2e/src/tests/ui/Checkout/Test_003_CartAndCheckoutValidation.spec.ts",
     "**/playwright-e2e/src/tests/ui/Checkout/Test_004_CheckoutWizardValidation.spec.ts",
     "**/playwright-e2e/src/tests/ui/Checkout/Test_005_EndToEndNewCustomerJourney.spec.ts",
+    "**/playwright-e2e/src/tests/ui/Checkout/Test_006_CartQuantityAdjustment.spec.ts",
     "**/playwright-e2e/src/tests/ui/UserManagement/Test_001_RegisterUser.spec.ts",
     "**/playwright-e2e/src/tests/ui/UserManagement/Test_002_LoginWithExistingUser.spec.ts",
     "**/playwright-e2e/src/tests/ui/UserManagement/Test_003_ProtectedRouteGuard.spec.ts",

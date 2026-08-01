@@ -1,0 +1,14 @@
+{
+  "user": {
+    "fullName": "Cart Quantity User",
+    "password": "Password123!"
+  },
+  "books": {
+    "firstSearch": "Mockingbird",
+    "firstBookId": 2,
+    "firstBookTitle": "To Kill a Mockingbird Exception",
+    "secondSearch": "Gatsby",
+    "secondBookId": 1,
+    "secondBookTitle": "The Great Gatsby"
+  }
+}

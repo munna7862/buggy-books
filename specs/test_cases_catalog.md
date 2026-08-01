@@ -36,7 +36,7 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 | **UI_CHECK_01** | Checkout Form Validation | Attempt to submit the checkout form with empty fields. Verify inline validation error tags appear. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_003_CartAndCheckoutValidation.spec.ts`<br>- Test: `UI_CHECK_01: Checkout Form Validation` |
 
 | **UI_CHECK_02** | Successful Order Placement | Complete the checkout form and submit. Verify that the payment successful message appears and the cart is cleared. | Smoke | Playwright UI | **Yes**<br>- File: `Checkout/Test_001_CompleteBookPurchase.spec.ts` (`Testcase 1`) & `Checkout/Test_002_CartPersistenceCheckout.spec.ts` (`Testcase 1`) |
-| **UI_CART_04** | Cart Item Quantity Adjustment | In `/cart`, adjust item quantities using increment/decrement controls. Assert that item subtotals and grand totals update dynamically without full page reload. | Regression | Playwright UI | **No** — *Planned for automation* |
+| **UI_CART_04** | Cart Item Quantity Adjustment | In `/cart`, adjust item quantities using increment/decrement controls. Assert that item subtotals and grand totals update dynamically without full page reload. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_006_CartQuantityAdjustment.spec.ts`<br>- Test: `UI_CART_04: Cart item addition and removal dynamically recalculates item count and order total` |
 
 ### **Suite: Multi-Step Checkout Wizard**
 *Spec Source: [checkout_wizard_and_validation_tests.md](file:///c:/BuggyBooks/buggy-books/specs/checkout_wizard_and_validation_tests.md)*
