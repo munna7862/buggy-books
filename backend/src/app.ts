@@ -18,10 +18,7 @@ app.use(correlationIdMiddleware);
 app.use(express.json());
 
 // --- CSRF Protection (Double-Submit Cookie Pattern) ---
-const {
-  doubleCsrfProtection,
-  generateCsrfToken,
-} = doubleCsrf({
+const csrfUtilities = doubleCsrf({
   getSecret: () => config.jwtSecret,
   getSessionIdentifier: (req) => req.cookies?.token || '',
   cookieName: 'psifi.x-csrf-token',
@@ -35,8 +32,10 @@ const {
   getCsrfTokenFromRequest: (req) => req.headers['x-csrf-token'] as string,
 });
 
-// CSRF middleware: skip for safe methods, auth routes, test/chaos routes, and test mode
-const csrfMiddleware = (req: express.Request, res: express.Response, next: express.NextFunction) => {
+export const generateCsrfToken = csrfUtilities.generateCsrfToken;
+
+// CSRF protection middleware passed directly to app.use
+const doubleCsrfProtection = (req: express.Request, res: express.Response, next: express.NextFunction) => {
   const safeMethods = ['GET', 'HEAD', 'OPTIONS'];
   if (safeMethods.includes(req.method)) return next();
 
@@ -54,10 +53,10 @@ const csrfMiddleware = (req: express.Request, res: express.Response, next: expre
     req.headers['x-bypass-rate-limit'] === 'true'
   ) return next();
 
-  doubleCsrfProtection(req, res, next);
+  csrfUtilities.doubleCsrfProtection(req, res, next);
 };
 
-app.use(csrfMiddleware);
+app.use(doubleCsrfProtection);
 
 // Structured request logging
 app.use((req, res, next) => {
