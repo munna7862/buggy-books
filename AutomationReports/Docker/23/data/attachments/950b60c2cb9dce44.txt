@@ -1,0 +1,24 @@
+[2026-08-01 21:42:54] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-01 21:42:54] INFO: 📤 Request Payload: {
+  "username": "ref_issue_1785586374829_891214c3",
+  "password": "Password123!",
+  "fullName": "Token Refresh Test User"
+}
+[2026-08-01 21:42:55] INFO: ✅ Register user for refresh token issuance test Success! Status: 201 Created
+[2026-08-01 21:42:55] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "ref_issue_1785586374829_891214c3"
+}
+[2026-08-01 21:42:55] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-01 21:42:55] INFO: 📤 Request Payload: {
+  "username": "ref_issue_1785586374829_891214c3",
+  "password": "Password123!"
+}
+[2026-08-01 21:42:56] INFO: ✅ Login user to inspect Set-Cookie headers Success! Status: 200 OK
+[2026-08-01 21:42:56] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "ref_issue_1785586374829_891214c3"
+}
+[2026-08-01 21:42:56] INFO:  Verifying Set-Cookie contains access token Success !! Actual and Expected Values are:: true
+[2026-08-01 21:42:56] INFO:  Verifying Set-Cookie contains refresh token Success !! Actual and Expected Values are:: true
+[2026-08-01 21:42:56] INFO:  Verifying Set-Cookie includes HttpOnly security flag Success !! Actual and Expected Values are:: true

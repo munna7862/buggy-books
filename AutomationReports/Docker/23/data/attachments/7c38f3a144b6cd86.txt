@@ -1,0 +1,33 @@
+[2026-08-01 21:42:50] INFO: Network interception enabled with mode: api-only
+[2026-08-01 21:42:50] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 21:42:50] INFO: Clicking on Login link
+[2026-08-01 21:42:50] INFO: Entering username: admin
+[2026-08-01 21:42:50] INFO: Entering password: password123
+[2026-08-01 21:42:50] INFO: Clicking on Sign In button
+[2026-08-01 21:42:51] INFO: Verifying landing on Checkout Page
+[2026-08-01 21:42:51] INFO: Checking if Checkout label is visible
+[2026-08-01 21:42:52] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 21:42:52] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-08-01 21:42:52] INFO: Clicking on Cart link
+[2026-08-01 21:42:57] INFO: Clicking on Catalog link
+[2026-08-01 21:42:57] INFO: Clicking on Add to Cart button for book id: 2
+[2026-08-01 21:42:57] INFO: Waiting for cart status message: added to cart
+[2026-08-01 21:42:59] INFO: Cart status message "added to cart" is visible
+[2026-08-01 21:42:59] INFO: Waiting for cart status message: Added to cart!
+[2026-08-01 21:42:59] INFO: Cart status message "Added to cart!" is visible
+[2026-08-01 21:42:59] INFO: Clicking on Cart link
+[2026-08-01 21:42:59] INFO: Getting cart item text
+[2026-08-01 21:42:59] INFO: Getting cart total text
+[2026-08-01 21:42:59] INFO: Clicking on Logout button
+[2026-08-01 21:42:59] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-08-01 21:42:59] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-08-01 21:42:59] INFO: Entering username: admin
+[2026-08-01 21:42:59] INFO: Entering password: password123
+[2026-08-01 21:42:59] INFO: Clicking on Sign In button
+[2026-08-01 21:43:00] INFO: Verifying landing on Checkout Page
+[2026-08-01 21:43:00] INFO: Checking if Checkout label is visible
+[2026-08-01 21:43:01] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 21:43:01] INFO:  Verifying if user logged in successfully again Success !! Actual and Expected Values are:: true
+[2026-08-01 21:43:01] INFO: Clicking on Cart link
+[2026-08-01 21:43:01] INFO: Getting cart item text
+[2026-08-01 21:44:01] INFO: Captured 43 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_002_CartP-51a4b-sts-across-logout-and-login-Google-Chrome/network-log.json

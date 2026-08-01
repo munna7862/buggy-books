@@ -1,0 +1,26 @@
+[2026-08-01 21:42:53] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-01 21:42:53] INFO: 📤 Request Payload: {
+  "username": "ref_issue_1785586373159_926fb7cd",
+  "password": "Password123!",
+  "fullName": "Token Refresh Test User"
+}
+[2026-08-01 21:42:53] INFO: ✅ Register user for refresh token issuance test Success! Status: 201 Created
+[2026-08-01 21:42:53] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "ref_issue_1785586373159_926fb7cd"
+}
+[2026-08-01 21:42:53] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-01 21:42:53] INFO: 📤 Request Payload: {
+  "username": "ref_issue_1785586373159_926fb7cd",
+  "password": "Password123!"
+}
+[2026-08-01 21:42:53] ERROR: ❌ Login user to inspect Set-Cookie headers Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "b833f464-d9c8-4671-bb35-a9d60afa397c"
+}
+[2026-08-01 21:42:53] ERROR: ❌ Login user to inspect Set-Cookie headers Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "b833f464-d9c8-4671-bb35-a9d60afa397c"
+}

@@ -1,0 +1,41 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]: 🛒
+    - status [ref=e6]: A user from Berlin just purchased "To Kill a Mockingbird Exception"!
+  - banner [ref=e7]:
+    - link "BuggyBooks" [ref=e8] [cursor=pointer]:
+      - /url: /
+      - heading "BuggyBooks" [level=2] [ref=e9]
+    - navigation [ref=e10]:
+      - link "Catalog" [ref=e11] [cursor=pointer]:
+        - /url: /
+      - link "Cart" [ref=e12] [cursor=pointer]:
+        - /url: /cart
+      - link "Checkout" [ref=e13] [cursor=pointer]:
+        - /url: /checkout
+      - link "Profile" [ref=e14] [cursor=pointer]:
+        - /url: /profile
+      - button "Logout" [ref=e15] [cursor=pointer]
+      - button "Toggle notifications" [ref=e17] [cursor=pointer]:
+        - text: 🔔
+        - 'generic "Live Feed: Connected" [ref=e18]'
+  - main [ref=e19]:
+    - generic [ref=e21]:
+      - heading "User Profile" [level=2] [ref=e22]
+      - img "Profile Avatar" [ref=e24]
+      - generic [ref=e25]:
+        - paragraph [ref=e26]:
+          - strong [ref=e27]: "Name:"
+        - paragraph [ref=e28]:
+          - strong [ref=e29]: "Username:"
+      - separator [ref=e30]
+      - generic [ref=e31]:
+        - heading "Upload Avatar" [level=3] [ref=e32]
+        - paragraph [ref=e33]: JPEG, JPG, or PNG formats, under 2MB limit.
+        - button "Choose File" [ref=e35] [cursor=pointer]
+        - button "Upload Image" [ref=e36] [cursor=pointer]
+        - paragraph [ref=e37]: User not found
+```

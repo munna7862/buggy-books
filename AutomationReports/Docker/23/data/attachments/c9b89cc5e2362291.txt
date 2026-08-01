@@ -1,0 +1,26 @@
+[2026-08-01 21:44:55] INFO: Network interception enabled with mode: api-only
+[2026-08-01 21:44:55] INFO: Clicking on Sign Up link
+[2026-08-01 21:44:56] INFO: Entering full name: Full wiz_user_Onxw1
+[2026-08-01 21:44:56] INFO: Entering username: wiz_user_Onxw1
+[2026-08-01 21:44:56] INFO: Entering password: Password123!
+[2026-08-01 21:44:56] INFO: Entering confirming password: Password123!
+[2026-08-01 21:44:56] INFO: Clicking on Create Account button
+[2026-08-01 21:44:57] INFO: Verifying landing on Checkout Page
+[2026-08-01 21:44:57] INFO: Checking if Checkout label is visible
+[2026-08-01 21:44:57] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 21:44:57] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 21:44:58] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-01 21:44:58] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-01 21:44:58] INFO: Waiting for cart status message: added to cart
+[2026-08-01 21:44:59] INFO: Cart status message "added to cart" is visible
+[2026-08-01 21:44:59] INFO: Clicking on Cart link
+[2026-08-01 21:45:00] INFO: Clicking on Proceed to Checkout button
+[2026-08-01 21:45:02] INFO: Entering first name: John
+[2026-08-01 21:45:02] INFO: Clicking on Catalog link
+[2026-08-01 21:45:02] INFO:  Verifying dirty navigation confirm dialog message on dismiss Success !! Actual and Expected Values are:: You have unsaved changes. Are you sure you want to leave the checkout wizard?
+[2026-08-01 21:45:02] INFO:  Verifying navigation blocked when dialog is dismissed Success !! Actual and Expected Values are:: true
+[2026-08-01 21:45:02] INFO:  Verifying input value preserved after dialog dismiss Success !! Actual and Expected Values are:: John
+[2026-08-01 21:45:02] INFO: Clicking on Catalog link
+[2026-08-01 21:45:03] INFO:  Verifying dirty navigation confirm dialog message on accept Success !! Actual and Expected Values are:: You have unsaved changes. Are you sure you want to leave the checkout wizard?
+[2026-08-01 21:45:03] INFO:  Verifying navigated away from checkout when dialog accepted Success !! Actual and Expected Values are:: true
+[2026-08-01 21:45:03] INFO: Captured 24 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_004_Check-eb1e9-rty-Navigation-Alert-Dialog-Google-Chrome/network-log.json

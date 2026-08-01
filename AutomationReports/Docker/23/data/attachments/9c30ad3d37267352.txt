@@ -1,0 +1,16 @@
+[2026-08-01 21:43:48] INFO: Network interception enabled with mode: api-only
+[2026-08-01 21:43:48] INFO: Clicking on Sign Up link
+[2026-08-01 21:43:48] INFO: Entering full name: Full profile_user_MzKZT
+[2026-08-01 21:43:48] INFO: Entering username: profile_user_MzKZT
+[2026-08-01 21:43:48] INFO: Entering password: Password123!
+[2026-08-01 21:43:48] INFO: Entering confirming password: Password123!
+[2026-08-01 21:43:48] INFO: Clicking on Create Account button
+[2026-08-01 21:43:49] INFO: Verifying landing on Checkout Page
+[2026-08-01 21:43:49] INFO: Checking if Checkout label is visible
+[2026-08-01 21:43:50] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 21:43:50] INFO: Clicking on Profile navbar link
+[2026-08-01 21:43:50] INFO: Selecting file for avatar upload: /__w/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/invalid_file.txt
+[2026-08-01 21:43:50] INFO: Clicking Upload Image button
+[2026-08-01 21:43:50] INFO: Getting upload error message text
+[2026-08-01 21:43:50] INFO:  Verifying file extension filter 400 error message Success !! Actual and Expected Values are:: true
+[2026-08-01 21:43:50] INFO: Captured 12 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_005_Profil-16405-Extension-Filter-Validation-Google-Chrome/network-log.json
