@@ -96,5 +96,8 @@ export class SignUpPage extends BasePage {
     await this.clickSignIn();
   }
 
+  public async isSignInPageLoaded(): Promise<boolean> {
+    return await this.doesElementExist(this.btnSignIn, "Checking if Sign In button is visible on Login page");
+  }
 
 }

@@ -1,0 +1,19 @@
+{
+  "protectedRoutes": [
+    {
+      "name": "Checkout Page",
+      "path": "/checkout",
+      "expectedRedirect": "/login"
+    },
+    {
+      "name": "Profile Page",
+      "path": "/profile",
+      "expectedRedirect": "/login"
+    },
+    {
+      "name": "Cart Page",
+      "path": "/cart",
+      "expectedRedirect": "/login"
+    }
+  ]
+}

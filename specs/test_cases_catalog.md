@@ -15,6 +15,7 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 | **UI_AUTH_03** | Login Validation Errors | Attempt login with wrong password. Verify error message "Unauthorized: Invalid credentials" appears. | Regression | Playwright UI | **Yes**<br>- File: `UserManagement/Test_002_LoginWithExistingUser.spec.ts` (`Testcase 3: Login Validation Errors`) |
 | **UI_AUTH_04** | Password Strength Indicator | On Register page, type a simple password ("123") and verify label is "weak". Type a complex one and verify label is "strong". | Regression | Playwright UI | **Yes**<br>- File: `UserManagement/Test_001_RegisterUser.spec.ts` (`Testcase 3: Password Strength Indicator`) |
 | **UI_AUTH_05** | Logout Functionality | Click "Logout" in the navbar. Verify user is redirected to Login and cannot access the `/cart` page directly. | Smoke | Playwright UI | **Yes**<br>- File: `UserManagement/Test_002_LoginWithExistingUser.spec.ts` (`Testcase 1` & `Testcase 2` logout steps) |
+| **UI_AUTH_06** | Protected Route Access Guard | Direct browser navigation to `/checkout` or `/profile` without active login session. Verify automatic redirect to `/login` with an authentication warning tag. | Smoke | Playwright UI | **Yes**<br>- File: `UserManagement/Test_003_ProtectedRouteGuard.spec.ts`<br>- Test: `UI_AUTH_06: Direct unauthenticated navigation to protected routes redirects to Login` |
 
 ### **Suite: Catalog & Book Discovery**
 | ID | Title | Description | Priority | Target Coverage | Covered |
