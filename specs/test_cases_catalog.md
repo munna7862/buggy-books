@@ -36,6 +36,7 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 | **UI_CHECK_01** | Checkout Form Validation | Attempt to submit the checkout form with empty fields. Verify inline validation error tags appear. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_003_CartAndCheckoutValidation.spec.ts`<br>- Test: `UI_CHECK_01: Checkout Form Validation` |
 
 | **UI_CHECK_02** | Successful Order Placement | Complete the checkout form and submit. Verify that the payment successful message appears and the cart is cleared. | Smoke | Playwright UI | **Yes**<br>- File: `Checkout/Test_001_CompleteBookPurchase.spec.ts` (`Testcase 1`) & `Checkout/Test_002_CartPersistenceCheckout.spec.ts` (`Testcase 1`) |
+| **UI_CART_04** | Cart Item Quantity Adjustment | In `/cart`, adjust item quantities using increment/decrement controls. Assert that item subtotals and grand totals update dynamically without full page reload. | Regression | Playwright UI | **No** — *Planned for automation* |
 
 ### **Suite: Multi-Step Checkout Wizard**
 *Spec Source: [checkout_wizard_and_validation_tests.md](file:///c:/BuggyBooks/buggy-books/specs/checkout_wizard_and_validation_tests.md)*
@@ -55,6 +56,7 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 | **UI_UPL_02** | File Extension Filter Validation | Choose an invalid file format (e.g. `document.txt`). Assert that the upload fails with `400` and displays warning element. | Smoke | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_02: File Extension Filter Validation` |
 | **UI_UPL_03** | File Size Limit Validation | Choose an image file larger than 2MB. Assert that the upload fails with `400` and displays a file size limit warning. | Smoke | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_03: File Size Limit Validation` |
 | **UI_UPL_04** | Upload Chaos Failure Recovery | Configure `uploadFailureRate: 1.0` via chaos config. Submit a valid file. Assert that status code `500` is returned, and an error banner displays. | Regression | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_04: Upload Chaos Failure Recovery` |
+| **UI_PROF_01** | Account Summary & Order History | Navigate to `/profile`. Verify account full name, avatar preview, and past placed orders list rendered from backend response. | Smoke | Playwright UI | **No** — *Planned for automation* |
 
 
 ### **Suite: JWT Expiration & Silent Refresh UI**
@@ -128,6 +130,7 @@ These test cases verify the logic, security, and integrity of backend endpoints 
 |:---|:---|:---|:---|:---|:---|
 | **API_CART_01** | Persistence after server crash | Add item -> Restart server -> Get Cart. Verify item is still there. | Smoke | Playwright API | **Yes**<br>- File: `api/CartAndInventory/Test_001_CartAndInventoryApi.spec.ts`<br>- Test: `API_CART_01: Cart persistence after server crash` |
 | **API_INV_01** | Inventory Report Latency | Trigger the inventory report. Verify it returns a list of all 15 books with stock data. | Smoke | Playwright API | **Yes**<br>- File: `api/CartAndInventory/Test_001_CartAndInventoryApi.spec.ts`<br>- Test: `API_INV_01: Trigger inventory report` |
+| **API_ORD_01** | `GET /api/orders` History Check | Authenticate, complete checkout via `POST /api/checkout/process`, call `GET /api/orders`. Assert `200 OK` and order items match. | Smoke | Playwright API | **No** — *Planned for automation* |
 
 ### **Suite: File Upload API**
 | ID | Title | Description | Priority | Target Coverage | Covered |
@@ -198,3 +201,14 @@ These test cases isolate frontend logic and UI pages by mocking backend API resp
 - **File**: `playwright-e2e/src/tests/ui/Checkout/Test_005_EndToEndNewCustomerJourney.spec.ts`
 - **Data File**: `playwright-e2e/src/test-data/ui/Checkout/Test_005_EndToEndNewCustomerJourney.json`
 - **Test**: `Testcase 1: Complete New Customer E2E Journey from Registration to Checkout`
+
+---
+
+### **Scenario 2: The Resilient Customer Journey under Artificial API Latency**
+1. **Configure Chaos**: Inject artificial API delay (`inventoryDelayMs: 2000`) via `POST /api/test/config`.
+2. **Browse & Search**: Search catalog and inspect book details. Verify loading spinners render during latency.
+3. **Add & Cart**: Add book to cart and review item subtotals.
+4. **Checkout**: Submit checkout payment under backend delay.
+5. **Verify & Reset**: Confirm successful order completion banner, reset chaos configuration via `POST /api/test/reset`.
+
+**Automated**: **No** — *Planned for automation*
