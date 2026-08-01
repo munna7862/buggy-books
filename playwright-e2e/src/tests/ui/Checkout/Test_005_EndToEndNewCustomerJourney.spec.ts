@@ -28,9 +28,11 @@ type EndToEndJourneyTestData = {
 const testDataPath = path.join(__dirname, '../../../test-data/ui/Checkout/Test_005_EndToEndNewCustomerJourney.json');
 const TestData = require(testDataPath) as EndToEndJourneyTestData;
 
+import { randomBytes } from 'crypto';
+
 function uniqueUsername(prefix: string = 'e2e_customer'): string {
   const timestamp = Date.now();
-  const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+  const randomSuffix = randomBytes(4).toString('hex');
   return `${prefix}_${timestamp}_${randomSuffix}`;
 }
 
