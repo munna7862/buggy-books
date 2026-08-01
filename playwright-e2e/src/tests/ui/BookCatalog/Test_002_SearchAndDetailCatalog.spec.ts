@@ -96,7 +96,8 @@ test.describe('Book Catalog Search and Detail View', () => {
     await test.step('Verify back link navigates back to catalog', async () => {
       await bookDetailPage.clickBackToCatalog();
       const currentUrl = page.url();
-      const expectedPattern = new RegExp(`^${envConfig.baseUrl.replace(/\/$/, '')}/?$`);
+      const escapedBaseUrl = envConfig.baseUrl.replace(/\/$/, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const expectedPattern = new RegExp(`^${escapedBaseUrl}/?$`);
       isBackNavCorrect = await commonFunctions.compareTwoValues(expectedPattern.test(currentUrl), true, "Verifying back to catalog URL");
     });
 
