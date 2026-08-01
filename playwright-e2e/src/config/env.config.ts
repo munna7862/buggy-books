@@ -4,7 +4,7 @@ dotenv.config();
 
 export const envConfig = {
   env: process.env.ENV || 'INTEROP',
-  baseUrl: process.env.BASE_URL || "https://buggy-books-fe.onrender.com/",
+  baseUrl: process.env.BASE_URL || "https://buggy-books-fe.onrender.com",
   apiBaseUrl: process.env.API_BASE_URL || 'https://buggy-books.onrender.com',
   headless: process.env.HEADLESS === 'true',
   browser: process.env.BROWSER || 'chrome',

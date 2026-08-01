@@ -19,8 +19,10 @@ type LoginPayload = {
   password?: string;
 };
 
+import { randomBytes } from 'crypto';
+
 function uniqueUsername(prefix: string = 'johndoe'): string {
-  return `${prefix}${Date.now()}${Math.floor(Math.random() * 100000)}@`;
+  return `${prefix}${Date.now()}${randomBytes(4).toString('hex')}@`;
 }
 
 function buildValidPayload(overrides: RegisterPayload = {}): RegisterPayload {
@@ -53,8 +55,8 @@ function buildRegisterSecurityPayload(template: any): RegisterPayload {
     return {
       username:
         template.payload.usernamePattern === 'oversized_username'
-          ? `${'a'.repeat(240)}${Date.now()}${Math.floor(Math.random() * 100000)}@`
-          : `${template.payload.usernamePattern}${Date.now()}${Math.floor(Math.random() * 100000)}@`,
+          ? `${'a'.repeat(240)}${Date.now()}${randomBytes(4).toString('hex')}@`
+          : `${template.payload.usernamePattern}${Date.now()}${randomBytes(4).toString('hex')}@`,
       password: testData.defaultPassword,
       fullName: testData.defaultFullName,
     };
@@ -71,8 +73,8 @@ function buildLoginSecurityPayload(template: any): LoginPayload {
   return {
     username:
       template.payload.usernamePattern === 'oversized_username'
-        ? `${'b'.repeat(240)}${Date.now()}${Math.floor(Math.random() * 100000)}@`
-        : `${template.payload.usernamePattern}${Date.now()}${Math.floor(Math.random() * 100000)}@`,
+        ? `${'b'.repeat(240)}${Date.now()}${randomBytes(4).toString('hex')}@`
+        : `${template.payload.usernamePattern}${Date.now()}${randomBytes(4).toString('hex')}@`,
     password: template.payload.password,
   };
 }

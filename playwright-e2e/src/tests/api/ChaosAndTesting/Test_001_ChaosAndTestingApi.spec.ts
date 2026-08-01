@@ -12,8 +12,10 @@ const INVENTORY_URL = `${envConfig.apiBaseUrl}/api/inventory/report`;
 const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 const RESET_URL = `${envConfig.apiBaseUrl}/api/test/reset`;
 
+import { randomBytes } from 'crypto';
+
 function uniqueUsername(prefix: string = 'chaosuser'): string {
-  return `${prefix}${Date.now()}${Math.floor(Math.random() * 100000)}@`;
+  return `${prefix}${Date.now()}${randomBytes(4).toString('hex')}@`;
 }
 
 test.describe('Chaos and Testing Utilities API', () => {

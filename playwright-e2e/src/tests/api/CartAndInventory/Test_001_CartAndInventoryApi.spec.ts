@@ -11,8 +11,10 @@ const LOGIN_URL = `${envConfig.apiBaseUrl}/api/login`;
 const CART_URL = `${envConfig.apiBaseUrl}/api/cart`;
 const INVENTORY_URL = `${envConfig.apiBaseUrl}/api/inventory/report`;
 
+import { randomBytes } from 'crypto';
+
 function uniqueUsername(prefix: string = 'cartuser'): string {
-  return `${prefix}${Date.now()}${Math.floor(Math.random() * 100000)}@`;
+  return `${prefix}${Date.now()}${randomBytes(4).toString('hex')}@`;
 }
 
 test.describe('Cart & Inventory API', () => {

@@ -39,11 +39,16 @@ class UserRepository {
   }
 
   public save(username: string, record: UserRecord): void {
-    if (!this.isSafeKey(username)) {
+    if (!this.isSafeKey(username) || typeof username !== 'string' || username.includes('__proto__') || username.includes('prototype')) {
       throw new BadRequestError('Bad Request: Invalid username');
     }
     const users = this.getUsersMap();
-    users[username] = record;
+    Object.defineProperty(users, username, {
+      value: record,
+      writable: true,
+      enumerable: true,
+      configurable: true
+    });
     this.saveUsersMap(users);
   }
 

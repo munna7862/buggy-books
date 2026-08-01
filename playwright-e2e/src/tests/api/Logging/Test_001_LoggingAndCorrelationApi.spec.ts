@@ -12,8 +12,10 @@ const CART_URL = `${envConfig.apiBaseUrl}/api/cart`;
 const CHECKOUT_URL = `${envConfig.apiBaseUrl}/api/checkout/process`;
 const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 
+import { randomBytes } from 'crypto';
+
 function uniqueUsername(prefix: string = 'loguser'): string {
-  return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 100000)}`;
+  return `${prefix}_${Date.now()}_${randomBytes(4).toString('hex')}`;
 }
 
 test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
