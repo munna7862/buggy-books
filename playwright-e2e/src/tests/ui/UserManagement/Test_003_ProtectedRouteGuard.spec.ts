@@ -35,16 +35,16 @@ test.describe('Protected Route Access Guard', () => {
           window.dispatchEvent(new Event('popstate'));
         }, route.path);
 
-        const isLoginPage = await signUpPage.isSignInPageLoaded();
+        const isLoginPageLoaded = await signUpPage.verifyLoginPageLoaded();
         const currentUrl = page.url();
 
         const isUrlCorrect = currentUrl.includes(route.expectedRedirect);
-        const stepSuccess = isLoginPage && isUrlCorrect;
+        const stepSuccess = isLoginPageLoaded && isUrlCorrect;
 
         isRedirectValid = await commonFunctions.compareTwoValues(
           stepSuccess,
           true,
-          `Verifying direct navigation to ${route.path} redirects to ${route.expectedRedirect}`
+          `Verifying direct navigation to ${route.path} redirects to ${route.expectedRedirect} and Login page elements are fully loaded`
         ) && isRedirectValid;
       });
     }
