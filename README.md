@@ -8,8 +8,8 @@
 
 | Service | URL | Notes |
 |---|---|---|
-| **Frontend** | https://buggy-books-fe.onrender.com | React SPA |
-| **Backend API** | https://buggy-books-api.onrender.com | REST API |
+| **Frontend** | <https://buggy-books-fe.onrender.com> | React SPA |
+| **Backend API** | <https://buggy-books-api.onrender.com> | REST API |
 
 > ⚠️ **Note (Free Tier):** The Render backend spins down after 15 minutes of inactivity. The **first request** after inactivity may take up to **30–60 seconds** as the server cold-starts. This is expected behaviour and is itself a testable scenario.
 
@@ -119,7 +119,7 @@ buggy-books/
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/munna7862/buggy-books.git
+git clone <https://github.com/munna7862/buggy-books.git>
 cd buggy-books
 ```
 

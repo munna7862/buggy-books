@@ -14,44 +14,6 @@ import { errorHandler } from './middleware/error.middleware';
 const app = express();
 
 app.use(cookieParser());
-app.use(correlationIdMiddleware);
-
-// Structured request logging
-app.use((req, res, next) => {
-  const start = Date.now();
-  const store = loggerStore.getStore();
-  res.on('finish', () => {
-    const duration = Date.now() - start;
-    loggerStore.run(store || {}, () => {
-      logger.info(`${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms`, {
-        method: req.method,
-        url: req.originalUrl,
-        statusCode: res.statusCode,
-        durationMs: duration
-      });
-    });
-  });
-  next();
-});
-
-// Security Headers
-app.use(helmet());
-
-// Enable CORS with restricted but flexible origins
-app.use(cors({
-  origin: (origin, callback) => {
-    const allowed: readonly string[] = config.cors.allowedOrigins;
-    if (!origin || allowed.includes(origin) || origin.endsWith(config.cors.wildcardSuffix)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
-
-// Parse JSON payloads
-app.use(express.json());
 
 // --- CSRF Protection (Double-Submit Cookie Pattern) ---
 const {
@@ -94,6 +56,44 @@ const csrfMiddleware = (req: express.Request, res: express.Response, next: expre
 };
 
 app.use(csrfMiddleware);
+app.use(correlationIdMiddleware);
+
+// Structured request logging
+app.use((req, res, next) => {
+  const start = Date.now();
+  const store = loggerStore.getStore();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    loggerStore.run(store || {}, () => {
+      logger.info(`${req.method} ${req.originalUrl} ${res.statusCode} - ${duration}ms`, {
+        method: req.method,
+        url: req.originalUrl,
+        statusCode: res.statusCode,
+        durationMs: duration
+      });
+    });
+  });
+  next();
+});
+
+// Security Headers
+app.use(helmet());
+
+// Enable CORS with restricted but flexible origins
+app.use(cors({
+  origin: (origin, callback) => {
+    const allowed: readonly string[] = config.cors.allowedOrigins;
+    if (!origin || allowed.includes(origin) || origin.endsWith(config.cors.wildcardSuffix)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
+// Parse JSON payloads
+app.use(express.json());
 
 // Endpoint for the frontend to fetch a CSRF token
 app.get('/api/csrf-token', (req, res) => {
