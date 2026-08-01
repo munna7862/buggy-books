@@ -49,6 +49,11 @@ An **intentionally buggy** book-store demo used to exercise test-automation and 
 - Headless heal re-run: `npx cross-env HEADLESS=true npx playwright test <spec-path> --config=src/config/playwright.config.ts`.
 - Reports: `npm run report` (Allure). Snapshots: `npm run save-snapshot -- <url> <page-name>`. Clean: `npm run clean-reports`.
 
+## Pull Request & Git standard
+- Always create a feature/bugfix branch from latest `main`.
+- Push branch and open PR via `gh pr create` with a structured description (Summary of Changes + Verification results).
+- If additional fixes or edits are made after opening a PR, update the PR description using `gh pr edit <pr-number> --body-file <path>` to keep the PR summary current.
+
 ## Safety
 - Prefer local, reversible edits. Confirm before destructive actions (deleting files/branches, `git reset --hard`, force pushes).
 - Do not create documentation markdown unless explicitly requested.

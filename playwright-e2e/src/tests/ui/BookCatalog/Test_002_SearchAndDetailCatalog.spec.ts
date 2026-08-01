@@ -96,8 +96,9 @@ test.describe('Book Catalog Search and Detail View', () => {
     await test.step('Verify back link navigates back to catalog', async () => {
       await bookDetailPage.clickBackToCatalog();
       const currentUrl = page.url();
-      const expectedPattern = new RegExp(`^${envConfig.baseUrl.replace(/\/$/, '')}/?$`);
-      isBackNavCorrect = await commonFunctions.compareTwoValues(expectedPattern.test(currentUrl), true, "Verifying back to catalog URL");
+      const currentPath = new URL(currentUrl).pathname;
+      const isAtCatalog = (currentPath === '/' || currentPath === '') && currentUrl.startsWith(envConfig.baseUrl.replace(/\/$/, ''));
+      isBackNavCorrect = await commonFunctions.compareTwoValues(isAtCatalog, true, "Verifying back to catalog URL");
     });
 
     expect(isUrlCorrect && isTitleCorrect && isAuthorCorrect && isPriceCorrect && isDescCorrect && isBackNavCorrect).toBeTruthy();
