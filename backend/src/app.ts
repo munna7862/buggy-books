@@ -14,6 +14,8 @@ import { errorHandler } from './middleware/error.middleware';
 const app = express();
 
 app.use(cookieParser());
+app.use(correlationIdMiddleware);
+app.use(express.json());
 
 // --- CSRF Protection (Double-Submit Cookie Pattern) ---
 const {
@@ -56,7 +58,6 @@ const csrfMiddleware = (req: express.Request, res: express.Response, next: expre
 };
 
 app.use(csrfMiddleware);
-app.use(correlationIdMiddleware);
 
 // Structured request logging
 app.use((req, res, next) => {
@@ -103,9 +104,6 @@ app.use(cors({
   },
   credentials: true
 }));
-
-// Parse JSON payloads
-app.use(express.json());
 
 // Endpoint for the frontend to fetch a CSRF token
 app.get('/api/csrf-token', (req, res) => {

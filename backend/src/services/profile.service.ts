@@ -45,8 +45,8 @@ class ProfileService {
     }
 
     const fileUrl = `/uploads/${filename}`;
-    user.avatarUrl = fileUrl;
-    userRepository.save(username, user);
+    const updatedUser = { ...user, avatarUrl: fileUrl };
+    userRepository.save(username, updatedUser);
 
     logger.info(`Avatar uploaded successfully for user: ${username} -> ${fileUrl}`, { username, fileUrl });
     return { avatarUrl: fileUrl };
