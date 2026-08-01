@@ -1,0 +1,26 @@
+[2026-08-01 20:26:16] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-01 20:26:16] INFO: 📤 Request Payload: {
+  "username": "silent_ref_1785581776304_c420379a",
+  "password": "Password123!",
+  "fullName": "Token Refresh Test User"
+}
+[2026-08-01 20:26:16] INFO: ✅ Register user for silent refresh test Success! Status: 201 Created
+[2026-08-01 20:26:16] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "silent_ref_1785581776304_c420379a"
+}
+[2026-08-01 20:26:16] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-01 20:26:16] INFO: 📤 Request Payload: {
+  "username": "silent_ref_1785581776304_c420379a",
+  "password": "Password123!"
+}
+[2026-08-01 20:26:17] ERROR: ❌ Login user to extract refreshToken cookie Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "868bd7e6-412d-476c-a245-80bbc17bdfa1"
+}
+[2026-08-01 20:26:17] ERROR: ❌ Login user to extract refreshToken cookie Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "868bd7e6-412d-476c-a245-80bbc17bdfa1"
+}

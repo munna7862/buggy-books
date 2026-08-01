@@ -1,0 +1,9 @@
+[2026-08-01 20:26:22] INFO: Network interception enabled with mode: api-only
+[2026-08-01 20:26:22] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 20:26:22] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-01 20:26:22] INFO: Filling search input with: xyz999nonexistent
+[2026-08-01 20:26:22] INFO: Clicking Search button
+[2026-08-01 20:26:22] INFO:  Verifying zero books displayed for gibberish search Success !! Actual and Expected Values are:: 0
+[2026-08-01 20:26:22] INFO: Getting catalog empty state text
+[2026-08-01 20:26:22] INFO:  Verifying empty state message text Success !! Actual and Expected Values are:: true
+[2026-08-01 20:26:22] INFO: Captured 7 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_002_Se-6c954--CAT-04-Search---No-Results-Google-Chrome/network-log.json

@@ -1,0 +1,2 @@
+[2026-08-01 20:26:11] INFO:  Verifying --bg CSS variable in light mode equals #f8fafc (actual: #f8fafc) Success !! Actual and Expected Values are:: true
+[2026-08-01 20:26:11] INFO:  Verifying --bg CSS variable in dark mode equals #090d15 (actual: #090d15) Success !! Actual and Expected Values are:: true

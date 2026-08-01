@@ -1,0 +1,36 @@
+[2026-08-01 20:26:03] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-08-01 20:26:03] INFO: 📤 Request Payload: {
+  "visualChaos": "yes"
+}
+[2026-08-01 20:26:04] ERROR: ❌ POST /api/test/config with invalid string type for visualChaos Failed! Status: 400 Bad Request | Response: {
+  "error": "Validation failed",
+  "errorName": "ValidationError",
+  "correlationId": "1ab57d3f-ee1a-445e-b699-0c10bafc097a",
+  "details": [
+    {
+      "expected": "boolean",
+      "code": "invalid_type",
+      "path": [
+        "visualChaos"
+      ],
+      "message": "Invalid input: expected boolean, received string"
+    }
+  ]
+}
+[2026-08-01 20:26:04] ERROR: ❌ POST /api/test/config with invalid string type for visualChaos Failed! Status: 400 Bad Request | Response: {
+  "error": "Validation failed",
+  "errorName": "ValidationError",
+  "correlationId": "1ab57d3f-ee1a-445e-b699-0c10bafc097a",
+  "details": [
+    {
+      "expected": "boolean",
+      "code": "invalid_type",
+      "path": [
+        "visualChaos"
+      ],
+      "message": "Invalid input: expected boolean, received string"
+    }
+  ]
+}
+[2026-08-01 20:26:04] INFO:  Verifying 400 Bad Request returned for invalid data type Success !! Actual and Expected Values are:: 400
+[2026-08-01 20:26:04] INFO:  Verifying response contains validation error message Success !! Actual and Expected Values are:: true

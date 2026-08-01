@@ -1,0 +1,39 @@
+[2026-08-01 20:26:04] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-08-01 20:26:04] INFO: 📤 Request Payload: {
+  "visualChaos": true,
+  "checkoutFailureRate": 0.5
+}
+[2026-08-01 20:26:04] INFO: ✅ Configure visualChaos and checkoutFailureRate together Success! Status: 200 OK
+[2026-08-01 20:26:04] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 0.5,
+    "inventoryDelayMs": 3000,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": true
+  }
+}
+[2026-08-01 20:26:04] INFO:  Verifying POST /api/test/config status is 200 Success !! Actual and Expected Values are:: 200
+[2026-08-01 20:26:04] INFO:  Verifying visualChaos saved as true Success !! Actual and Expected Values are:: true
+[2026-08-01 20:26:04] INFO:  Verifying checkoutFailureRate saved as 0.5 Success !! Actual and Expected Values are:: 0.5
+[2026-08-01 20:26:04] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-08-01 20:26:04] INFO: 📤 Request Payload: {
+  "visualChaos": false,
+  "checkoutFailureRate": 0.15
+}
+[2026-08-01 20:26:04] INFO: ✅ Reset chaos config parameters to default Success! Status: 200 OK
+[2026-08-01 20:26:04] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 0.15,
+    "inventoryDelayMs": 3000,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": false
+  }
+}

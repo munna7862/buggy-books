@@ -1,0 +1,1 @@
+[2026-08-01 20:26:20] INFO:  Asserting book card h3 text line-height multiplier is ~3.2, actual: 3.2 (lineHeight: 57.6px, fontSize: 18px) Success !! Actual and Expected Values are:: true

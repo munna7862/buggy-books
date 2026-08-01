@@ -1,0 +1,13 @@
+[2026-08-01 20:26:03] INFO: Clicking on Sign Up link
+[2026-08-01 20:26:03] INFO: Entering full name: Full refresh_ui_user_C4ZZZ
+[2026-08-01 20:26:03] INFO: Entering username: refresh_ui_user_C4ZZZ
+[2026-08-01 20:26:03] INFO: Entering password: Password123!
+[2026-08-01 20:26:03] INFO: Entering confirming password: Password123!
+[2026-08-01 20:26:03] INFO: Clicking on Create Account button
+[2026-08-01 20:26:04] INFO: Verifying landing on Checkout Page
+[2026-08-01 20:26:04] INFO: Checking if Checkout label is visible
+[2026-08-01 20:26:05] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 20:26:09] INFO: Clicking on Profile navbar link
+[2026-08-01 20:26:09] INFO: Getting profile avatar preview image src
+[2026-08-01 20:26:09] INFO:  Verifying profile page opened successfully post silent token refresh Success !! Actual and Expected Values are:: true
+[2026-08-01 20:26:09] INFO:  Verifying user is retained on profile page without logout Success !! Actual and Expected Values are:: true

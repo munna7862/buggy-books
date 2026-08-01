@@ -1,0 +1,16 @@
+[2026-08-01 20:27:27] INFO: Network interception enabled with mode: api-only
+[2026-08-01 20:27:27] INFO: Clicking on Sign Up link
+[2026-08-01 20:27:27] INFO: Entering full name: Full profile_user_SzOgw
+[2026-08-01 20:27:27] INFO: Entering username: profile_user_SzOgw
+[2026-08-01 20:27:27] INFO: Entering password: Password123!
+[2026-08-01 20:27:27] INFO: Entering confirming password: Password123!
+[2026-08-01 20:27:27] INFO: Clicking on Create Account button
+[2026-08-01 20:27:28] INFO: Verifying landing on Checkout Page
+[2026-08-01 20:27:28] INFO: Checking if Checkout label is visible
+[2026-08-01 20:27:29] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 20:27:29] INFO: Clicking on Profile navbar link
+[2026-08-01 20:27:29] INFO: Selecting file for avatar upload: /__w/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/valid_avatar.png
+[2026-08-01 20:27:29] INFO: Clicking Upload Image button
+[2026-08-01 20:27:29] INFO: Getting upload error message text
+[2026-08-01 20:27:29] INFO:  Verifying upload chaos 500 error message Success !! Actual and Expected Values are:: true
+[2026-08-01 20:27:29] INFO: Captured 12 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_005_Profil-2412f-load-Chaos-Failure-Recovery-Google-Chrome/network-log.json

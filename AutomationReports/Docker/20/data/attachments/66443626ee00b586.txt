@@ -1,0 +1,41 @@
+[2026-08-01 20:26:15] INFO: Clicking on Sign Up link
+[2026-08-01 20:26:15] INFO: Entering full name: Full ws_user_DEfj8
+[2026-08-01 20:26:15] INFO: Entering username: ws_user_DEfj8
+[2026-08-01 20:26:15] INFO: Entering password: Password123!
+[2026-08-01 20:26:15] INFO: Entering confirming password: Password123!
+[2026-08-01 20:26:15] INFO: Clicking on Create Account button
+[2026-08-01 20:26:16] INFO: Verifying landing on Checkout Page
+[2026-08-01 20:26:16] INFO: Checking if Checkout label is visible
+[2026-08-01 20:26:17] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 20:26:17] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-01 20:26:17] INFO: Waiting for cart status message: added to cart
+[2026-08-01 20:26:19] INFO: Cart status message "added to cart" is visible
+[2026-08-01 20:26:19] INFO: Clicking on Cart link
+[2026-08-01 20:26:19] INFO: Clicking on Proceed to Checkout button
+[2026-08-01 20:26:21] INFO: Entering first name: Web
+[2026-08-01 20:26:21] INFO: Entering last name: SocketUser
+[2026-08-01 20:26:21] INFO: Entering shipping address: 123 Buggy Lane
+[2026-08-01 20:26:21] INFO: Entering city: Stack City
+[2026-08-01 20:26:21] INFO: Clicking on Next Step button
+[2026-08-01 20:26:21] INFO: Entering card number
+[2026-08-01 20:26:21] INFO: Entering card expiry: 12/30
+[2026-08-01 20:26:21] INFO: Entering card CVV: 123
+[2026-08-01 20:26:21] INFO: Checking if Next Step button is visible - Element is visible
+[2026-08-01 20:26:21] INFO: Clicking on Next Step button on Payment page
+[2026-08-01 20:26:21] INFO: Waiting for confirmation message containing: Thank you for your order
+[2026-08-01 20:27:21] WARN: Payment attempt 1 did not complete successfully. Retrying payment.
+[2026-08-01 20:27:21] INFO: Checking if Next Step button is visible - Element is not visible
+[2026-08-01 20:27:21] INFO: Clicking on Complete Payment button on Confirm page
+[2026-08-01 20:27:21] INFO: Waiting for confirmation message containing: Thank you for your order
+[2026-08-01 20:28:21] WARN: Payment attempt 2 did not complete successfully. Retrying payment.
+[2026-08-01 20:28:21] INFO: Checking if Next Step button is visible - Element is not visible
+[2026-08-01 20:28:21] INFO: Clicking on Complete Payment button on Confirm page
+[2026-08-01 20:28:21] INFO: Waiting for confirmation message containing: Thank you for your order
+
+[Failure Hook] Capturing state for failing test: "WS_EVENT_02: Hot-Toast Alert Trigger"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+

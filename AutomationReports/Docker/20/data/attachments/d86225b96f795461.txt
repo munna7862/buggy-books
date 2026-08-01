@@ -1,0 +1,26 @@
+[2026-08-01 20:26:13] INFO: Network interception enabled with mode: api-only
+[2026-08-01 20:26:13] INFO: Clicking on Sign Up link
+[2026-08-01 20:26:13] INFO: Entering full name: Full profile_user_bpHSh
+[2026-08-01 20:26:13] INFO: Entering username: profile_user_bpHSh
+[2026-08-01 20:26:13] INFO: Entering password: Password123!
+[2026-08-01 20:26:13] INFO: Entering confirming password: Password123!
+[2026-08-01 20:26:13] INFO: Clicking on Create Account button
+[2026-08-01 20:26:14] INFO: Verifying landing on Checkout Page
+[2026-08-01 20:26:14] INFO: Checking if Checkout label is visible
+[2026-08-01 20:26:15] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 20:26:15] INFO: Clicking on Profile navbar link
+[2026-08-01 20:26:16] INFO: Selecting file for avatar upload: /__w/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/valid_avatar.png
+[2026-08-01 20:26:16] INFO: Clicking Upload Image button
+[2026-08-01 20:26:16] INFO: Getting profile avatar preview image src
+[2026-08-01 20:26:16] ERROR:  Verifying avatar preview image src points to uploads path Failed!! Expected Value:: true || Actual Value:: false
+[2026-08-01 20:26:16] ERROR:  Verifying avatar preview image src points to uploads path Failed!! Expected Value:: true || Actual Value:: false
+[2026-08-01 20:26:16] INFO: Getting upload success message text
+
+[Failure Hook] Capturing state for failing test: "UI_UPL_01: Valid Profile Picture Upload"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-08-01 20:27:16] INFO: Captured 32 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_005_Profil-59043-alid-Profile-Picture-Upload-Google-Chrome/network-log.json

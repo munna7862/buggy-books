@@ -1,0 +1,16 @@
+[2026-08-01 20:26:14] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-01 20:26:14] INFO: 📤 Request Payload: {
+  "username": "' OR '1'='11785581766025a8494fcd@",
+  "password": "johna123@"
+}
+[2026-08-01 20:26:14] ERROR: ❌ Login security validation for SQL injection pattern in username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "a3ca9800-2c44-4a98-9ca8-30b5545c136b"
+}
+[2026-08-01 20:26:14] ERROR: ❌ Login security validation for SQL injection pattern in username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "a3ca9800-2c44-4a98-9ca8-30b5545c136b"
+}
+[2026-08-01 20:26:14] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true
