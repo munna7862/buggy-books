@@ -9,7 +9,8 @@
     "open-allure": "allure open reports/allure-report",
     "report": "npm run generate-allure && npm run open-allure",
     "clean-reports": "rimraf reports logs playwright-report test-results",
-    "save-snapshot": "ts-node scripts/save-snapshot.ts"
+    "save-snapshot": "ts-node scripts/save-snapshot.ts",
+    "finalize-spec": "ts-node scripts/finalize-spec.ts"
   },
   "keywords": [],
   "author": "",
