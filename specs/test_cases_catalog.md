@@ -56,7 +56,7 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 | **UI_UPL_02** | File Extension Filter Validation | Choose an invalid file format (e.g. `document.txt`). Assert that the upload fails with `400` and displays warning element. | Smoke | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_02: File Extension Filter Validation` |
 | **UI_UPL_03** | File Size Limit Validation | Choose an image file larger than 2MB. Assert that the upload fails with `400` and displays a file size limit warning. | Smoke | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_03: File Size Limit Validation` |
 | **UI_UPL_04** | Upload Chaos Failure Recovery | Configure `uploadFailureRate: 1.0` via chaos config. Submit a valid file. Assert that status code `500` is returned, and an error banner displays. | Regression | Playwright UI | **Yes**<br>- File: `Profile/Test_005_ProfilePictureUpload.spec.ts`<br>- Test: `UI_UPL_04: Upload Chaos Failure Recovery` |
-| **UI_PROF_01** | Account Summary & Order History | Navigate to `/profile`. Verify account full name, avatar preview, and past placed orders list rendered from backend response. | Smoke | Playwright UI | **No** — *Planned for automation* |
+| **UI_PROF_01** | Account Summary & Order History | Navigate to `/profile`. Verify account full name, avatar preview, and past placed orders list rendered from backend response. | Smoke | Playwright UI | **Yes**<br>- File: `Profile/Test_006_ProfileSummaryAndOrderHistory.spec.ts`<br>- Test: `UI_PROF_01: Verify user account profile summary and avatar preview render correctly` |
 
 
 ### **Suite: JWT Expiration & Silent Refresh UI**
@@ -130,7 +130,7 @@ These test cases verify the logic, security, and integrity of backend endpoints 
 |:---|:---|:---|:---|:---|:---|
 | **API_CART_01** | Persistence after server crash | Add item -> Restart server -> Get Cart. Verify item is still there. | Smoke | Playwright API | **Yes**<br>- File: `api/CartAndInventory/Test_001_CartAndInventoryApi.spec.ts`<br>- Test: `API_CART_01: Cart persistence after server crash` |
 | **API_INV_01** | Inventory Report Latency | Trigger the inventory report. Verify it returns a list of all 15 books with stock data. | Smoke | Playwright API | **Yes**<br>- File: `api/CartAndInventory/Test_001_CartAndInventoryApi.spec.ts`<br>- Test: `API_INV_01: Trigger inventory report` |
-| **API_ORD_01** | `GET /api/orders` History Check | Authenticate, complete checkout via `POST /api/checkout/process`, call `GET /api/orders`. Assert `200 OK` and order items match. | Smoke | Playwright API | **No** — *Planned for automation* |
+| **API_ORD_01** | `GET /api/orders` History Check | Authenticate, complete checkout via `POST /api/checkout/process`, call `GET /api/orders`. Assert `200 OK` and order items match. | Smoke | Playwright API | **Yes**<br>- File: `api/CartAndInventory/Test_002_OrdersApi.spec.ts`<br>- Test: `API_ORD_01: Authenticate user, complete checkout via API, and verify GET /api/orders history response` |
 
 ### **Suite: File Upload API**
 | ID | Title | Description | Priority | Target Coverage | Covered |

@@ -1,0 +1,8 @@
+{
+  "checkoutDetails": {
+    "firstName": "Order",
+    "lastName": "User",
+    "creditCard": "4532111122223333"
+  },
+  "bookId": "2"
+}
