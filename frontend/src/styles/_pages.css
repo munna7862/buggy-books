@@ -126,6 +126,15 @@
   pointer-events: none;
 }
 
+.auth-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  background: var(--border);
+  color: var(--text);
+  box-shadow: none;
+}
+
 .auth-submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 15px 25px -5px var(--accent-bg);
@@ -134,15 +143,6 @@
 
 .auth-submit-btn:active:not(:disabled) {
   transform: translateY(1px);
-}
-
-.auth-submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-  background: var(--border);
-  color: var(--text);
-  box-shadow: none;
 }
 
 .auth-footer {
@@ -406,6 +406,12 @@
   font-family: var(--sans);
 }
 
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
 .page-btn:hover:not(:disabled) {
   background: var(--code-bg);
   border-color: var(--accent-border);
@@ -417,12 +423,6 @@
   color: white;
   border-color: var(--accent);
   font-weight: 700;
-}
-
-.page-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  transform: none;
 }
 
 
@@ -572,13 +572,13 @@
   transition: all 0.2s;
 }
 
-.cart-remove-btn:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.1);
-}
-
 .cart-remove-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.cart-remove-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .cart-clear-btn {
@@ -592,14 +592,14 @@
   transition: all 0.2s;
 }
 
-.cart-clear-btn:hover:not(:disabled) {
-  background: var(--code-bg);
-  color: var(--text-h);
-}
-
 .cart-clear-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.cart-clear-btn:hover:not(:disabled) {
+  background: var(--code-bg);
+  color: var(--text-h);
 }
 
 
