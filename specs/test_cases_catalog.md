@@ -185,12 +185,15 @@ These test cases isolate frontend logic and UI pages by mocking backend API resp
 ## 4. End-to-End (E2E) Journey
 
 ### **Scenario: The New Customer Journey**
-1. **Register**: Create a new account.
-2. **Search**: Search for "Harry Potter".
-3. **Inspect**: Click to see details.
+1. **Register**: Create a new account with dynamic unique credentials.
+2. **Search**: Search for "Mockingbird" in the catalog.
+3. **Inspect**: Click to see book details (title, price, author, description).
 4. **Add**: Add the book to the cart.
-5. **Review**: Go to the cart and verify the title and price.
+5. **Review**: Go to the cart and verify the title, price, and total amount.
 6. **Checkout**: Complete the checkout process.
-7. **Verify**: Verify the order appears in the order history (if implemented) or that a Success ID or message is provided.
+7. **Verify**: Verify that an order confirmation message ("Order placed successfully") is provided.
 
-*Note: This specific end-to-end user scenario is **not fully automated as a single script** in the existing Playwright E2E folder, but parts of it (registration, adding to cart, checkout details) are tested across different spec files.*
+**Automated**: **Yes**
+- **File**: `playwright-e2e/src/tests/ui/Checkout/Test_005_EndToEndNewCustomerJourney.spec.ts`
+- **Data File**: `playwright-e2e/src/test-data/ui/Checkout/Test_005_EndToEndNewCustomerJourney.json`
+- **Test**: `Testcase 1: Complete New Customer E2E Journey from Registration to Checkout`
