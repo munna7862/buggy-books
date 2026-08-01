@@ -1,0 +1,33 @@
+[2026-08-01 22:31:15] INFO: Network interception enabled with mode: api-only
+[2026-08-01 22:31:15] INFO: Clicking on Sign Up link
+[2026-08-01 22:31:15] INFO: Entering full name: Full wiz_user_8OJje
+[2026-08-01 22:31:15] INFO: Entering username: wiz_user_8OJje
+[2026-08-01 22:31:15] INFO: Entering password: Password123!
+[2026-08-01 22:31:15] INFO: Entering confirming password: Password123!
+[2026-08-01 22:31:15] INFO: Clicking on Create Account button
+[2026-08-01 22:31:16] INFO: Verifying landing on Checkout Page
+[2026-08-01 22:31:16] INFO: Checking if Checkout label is visible
+[2026-08-01 22:31:17] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 22:31:17] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 22:31:17] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-01 22:31:17] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-01 22:31:19] INFO: Waiting for cart status message: added to cart
+[2026-08-01 22:31:19] INFO: Cart status message "added to cart" is visible
+[2026-08-01 22:31:19] INFO: Clicking on Cart link
+[2026-08-01 22:31:19] INFO: Clicking on Proceed to Checkout button
+[2026-08-01 22:31:19] INFO: Entering first name: John
+[2026-08-01 22:31:19] INFO: Entering last name: Doe
+[2026-08-01 22:31:19] INFO: Entering shipping address: 123 Buggy Lane
+[2026-08-01 22:31:19] INFO: Entering city: Stack City
+[2026-08-01 22:31:19] INFO: Clicking on Next Step button to trigger validation
+[2026-08-01 22:31:19] INFO: Entering card number
+[2026-08-01 22:31:19] INFO: Entering card expiry: 12/28
+[2026-08-01 22:31:19] INFO: Entering card CVV: 123
+[2026-08-01 22:31:19] INFO: Clicking on Back step button
+[2026-08-01 22:31:20] INFO:  Verifying returning to Step 1 after clicking Back Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:20] INFO: Clicking on Next Step button to trigger validation
+[2026-08-01 22:31:20] INFO:  Verifying returning to Step 2 after clicking Next Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:20] INFO:  Verifying preserved credit card number Success !! Actual and Expected Values are:: 4111222233334444
+[2026-08-01 22:31:20] INFO:  Verifying preserved expiry date Success !! Actual and Expected Values are:: 12/28
+[2026-08-01 22:31:20] INFO:  Verifying preserved CVV Success !! Actual and Expected Values are:: 123
+[2026-08-01 22:31:20] INFO: Captured 21 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_004_Check-6966b-k-Step-History-preservation-Google-Chrome/network-log.json

@@ -1,0 +1,31 @@
+[2026-08-01 22:30:47] INFO: Network interception enabled with mode: api-only
+[2026-08-01 22:30:47] INFO: Clicking on Sign Up link
+[2026-08-01 22:30:47] INFO: Entering full name: Full user_a_cart_HanqX
+[2026-08-01 22:30:47] INFO: Entering username: user_a_cart_HanqX
+[2026-08-01 22:30:47] INFO: Entering password: Password123!
+[2026-08-01 22:30:47] INFO: Entering confirming password: Password123!
+[2026-08-01 22:30:47] INFO: Clicking on Create Account button
+[2026-08-01 22:30:48] INFO: Verifying landing on Checkout Page
+[2026-08-01 22:30:48] INFO: Checking if Checkout label is visible
+[2026-08-01 22:30:49] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 22:30:49] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 22:30:49] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-01 22:30:49] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-01 22:30:51] INFO: Waiting for cart status message: added to cart
+[2026-08-01 22:30:51] INFO: Cart status message "added to cart" is visible
+[2026-08-01 22:30:51] INFO: Clicking on Cart link
+[2026-08-01 22:30:51] INFO:  Verifying User A cart contains added item Success !! Actual and Expected Values are:: 1
+[2026-08-01 22:30:51] INFO: Clicking on Logout button
+[2026-08-01 22:30:51] INFO: Clicking on Sign Up link
+[2026-08-01 22:30:51] INFO: Entering full name: Full user_b_cart_EuIiD
+[2026-08-01 22:30:52] INFO: Entering username: user_b_cart_EuIiD
+[2026-08-01 22:30:52] INFO: Entering password: Password123!
+[2026-08-01 22:30:52] INFO: Entering confirming password: Password123!
+[2026-08-01 22:30:52] INFO: Clicking on Create Account button
+[2026-08-01 22:30:53] INFO: Verifying landing on Checkout Page
+[2026-08-01 22:30:53] INFO: Checking if Checkout label is visible
+[2026-08-01 22:30:53] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 22:30:53] INFO: Clicking on Cart link
+[2026-08-01 22:30:53] INFO: Checking if 'Your cart is empty.' message is visible - Element is visible
+[2026-08-01 22:30:58] INFO:  Verifying User B cart is completely empty Success !! Actual and Expected Values are:: true
+[2026-08-01 22:30:58] INFO: Captured 27 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_003_CartA-975e1-CART-03-User-Cart-Isolation-Google-Chrome/network-log.json

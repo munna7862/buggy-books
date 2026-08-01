@@ -1,0 +1,16 @@
+[2026-08-01 22:34:21] INFO: Network interception enabled with mode: api-only
+[2026-08-01 22:34:21] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 22:34:21] INFO: Clicking on Sign Up link
+[2026-08-01 22:34:22] INFO: Entering full name: Profile Summary User
+[2026-08-01 22:34:22] INFO: Entering username: profile_user_1785589461687_8b594997
+[2026-08-01 22:34:22] INFO: Entering password: Password123!
+[2026-08-01 22:34:22] INFO: Entering confirming password: Password123!
+[2026-08-01 22:34:22] INFO: Clicking on Create Account button
+[2026-08-01 22:34:23] INFO: Verifying landing on Checkout Page
+[2026-08-01 22:34:23] INFO: Checking if Checkout label is visible
+[2026-08-01 22:34:23] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 22:34:23] INFO: Clicking on Profile navbar link
+[2026-08-01 22:34:24] INFO: Getting profile info section text
+[2026-08-01 22:34:24] INFO: Getting profile avatar preview image src
+[2026-08-01 22:34:24] INFO:  Verifying profile page renders registered full name, username, and avatar preview Success !! Actual and Expected Values are:: true
+[2026-08-01 22:34:24] INFO: Captured 10 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_006_Profil-dba50-ar-preview-render-correctly-Google-Chrome/network-log.json

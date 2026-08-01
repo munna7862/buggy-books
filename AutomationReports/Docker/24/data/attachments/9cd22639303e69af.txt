@@ -1,0 +1,45 @@
+[2026-08-01 22:31:27] INFO: Network interception enabled with mode: api-only
+[2026-08-01 22:31:27] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 22:31:27] INFO: Clicking on Sign Up link
+[2026-08-01 22:31:27] INFO: Entering full name: E2E Test User
+[2026-08-01 22:31:27] INFO: Entering username: e2e_customer_1785589287030_e6e31d2c
+[2026-08-01 22:31:27] INFO: Entering password: Password123!
+[2026-08-01 22:31:27] INFO: Entering confirming password: Password123!
+[2026-08-01 22:31:27] INFO: Clicking on Create Account button
+[2026-08-01 22:31:28] INFO: Verifying landing on Checkout Page
+[2026-08-01 22:31:28] INFO: Checking if Checkout label is visible
+[2026-08-01 22:31:29] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 22:31:29] INFO:  Verifying new user registered and logged in successfully Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:29] INFO: Clicking on Catalog link
+[2026-08-01 22:31:29] INFO: Filling search input with: Mockingbird
+[2026-08-01 22:31:29] INFO: Clicking Search button
+[2026-08-01 22:31:29] INFO: Getting catalog result count text
+[2026-08-01 22:31:29] INFO:  Verifying catalog search results for 'Mockingbird' Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:29] INFO: Clicking on book title link for book ID: 2
+[2026-08-01 22:31:29] INFO: Getting book detail title
+[2026-08-01 22:31:29] INFO: Getting book detail price
+[2026-08-01 22:31:29] INFO:  Verifying book detail title and price are displayed Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:29] INFO: Clicking Add to Cart button on Book Detail page
+[2026-08-01 22:31:30] INFO: Waiting for cart status message: added to cart
+[2026-08-01 22:31:30] INFO: Cart status message "added to cart" is visible
+[2026-08-01 22:31:30] INFO: Clicking on Cart link
+[2026-08-01 22:31:30] INFO: Getting cart item text
+[2026-08-01 22:31:30] INFO: Getting cart total text
+[2026-08-01 22:31:30] INFO:  Verifying cart contains item and order total Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:30] INFO: Clicking on Proceed to Checkout button
+[2026-08-01 22:31:32] INFO: Entering first name: Alex
+[2026-08-01 22:31:32] INFO: Entering last name: Rivera
+[2026-08-01 22:31:32] INFO: Entering shipping address: 123 Buggy Lane
+[2026-08-01 22:31:32] INFO: Entering city: Stack City
+[2026-08-01 22:31:32] INFO: Clicking on Next Step button
+[2026-08-01 22:31:32] INFO: Entering card number
+[2026-08-01 22:31:32] INFO: Entering card expiry: 12/30
+[2026-08-01 22:31:32] INFO: Entering card CVV: 123
+[2026-08-01 22:31:32] INFO: Checking if Next Step button is visible - Element is visible
+[2026-08-01 22:31:32] INFO: Clicking on Next Step button on Payment page
+[2026-08-01 22:31:32] INFO: Waiting for confirmation message containing: Order placed successfully
+[2026-08-01 22:31:33] INFO: Payment completed successfully and order confirmation message is displayed.
+[2026-08-01 22:31:33] INFO: Clicking on Logout button
+[2026-08-01 22:31:33] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-08-01 22:31:33] INFO:  Verifying user logged out successfully after completing order Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:33] INFO: Captured 20 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_005_EndTo-2f0b6-om-Registration-to-Checkout-Google-Chrome/network-log.json

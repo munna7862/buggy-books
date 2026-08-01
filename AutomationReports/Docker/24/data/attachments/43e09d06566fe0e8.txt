@@ -1,0 +1,28 @@
+[2026-08-01 22:31:03] INFO: Network interception enabled with mode: api-only
+[2026-08-01 22:31:04] INFO: Clicking on Sign Up link
+[2026-08-01 22:31:04] INFO: Entering full name: Full wiz_user_ghee6
+[2026-08-01 22:31:04] INFO: Entering username: wiz_user_ghee6
+[2026-08-01 22:31:04] INFO: Entering password: Password123!
+[2026-08-01 22:31:04] INFO: Entering confirming password: Password123!
+[2026-08-01 22:31:04] INFO: Clicking on Create Account button
+[2026-08-01 22:31:05] INFO: Verifying landing on Checkout Page
+[2026-08-01 22:31:05] INFO: Checking if Checkout label is visible
+[2026-08-01 22:31:06] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 22:31:06] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-01 22:31:06] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-01 22:31:06] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-01 22:31:07] INFO: Waiting for cart status message: added to cart
+[2026-08-01 22:31:07] INFO: Cart status message "added to cart" is visible
+[2026-08-01 22:31:07] INFO: Clicking on Cart link
+[2026-08-01 22:31:07] INFO: Clicking on Proceed to Checkout button
+[2026-08-01 22:31:09] INFO:  Verifying Step 1 indicator is active Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:09] INFO:  Verifying Shipping step content is visible Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:09] INFO: Entering first name: John
+[2026-08-01 22:31:09] INFO: Entering last name: Doe
+[2026-08-01 22:31:09] INFO: Entering shipping address: 123 Buggy Lane
+[2026-08-01 22:31:09] INFO: Entering city: Stack City
+[2026-08-01 22:31:09] INFO: Clicking on Next Step button to trigger validation
+[2026-08-01 22:31:09] INFO:  Verifying Step 2 indicator is active Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:10] INFO:  Verifying Shipping step content is hidden Success !! Actual and Expected Values are:: false
+[2026-08-01 22:31:10] INFO:  Verifying Payment step content is visible Success !! Actual and Expected Values are:: true
+[2026-08-01 22:31:10] INFO: Captured 23 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_004_Check-01c1c-epper-Transition-Validation-Google-Chrome/network-log.json

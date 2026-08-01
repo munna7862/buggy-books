@@ -1,0 +1,18 @@
+[2026-08-01 22:29:16] INFO: Clicking on Sign Up link
+[2026-08-01 22:29:16] INFO: Entering full name: Full refresh_ui_user_w9nvd
+[2026-08-01 22:29:16] INFO: Entering username: refresh_ui_user_w9nvd
+[2026-08-01 22:29:16] INFO: Entering password: Password123!
+[2026-08-01 22:29:16] INFO: Entering confirming password: Password123!
+[2026-08-01 22:29:16] INFO: Clicking on Create Account button
+[2026-08-01 22:29:17] INFO: Verifying landing on Checkout Page
+[2026-08-01 22:29:17] INFO: Checking if Checkout label is visible
+[2026-08-01 22:29:18] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 22:29:21] INFO: Clicking on Profile navbar link
+
+[Failure Hook] Capturing state for failing test: "UI_REF_01: Transparent Client Request Retry"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
