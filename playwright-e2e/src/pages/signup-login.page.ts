@@ -96,5 +96,20 @@ export class SignUpPage extends BasePage {
     await this.clickSignIn();
   }
 
+  private get eleLoginTitle(): Locator {
+    return this.page.locator('.auth-title');
+  }
+
+  public async isSignInPageLoaded(): Promise<boolean> {
+    return await this.doesElementExist(this.btnSignIn, "Checking if Sign In button is visible on Login page");
+  }
+
+  public async verifyLoginPageLoaded(): Promise<boolean> {
+    const isTitleVisible = await this.doesElementExist(this.eleLoginTitle, "Checking if Login page title is visible");
+    const isUsernameVisible = await this.doesElementExist(this.tfldUsername, "Checking if Username input field is visible on Login page");
+    const isPasswordVisible = await this.doesElementExist(this.tfldPassword, "Checking if Password input field is visible on Login page");
+    const isButtonVisible = await this.doesElementExist(this.btnSignIn, "Checking if Sign In button is visible on Login page");
+    return isTitleVisible && isUsernameVisible && isPasswordVisible && isButtonVisible;
+  }
 
 }

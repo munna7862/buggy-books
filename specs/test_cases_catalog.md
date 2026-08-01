@@ -15,7 +15,7 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 | **UI_AUTH_03** | Login Validation Errors | Attempt login with wrong password. Verify error message "Unauthorized: Invalid credentials" appears. | Regression | Playwright UI | **Yes**<br>- File: `UserManagement/Test_002_LoginWithExistingUser.spec.ts` (`Testcase 3: Login Validation Errors`) |
 | **UI_AUTH_04** | Password Strength Indicator | On Register page, type a simple password ("123") and verify label is "weak". Type a complex one and verify label is "strong". | Regression | Playwright UI | **Yes**<br>- File: `UserManagement/Test_001_RegisterUser.spec.ts` (`Testcase 3: Password Strength Indicator`) |
 | **UI_AUTH_05** | Logout Functionality | Click "Logout" in the navbar. Verify user is redirected to Login and cannot access the `/cart` page directly. | Smoke | Playwright UI | **Yes**<br>- File: `UserManagement/Test_002_LoginWithExistingUser.spec.ts` (`Testcase 1` & `Testcase 2` logout steps) |
-| **UI_AUTH_06** | Protected Route Access Guard | Direct browser navigation to `/checkout` or `/profile` without active login session. Verify automatic redirect to `/login` with an authentication warning tag. | Smoke | Playwright UI | **No** — *Planned for automation* |
+| **UI_AUTH_06** | Protected Route Access Guard | Direct browser navigation to `/checkout` or `/profile` without active login session. Verify automatic redirect to `/login` with an authentication warning tag. | Smoke | Playwright UI | **Yes**<br>- File: `UserManagement/Test_003_ProtectedRouteGuard.spec.ts`<br>- Test: `UI_AUTH_06: Direct unauthenticated navigation to protected routes redirects to Login` |
 
 ### **Suite: Catalog & Book Discovery**
 | ID | Title | Description | Priority | Target Coverage | Covered |
@@ -36,7 +36,7 @@ These test cases verify user-facing interfaces and behaviors inside a real brows
 | **UI_CHECK_01** | Checkout Form Validation | Attempt to submit the checkout form with empty fields. Verify inline validation error tags appear. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_003_CartAndCheckoutValidation.spec.ts`<br>- Test: `UI_CHECK_01: Checkout Form Validation` |
 
 | **UI_CHECK_02** | Successful Order Placement | Complete the checkout form and submit. Verify that the payment successful message appears and the cart is cleared. | Smoke | Playwright UI | **Yes**<br>- File: `Checkout/Test_001_CompleteBookPurchase.spec.ts` (`Testcase 1`) & `Checkout/Test_002_CartPersistenceCheckout.spec.ts` (`Testcase 1`) |
-| **UI_CART_04** | Cart Item Quantity Adjustment | In `/cart`, adjust item quantities using increment/decrement controls. Assert that item subtotals and grand totals update dynamically without full page reload. | Regression | Playwright UI | **No** — *Planned for automation* |
+| **UI_CART_04** | Cart Item Quantity Adjustment | In `/cart`, adjust item quantities using increment/decrement controls. Assert that item subtotals and grand totals update dynamically without full page reload. | Regression | Playwright UI | **Yes**<br>- File: `Checkout/Test_006_CartQuantityAdjustment.spec.ts`<br>- Test: `UI_CART_04: Cart item addition and removal dynamically recalculates item count and order total` |
 
 ### **Suite: Multi-Step Checkout Wizard**
 *Spec Source: [checkout_wizard_and_validation_tests.md](file:///c:/BuggyBooks/buggy-books/specs/checkout_wizard_and_validation_tests.md)*

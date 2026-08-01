@@ -16,7 +16,7 @@ export class CartPage extends BasePage {
   }
 
   private get cartTotalHeading(): Locator {
-    return this.page.locator('.cart-total-header, h3');
+    return this.page.locator('.cart-total-header');
   }
 
   private get clearAllButton(): Locator {
