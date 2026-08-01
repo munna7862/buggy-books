@@ -47,15 +47,3 @@ This skill provides core capabilities for generating Page Objects, writing E2E t
 3. Update the selector inside the corresponding Page Object private getter.
 4. Rerun targeted spec in headless mode to confirm the fix:
    `npx cross-env HEADLESS=true npx playwright test <target-spec-path> --config=src/config/playwright.config.ts`
-
-
-
-
-
-
-
-
-
-
-
-

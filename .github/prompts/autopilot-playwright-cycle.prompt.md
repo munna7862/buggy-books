@@ -19,10 +19,10 @@ Inputs:
 Execution requirements:
 - Assume the Playwright MCP server is already running and connected — do NOT attempt to start, restart, or verify server startup. Use the available MCP browser tools directly.
 - Explore the workflow first using live app state (MCP required):
-	- Navigate to the app and complete authentication per Auth context.
-	- Take a live accessibility snapshot and at least one live DOM/evaluate snapshot for each key screen in scope.
-	- Build a locator map from live snapshots using the locator priority in the shared instructions.
-	- Do not rely only on static code assumptions when locator behavior can be validated in the live app.
+  - Navigate to the app and complete authentication per Auth context.
+  - Take a live accessibility snapshot and at least one live DOM/evaluate snapshot for each key screen in scope.
+  - Build a locator map from live snapshots using the locator priority in the shared instructions.
+  - Do not rely only on static code assumptions when locator behavior can be validated in the live app.
 - Reuse existing fixtures/page objects/utilities and add minimal new APIs only when required.
 - Generate or update focused specs under the target path.
 - Run targeted tests with `--workers=1`:

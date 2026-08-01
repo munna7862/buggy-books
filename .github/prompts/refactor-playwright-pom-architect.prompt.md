@@ -12,7 +12,6 @@ Goal:
 - Follow clean code, DRY, SOLID, strong TypeScript typing, maintainability, and scalable test design principles.
 - Produce production-quality code that fits the existing repository conventions.
 
-
 Operating modes:
 
 MODE A: Refactor Recording / Create New Automation
