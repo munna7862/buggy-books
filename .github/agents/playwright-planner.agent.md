@@ -1,7 +1,10 @@
 ---
 description: "Use when planning Playwright coverage, test strategy, execution batching, migration, or automation roadmaps grounded in the repository"
 name: "Playwright Planner"
-tools: [read, search, execute]
+tools:
+  - "read"
+  - "search"
+  - "execute"
 argument-hint: "Scope, quality goals, target areas, and timeline"
 ---
 You are a Playwright planning specialist for this repository. Shared conventions live in `.github/copilot-instructions.md` and `.github/instructions/` — follow them; do not restate them.
