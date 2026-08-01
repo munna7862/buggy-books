@@ -3,7 +3,6 @@ description: "Strict live-first cycle: execute every workflow step via MCP befor
 name: "Playwright Autopilot Cycle (MCP-first)"
 argument-hint: "Base URL, environment, feature scope, and target path"
 agent: "Playwright Autopilot Cycle"
-model: ["Claude Sonnet 5 (copilot)", "Claude Sonnet 4.6 (copilot)", "GPT-5.5 (copilot)", "GPT-5 (copilot)"]
 ---
 Run a strict live-first Playwright cycle for this repository.
 Shared conventions live in `.github/copilot-instructions.md` and `.github/instructions/` — follow them; do not restate them.

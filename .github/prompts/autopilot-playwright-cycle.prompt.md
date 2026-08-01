@@ -3,7 +3,6 @@ description: "Autonomously explore app, generate Playwright tests, run and self-
 name: "Playwright Autopilot Cycle"
 argument-hint: "Base URL, environment, feature scope, and target path"
 agent: "Playwright Autopilot"
-model: ["Claude Sonnet 5 (copilot)", "Claude Sonnet 4.6 (copilot)", "GPT-5.5 (copilot)", "GPT-5 (copilot)"]
 ---
 Run an autonomous Playwright cycle for this repository.
 Shared conventions live in `.github/copilot-instructions.md` and `.github/instructions/` — follow them; do not restate them.

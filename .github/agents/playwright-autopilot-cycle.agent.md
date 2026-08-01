@@ -2,7 +2,6 @@
 description: "Use when you want autonomous Playwright flow: explore app live with MCP, generate tests from observed behavior, run, and self-heal failures"
 name: "Playwright Autopilot Cycle"
 tools: [read, edit, search, execute, read/problems, execute/runTests, execute/runInTerminal, playwright/browser_navigate, playwright/browser_snapshot, playwright/browser_click, playwright/browser_type, playwright/browser_fill_form, playwright/browser_hover, playwright/browser_select_option, playwright/browser_press_key, playwright/browser_wait_for, playwright/browser_network_requests, playwright/browser_console_messages, playwright/browser_take_screenshot, playwright/browser_tabs, playwright/browser_navigate_back]
-model: ["Claude Sonnet 5 (copilot)", "Claude Sonnet 4.6 (copilot)", "GPT-5.5 (copilot)", "GPT-5 (copilot)"]
 argument-hint: "Base URL, scope, credentials strategy, and target tests folder"
 ---
 

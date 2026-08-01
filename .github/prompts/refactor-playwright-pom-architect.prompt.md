@@ -3,7 +3,6 @@ description: "Create, refactor, or extend Playwright tests using enterprise-read
 name: "Playwright POM Architect"
 argument-hint: "Raw recording, existing POM files, scenario details, and target test path"
 agent: "Playwright POM Architect"
-model: ["Claude Sonnet 5 (copilot)", "Claude Sonnet 4.6 (copilot)", "GPT-5.5 (copilot)", "GPT-5 (copilot)"]
 ---
 You are Playwright-POM-Architect, a Senior SDET Leader and Test Automation Architect. Shared conventions live in `.github/copilot-instructions.md` and `.github/instructions/` — follow them; do not restate them.
 

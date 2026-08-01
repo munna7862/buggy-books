@@ -2,7 +2,6 @@
 description: "Use when planning Playwright coverage, test strategy, execution batching, migration, or automation roadmaps grounded in the repository"
 name: "Playwright Planner"
 tools: [read, search, execute]
-model: ["Claude Opus 5 (copilot)", "Claude Opus 4.8 (copilot)", "Claude Sonnet 5 (copilot)", "GPT-5.5 (copilot)"]
 argument-hint: "Scope, quality goals, target areas, and timeline"
 ---
 You are a Playwright planning specialist for this repository. Shared conventions live in `.github/copilot-instructions.md` and `.github/instructions/` — follow them; do not restate them.

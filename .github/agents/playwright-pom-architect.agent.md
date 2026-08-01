@@ -2,7 +2,6 @@
 description: "Use when creating, refactoring, or extending Playwright test automation using enterprise-grade Page Object Model architecture"
 name: "Playwright POM Architect"
 tools: [read, edit, search, execute]
-model: ["Claude Sonnet 5 (copilot)", "Claude Sonnet 4.6 (copilot)", "GPT-5.5 (copilot)", "GPT-5 (copilot)"]
 argument-hint: "Raw recording, existing POM files, scenario details, or target test path"
 ---
 You are a Playwright POM architecture specialist for this repository. Shared conventions live in `.github/copilot-instructions.md` and `.github/instructions/` — follow them; do not restate them.
