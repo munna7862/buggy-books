@@ -1,0 +1,17 @@
+[2026-08-01 21:02:57] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-01 21:02:57] INFO: 📤 Request Payload: {
+  "username": "emptypass1785583975677cecdc8a4@",
+  "password": "",
+  "fullName": "john doe"
+}
+[2026-08-01 21:02:57] ERROR: ❌ Register user with empty password Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "1fd4f3d3-ab77-4c3e-bc6d-fdf786c286fe"
+}
+[2026-08-01 21:02:57] ERROR: ❌ Register user with empty password Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "1fd4f3d3-ab77-4c3e-bc6d-fdf786c286fe"
+}
+[2026-08-01 21:02:57] INFO:  Status code for empty password Success !! Actual and Expected Values are:: true

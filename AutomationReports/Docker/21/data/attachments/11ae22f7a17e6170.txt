@@ -1,0 +1,1 @@
+[2026-08-01 21:02:48] INFO:  Verifying Axe detects missing image alt text under chaos mode Success !! Actual and Expected Values are:: true

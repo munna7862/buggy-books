@@ -1,0 +1,40 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "BuggyBooks" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - heading "BuggyBooks" [level=2] [ref=e6]
+    - navigation [ref=e7]:
+      - link "Catalog" [ref=e8] [cursor=pointer]:
+        - /url: /
+      - link "Cart" [ref=e9] [cursor=pointer]:
+        - /url: /cart
+      - link "Checkout" [ref=e10] [cursor=pointer]:
+        - /url: /checkout
+      - link "Profile" [ref=e11] [cursor=pointer]:
+        - /url: /profile
+      - button "Logout" [ref=e12] [cursor=pointer]
+      - button "Toggle notifications" [ref=e14] [cursor=pointer]:
+        - text: 🔔
+        - 'generic "Live Feed: Connected" [ref=e15]'
+  - main [ref=e16]:
+    - generic [ref=e18]:
+      - heading "User Profile" [level=2] [ref=e19]
+      - img "Profile Avatar" [ref=e21]
+      - generic [ref=e22]:
+        - paragraph [ref=e23]:
+          - strong [ref=e24]: "Name:"
+          - text: Full profile_user_B9jCB
+        - paragraph [ref=e25]:
+          - strong [ref=e26]: "Username:"
+          - text: profile_user_B9jCB
+      - separator [ref=e27]
+      - generic [ref=e28]:
+        - heading "Upload Avatar" [level=3] [ref=e29]
+        - paragraph [ref=e30]: JPEG, JPG, or PNG formats, under 2MB limit.
+        - button "Choose File" [ref=e32] [cursor=pointer]
+        - button "Upload Image" [disabled] [ref=e33]
+        - paragraph [ref=e34]: Avatar updated successfully!
+```

@@ -1,0 +1,129 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "BuggyBooks" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - heading "BuggyBooks" [level=2] [ref=e6]
+    - navigation [ref=e7]:
+      - link "Catalog" [ref=e8] [cursor=pointer]:
+        - /url: /
+      - link "Login" [ref=e9] [cursor=pointer]:
+        - /url: /login
+      - link "Sign Up" [ref=e10] [cursor=pointer]:
+        - /url: /register
+      - button "Toggle notifications" [ref=e12] [cursor=pointer]:
+        - text: 🔔
+        - 'generic "Live Feed: Connected" [ref=e13]'
+  - main [ref=e14]:
+    - generic [ref=e15]:
+      - heading "Book Catalog" [level=1] [ref=e16]
+      - generic [ref=e17]:
+        - textbox "Search books" [ref=e18]:
+          - /placeholder: Search by title, author, or genre...
+        - button "Search" [ref=e19] [cursor=pointer]
+      - paragraph [ref=e20]: 15 books available
+      - generic [ref=e21]:
+        - generic [ref=e22]:
+          - link "The Great Buggy Gatsby" [ref=e24] [cursor=pointer]:
+            - /url: /books/1
+            - img "The Great Buggy Gatsby" [ref=e25]
+          - generic [ref=e26]:
+            - generic [ref=e27]: Classic
+            - heading "The Great Buggy Gatsby" [level=3] [ref=e28]:
+              - link "The Great Buggy Gatsby" [ref=e29] [cursor=pointer]:
+                - /url: /books/1
+            - paragraph [ref=e30]: F. Scott Fitzgerald
+            - paragraph [ref=e31]: $10.99
+            - button "Add to Cart" [ref=e32] [cursor=pointer]
+        - generic [ref=e33]:
+          - link "To Kill a Mockingbird Exception" [ref=e35] [cursor=pointer]:
+            - /url: /books/2
+            - img "To Kill a Mockingbird Exception" [ref=e36]
+          - generic [ref=e37]:
+            - generic [ref=e38]: Classic
+            - heading "To Kill a Mockingbird Exception" [level=3] [ref=e39]:
+              - link "To Kill a Mockingbird Exception" [ref=e40] [cursor=pointer]:
+                - /url: /books/2
+            - paragraph [ref=e41]: Harper Lee
+            - paragraph [ref=e42]: $15.50
+            - button "Add to Cart" [ref=e43] [cursor=pointer]
+        - generic [ref=e44]:
+          - link "1984 Bugs" [ref=e46] [cursor=pointer]:
+            - /url: /books/3
+            - img "1984 Bugs" [ref=e47]
+          - generic [ref=e48]:
+            - generic [ref=e49]: Dystopian
+            - heading "1984 Bugs" [level=3] [ref=e50]:
+              - link "1984 Bugs" [ref=e51] [cursor=pointer]:
+                - /url: /books/3
+            - paragraph [ref=e52]: George Orwell
+            - paragraph [ref=e53]: $12.00
+            - button "Add to Cart" [ref=e54] [cursor=pointer]
+        - generic [ref=e55]:
+          - link "Pride and Prejudice and Performance Issues" [ref=e57] [cursor=pointer]:
+            - /url: /books/4
+            - img "Pride and Prejudice and Performance Issues" [ref=e58]
+          - generic [ref=e59]:
+            - generic [ref=e60]: Classic
+            - heading "Pride and Prejudice and Performance Issues" [level=3] [ref=e61]:
+              - link "Pride and Prejudice and Performance Issues" [ref=e62] [cursor=pointer]:
+                - /url: /books/4
+            - paragraph [ref=e63]: Jane Austen
+            - paragraph [ref=e64]: $9.99
+            - button "Add to Cart" [ref=e65] [cursor=pointer]
+        - generic [ref=e66]:
+          - link "The Null and the Furious" [ref=e68] [cursor=pointer]:
+            - /url: /books/5
+            - img "The Null and the Furious" [ref=e69]
+          - generic [ref=e70]:
+            - generic [ref=e71]: Thriller
+            - heading "The Null and the Furious" [level=3] [ref=e72]:
+              - link "The Null and the Furious" [ref=e73] [cursor=pointer]:
+                - /url: /books/5
+            - paragraph [ref=e74]: Cormac McCarthy
+            - paragraph [ref=e75]: $13.99
+            - button "Add to Cart" [ref=e76] [cursor=pointer]
+        - generic [ref=e77]:
+          - link "Harry Potter and the Goblet of Fire Events" [ref=e79] [cursor=pointer]:
+            - /url: /books/6
+            - img "Harry Potter and the Goblet of Fire Events" [ref=e80]
+          - generic [ref=e81]:
+            - generic [ref=e82]: Fantasy
+            - heading "Harry Potter and the Goblet of Fire Events" [level=3] [ref=e83]:
+              - link "Harry Potter and the Goblet of Fire Events" [ref=e84] [cursor=pointer]:
+                - /url: /books/6
+            - paragraph [ref=e85]: J.K. Rowling
+            - paragraph [ref=e86]: $19.99
+            - button "Add to Cart" [ref=e87] [cursor=pointer]
+        - generic [ref=e88]:
+          - link "The Hitchhiker's Guide to the API" [ref=e90] [cursor=pointer]:
+            - /url: /books/7
+            - img "The Hitchhiker's Guide to the API" [ref=e91]
+          - generic [ref=e92]:
+            - generic [ref=e93]: Sci-Fi
+            - heading "The Hitchhiker's Guide to the API" [level=3] [ref=e94]:
+              - link "The Hitchhiker's Guide to the API" [ref=e95] [cursor=pointer]:
+                - /url: /books/7
+            - paragraph [ref=e96]: Douglas Adams
+            - paragraph [ref=e97]: $11.50
+            - button "Add to Cart" [ref=e98] [cursor=pointer]
+        - generic [ref=e99]:
+          - link "Moby Stack Overflow" [ref=e101] [cursor=pointer]:
+            - /url: /books/8
+            - img "Moby Stack Overflow" [ref=e102]
+          - generic [ref=e103]:
+            - generic [ref=e104]: Classic
+            - heading "Moby Stack Overflow" [level=3] [ref=e105]:
+              - link "Moby Stack Overflow" [ref=e106] [cursor=pointer]:
+                - /url: /books/8
+            - paragraph [ref=e107]: Herman Melville
+            - paragraph [ref=e108]: $8.99
+            - button "Add to Cart" [ref=e109] [cursor=pointer]
+      - generic [ref=e110]:
+        - button "← Prev" [disabled] [ref=e111]
+        - button "1" [ref=e112] [cursor=pointer]
+        - button "2" [ref=e113] [cursor=pointer]
+        - button "Next →" [ref=e114] [cursor=pointer]
+```

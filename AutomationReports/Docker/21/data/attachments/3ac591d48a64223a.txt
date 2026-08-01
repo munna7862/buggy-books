@@ -1,0 +1,11 @@
+[2026-08-01 21:03:12] INFO: Clicking on Sign Up link
+[2026-08-01 21:03:12] INFO: Entering full name: Full refresh_ui_user_4O45A
+[2026-08-01 21:03:12] INFO: Entering username: refresh_ui_user_4O45A
+[2026-08-01 21:03:12] INFO: Entering password: Password123!
+[2026-08-01 21:03:12] INFO: Entering confirming password: Password123!
+[2026-08-01 21:03:12] INFO: Clicking on Create Account button
+[2026-08-01 21:03:13] INFO: Verifying landing on Checkout Page
+[2026-08-01 21:03:13] INFO: Checking if Checkout label is visible
+[2026-08-01 21:03:14] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-01 21:03:14] INFO: Clicking on Profile navbar link
+[2026-08-01 21:03:15] INFO:  Verifying unauthenticated access redirects user to /login page Success !! Actual and Expected Values are:: true

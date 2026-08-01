@@ -1,0 +1,13 @@
+[2026-08-01 21:02:59] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-01 21:02:59] INFO: 📤 Request Payload: "{\"username\":\"johndoe17855839798341543189b@\",\"password\":\"johna123@\",\"fullName\":\"john doe\"}"
+[2026-08-01 21:02:59] ERROR: ❌ Register user with unsupported content type Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "122be7fc-0bf4-4bea-82e4-e93ff62db03d"
+}
+[2026-08-01 21:02:59] ERROR: ❌ Register user with unsupported content type Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "122be7fc-0bf4-4bea-82e4-e93ff62db03d"
+}
+[2026-08-01 21:02:59] INFO:  Unsupported content type status Success !! Actual and Expected Values are:: true
