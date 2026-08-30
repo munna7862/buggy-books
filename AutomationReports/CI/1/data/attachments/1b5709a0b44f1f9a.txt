@@ -1,0 +1,16 @@
+[2026-08-31 00:32:08] INFO: Network interception enabled with mode: api-only
+[2026-08-31 00:32:08] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-31 00:32:09] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-31 00:32:09] INFO: Clicking on book title link for book ID: 2
+[2026-08-31 00:32:09] INFO:  Verifying book detail URL Success !! Actual and Expected Values are:: true
+[2026-08-31 00:32:09] INFO: Getting book detail title
+[2026-08-31 00:32:09] INFO:  Verifying book detail title Success !! Actual and Expected Values are:: To Kill a Mockingbird Exception
+[2026-08-31 00:32:09] INFO: Getting book detail author
+[2026-08-31 00:32:09] INFO:  Verifying book detail author Success !! Actual and Expected Values are:: by Harper Lee
+[2026-08-31 00:32:09] INFO: Getting book detail price
+[2026-08-31 00:32:09] INFO:  Verifying book detail price Success !! Actual and Expected Values are:: $15.50
+[2026-08-31 00:32:09] INFO: Getting book detail description
+[2026-08-31 00:32:09] INFO:  Verifying book detail description Success !! Actual and Expected Values are:: A coming-of-age tale with unhandled exceptions.
+[2026-08-31 00:32:09] INFO: Clicking Back to Catalog link
+[2026-08-31 00:32:09] INFO:  Verifying back to catalog URL Success !! Actual and Expected Values are:: true
+[2026-08-31 00:32:09] INFO: Captured 7 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_002_Se-a5daa-etail-View-smoke-regression-Google-Chrome/network-log.json

@@ -1,0 +1,10 @@
+[2026-08-31 00:32:53] INFO: Clicking on Sign Up link
+[2026-08-31 00:32:54] INFO: Entering full name: Full refresh_ui_user_TWmG5
+[2026-08-31 00:32:54] INFO: Entering username: refresh_ui_user_TWmG5
+[2026-08-31 00:32:54] INFO: Entering password: Password123!
+[2026-08-31 00:32:54] INFO: Entering confirming password: Password123!
+[2026-08-31 00:32:54] INFO: Clicking on Create Account button
+[2026-08-31 00:32:55] INFO: Verifying landing on Checkout Page
+[2026-08-31 00:32:55] INFO: Checking if Checkout label is visible
+[2026-08-31 00:32:55] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 00:32:55] INFO: Clicking on Profile navbar link

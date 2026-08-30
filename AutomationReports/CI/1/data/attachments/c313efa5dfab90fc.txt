@@ -1,0 +1,16 @@
+[2026-08-31 00:31:52] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-31 00:31:52] INFO: 📤 Request Payload: {
+  "username": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb17881021070820c3d3b17@",
+  "password": "johna123@"
+}
+[2026-08-31 00:31:52] ERROR: ❌ Login security validation for oversized username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "f2ee1ae6-3870-4d6a-859e-5680f8d8852e"
+}
+[2026-08-31 00:31:52] ERROR: ❌ Login security validation for oversized username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "f2ee1ae6-3870-4d6a-859e-5680f8d8852e"
+}
+[2026-08-31 00:31:52] INFO:  Security status for oversized username Success !! Actual and Expected Values are:: true

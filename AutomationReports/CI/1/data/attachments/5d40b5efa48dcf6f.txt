@@ -1,0 +1,18 @@
+[2026-08-31 00:32:06] INFO: Network interception enabled with mode: api-only
+[2026-08-31 00:32:06] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-31 00:32:07] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-31 00:32:07] INFO: Filling search input with: xyz999nonexistent
+[2026-08-31 00:32:07] INFO: Clicking Search button
+[2026-08-31 00:32:07] ERROR:  Verifying zero books displayed for gibberish search Failed!! Expected Value:: 0 || Actual Value:: 8
+[2026-08-31 00:32:07] ERROR:  Verifying zero books displayed for gibberish search Failed!! Expected Value:: 0 || Actual Value:: 8
+[2026-08-31 00:32:07] INFO: Getting catalog empty state text
+[2026-08-31 00:32:07] INFO:  Verifying empty state message text Success !! Actual and Expected Values are:: true
+
+[Failure Hook] Capturing state for failing test: "UI_CAT_04: Search - No Results @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-08-31 00:32:07] INFO: Captured 7 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_002_Se-dab46-rch---No-Results-regression-Google-Chrome-retry1/network-log.json

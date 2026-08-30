@@ -1,0 +1,1 @@
+[2026-08-31 00:33:20] INFO:  Asserting price tag has rotation transform, actual: matrix(0.99863, -0.052336, 0.052336, 0.99863, 7.98904, -0.418688) Success !! Actual and Expected Values are:: true
