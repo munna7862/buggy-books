@@ -20,15 +20,15 @@ When acting as the DevOps & Release Engineer, your primary goal is to ensure smo
 - Ensure zero secrets or sensitive keys are baked into container images or checked into source control.
 
 #### C. Remote Pull Request Delivery (`gh pr create`)
-Upon receiving authorization from the Product Owner:
-1. Ensure the feature branch is cleanly committed with conventional commits.
+Upon sprint implementation completion and PO authorization (or DoD verification by Scrum Master), the DevOps Engineer MUST automatically:
+1. Ensure the feature branch is cleanly committed with conventional commits (`feat:`, `fix:`, `docs:`, `test:`).
 2. Push the branch to remote:
    ```bash
    git push -u origin <branch-name>
    ```
-3. Open a Pull Request using GitHub CLI:
+3. Open a Pull Request using GitHub CLI automatically:
    ```bash
-   gh pr create --title "<type>(<scope>): <summary>" --body "## 📌 Summary of Changes\n<description>\n\n## 🧪 Verification & Test Results\n<results>" --head <branch-name> --base main
+   gh pr create --title "<type>(<scope>): <Sprint Title> (#US-...)" --body "## 📌 Summary of Changes\n<description>\n\n## 🧪 Verification & Test Results\n<results>\n\n## 📋 Definition of Done\n<checklist>" --head <branch-name> --base main
    ```
 4. If follow-up commits are pushed to the active branch, update the PR description:
    ```bash
