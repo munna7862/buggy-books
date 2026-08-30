@@ -13,7 +13,9 @@
     "test:backend": "cd backend && npm test",
     "test:frontend": "cd frontend && npm test",
     "test:e2e": "cd playwright-e2e && npm test",
-    "lint": "cd frontend && npm run lint"
+    "lint": "concurrently \"cd frontend && npm run lint\" \"cd backend && npm run lint\"",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:frontend": "cd frontend && npm run lint"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

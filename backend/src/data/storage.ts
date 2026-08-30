@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import { config } from '../config';
+import type { ChaosConfig, UserRecord } from '@buggybooks/types';
+import type { AppData } from './dataStore';
 
 const filename = config.isTest
   ? (process.env.JEST_WORKER_ID ? `db.test.${process.env.JEST_WORKER_ID}.json` : 'db.test.json')
@@ -9,9 +11,9 @@ const filename = config.isTest
 export const DB_PATH = path.join(__dirname, '../../', filename);
 
 export interface DbSchema {
-  users: Record<string, any> | null;
-  dataStore: any | null;
-  chaosStore: any | null;
+  users: Record<string, UserRecord> | null;
+  dataStore: AppData | null;
+  chaosStore: ChaosConfig | null;
 }
 
 class Storage {
@@ -78,9 +80,10 @@ class Storage {
       const TEMP_DB_PATH = `${DB_PATH}.tmp`;
       await fs.promises.writeFile(TEMP_DB_PATH, content, 'utf-8');
       await fs.promises.rename(TEMP_DB_PATH, DB_PATH);
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Suppress filesystem errors during Jest worker process exit/teardown
-      const isTeardownError = err.code === 'ENOENT' || err.code === 'EPERM' || err.code === 'EBUSY';
+      const errorCode = typeof err === 'object' && err !== null && 'code' in err ? (err as { code: string }).code : undefined;
+      const isTeardownError = errorCode === 'ENOENT' || errorCode === 'EPERM' || errorCode === 'EBUSY';
       if (!(config.isTest && isTeardownError)) {
         console.error(`Failed to write ${filename} asynchronously`, err);
       }

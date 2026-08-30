@@ -7,7 +7,7 @@ import { Request, Response, NextFunction, RequestHandler } from 'express';
  * Usage:
  *   router.post('/login', asyncHandler(authController.login));
  */
-export const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => any): RequestHandler => {
+export const asyncHandler = (fn: (req: Request, res: Response, next: NextFunction) => Promise<unknown> | unknown): RequestHandler => {
   return (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next);
   };

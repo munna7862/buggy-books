@@ -32,13 +32,13 @@ describe('JWT Expiration and Silent Refresh Integration Flow', () => {
     const accessTokenCookie = cookies.find(c => c.startsWith('token='))!;
     const accessToken = accessTokenCookie.split(';')[0].split('=')[1];
     
-    const decodedAccess = jwt.verify(accessToken, JWT_SECRET) as any;
+    const decodedAccess = jwt.verify(accessToken, JWT_SECRET) as { username: string; type: string };
     expect(decodedAccess.username).toBe('admin');
     expect(decodedAccess.type).toBe('access');
 
     const refreshTokenCookie = cookies.find(c => c.startsWith('refreshToken='))!;
     const refreshToken = refreshTokenCookie.split(';')[0].split('=')[1];
-    const decodedRefresh = jwt.verify(refreshToken, JWT_SECRET) as any;
+    const decodedRefresh = jwt.verify(refreshToken, JWT_SECRET) as { username: string; type: string };
     expect(decodedRefresh.username).toBe('admin');
     expect(decodedRefresh.type).toBe('refresh');
   });

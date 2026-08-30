@@ -14,7 +14,7 @@ const checkoutSchema = z.object({
 
 class CheckoutService {
   public processCheckout(username: string, payload: unknown): { orderId: string } {
-    const { firstName, lastName, creditCard } = checkoutSchema.parse(payload);
+    const { firstName, lastName } = checkoutSchema.parse(payload);
     logger.info(`Starting checkout processing for user: ${username}`, { username, firstName, lastName });
 
     const failureRate = chaosStore.getConfig().checkoutFailureRate;

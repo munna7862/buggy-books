@@ -9,17 +9,18 @@ import { config } from '../config';
  * Parses validation errors, custom application errors, and general system exceptions.
  */
 export const errorHandler = (
-  err: any,
+  err: unknown,
   req: Request,
   res: Response,
-  next: NextFunction
+  _next: NextFunction
 ) => {
-  const correlationId = res.getHeader('x-correlation-id') as string || undefined;
+  const correlationId = (res.getHeader('x-correlation-id') as string) || undefined;
   
   let statusCode = 500;
   let errorName = 'InternalServerError';
   let message = 'Something went wrong';
-  let details: any = undefined;
+  let details: unknown = undefined;
+  const stack = err instanceof Error ? err.stack : undefined;
 
   // Handle custom AppError hierarchy
   if (err instanceof AppError) {
@@ -36,16 +37,16 @@ export const errorHandler = (
     details = err.issues;
   }
   // Handle native Multer errors
-  else if (err?.name === 'MulterError') {
+  else if (typeof err === 'object' && err !== null && 'name' in err && (err as { name: string }).name === 'MulterError') {
     statusCode = 400;
     errorName = 'ValidationError';
-    message = err.message;
+    message = 'message' in err && typeof (err as { message: unknown }).message === 'string' ? (err as { message: string }).message : 'File upload error';
   }
   // Handle general standard Errors
   else if (err instanceof Error) {
     errorName = err.name || errorName;
-    if ('status' in err) {
-      statusCode = (err as any).status;
+    if ('status' in err && typeof (err as { status: unknown }).status === 'number') {
+      statusCode = (err as { status: number }).status;
     }
     // Standard unhandled/body-parser errors default to 'Internal Server Error'
     message = 'Internal Server Error';
@@ -58,7 +59,7 @@ export const errorHandler = (
     statusCode,
     url: req.originalUrl,
     correlationId,
-    stack: !config.isProduction ? err.stack : undefined,
+    stack: !config.isProduction ? stack : undefined,
     details
   };
 
@@ -74,6 +75,6 @@ export const errorHandler = (
     errorName,
     correlationId,
     ...(details ? { details } : {}),
-    ...(!config.isProduction && isServerSideError ? { stack: err.stack } : {})
+    ...(!config.isProduction && isServerSideError && stack ? { stack } : {})
   });
 };

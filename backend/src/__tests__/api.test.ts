@@ -30,7 +30,7 @@ describe('BuggyBooks API Integration Tests', () => {
       const res = await request(app).get('/api/books?q=dystopian&page=1&limit=10');
       expect(res.status).toBe(200);
       expect(res.body.books.length).toBeGreaterThanOrEqual(1);
-      expect(res.body.books.every((b: any) =>
+      expect(res.body.books.every((b: { genre?: string }) =>
         b.genre?.toLowerCase().includes('dystopian')
       )).toBeTruthy();
     });
@@ -83,7 +83,7 @@ describe('BuggyBooks API Integration Tests', () => {
       });
       expect(res.status).toBe(200);
       expect(res.headers['set-cookie']).toBeDefined();
-      cookies = (res.headers['set-cookie'] as any) || []; // save for subsequent tests
+      cookies = (res.headers['set-cookie'] as unknown as string[]) || []; // save for subsequent tests
     });
 
 

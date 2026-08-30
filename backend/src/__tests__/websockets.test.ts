@@ -30,8 +30,14 @@ describe('WebSocket Integration and Chaos Testing', () => {
   });
 
   afterAll((done) => {
-    io.close();
-    server.close(done);
+    io.disconnectSockets(true);
+    io.close(() => {
+      if (server && server.listening) {
+        server.close(done);
+      } else {
+        done();
+      }
+    });
   });
 
   beforeEach(async () => {
@@ -40,6 +46,9 @@ describe('WebSocket Integration and Chaos Testing', () => {
 
   afterEach(() => {
     if (clientSocket) {
+      if (clientSocket.connected) {
+        clientSocket.disconnect();
+      }
       clientSocket.close();
     }
   });
@@ -49,7 +58,10 @@ describe('WebSocket Integration and Chaos Testing', () => {
   }
 
   it('should establish connection successfully', (done) => {
-    clientSocket = Client(`http://localhost:${port}`);
+    clientSocket = Client(`http://localhost:${port}`, {
+      transports: ['websocket'],
+      reconnection: false
+    });
     clientSocket.on('connect', () => {
       expect(clientSocket.connected).toBe(true);
       done();
@@ -57,7 +69,10 @@ describe('WebSocket Integration and Chaos Testing', () => {
   });
 
   it('should receive broadcasted bookstore-events successfully', (done) => {
-    clientSocket = Client(`http://localhost:${port}`);
+    clientSocket = Client(`http://localhost:${port}`, {
+      transports: ['websocket'],
+      reconnection: false
+    });
     
     clientSocket.on('connect', () => {
       const mockEvent = {
@@ -70,7 +85,7 @@ describe('WebSocket Integration and Chaos Testing', () => {
       io.emit('bookstore-event', mockEvent);
     });
 
-    clientSocket.on('bookstore-event', (evt: any) => {
+    clientSocket.on('bookstore-event', (evt: { id: string; message: string; type: string; timestamp: string }) => {
       expect(evt.id).toBe('test-evt-1');
       expect(evt.message).toBe('A user purchased a book!');
       expect(evt.type).toBe('purchase');
@@ -82,6 +97,7 @@ describe('WebSocket Integration and Chaos Testing', () => {
     chaosStore.updateConfig({ websocketDropRate: 1.0 });
     
     clientSocket = Client(`http://localhost:${port}`, {
+      transports: ['websocket'],
       reconnection: false
     });
 

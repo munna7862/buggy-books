@@ -16,6 +16,6 @@ try {
   if (fs.existsSync(testDbPath)) {
     fs.unlinkSync(testDbPath);
   }
-} catch (e) {
+} catch {
   // ignore
 }
