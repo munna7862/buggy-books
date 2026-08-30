@@ -7,7 +7,7 @@ const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 
 test.describe('WebSockets Event & Resilience Suite', () => {
 
-  test('WS_CONN_01: WebSocket State Indicator', async ({ notificationCenter, commonFunctions, page }) => {
+  test('WS_CONN_01: WebSocket State Indicator @smoke @regression', async ({ notificationCenter, commonFunctions, page }) => {
     let isConnected = false;
 
     await test.step('Navigate to home page', async () => {
@@ -21,7 +21,7 @@ test.describe('WebSockets Event & Resilience Suite', () => {
     expect(isConnected).toBeTruthy();
   });
 
-  test('WS_EVENT_01: Broadcasted Event Reception', async ({ notificationCenter, commonFunctions, page }) => {
+  test('WS_EVENT_01: Broadcasted Event Reception @smoke @regression', async ({ notificationCenter, commonFunctions, page }) => {
     let isDropdownOpened = false;
 
     await test.step('Navigate to home page', async () => {
@@ -39,7 +39,7 @@ test.describe('WebSockets Event & Resilience Suite', () => {
     expect(isDropdownOpened).toBeTruthy();
   });
 
-  test('WS_EVENT_02: Hot-Toast Alert Trigger', async ({ signUpPage, catalogPage, cartPage, checkoutPage, notificationCenter, commonFunctions, page }) => {
+  test('WS_EVENT_02: Hot-Toast Alert Trigger @regression', async ({ signUpPage, catalogPage, cartPage, checkoutPage, notificationCenter, commonFunctions, page }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isToastTriggered = false;
@@ -73,7 +73,7 @@ test.describe('WebSockets Event & Resilience Suite', () => {
     expect(isToastTriggered).toBeTruthy();
   });
 
-  test('WS_RESIL_01: Automatic Connection Recovery', async ({ notificationCenter, commonFunctions, page, request }) => {
+  test('WS_RESIL_01: Automatic Connection Recovery @regression @chaos', async ({ notificationCenter, commonFunctions, page, request }) => {
     let isDisconnectedOrReconnecting = false;
 
     try {

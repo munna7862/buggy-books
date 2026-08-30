@@ -6,7 +6,7 @@ import { AuthUtility } from '../../../utils/auth.util';
 
 test.describe('Login With Existing User', () => {
 
-  test('Testcase 1: Login With Existing User', async ({ signUpPage, catalogPage, commonFunctions, page, context, networkInterceptor }) => {
+  test('Testcase 1: Login With Existing User @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, context, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     await page.goto(envConfig.baseUrl);
 
@@ -31,7 +31,7 @@ test.describe('Login With Existing User', () => {
     await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
-  test('Testcase 2: Login Using Saved Session Storage', async ({ browser, signUpPage, catalogPage, commonFunctions, networkInterceptor }) => {
+  test('Testcase 2: Login Using Saved Session Storage @smoke @regression', async ({ browser, signUpPage, catalogPage, commonFunctions, networkInterceptor }) => {
     // Create a new context with the saved storage state
     const { context, page } = await AuthUtility.createContextWithSavedAuth(browser);
     
@@ -60,7 +60,7 @@ test.describe('Login With Existing User', () => {
     }
   });
 
-  test('Testcase 3: Login Validation Errors', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('Testcase 3: Login Validation Errors @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     await page.goto(envConfig.baseUrl);
 
@@ -79,5 +79,3 @@ test.describe('Login With Existing User', () => {
   });
 
 });
-
-

@@ -1,6 +1,6 @@
 # Playwright E2E Automation Framework
 
-This repository contains a TypeScript-based Playwright automation framework for the BuggyBooks application. It supports UI, API, and end-to-end user journey validation with structured page objects, reusable fixtures, test data separation, network capture, logging, and Allure reporting.
+This repository contains a TypeScript-based Playwright automation framework for the BuggyBooks application. It supports UI, API, and end-to-end user journey validation with structured page objects, reusable fixtures, test data separation, network capture, logging, dynamic glob test discovery, tag-based execution (`@smoke`, `@regression`, `@chaos`, `@a11y`), and Allure reporting.
 
 ## Tech Stack
 
@@ -31,6 +31,7 @@ playwright-e2e/
       playwright.config.ts
     core/
       base/
+        base.fixture.ts
         base.page.ts
         base.test.ts
       logger/
@@ -41,6 +42,8 @@ playwright-e2e/
       cart.page.ts
       catalog.page.ts
       checkout.page.ts
+      notification-center.component.ts
+      profile.page.ts
       signup-login.page.ts
     test-data/
       api/
@@ -60,11 +63,14 @@ playwright-e2e/
 
 ## Key Capabilities
 
-- UI test automation for catalog, cart, checkout, registration, and login flows.
-- API test automation for books, registration, and login endpoints.
+- Dynamic spec discovery (`testMatch: ['**/*.spec.ts']`) traversing UI and API suites.
+- Tag-based execution filtering (`@smoke`, `@regression`, `@chaos`, `@a11y`) using Playwright's native `--grep` flag.
+- Configurable action timeout architecture (`ELEMENT_TIMEOUT`, defaulting to 15,000ms).
+- UI test automation for catalog, cart, checkout, registration, profile upload, and login flows.
+- API test automation for books, registration, login, token refresh, inventory, and chaos endpoints.
 - End-to-end checkout journey coverage.
 - Reusable page actions through `BasePage`.
-- Centralized test fixtures from `src/core/base/base.test.ts`.
+- Centralized test fixtures from `src/core/base/base.fixture.ts`.
 - Test data stored separately as JSON under `src/test-data`.
 - Automatic network capture for UI tests using `NetworkInterceptor`.
 - Screenshots, videos, traces, and network logs retained on failures.
@@ -105,9 +111,9 @@ Create a `.env` file inside `playwright-e2e/` when local overrides or credential
 ENV=INTEROP
 BASE_URL=https://buggy-books-fe.onrender.com/
 API_BASE_URL=https://buggy-books.onrender.com
+ELEMENT_TIMEOUT=15000
 HEADLESS=false
 BROWSER=chrome
-SUITENAME=Default
 USER_NAME=your_existing_user
 PASSWORD=your_password
 ```
@@ -119,42 +125,58 @@ Configuration defaults are defined in `src/config/env.config.ts`.
 | `ENV` | Logical environment name used in reports | `INTEROP` |
 | `BASE_URL` | BuggyBooks UI base URL | Render UI URL |
 | `API_BASE_URL` | BuggyBooks API base URL | Render API URL |
+| `ELEMENT_TIMEOUT`| Default action and locator timeout in ms | `15000` |
 | `HEADLESS` | Runs browser in headless mode when `true` | `false` |
 | `BROWSER` | Browser identifier for future extension | `chrome` |
-| `SUITENAME` | Optional suite file name | `Default` |
 | `USER_NAME` | Existing user for login and checkout tests | Required for login tests |
 | `PASSWORD` | Password for existing user | Required for login tests |
 
 ## Running Tests
 
-Run the complete configured test set:
+### Complete Test Suite (Dynamic Discovery)
+Run all 26 UI and API specs:
 
 ```bash
 npm test
 ```
 
+### Tag-Based Execution Filtering
+
+Run only Smoke tests:
+```bash
+npx playwright test --grep "@smoke" --config=src/config/playwright.config.ts
+```
+
+Run only Regression tests:
+```bash
+npx playwright test --grep "@regression" --config=src/config/playwright.config.ts
+```
+
+Run only Chaos & Resilience tests:
+```bash
+npx playwright test --grep "@chaos" --config=src/config/playwright.config.ts
+```
+
+Run only Accessibility (a11y) tests:
+```bash
+npx playwright test --grep "@a11y" --config=src/config/playwright.config.ts
+```
+
+### Specific Spec Execution
 Run a specific spec file:
 
 ```bash
-npx playwright test src/tests/api/Test_001_BooksApi.spec.ts --config=src/config/playwright.config.ts
+npx playwright test src/tests/api/BookCatalog/Test_001_BooksApi.spec.ts --config=src/config/playwright.config.ts
 ```
 
-Run a specific test by title:
-
+### Headless & Custom Timeout Execution
 ```bash
-npx playwright test --grep "Complete book purchase successfully" --config=src/config/playwright.config.ts
-```
-
-Run in headed mode:
-
-```bash
-HEADLESS=false npm test
+npx cross-env HEADLESS=true ELEMENT_TIMEOUT=20000 npm test
 ```
 
 On Windows PowerShell:
-
 ```powershell
-$env:HEADLESS="false"; npm test
+$env:HEADLESS="true"; $env:ELEMENT_TIMEOUT="20000"; npm test
 ```
 
 ## Reports and Artifacts
@@ -190,9 +212,9 @@ Generated output:
 
 ## Network Logging
 
-UI tests that use the custom `test` fixture from `src/core/base/base.test.ts` automatically capture API network calls.
+UI tests that use the custom `test` fixture from `src/core/base/base.fixture.ts` automatically capture API network calls.
 
-The network interceptor currently runs in `api-only` mode and captures:
+The network interceptor runs in `api-only` mode and captures:
 
 - request URL, method, headers, and payload
 - response status, headers, and body when available
@@ -220,32 +242,6 @@ getLoginCredentials()
 
 Credentials must be supplied through `USER_NAME` and `PASSWORD`.
 
-## Test Selection
-
-`src/config/playwright.config.ts` controls which specs are loaded.
-
-Current behavior:
-
-- `USE_SPECIFIC_TESTS` is set to `true` in `env.config.ts`.
-- The framework runs the explicitly listed UI and API specs from `playwright.config.ts`.
-- If `USE_SPECIFIC_TESTS` is changed to `false`, the framework can load all specs or a named JSON suite.
-
-Suite loading expects files under:
-
-```text
-src/tests/TestSuites/<SUITENAME>.json
-```
-
-Expected suite format:
-
-```json
-{
-  "testFiles": [
-    "**/src/tests/api/Test_001_BooksApi.spec.ts"
-  ]
-}
-```
-
 ## Test Data Strategy
 
 Test data is stored as JSON and grouped by test layer and feature:
@@ -253,17 +249,28 @@ Test data is stored as JSON and grouped by test layer and feature:
 ```text
 src/test-data/
   api/
+    BookCatalog/
+    CartAndInventory/
+    ChaosAndTesting/
+    Logging/
+    UserManagement/
   ui/
+    A11y/
     BookCatalog/
     Checkout/
+    Profile/
+    Refresh/
+    Styling/
     UserManagement/
+    VisualRegression/
+    WebSockets/
 ```
 
 Keep static input data, expected messages, and reusable scenario values in JSON files. Keep test logic and assertions inside spec files.
 
 ## Page Object Strategy
 
-Page classes live under `src/pages` and inherit common browser actions from `BasePage`.
+Page classes live under `src/pages` and inherit common browser actions and dynamically configured timeouts from `BasePage`.
 
 Use page objects for:
 
@@ -291,6 +298,7 @@ It supports:
 ## Coding Standards
 
 - Use Playwright locators and web-first assertions where possible.
+- Annotate all test cases with tags (`@smoke`, `@regression`, `@chaos`, `@a11y`).
 - Keep tests readable with `test.step` for business-level flow clarity.
 - Store test data outside specs.
 - Add new page behavior to page objects instead of duplicating locator logic in tests.
@@ -298,16 +306,6 @@ It supports:
 - Prefer stable selectors over text or layout-dependent selectors.
 - Use API setup where it improves test speed and reliability.
 - Avoid making tests dependent on execution order unless the dependency is explicit and documented.
-
-## Troubleshooting
-
-| Issue | Likely Cause | Resolution |
-| --- | --- | --- |
-| Chrome project fails to start | Google Chrome is not installed | Install Chrome or change the Playwright project browser configuration |
-| Login tests fail with missing variable error | `USER_NAME` or `PASSWORD` is not configured | Add credentials to `.env` or CI secrets |
-| Allure command fails | Java or Allure CLI dependency is unavailable | Install Java and run `npm install` |
-| Tests pass locally but fail in CI | Headed/browser dependency mismatch | Set `HEADLESS=true` and ensure browsers are installed in CI |
-| No tests are discovered | Test selection pattern does not match files | Check `USE_SPECIFIC_TESTS`, `SUITENAME`, and `testMatch` |
 
 ## Useful Commands
 
@@ -319,13 +317,3 @@ npx playwright show-report
 npx playwright test --debug --config=src/config/playwright.config.ts
 npx playwright test --ui --config=src/config/playwright.config.ts
 ```
-
-## Ownership Notes
-
-This framework is designed as a maintainable SDET automation foundation, not just a collection of scripts. New tests should preserve the existing separation of concerns:
-
-- Specs describe the test intent.
-- Page objects encapsulate UI behavior.
-- Utilities handle cross-cutting technical concerns.
-- Test data remains externalized.
-- Reports and logs provide enough evidence to debug failures quickly.

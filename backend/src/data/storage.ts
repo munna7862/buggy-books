@@ -60,6 +60,12 @@ class Storage {
     this.enqueueSave();
   }
 
+  public async flush(): Promise<void> {
+    while (this.isWriting || this.pendingWrite) {
+      await new Promise(resolve => setTimeout(resolve, 10));
+    }
+  }
+
   private enqueueSave() {
     if (this.isWriting) {
       if (!this.pendingWrite) {

@@ -38,7 +38,7 @@ function uniqueUsername(prefix: string = 'e2e_customer'): string {
 
 test.describe('End-to-End User Journey', () => {
 
-  test('Testcase 1: Complete New Customer E2E Journey from Registration to Checkout', async ({ signUpPage, catalogPage, bookDetailPage, commonFunctions, page, networkInterceptor }) => {
+  test('Testcase 1: Complete New Customer E2E Journey from Registration to Checkout @smoke @regression', async ({ signUpPage, catalogPage, bookDetailPage, commonFunctions, page, networkInterceptor }) => {
     // networkInterceptor fixture automatically logs API calls
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);

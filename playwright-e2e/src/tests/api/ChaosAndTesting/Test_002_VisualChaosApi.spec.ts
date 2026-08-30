@@ -10,7 +10,7 @@ const RESET_URL = `${envConfig.apiBaseUrl}/api/test/reset`;
 
 test.describe('Visual Chaos Configuration API Suite', () => {
 
-  test('API_VIS_01: Toggle visualChaos Config via API', async () => {
+  test('API_VIS_01: Toggle visualChaos Config via API @smoke @regression @chaos', async () => {
     let isStatusOk = false;
     let isVisualChaosTrue = false;
 
@@ -38,7 +38,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     expect(isStatusOk && isVisualChaosTrue).toBeTruthy();
   });
 
-  test('API_VIS_02: Default visualChaos is False', async () => {
+  test('API_VIS_02: Default visualChaos is False @smoke @regression', async () => {
     let isStatusOk = false;
     let isVisualChaosFalse = false;
 
@@ -63,7 +63,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     expect(isStatusOk && isVisualChaosFalse).toBeTruthy();
   });
 
-  test('API_VIS_03: Invalid Type Rejected', async () => {
+  test('API_VIS_03: Invalid Type Rejected @regression', async () => {
     let isStatus400 = false;
     let hasValidationError = false;
 
@@ -84,7 +84,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     expect(isStatus400 && hasValidationError).toBeTruthy();
   });
 
-  test('API_VIS_04: Combine with Other Chaos Params', async () => {
+  test('API_VIS_04: Combine with Other Chaos Params @regression @chaos', async () => {
     let isStatusOk = false;
     let isVisualChaosSaved = false;
     let isCheckoutRateSaved = false;

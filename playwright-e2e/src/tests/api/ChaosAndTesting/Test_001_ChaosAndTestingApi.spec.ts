@@ -41,7 +41,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     });
   });
 
-  test('API_TEST_01: Global reset clears all non-default users and carts', async () => {
+  test('API_TEST_01: Global reset clears all non-default users and carts @smoke @regression', async () => {
     const username = uniqueUsername();
     const password = 'Password123!';
     const fullName = 'Chaos Test User';
@@ -130,7 +130,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(getCartRes.data).toEqual([]);
   });
 
-  test('API_CHAOS_01: Inject checkout failures', async () => {
+  test('API_CHAOS_01: Inject checkout failures @smoke @regression @chaos', async () => {
     const username = uniqueUsername();
     const password = 'Password123!';
     const fullName = 'Chaos Checkout User';
@@ -198,7 +198,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(checkoutRes.data.error).toContain('Internal Server Error: Payment Gateway Timeout');
   });
 
-  test('API_CHAOS_02: Inject API latency', async () => {
+  test('API_CHAOS_02: Inject API latency @smoke @regression @chaos', async () => {
     // 1. Set inventory latency to 3000 ms
     const configRes = await apiUtil.makeRequest({
       method: 'POST',

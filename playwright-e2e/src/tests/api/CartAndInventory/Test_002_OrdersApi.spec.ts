@@ -26,7 +26,7 @@ function uniqueUsername(prefix: string = 'api_orders_user'): string {
 
 test.describe('Orders API Endpoint', () => {
 
-  test('API_ORD_01: Authenticate user, complete checkout via API, and verify GET /api/orders history response', async ({ request }) => {
+  test('API_ORD_01: Authenticate user, complete checkout via API, and verify GET /api/orders history response @smoke @regression', async ({ request }) => {
 
     const username = uniqueUsername();
     const password = 'Password123!';

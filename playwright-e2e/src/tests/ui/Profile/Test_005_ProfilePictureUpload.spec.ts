@@ -10,7 +10,7 @@ const largeImagePath = path.join(__dirname, '../../../test-data/ui/Profile/large
 
 test.describe('Profile Picture Upload', () => {
 
-  test('UI_UPL_01: Valid Profile Picture Upload', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_UPL_01: Valid Profile Picture Upload @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isSrcUpdated = false;
@@ -38,7 +38,7 @@ test.describe('Profile Picture Upload', () => {
     expect(isSrcUpdated && isSuccessMsgValid).toBeTruthy();
   });
 
-  test('UI_UPL_02: File Extension Filter Validation', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_UPL_02: File Extension Filter Validation @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isErrorMsgValid = false;
@@ -62,7 +62,7 @@ test.describe('Profile Picture Upload', () => {
     expect(isErrorMsgValid).toBeTruthy();
   });
 
-  test('UI_UPL_03: File Size Limit Validation', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_UPL_03: File Size Limit Validation @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isSizeErrorMsgValid = false;
@@ -86,7 +86,7 @@ test.describe('Profile Picture Upload', () => {
     expect(isSizeErrorMsgValid).toBeTruthy();
   });
 
-  test('UI_UPL_04: Upload Chaos Failure Recovery', async ({ signUpPage, profilePage, commonFunctions, page, request, networkInterceptor }) => {
+  test('UI_UPL_04: Upload Chaos Failure Recovery @regression @chaos', async ({ signUpPage, profilePage, commonFunctions, page, request, networkInterceptor }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isChaosErrorValid = false;

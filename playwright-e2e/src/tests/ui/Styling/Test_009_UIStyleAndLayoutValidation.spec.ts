@@ -5,7 +5,7 @@ import TestData from '../../../test-data/ui/Styling/Test_009_UIStyleAndLayoutVal
 
 test.describe('Modern UI Styling & Layout Suite', () => {
 
-  test('UI_STYLE_01: Retained Automation Selectors', async ({ commonFunctions, page, catalogPage }) => {
+  test('UI_STYLE_01: Retained Automation Selectors @smoke @regression', async ({ commonFunctions, page, catalogPage }) => {
     let flag1 = false, flag2 = false, flag3 = false, flag4 = false, flag5 = false, flag6 = false, flag7 = false, flag8 = false;
 
     await test.step('Navigate to catalog and perform a search', async () => {
@@ -57,7 +57,7 @@ test.describe('Modern UI Styling & Layout Suite', () => {
     expect(flag1 && flag2 && flag3 && flag4 && flag5 && flag6 && flag7 && flag8).toBeTruthy();
   });
 
-  test('UI_STYLE_02: Catalog Grid Layout Responsiveness', async ({ commonFunctions, page }) => {
+  test('UI_STYLE_02: Catalog Grid Layout Responsiveness @regression', async ({ commonFunctions, page }) => {
     let desktopFlag = false, tabletFlag = false, mobileFlag = false;
 
     await test.step('Load catalog page at desktop viewport and verify multi-column grid', async () => {
@@ -109,7 +109,7 @@ test.describe('Modern UI Styling & Layout Suite', () => {
     expect(desktopFlag && tabletFlag && mobileFlag).toBeTruthy();
   });
 
-  test('UI_STYLE_03: Hover Animation CSS Verification', async ({ commonFunctions, page }) => {
+  test('UI_STYLE_03: Hover Animation CSS Verification @regression', async ({ commonFunctions, page }) => {
     let flag1 = false, flag2 = false;
 
     await test.step('Navigate to catalog page and wait for book cards', async () => {
@@ -144,7 +144,7 @@ test.describe('Modern UI Styling & Layout Suite', () => {
     expect(flag1 && flag2).toBeTruthy();
   });
 
-  test('UI_STYLE_04: HSL CSS Variable Theme Verification', async ({ commonFunctions, page }) => {
+  test('UI_STYLE_04: HSL CSS Variable Theme Verification @regression', async ({ commonFunctions, page }) => {
     let lightBgFlag = false, darkBgFlag = false;
 
     await test.step('Load catalog in default (light) mode and assert --bg CSS variable resolves to light theme color', async () => {
