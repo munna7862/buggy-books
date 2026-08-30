@@ -1,0 +1,29 @@
+[2026-08-31 02:12:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-31 02:12:41] INFO: 📤 Request Payload: {
+  "username": "silent_ref_1788108161031_38e1f93b",
+  "password": "Password123!",
+  "fullName": "Token Refresh Test User"
+}
+[2026-08-31 02:12:41] INFO: ✅ Register user for silent refresh test Success! Status: 201 Created
+[2026-08-31 02:12:41] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "silent_ref_1788108161031_38e1f93b"
+}
+[2026-08-31 02:12:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-31 02:12:41] INFO: 📤 Request Payload: {
+  "username": "silent_ref_1788108161031_38e1f93b",
+  "password": "Password123!"
+}
+[2026-08-31 02:12:42] INFO: ✅ Login user to extract refreshToken cookie Success! Status: 200 OK
+[2026-08-31 02:12:42] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "silent_ref_1788108161031_38e1f93b"
+}
+[2026-08-31 02:12:42] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/auth/refresh
+[2026-08-31 02:12:42] INFO: ✅ Call POST /api/auth/refresh with refreshToken cookie Success! Status: 200 OK
+[2026-08-31 02:12:42] INFO: 📥 Response Payload: {
+  "success": true,
+  "username": "silent_ref_1788108161031_38e1f93b"
+}
+[2026-08-31 02:12:42] INFO:  Verifying POST /api/auth/refresh returns 200 OK Success !! Actual and Expected Values are:: 200
+[2026-08-31 02:12:42] INFO:  Verifying new access token issued in Set-Cookie Success !! Actual and Expected Values are:: true

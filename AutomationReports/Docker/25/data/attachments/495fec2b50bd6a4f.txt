@@ -1,0 +1,8 @@
+
+[Failure Hook] Capturing state for failing test: "VIS_REG_03: Book Card Border Color Assertion @regression @chaos"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+

@@ -1,0 +1,157 @@
+[
+  {
+    "id": "1788108167767-1",
+    "startedAt": "2026-08-30T16:42:47.767Z",
+    "url": "https://buggy-books.onrender.com/socket.io/?EIO=4&transport=polling&t=1foe634g",
+    "method": "GET",
+    "resourceType": "xhr",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "accept": "*/*",
+      "sec-ch-ua": "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Google Chrome\";v=\"152\"",
+      "accept-language": "en-US",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "postData": null,
+    "endedAt": "2026-08-30T16:42:47.869Z",
+    "durationMs": 102,
+    "response": {
+      "status": 200,
+      "statusText": "",
+      "ok": true,
+      "headers": {
+        "access-control-allow-credentials": "true",
+        "access-control-allow-origin": "https://buggy-books-fe.onrender.com",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cache-control": "no-store",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "a33540308ac4a1c4-MSP",
+        "content-encoding": "br",
+        "content-length": "105",
+        "content-type": "text/plain; charset=UTF-8",
+        "date": "Sun, 30 Aug 2026 16:42:47 GMT",
+        "rndr-id": "88bf5d6f-4231-4828",
+        "server": "cloudflare",
+        "vary": "Origin, Accept-Encoding",
+        "x-render-origin-server": "Render"
+      },
+      "body": "0{\"sid\":\"WIEViZfShSniif_8AABD\",\"upgrades\":[\"websocket\"],\"pingInterval\":25000,\"pingTimeout\":20000,\"maxPayload\":1000000}"
+    }
+  },
+  {
+    "id": "1788108167767-2",
+    "startedAt": "2026-08-30T16:42:47.767Z",
+    "url": "https://buggy-books.onrender.com/api/books?page=1&limit=8",
+    "method": "GET",
+    "resourceType": "fetch",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Google Chrome\";v=\"152\"",
+      "content-type": "application/json",
+      "sec-ch-ua-mobile": "?0",
+      "accept-language": "en-US"
+    },
+    "postData": null
+  },
+  {
+    "id": "1788108167767-3",
+    "startedAt": "2026-08-30T16:42:47.767Z",
+    "url": "https://buggy-books.onrender.com/api/test/config",
+    "method": "GET",
+    "resourceType": "fetch",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "sec-ch-ua": "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Google Chrome\";v=\"152\"",
+      "accept-language": "en-US",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "postData": null,
+    "endedAt": "2026-08-30T16:42:47.921Z",
+    "durationMs": 154,
+    "response": {
+      "status": 200,
+      "statusText": "",
+      "ok": true,
+      "headers": {
+        "access-control-allow-credentials": "true",
+        "access-control-allow-origin": "https://buggy-books-fe.onrender.com",
+        "alt-svc": "h3=\":443\"; ma=86400",
+        "cf-cache-status": "DYNAMIC",
+        "cf-ray": "a3354030ab0fa1c4-MSP",
+        "content-encoding": "br",
+        "content-length": "138",
+        "content-security-policy": "default-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';img-src 'self' data:;object-src 'none';script-src 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline';upgrade-insecure-requests",
+        "content-type": "application/json; charset=utf-8",
+        "cross-origin-opener-policy": "same-origin",
+        "cross-origin-resource-policy": "same-origin",
+        "date": "Sun, 30 Aug 2026 16:42:47 GMT",
+        "etag": "W/\"a8-7gPNKfrsLBb14LKrwkGpEOOXtkg\"",
+        "origin-agent-cluster": "?1",
+        "ratelimit-limit": "600",
+        "ratelimit-policy": "600;w=60",
+        "ratelimit-remaining": "376",
+        "ratelimit-reset": "33",
+        "referrer-policy": "no-referrer",
+        "rndr-id": "ebc0fecd-4adb-4dbb",
+        "server": "cloudflare",
+        "strict-transport-security": "max-age=31536000; includeSubDomains",
+        "vary": "Origin, Accept-Encoding",
+        "x-content-type-options": "nosniff",
+        "x-correlation-id": "d8578d0b-76d6-42a1-9455-5e3600b116c0",
+        "x-dns-prefetch-control": "off",
+        "x-download-options": "noopen",
+        "x-frame-options": "SAMEORIGIN",
+        "x-permitted-cross-domain-policies": "none",
+        "x-render-origin-server": "Render",
+        "x-xss-protection": "0"
+      },
+      "body": "{\"checkoutFailureRate\":0.15,\"inventoryDelayMs\":3000,\"jwtExpirySeconds\":900,\"websocketDropRate\":0,\"uploadFailureRate\":0,\"injectA11yViolations\":false,\"visualChaos\":false}"
+    }
+  },
+  {
+    "id": "1788108167865-4",
+    "startedAt": "2026-08-30T16:42:47.865Z",
+    "url": "https://buggy-books.onrender.com/socket.io/?EIO=4&transport=polling&t=1foh8koo&sid=WIEViZfShSniif_8AABD",
+    "method": "POST",
+    "resourceType": "xhr",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "accept-language": "en-US",
+      "sec-ch-ua": "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Google Chrome\";v=\"152\"",
+      "sec-ch-ua-mobile": "?0",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "accept": "*/*",
+      "content-type": "text/plain;charset=UTF-8"
+    },
+    "postData": "40"
+  },
+  {
+    "id": "1788108167865-5",
+    "startedAt": "2026-08-30T16:42:47.865Z",
+    "url": "https://buggy-books.onrender.com/socket.io/?EIO=4&transport=polling&t=1fohbf3v&sid=WIEViZfShSniif_8AABD",
+    "method": "GET",
+    "resourceType": "xhr",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Linux\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/152.0.0.0 Safari/537.36",
+      "accept": "*/*",
+      "sec-ch-ua": "\"Chromium\";v=\"152\", \"Not?A_Brand\";v=\"24\", \"Google Chrome\";v=\"152\"",
+      "accept-language": "en-US",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "postData": null
+  }
+]

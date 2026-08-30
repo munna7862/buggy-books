@@ -1,0 +1,1 @@
+[2026-08-31 02:17:29] INFO:  Asserting book cover has blur filter, actual: blur(1.5px) Success !! Actual and Expected Values are:: true

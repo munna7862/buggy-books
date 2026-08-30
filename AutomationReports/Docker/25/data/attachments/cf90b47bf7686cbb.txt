@@ -1,0 +1,7 @@
+[2026-08-31 02:12:51] INFO: Network interception enabled with mode: api-only
+[2026-08-31 02:12:51] INFO: ✅ New context created with saved authentication state from: /__w/buggy-books/buggy-books/auth-state.json
+[2026-08-31 02:12:53] INFO:  Verifying if user is logged in using saved session Success !! Actual and Expected Values are:: true
+[2026-08-31 02:12:53] INFO: Clicking on Logout button
+[2026-08-31 02:12:54] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-08-31 02:12:54] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-08-31 02:12:54] INFO: Captured 0 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-00237-on-Storage-smoke-regression-Google-Chrome/network-log.json

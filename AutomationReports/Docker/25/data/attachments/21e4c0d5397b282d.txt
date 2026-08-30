@@ -1,0 +1,1 @@
+[2026-08-31 02:12:41] INFO:  Verifying Axe detects color contrast ratio violation on result count tag under chaos mode Success !! Actual and Expected Values are:: true

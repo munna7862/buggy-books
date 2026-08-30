@@ -1,0 +1,16 @@
+[2026-08-31 02:12:25] INFO: Network interception enabled with mode: api-only
+[2026-08-31 02:12:26] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-31 02:12:26] INFO:  Verifying if Books count in Catalog page is correct Success !! Actual and Expected Values are:: 8
+[2026-08-31 02:12:26] INFO: Clicking on Pagination button number 2
+[2026-08-31 02:12:26] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-31 02:12:26] ERROR:  Verifying if Books count in Catalog page is correct Failed!! Expected Value:: 7 || Actual Value:: 8
+[2026-08-31 02:12:26] ERROR:  Verifying if Books count in Catalog page is correct Failed!! Expected Value:: 7 || Actual Value:: 8
+
+[Failure Hook] Capturing state for failing test: "Verify Books Count in pagination @smoke @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////__w/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-08-31 02:12:26] INFO: Captured 7 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_001_In-58b7c-pagination-smoke-regression-Google-Chrome-retry1/network-log.json
