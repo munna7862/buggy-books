@@ -1,0 +1,2 @@
+[2026-08-31 02:15:48] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w5-3-1788108348428-rm1n
+[2026-08-31 02:15:50] INFO: Cleaned up ephemeral test session: pw-w5-3-1788108348428-rm1n

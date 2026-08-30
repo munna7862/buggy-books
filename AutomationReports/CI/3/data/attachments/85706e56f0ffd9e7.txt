@@ -1,0 +1,14 @@
+[2026-08-31 02:14:31] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788108271795-am41
+[2026-08-31 02:14:31] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-31 02:14:31] INFO: 📤 Request Payload: {
+  "username": "security178810827140372298fb5@",
+  "password": "johna123@",
+  "fullName": "<script>alert(\"xss\")</script>"
+}
+[2026-08-31 02:14:33] INFO: ✅ Security validation for script tag in fullName Success! Status: 201 Created
+[2026-08-31 02:14:33] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "security178810827140372298fb5@"
+}
+[2026-08-31 02:14:33] INFO:  Security status for script tag in fullName Success !! Actual and Expected Values are:: true
+[2026-08-31 02:14:33] INFO: Cleaned up ephemeral test session: pw-w0-0-1788108271795-am41

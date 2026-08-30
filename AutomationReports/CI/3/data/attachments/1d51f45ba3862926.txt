@@ -1,0 +1,4 @@
+[2026-08-31 02:15:51] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788108351876-cus6
+[2026-08-31 02:15:53] ERROR:  Asserting book card border-color is red (rgb(240, 66, 66) or rgb(242, 36, 36)), actual: rgba(240, 66, 66, 1) Failed!! Expected Value:: true || Actual Value:: false
+[2026-08-31 02:15:53] ERROR:  Asserting book card border-color is red (rgb(240, 66, 66) or rgb(242, 36, 36)), actual: rgba(240, 66, 66, 1) Failed!! Expected Value:: true || Actual Value:: false
+[2026-08-31 02:15:53] INFO: Cleaned up ephemeral test session: pw-w0-0-1788108351876-cus6

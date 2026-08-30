@@ -1,0 +1,40 @@
+[2026-08-31 02:14:49] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788108289990-ewbs
+[2026-08-31 02:14:50] INFO: Network interception enabled with mode: api-only
+[2026-08-31 02:14:50] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-31 02:14:50] INFO: Clicking on Login link
+[2026-08-31 02:14:51] INFO: Entering username: admin
+[2026-08-31 02:14:51] INFO: Entering password: password123
+[2026-08-31 02:14:51] INFO: Clicking on Sign In button
+[2026-08-31 02:14:51] INFO: Verifying landing on Checkout Page
+[2026-08-31 02:14:51] INFO: Checking if Checkout label is visible
+[2026-08-31 02:14:52] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 02:14:52] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-08-31 02:14:52] INFO: Clicking on Cart link
+[2026-08-31 02:14:58] INFO: Clicking on Catalog link
+[2026-08-31 02:14:58] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-31 02:14:58] INFO: Waiting for cart status message: added to cart
+[2026-08-31 02:15:00] INFO: Cart status message "added to cart" is visible
+[2026-08-31 02:15:00] INFO: Waiting for cart status message: Added to cart!
+[2026-08-31 02:15:00] INFO: Cart status message "Added to cart!" is visible
+[2026-08-31 02:15:00] INFO: Clicking on Cart link
+[2026-08-31 02:15:00] INFO: Getting cart item text
+[2026-08-31 02:15:01] INFO: Getting cart total text
+[2026-08-31 02:15:01] INFO: Clicking on Proceed to Checkout button
+[2026-08-31 02:15:01] INFO: Waiting for checkout order total amount: $10.99
+[2026-08-31 02:15:01] INFO: Entering first name: john
+[2026-08-31 02:15:01] INFO: Entering last name: cena
+[2026-08-31 02:15:01] INFO: Entering shipping address: 123 Buggy Lane
+[2026-08-31 02:15:02] INFO: Entering city: Stack City
+[2026-08-31 02:15:02] INFO: Clicking on Next Step button
+[2026-08-31 02:15:02] INFO: Entering card number
+[2026-08-31 02:15:02] INFO: Entering card expiry: 12/30
+[2026-08-31 02:15:03] INFO: Entering card CVV: 123
+[2026-08-31 02:15:03] INFO: Checking if Next Step button is visible - Element is visible
+[2026-08-31 02:15:03] INFO: Clicking on Next Step button on Payment page
+[2026-08-31 02:15:03] INFO: Waiting for confirmation message containing: Payment Successful! Thank you for your order.
+[2026-08-31 02:15:03] INFO: Payment completed successfully and order confirmation message is displayed.
+[2026-08-31 02:15:03] INFO: Clicking on Logout button
+[2026-08-31 02:15:04] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-08-31 02:15:04] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-08-31 02:15:04] INFO: Captured 23 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_001_Compl-891ee-ccessfully-smoke-regression-Google-Chrome/network-log.json
+[2026-08-31 02:15:04] INFO: Cleaned up ephemeral test session: pw-w0-0-1788108289990-ewbs

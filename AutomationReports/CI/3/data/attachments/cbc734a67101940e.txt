@@ -1,0 +1,11 @@
+[2026-08-31 02:15:42] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788108342407-eax1
+[2026-08-31 02:15:42] INFO: Network interception enabled with mode: api-only
+[2026-08-31 02:15:43] INFO: Clicking on Sign Up link
+[2026-08-31 02:15:44] INFO: Entering password: 123
+[2026-08-31 02:15:44] INFO: Getting password strength text
+[2026-08-31 02:15:44] INFO:  Verifying if password strength is Weak Success !! Actual and Expected Values are:: Weak
+[2026-08-31 02:15:44] INFO: Entering password: ComplexPass123!
+[2026-08-31 02:15:44] INFO: Getting password strength text
+[2026-08-31 02:15:44] INFO:  Verifying if password strength is Strong Success !! Actual and Expected Values are:: Strong
+[2026-08-31 02:15:44] INFO: Captured 6 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-9448a-rength-Indicator-regression-Google-Chrome/network-log.json
+[2026-08-31 02:15:44] INFO: Cleaned up ephemeral test session: pw-w1-1-1788108342407-eax1

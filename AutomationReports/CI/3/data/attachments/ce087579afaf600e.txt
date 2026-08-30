@@ -1,0 +1,33 @@
+[2026-08-31 02:14:26] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788108266697-fsi6
+[2026-08-31 02:14:26] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-08-31 02:14:26] INFO: ✅ Reset state before test Success! Status: 200 OK
+[2026-08-31 02:14:26] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-08-31 02:14:26] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-08-31 02:14:26] INFO: 📤 Request Payload: {
+  "inventoryDelayMs": 3000
+}
+[2026-08-31 02:14:26] INFO: ✅ Configure inventory report latency to 3000ms Success! Status: 200 OK
+[2026-08-31 02:14:26] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 0,
+    "inventoryDelayMs": 3000,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": false
+  }
+}
+[2026-08-31 02:14:26] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/inventory/report
+[2026-08-31 02:14:30] INFO: ✅ Get inventory report under latency injection Success! Status: 200 OK
+[2026-08-31 02:14:30] INFO: 📥 Response Payload: {
+  "totalBooks": 15,
+  "totalValue": 196.91000000000003,
+  "timestamp": "2026-08-30T16:44:30.146Z"
+}
+[2026-08-31 02:14:30] INFO: Inventory report request took: 3202 ms
+[2026-08-31 02:14:30] INFO: Cleaned up ephemeral test session: pw-w1-1-1788108266697-fsi6

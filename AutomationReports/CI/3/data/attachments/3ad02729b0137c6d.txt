@@ -1,0 +1,25 @@
+[2026-08-31 02:15:41] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788108341241-ixcg
+[2026-08-31 02:15:41] INFO: Network interception enabled with mode: api-only
+[2026-08-31 02:15:42] INFO: Clicking on Sign Up link
+[2026-08-31 02:15:42] INFO: Entering full name: autoTestUser7AerR
+[2026-08-31 02:15:42] INFO: Entering username: autoTestUser4LpW8
+[2026-08-31 02:15:42] INFO: Entering password: AutoTest@123
+[2026-08-31 02:15:42] INFO: Entering confirming password: AutoTest@123
+[2026-08-31 02:15:43] INFO: Clicking on Create Account button
+[2026-08-31 02:15:43] INFO: Verifying landing on Checkout Page
+[2026-08-31 02:15:43] INFO: Checking if Checkout label is visible
+[2026-08-31 02:15:44] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 02:15:44] INFO: Clicking on Logout button
+[2026-08-31 02:15:44] INFO: Clicking on Login link
+[2026-08-31 02:15:44] INFO: Entering username: autoTestUser4LpW8
+[2026-08-31 02:15:45] INFO: Entering password: AutoTest@123
+[2026-08-31 02:15:45] INFO: Clicking on Sign In button
+[2026-08-31 02:15:45] INFO: Verifying landing on Checkout Page
+[2026-08-31 02:15:45] INFO: Checking if Checkout label is visible
+[2026-08-31 02:15:46] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 02:15:46] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-08-31 02:15:46] INFO: Clicking on Logout button
+[2026-08-31 02:15:47] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-08-31 02:15:47] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-08-31 02:15:47] INFO: Captured 15 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-59107-and-Logout-smoke-regression-Google-Chrome/network-log.json
+[2026-08-31 02:15:47] INFO: Cleaned up ephemeral test session: pw-w0-0-1788108341241-ixcg

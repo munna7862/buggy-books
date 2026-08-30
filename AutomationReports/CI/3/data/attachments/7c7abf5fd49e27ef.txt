@@ -1,0 +1,25 @@
+[2026-08-31 02:15:01] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-2-1788108301649-k3dt
+[2026-08-31 02:15:02] INFO: Network interception enabled with mode: api-only
+[2026-08-31 02:15:02] INFO: Clicking on Sign Up link
+[2026-08-31 02:15:03] INFO: Entering full name: Full user_a_cart_pT23t
+[2026-08-31 02:15:04] INFO: Entering username: user_a_cart_pT23t
+[2026-08-31 02:15:04] INFO: Entering password: Password123!
+[2026-08-31 02:15:04] INFO: Entering confirming password: Password123!
+[2026-08-31 02:15:04] INFO: Clicking on Create Account button
+[2026-08-31 02:15:04] INFO: Verifying landing on Checkout Page
+[2026-08-31 02:15:04] INFO: Checking if Checkout label is visible
+[2026-08-31 02:15:05] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 02:15:05] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-31 02:15:06] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-31 02:15:06] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-31 02:15:08] INFO: Waiting for cart status message: added to cart
+[2026-08-31 02:15:08] INFO: Cart status message "added to cart" is visible
+[2026-08-31 02:15:08] INFO: Clicking on Cart link
+[2026-08-31 02:15:08] INFO: Clicking on Proceed to Checkout button
+[2026-08-31 02:15:09] INFO: Clicking on Next Step button to trigger validation
+[2026-08-31 02:15:09] INFO:  Verifying First Name required error Success !! Actual and Expected Values are:: true
+[2026-08-31 02:15:09] INFO:  Verifying Last Name required error Success !! Actual and Expected Values are:: true
+[2026-08-31 02:15:09] INFO:  Verifying Address length error Success !! Actual and Expected Values are:: true
+[2026-08-31 02:15:09] INFO:  Verifying City required error Success !! Actual and Expected Values are:: true
+[2026-08-31 02:15:09] INFO: Captured 22 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_003_CartA-994f1--Form-Validation-regression-Google-Chrome/network-log.json
+[2026-08-31 02:15:09] INFO: Cleaned up ephemeral test session: pw-w2-2-1788108301649-k3dt

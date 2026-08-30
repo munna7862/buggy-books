@@ -1,0 +1,3 @@
+[2026-08-31 02:15:50] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-2-1788108349996-1qgr
+[2026-08-31 02:15:52] INFO:  Verifying visual pixel diff detected under chaos mode Success !! Actual and Expected Values are:: true
+[2026-08-31 02:15:52] INFO: Cleaned up ephemeral test session: pw-w2-2-1788108349996-1qgr

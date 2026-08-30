@@ -1,0 +1,133 @@
+[2026-08-31 02:14:27] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788108267960-sty7
+[2026-08-31 02:14:27] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-31 02:14:27] INFO: 📤 Request Payload: {
+  "username": "sandbox_user_a_1788108267962",
+  "password": "Password123!",
+  "fullName": "Sandbox User A"
+}
+[2026-08-31 02:14:28] INFO: ✅ Register user in Session A Success! Status: 201 Created
+[2026-08-31 02:14:28] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "sandbox_user_a_1788108267962"
+}
+[2026-08-31 02:14:28] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-31 02:14:28] INFO: 📤 Request Payload: {
+  "username": "sandbox_user_b_1788108267962",
+  "password": "Password123!",
+  "fullName": "Sandbox User B"
+}
+[2026-08-31 02:14:29] INFO: ✅ Register user in Session B Success! Status: 201 Created
+[2026-08-31 02:14:29] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "sandbox_user_b_1788108267962"
+}
+[2026-08-31 02:14:29] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-31 02:14:29] INFO: 📤 Request Payload: {
+  "username": "sandbox_user_a_1788108267962",
+  "password": "Password123!"
+}
+[2026-08-31 02:14:31] INFO: ✅ Login user in Session A Success! Status: 200 OK
+[2026-08-31 02:14:31] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "sandbox_user_a_1788108267962"
+}
+[2026-08-31 02:14:31] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-31 02:14:31] INFO: 📤 Request Payload: {
+  "username": "sandbox_user_b_1788108267962",
+  "password": "Password123!"
+}
+[2026-08-31 02:14:33] INFO: ✅ Login user in Session B Success! Status: 200 OK
+[2026-08-31 02:14:33] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "sandbox_user_b_1788108267962"
+}
+[2026-08-31 02:14:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-08-31 02:14:33] INFO: 📤 Request Payload: {
+  "bookId": "1"
+}
+[2026-08-31 02:14:33] INFO: ✅ Add book 1 to cart in Session A Success! Status: 200 OK
+[2026-08-31 02:14:33] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-08-31 02:14:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-08-31 02:14:33] INFO: 📤 Request Payload: {
+  "bookId": "2"
+}
+[2026-08-31 02:14:33] INFO: ✅ Add book 2 to cart in Session B Success! Status: 200 OK
+[2026-08-31 02:14:33] INFO: 📥 Response Payload: [
+  {
+    "id": "2",
+    "title": "To Kill a Mockingbird Exception",
+    "author": "Harper Lee",
+    "price": 15.5,
+    "genre": "Classic",
+    "description": "A coming-of-age tale with unhandled exceptions.",
+    "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-08-31 02:14:33] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/cart
+[2026-08-31 02:14:33] INFO: ✅ Get Cart in Session A Success! Status: 200 OK
+[2026-08-31 02:14:33] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-08-31 02:14:33] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/cart
+[2026-08-31 02:14:33] INFO: ✅ Get Cart in Session B Success! Status: 200 OK
+[2026-08-31 02:14:33] INFO: 📥 Response Payload: [
+  {
+    "id": "2",
+    "title": "To Kill a Mockingbird Exception",
+    "author": "Harper Lee",
+    "price": 15.5,
+    "genre": "Classic",
+    "description": "A coming-of-age tale with unhandled exceptions.",
+    "image": "https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-08-31 02:14:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-31 02:14:33] INFO: 📤 Request Payload: {
+  "username": "sandbox_user_a_1788108267962",
+  "password": "Password123!"
+}
+[2026-08-31 02:14:33] ERROR: ❌ Cross-tenant login attempt in Session B Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "333a54cf-f55f-42a0-a5cc-ba853a86f87d"
+}
+[2026-08-31 02:14:33] ERROR: ❌ Cross-tenant login attempt in Session B Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "333a54cf-f55f-42a0-a5cc-ba853a86f87d"
+}
+[2026-08-31 02:14:33] INFO: 🚀 Making DELETE request to https://buggy-books.onrender.com/api/test/session/pw-w3-3-1788108267960-sty7-worker-a
+[2026-08-31 02:14:33] INFO: ✅ Delete Session A Success! Status: 200 OK
+[2026-08-31 02:14:33] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Session pw-w3-3-1788108267960-sty7-worker-a deleted successfully",
+  "deleted": true,
+  "activeSessions": 4
+}
+[2026-08-31 02:14:33] INFO: 🚀 Making DELETE request to https://buggy-books.onrender.com/api/test/session/pw-w3-3-1788108267960-sty7-worker-b
+[2026-08-31 02:14:34] INFO: ✅ Delete Session B Success! Status: 200 OK
+[2026-08-31 02:14:34] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Session pw-w3-3-1788108267960-sty7-worker-b deleted successfully",
+  "deleted": true,
+  "activeSessions": 3
+}
+[2026-08-31 02:14:34] INFO: Cleaned up ephemeral test session: pw-w3-3-1788108267960-sty7

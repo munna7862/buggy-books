@@ -1,0 +1,56 @@
+[2026-08-31 02:14:28] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788108268798-nxrr
+[2026-08-31 02:14:28] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-31 02:14:28] INFO: 📤 Request Payload: {
+  "username": "user_log_1788108268801_d0d75f10",
+  "password": "Password123!",
+  "fullName": "Logging Test User"
+}
+[2026-08-31 02:14:30] INFO: ✅ Register user with custom correlation ID Success! Status: 201 Created
+[2026-08-31 02:14:30] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "user_log_1788108268801_d0d75f10"
+}
+[2026-08-31 02:14:30] INFO:  Verifying user registration status is 201 Success !! Actual and Expected Values are:: 201
+[2026-08-31 02:14:30] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-08-31 02:14:30] INFO: 📤 Request Payload: {
+  "username": "user_log_1788108268801_d0d75f10",
+  "password": "Password123!"
+}
+[2026-08-31 02:14:31] INFO: ✅ Login user with custom correlation ID Success! Status: 200 OK
+[2026-08-31 02:14:31] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "user_log_1788108268801_d0d75f10"
+}
+[2026-08-31 02:14:31] INFO:  Verifying user login status is 200 Success !! Actual and Expected Values are:: 200
+[2026-08-31 02:14:31] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-08-31 02:14:31] INFO: 📤 Request Payload: {
+  "bookId": "1"
+}
+[2026-08-31 02:14:31] INFO: ✅ Add book 1 to cart with custom correlation ID Success! Status: 200 OK
+[2026-08-31 02:14:31] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop"
+  }
+]
+[2026-08-31 02:14:31] INFO:  Verifying add to cart status is 200 Success !! Actual and Expected Values are:: 200
+[2026-08-31 02:14:31] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/checkout/process
+[2026-08-31 02:14:31] INFO: 📤 Request Payload: {
+  "firstName": "LogUser",
+  "lastName": "Test",
+  "creditCard": "4111222233334444"
+}
+[2026-08-31 02:14:31] INFO: ✅ Process checkout with custom correlation ID Success! Status: 200 OK
+[2026-08-31 02:14:31] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Order processed successfully",
+  "orderId": "1fcf4d58-c8a1-4cfb-82fb-f1acb454ea7d"
+}
+[2026-08-31 02:14:31] INFO:  Verifying process checkout status is 200 Success !! Actual and Expected Values are:: 200
+[2026-08-31 02:14:31] INFO:  Verifying correlation ID preserved in checkout response Success !! Actual and Expected Values are:: custom-correlation-uuid-99999_user_flow
+[2026-08-31 02:14:31] INFO: Cleaned up ephemeral test session: pw-w0-0-1788108268798-nxrr

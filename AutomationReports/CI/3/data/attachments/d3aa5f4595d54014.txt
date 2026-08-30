@@ -1,0 +1,13 @@
+[2026-08-31 02:14:33] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788108273309-vnec
+[2026-08-31 02:14:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-31 02:14:33] INFO: 📤 Request Payload: {
+  "username": "security1788108271403ae5452be@",
+  "password": "johna123@"
+}
+[2026-08-31 02:14:34] INFO: ✅ Security validation for oversized username Success! Status: 201 Created
+[2026-08-31 02:14:34] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "security1788108271403ae5452be@"
+}
+[2026-08-31 02:14:34] INFO:  Security status for oversized username Success !! Actual and Expected Values are:: true
+[2026-08-31 02:14:34] INFO: Cleaned up ephemeral test session: pw-w0-0-1788108273309-vnec
