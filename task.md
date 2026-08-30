@@ -22,15 +22,15 @@
 
 ### User Story US-OPS-201: Integrate Linting in CI Pipelines
 *As a DevOps engineer, I want `.github/workflows/ci.yml` to run `npm run lint` for both frontend and backend on all PRs, so that unformatted or rule-violating code is automatically blocked before merging.*
-- [x] **US-OPS-201.1** [DevOps Engineer]: Add `npm run lint` step under `backend-tests` job in `.github/workflows/ci.yml`.
-- [x] **US-OPS-201.2** [DevOps Engineer]: Add `npm run lint` step under `frontend-tests` job in `.github/workflows/ci.yml`.
-- [x] **US-OPS-201.3** [DevOps Engineer]: Add `frontend-build` job (`npm run build`) in `.github/workflows/ci.yml`.
+- [x] **US-OPS-201.1** (`DevOps Engineer`): Add `npm run lint` step under `backend-tests` job in `.github/workflows/ci.yml`.
+- [x] **US-OPS-201.2** (`DevOps Engineer`): Add `npm run lint` step under `frontend-tests` job in `.github/workflows/ci.yml`.
+- [x] **US-OPS-201.3** (`DevOps Engineer`): Add `frontend-build` job (`npm run build`) in `.github/workflows/ci.yml`.
 
 ### User Story US-OPS-202: Fast-Feedback CI Pipeline Staging & Browser Caching
 *As a software team, I want CI jobs to stage sequentially (Fast Gates: Lint/Build → Unit Tests → E2E Suites), so that we save GitHub Actions runner minutes by failing fast on static and unit errors.*
-- [x] **US-OPS-202.1** [DevOps Engineer]: Configure job dependency chaining (`needs: [backend-tests, frontend-tests, backend-build, frontend-build]`) and add `e2e-quality-gate` in `.github/workflows/ci.yml`.
-- [x] **US-OPS-202.2** [DevOps Engineer]: Configure dynamic Playwright version browser binary caching (`actions/cache@v4`) and `workflow_run` integration in `.github/workflows/playwright-ci.yml`.
-- [x] **US-OPS-202.3** [SDET Architect]: Validate local CI simulation parity (`npm run typecheck`, `npm run lint`, `npm run test:unit`, `finalize-spec`).
+- [x] **US-OPS-202.1** (`DevOps Engineer`): Configure job dependency chaining (`needs: [backend-tests, frontend-tests, backend-build, frontend-build]`) and add `e2e-quality-gate` in `.github/workflows/ci.yml`.
+- [x] **US-OPS-202.2** (`DevOps Engineer`): Configure dynamic Playwright version browser binary caching (`actions/cache@v4`) and `workflow_run` integration in `.github/workflows/playwright-ci.yml`.
+- [x] **US-OPS-202.3** (`SDET Architect`): Validate local CI simulation parity (`npm run typecheck`, `npm run lint`, `npm run test:unit`, `finalize-spec`).
 
 ---
 
