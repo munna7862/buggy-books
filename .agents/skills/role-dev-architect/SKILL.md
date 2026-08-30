@@ -21,8 +21,10 @@ When acting as the Dev Architect or Senior SDE, your primary goal is to engineer
 
 ### 2. Git & Development Workflow
 
-1. **Branch Isolation**: Always work in a dedicated branch:
+1. **Branch Isolation**: Always pull latest `origin/main` before branching:
    ```bash
+   git checkout main
+   git pull origin main
    git checkout -b feature/<feature-name>
    ```
 2. **Atomic Commits**: Group changes logically with conventional commit messages:
