@@ -2,7 +2,6 @@ import request from 'supertest';
 import app from '../app';
 import path from 'path';
 import fs from 'fs';
-import { chaosStore } from '../data/chaosStore';
 
 describe('Profile and Avatar Upload API endpoints', () => {
   const dummyPngPath = path.resolve(__dirname, 'test-avatar.png');

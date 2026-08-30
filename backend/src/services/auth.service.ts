@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { config, JWT_SECRET } from '../config';
+import { JWT_SECRET } from '../config';
 import { chaosStore } from '../data/chaosStore';
 import { logger } from '../utils/logger';
 import { userRepository } from '../repositories/user.repository';
@@ -65,8 +65,8 @@ class AuthService {
     }
 
     try {
-      const decoded = jwt.verify(refreshToken, JWT_SECRET) as any;
-      if (decoded?.type !== 'refresh') {
+      const decoded = jwt.verify(refreshToken, JWT_SECRET) as { username?: string; type?: string };
+      if (decoded?.type !== 'refresh' || !decoded?.username) {
         throw new ForbiddenError('Forbidden: Invalid refresh token');
       }
 
@@ -76,7 +76,7 @@ class AuthService {
 
       logger.info(`Token silently refreshed for user: ${username}`, { username });
       return { token: newToken, username };
-    } catch (err) {
+    } catch {
       logger.warn('Refresh failed: Invalid or expired refresh token');
       throw new ForbiddenError('Forbidden: Invalid refresh token');
     }

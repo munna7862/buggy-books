@@ -1,7 +1,18 @@
 import { storage, DB_PATH } from '../data/storage';
+import type { ChaosConfig } from '@buggybooks/types';
 import fs from 'fs';
 
 describe('Storage Persistence Unit Tests', () => {
+  const baseChaosConfig: ChaosConfig = {
+    checkoutFailureRate: 0.15,
+    inventoryDelayMs: 3000,
+    jwtExpirySeconds: 900,
+    websocketDropRate: 0.0,
+    uploadFailureRate: 0.0,
+    injectA11yViolations: false,
+    visualChaos: false
+  };
+
   beforeEach(() => {
     // Reset storage data cache before each test
     storage.set('users', null);
@@ -26,7 +37,7 @@ describe('Storage Persistence Unit Tests', () => {
   });
 
   it('should successfully get and set values', async () => {
-    const testData = { foo: 'bar' };
+    const testData: ChaosConfig = { ...baseChaosConfig, inventoryDelayMs: 4500 };
     storage.set('chaosStore', testData);
     
     // In-memory retrieval is instantaneous and synchronous
@@ -46,11 +57,11 @@ describe('Storage Persistence Unit Tests', () => {
     
     // Perform multiple set operations concurrently
     for (let i = 0; i < iterations; i++) {
-      storage.set('chaosStore', { val: i });
+      storage.set('chaosStore', { ...baseChaosConfig, inventoryDelayMs: i });
     }
 
     // Immediately, the in-memory value should reflect the final one
-    expect(storage.get('chaosStore')).toEqual({ val: iterations - 1 });
+    expect(storage.get('chaosStore')).toEqual({ ...baseChaosConfig, inventoryDelayMs: iterations - 1 });
 
     // Wait for the queue to finish writing (50 iterations might take a tiny bit of time)
     await new Promise(resolve => setTimeout(resolve, 400));
@@ -58,14 +69,14 @@ describe('Storage Persistence Unit Tests', () => {
     // Read file directly to verify it has the final state and did not corrupt/error
     const fileContent = await fs.promises.readFile(DB_PATH, 'utf-8');
     const parsed = JSON.parse(fileContent);
-    expect(parsed.chaosStore).toEqual({ val: iterations - 1 });
+    expect(parsed.chaosStore).toEqual({ ...baseChaosConfig, inventoryDelayMs: iterations - 1 });
   });
 
   it('should not block the event loop or throw during parallel writes', async () => {
     const beforeTime = Date.now();
 
     for (let i = 0; i < 100; i++) {
-      storage.set('users', { userIndex: i });
+      storage.set('users', { testuser: { passwordHash: `hash-${i}` } });
     }
 
     const duration = Date.now() - beforeTime;
@@ -76,10 +87,10 @@ describe('Storage Persistence Unit Tests', () => {
     await new Promise(resolve => setTimeout(resolve, 400));
 
     // Ensure the final state is preserved
-    expect(storage.get('users')).toEqual({ userIndex: 99 });
+    expect(storage.get('users')).toEqual({ testuser: { passwordHash: 'hash-99' } });
     
     const fileContent = await fs.promises.readFile(DB_PATH, 'utf-8');
     const parsed = JSON.parse(fileContent);
-    expect(parsed.users).toEqual({ userIndex: 99 });
+    expect(parsed.users).toEqual({ testuser: { passwordHash: 'hash-99' } });
   });
 });

@@ -42,7 +42,7 @@ describe('Prototype Pollution Protection', () => {
     });
 
     // Verify Object.prototype is not polluted
-    const emptyObj: any = {};
+    const emptyObj: Record<string, unknown> = {};
     expect(emptyObj.passwordHash).toBeUndefined();
     expect(emptyObj.avatarUrl).toBeUndefined();
   });

@@ -3,7 +3,6 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
-import path from 'path';
 import { doubleCsrf } from 'csrf-csrf';
 import apiRoutes from './routes/api';
 import { correlationIdMiddleware } from './middleware/correlationId';

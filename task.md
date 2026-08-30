@@ -1,9 +1,9 @@
-# Sprint 1.1: Monorepo Orchestration & Developer Experience (DX)
+# Sprint 1.2: Backend Stability, Teardown Leaks & ESLint Setup
 
-**Sprint Identifier**: `SPRINT-1.1-MONOREPO-DX`  
+**Sprint Identifier**: `SPRINT-1.2-BACKEND-STABILITY`  
 **Phase**: Phase 1 (Full-Stack Quality & Developer Foundations)  
 **Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Unify monorepo installation and cross-workspace script execution so developers, CI runners, and AI agents can install, test, typecheck, and build the entire repository from the root directory with single commands.
+**Sprint Goal**: Eliminate Jest worker force-exit warnings by properly cleaning up server handles, database connections, and background timers in test teardown hooks, and establish ESLint with strict TypeScript rules for the Express backend.
 
 ---
 
@@ -11,41 +11,38 @@
 
 | Persona | Assigned Member | Responsibilities for this Sprint |
 | :--- | :--- | :--- |
-| **Scrum Master** | AI Agent / SM | Task breakdown, tracking in `task.md`, workflow handoffs. |
-| **SDET Architect** | AI Agent / SDET | Test strategy, test catalog verification, verification plan validation. |
-| **Dev Architect** | AI Agent / Dev Arch | Updating root `package.json`, configuring cross-workspace script commands, updating setup docs. |
-| **Security Officer** | AI Agent / SEC | Auditing package script security, zero secrets in VCS, dependency safety. |
-| **QA Specialist** | AI Agent / QA | Quality Gate execution: running root install, typecheck, unit tests, and build scripts. |
-| **Product Owner** | AI Agent / PO | Acceptance Criteria audit against User Stories and Definition of Done. |
+| **Scrum Master** | AI Agent / SM | Sprint breakdown, tracking in `task.md`, workflow handoffs. |
+| **SDET Architect** | AI Agent / SDET | Test strategy, isolating leaks with `--detectOpenHandles`, verifying 66/66 test pass report. |
+| **Dev Architect** | AI Agent / Dev Arch | Implementing clean async teardowns, configuring `backend/eslint.config.js`, zero-any enforcement. |
+| **Security Officer** | AI Agent / Sec Officer | Reviewing ESLint rules, checking input validation & sanitized params. |
+| **Product Owner** | AI Agent / PO | Acceptance criteria verification, backend stability sign-off. |
 | **DevOps Engineer** | AI Agent / DevOps | Commits, remote branch push, and GitHub PR creation via `gh pr create`. |
 
 ---
 
 ## 2. Sprint Backlog & Subtask Tracking
 
-### User Story US-DX-101: Fix Incomplete Monorepo Installation
-*As a developer or CI runner setting up a fresh clone of BuggyBooks, I want `npm run install:all` to install dependencies across root, backend, frontend, and playwright-e2e, so that all automation and service dependencies are ready without manual subfolder navigation.*
-- [x] **US-DX-101.1** [Dev Architect]: Inspect root `package.json` `scripts.install:all`.
-- [x] **US-DX-101.2** [Dev Architect]: Update `install:all` to chain installation across `backend/`, `frontend/`, and `playwright-e2e/`.
-- [x] **US-DX-101.3** [SDET Architect / QA]: Verify `npm run install:all` executes cleanly with exit code 0.
+### User Story US-BE-101: Fix Jest Worker Teardown Resource Leaks
+*As an SDET running backend test suites, I want Jest to exit gracefully without worker process force-exit warnings, so that automated test runs in local dev and CI do not hang or leak active handles.*
+- [x] **US-BE-101.1** [SDET Architect]: Run `npm test -- --detectOpenHandles` in `backend/` to isolate leaking handles and timers.
+- [x] **US-BE-101.2** [Dev Architect]: Inspect and fix `websockets.test.ts` (close Socket.io client and server instances in `afterAll`).
+- [x] **US-BE-101.3** [Dev Architect]: Inspect and fix `authRefresh.test.ts`, `api.test.ts`, and other suites to ensure HTTP servers/timers are cleanly closed.
+- [x] **US-BE-101.4** [Dev Architect]: Configure global test setup/teardown in Jest configuration if needed.
+- [x] **US-BE-101.5** [SDET Architect]: Verify `npm test` runs all 10 suites (66 tests) with 0 open handles and 0 force-exit warnings.
 
-### User Story US-DX-102: Unified Cross-Workspace Quality & Build Scripts
-*As an engineer or AI agent working in BuggyBooks, I want root npm commands for unit testing, E2E testing, linting, typechecking, and building, so that I can validate code health across all packages in a single terminal command.*
-- [x] **US-DX-102.1** [Dev Architect]: Configure root `package.json` scripts:
-  - `"test:unit": "concurrently \"npm run test:backend\" \"npm run test:frontend\""`
-  - `"test:backend": "cd backend && npm test"`
-  - `"test:frontend": "cd frontend && npm test"`
-  - `"test:e2e": "cd playwright-e2e && npm test"`
-  - `"lint": "cd frontend && npm run lint"`
-  - `"typecheck": "concurrently \"cd backend && npm run build\" \"cd frontend && npx tsc -b\" \"cd playwright-e2e && npx tsc --noEmit\""`
-  - `"build": "cd backend && npm run build && cd ../frontend && npm run build"`
-- [x] **US-DX-102.2** [Dev Architect]: Update `README.md` to document the unified root scripts and full installation command.
-- [x] **US-DX-102.3** [Dev Architect]: Conduct Dev Technical Code Acceptance Review.
-- [x] **US-DX-102.4** [Security Officer]: Perform Security Audit on script execution, commands, and repository secret hygiene.
-- [x] **US-DX-102.5** [SDET Architect / QA]: Conduct Quality Gate verification (`npm run typecheck`, `npm run test:unit`, `npm run build`).
-- [x] **US-DX-102.6** [Product Owner]: Conduct Product & UX Acceptance Review and authorize release.
-- [x] **US-DX-102.7** [DevOps Engineer]: Create conventional commits, push `feature/sprint-1-1-monorepo-dx` branch, and open GitHub PR.
-- [x] **US-DX-102.8** [Scrum Master]: Finalize DoD, update sprint document review gates, and conduct Sprint 1.2 handoff.
+### User Story US-BE-102: Backend ESLint Configuration & Zero Any Enforcement
+*As a backend engineer, I want ESLint configured with TypeScript strict rules in `backend/`, so that all Express routes, controllers, and services adhere to the project's quality standards.*
+- [x] **US-BE-102.1** [Dev Architect]: Install/verify ESLint dependencies (`eslint`, `@eslint/js`, `typescript-eslint`, `globals`) in `backend/`.
+- [x] **US-BE-102.2** [Dev Architect]: Create `backend/eslint.config.mjs` with TypeScript strict rules.
+- [x] **US-BE-102.3** [Dev Architect]: Add `"lint": "eslint src/"` to `backend/package.json`.
+- [x] **US-BE-102.4** [Dev Architect]: Update root `"lint"` command: `"concurrently \"cd frontend && npm run lint\" \"cd backend && npm run lint\""`.
+- [x] **US-BE-102.5** [Dev Architect]: Scan and fix all ESLint issues across `backend/src/` to achieve 0 errors and 0 warnings.
+- [x] **US-BE-102.6** [Dev Architect]: Conduct Dev Technical Code Acceptance Review.
+- [x] **US-BE-102.7** [Security Officer]: Conduct Security Audit on ESLint rules and backend route safety.
+- [x] **US-BE-102.8** [SDET Architect]: Run full test suite & typecheck to ensure zero regressions.
+- [x] **US-BE-102.9** [Product Owner]: Conduct Product Acceptance Review and authorize release.
+- [x] **US-BE-102.10** [DevOps Engineer]: Create conventional commits, push `feature/sprint-1-2-backend-stability`, and open GitHub PR.
+- [x] **US-BE-102.11** [Scrum Master]: Finalize DoD, update sprint document review gates, and conduct Sprint 1.3 handoff.
 
 ---
 
@@ -53,20 +50,19 @@
 
 | Reviewer Role | Target Role | Feedback / Action Item | Status |
 | :--- | :--- | :--- | :--- |
-| **Dev Technical Review** | Dev Architect | Inspect root `package.json` syntax, path continuity across OS environments. Scripts verified working on Windows/Linux. | `[APPROVED]` |
-| **Security Audit** | Security Officer | Verify no token leakage, secure dependency scripts. Zero secrets committed, safe CLI commands. | `[APPROVED]` |
-| **SDET Quality Gate** | SDET Architect | Verify 100% green execution on unit test suites & typechecks (66 backend + 26 frontend tests pass, typecheck clean). | `[APPROVED]` |
-| **PO Acceptance Gate** | Product Owner | Verify developer ergonomics and acceptance criteria. All US-DX-101 and US-DX-102 criteria met. Release authorized. | `[APPROVED]` |
+| **Dev Technical Review** | Dev Architect | Inspect `eslint.config.mjs`, TypeScript build, and async teardown code. Clean 0-error build & lint. | `[APPROVED]` |
+| **Security Audit** | Security Officer | Verify no credential exposure, secure middleware, strict typing. 0 `any` types achieved. | `[APPROVED]` |
+| **SDET Quality Gate** | SDET Architect | Run full Jest suite with `--detectOpenHandles`, verify 0 leaks. All 66 tests pass cleanly. | `[APPROVED]` |
+| **PO Acceptance Gate** | Product Owner | Verify stability metrics and sign off on backend stability. Release authorized. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] All user story tasks are complete.
-- [x] Root `package.json` contains verified scripts.
-- [x] `npm run install:all` successfully provisions all 3 packages.
-- [x] `npm run typecheck` passes with 0 compilation errors.
-- [x] `npm run test:unit` passes with 0 test failures.
-- [x] Changes committed to a feature branch with conventional commits.
+- [x] All 66 backend Jest tests pass cleanly.
+- [x] 0 open handle or worker force-exit warnings emitted.
+- [x] Backend ESLint configured and passing with 0 errors.
+- [x] TypeScript compiles cleanly with `npm run build`.
+- [x] Changes committed to feature branch with conventional commits.
 - [x] Remote PR opened with structured summary and test evidence.
-- [x] Handoff verified by Scrum Master for Sprint 1.2 kickoff.
+- [x] Handoff verified by Scrum Master for Sprint 1.3 kickoff.

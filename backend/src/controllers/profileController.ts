@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
@@ -23,12 +23,12 @@ const storageEngine = multer.diskStorage({
     try {
       const token = req.cookies?.token;
       if (token) {
-        const decoded = jwt.verify(token, JWT_SECRET) as any;
+        const decoded = jwt.verify(token, JWT_SECRET) as { username?: string };
         if (decoded?.username) {
           username = decoded.username;
         }
       }
-    } catch (err) {
+    } catch {
       // fallback
     }
     const ext = path.extname(file.originalname).toLowerCase();
@@ -55,13 +55,14 @@ const uploadConfig = multer({
 }).single('avatar');
 
 // Wrapper middleware to intercept and format Multer errors
-export const handleAvatarUpload = (req: Request, res: Response, next: any) => {
-  uploadConfig(req, res, (err: any) => {
+export const handleAvatarUpload = (req: Request, res: Response, next: NextFunction) => {
+  uploadConfig(req, res, (err: unknown) => {
     if (err) {
       if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
         return next(new BadRequestError('Bad Request: File size exceeds the 2MB limit'));
       }
-      return next(new BadRequestError(`Bad Request: ${err.message}`));
+      const message = err instanceof Error ? err.message : String(err);
+      return next(new BadRequestError(`Bad Request: ${message}`));
     }
     next();
   });
