@@ -1,0 +1,16 @@
+[2026-08-31 00:47:10] INFO: Network interception enabled with mode: api-only
+[2026-08-31 00:47:10] INFO: Clicking on Sign Up link
+[2026-08-31 00:47:11] INFO: Entering full name: Full profile_user_QXZvy
+[2026-08-31 00:47:11] INFO: Entering username: profile_user_QXZvy
+[2026-08-31 00:47:11] INFO: Entering password: Password123!
+[2026-08-31 00:47:11] INFO: Entering confirming password: Password123!
+[2026-08-31 00:47:11] INFO: Clicking on Create Account button
+[2026-08-31 00:47:11] INFO: Verifying landing on Checkout Page
+[2026-08-31 00:47:11] INFO: Checking if Checkout label is visible
+[2026-08-31 00:47:12] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 00:47:12] INFO: Clicking on Profile navbar link
+[2026-08-31 00:47:12] INFO: Selecting file for avatar upload: /home/runner/work/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/large_image.png
+[2026-08-31 00:47:12] INFO: Clicking Upload Image button
+[2026-08-31 00:47:13] INFO: Getting upload error message text
+[2026-08-31 00:47:13] INFO:  Verifying file size limit 400 error message Success !! Actual and Expected Values are:: true
+[2026-08-31 00:47:13] INFO: Captured 12 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_005_Profil-c08e1-Validation-smoke-regression-Google-Chrome/network-log.json

@@ -1,0 +1,26 @@
+[2026-08-31 00:46:31] INFO: Network interception enabled with mode: api-only
+[2026-08-31 00:46:31] INFO: Clicking on Sign Up link
+[2026-08-31 00:46:32] INFO: Entering full name: Full user_a_cart_Tn9c9
+[2026-08-31 00:46:32] INFO: Entering username: user_a_cart_Tn9c9
+[2026-08-31 00:46:32] INFO: Entering password: Password123!
+[2026-08-31 00:46:32] INFO: Entering confirming password: Password123!
+[2026-08-31 00:46:32] INFO: Clicking on Create Account button
+[2026-08-31 00:46:33] INFO: Verifying landing on Checkout Page
+[2026-08-31 00:46:33] INFO: Checking if Checkout label is visible
+[2026-08-31 00:46:33] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 00:46:33] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-31 00:46:34] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-31 00:46:34] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-31 00:46:35] INFO: Waiting for cart status message: added to cart
+[2026-08-31 00:46:35] INFO: Cart status message "added to cart" is visible
+[2026-08-31 00:46:35] INFO: Clicking on Add to Cart button for book id: 2
+[2026-08-31 00:46:37] INFO: Waiting for cart status message: added to cart
+[2026-08-31 00:46:37] INFO: Cart status message "added to cart" is visible
+[2026-08-31 00:46:37] INFO: Clicking on Cart link
+[2026-08-31 00:46:37] INFO:  Verifying initial cart item count Success !! Actual and Expected Values are:: 2
+[2026-08-31 00:46:37] INFO: Getting cart total text
+[2026-08-31 00:46:37] INFO: Clicking Remove item button
+[2026-08-31 00:46:38] INFO:  Verifying cart item count after removal Success !! Actual and Expected Values are:: 1
+[2026-08-31 00:46:38] INFO: Getting cart total text
+[2026-08-31 00:46:38] INFO:  Verifying total price updated after item removal Success !! Actual and Expected Values are:: true
+[2026-08-31 00:46:38] INFO: Captured 22 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_003_CartA-5f314-e-Item-from-Cart-regression-Google-Chrome/network-log.json

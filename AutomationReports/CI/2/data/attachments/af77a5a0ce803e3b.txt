@@ -1,0 +1,38 @@
+[2026-08-31 00:47:00] INFO: Network interception enabled with mode: api-only
+[2026-08-31 00:47:00] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-31 00:47:01] INFO: Clicking on Sign Up link
+[2026-08-31 00:47:01] INFO: Entering full name: Cart Quantity User
+[2026-08-31 00:47:01] INFO: Entering username: cart_qty_user_1788103020927_b42d6d76
+[2026-08-31 00:47:01] INFO: Entering password: Password123!
+[2026-08-31 00:47:01] INFO: Entering confirming password: Password123!
+[2026-08-31 00:47:01] INFO: Clicking on Create Account button
+[2026-08-31 00:47:02] INFO: Verifying landing on Checkout Page
+[2026-08-31 00:47:02] INFO: Checking if Checkout label is visible
+[2026-08-31 00:47:03] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 00:47:03] INFO: Clicking on Catalog link
+[2026-08-31 00:47:03] INFO: Filling search input with: Mockingbird
+[2026-08-31 00:47:03] INFO: Clicking Search button
+[2026-08-31 00:47:03] INFO: Clicking on Add to Cart button for book id: 2
+[2026-08-31 00:47:04] INFO: Waiting for cart status message: added to cart
+[2026-08-31 00:47:04] INFO: Cart status message "added to cart" is visible
+[2026-08-31 00:47:04] INFO: Waiting for cart status message: added to cart
+[2026-08-31 00:47:04] INFO: Cart status message "added to cart" is visible
+[2026-08-31 00:47:04] INFO: Clicking on Cart link
+[2026-08-31 00:47:05] INFO: Getting cart total text
+[2026-08-31 00:47:05] INFO:  Verifying 1 item in cart with non-zero total price Success !! Actual and Expected Values are:: true
+[2026-08-31 00:47:05] INFO: Clicking on Catalog link
+[2026-08-31 00:47:05] INFO: Filling search input with: Gatsby
+[2026-08-31 00:47:05] INFO: Clicking Search button
+[2026-08-31 00:47:05] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-31 00:47:06] INFO: Waiting for cart status message: added to cart
+[2026-08-31 00:47:06] INFO: Cart status message "added to cart" is visible
+[2026-08-31 00:47:06] INFO: Waiting for cart status message: added to cart
+[2026-08-31 00:47:06] INFO: Cart status message "added to cart" is visible
+[2026-08-31 00:47:06] INFO: Clicking on Cart link
+[2026-08-31 00:47:07] INFO: Getting cart total text
+[2026-08-31 00:47:07] INFO:  Verifying cart item count increased to 2 and grand total updated dynamically Success !! Actual and Expected Values are:: true
+[2026-08-31 00:47:07] INFO: Getting cart total text
+[2026-08-31 00:47:07] INFO: Clicking Remove item button
+[2026-08-31 00:47:07] INFO: Getting cart total text
+[2026-08-31 00:47:07] INFO:  Verifying cart item count decreased to 1 and grand total reduced dynamically Success !! Actual and Expected Values are:: true
+[2026-08-31 00:47:07] INFO: Captured 21 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_006_CartQ-6d4e6--and-order-total-regression-Google-Chrome/network-log.json

@@ -1,0 +1,9 @@
+[2026-08-31 00:47:27] INFO: Network interception enabled with mode: api-only
+[2026-08-31 00:47:27] INFO: Clicking on Sign Up link
+[2026-08-31 00:47:27] INFO: Entering password: 123
+[2026-08-31 00:47:27] INFO: Getting password strength text
+[2026-08-31 00:47:27] INFO:  Verifying if password strength is Weak Success !! Actual and Expected Values are:: Weak
+[2026-08-31 00:47:27] INFO: Entering password: ComplexPass123!
+[2026-08-31 00:47:27] INFO: Getting password strength text
+[2026-08-31 00:47:27] INFO:  Verifying if password strength is Strong Success !! Actual and Expected Values are:: Strong
+[2026-08-31 00:47:27] INFO: Captured 6 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-9448a-rength-Indicator-regression-Google-Chrome/network-log.json

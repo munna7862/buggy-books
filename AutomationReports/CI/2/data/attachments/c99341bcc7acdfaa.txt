@@ -1,0 +1,14 @@
+[2026-08-31 00:47:28] INFO: Network interception enabled with mode: api-only
+[2026-08-31 00:47:28] INFO: Clicking on Login link
+[2026-08-31 00:47:28] INFO: Entering username: admin
+[2026-08-31 00:47:28] INFO: Entering password: password123
+[2026-08-31 00:47:28] INFO: Clicking on Sign In button
+[2026-08-31 00:47:29] INFO: Verifying landing on Checkout Page
+[2026-08-31 00:47:29] INFO: Checking if Checkout label is visible
+[2026-08-31 00:47:30] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 00:47:30] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-08-31 00:47:30] INFO: ✅ Authentication state saved to: /home/runner/work/buggy-books/buggy-books/auth-state.json
+[2026-08-31 00:47:30] INFO: Clicking on Logout button
+[2026-08-31 00:47:30] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-08-31 00:47:30] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-08-31 00:47:30] INFO: Captured 10 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-ef8d5-sting-User-smoke-regression-Google-Chrome/network-log.json

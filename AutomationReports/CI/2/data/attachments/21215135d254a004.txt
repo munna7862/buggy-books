@@ -1,0 +1,10 @@
+[2026-08-31 00:47:17] INFO: Clicking on Sign Up link
+[2026-08-31 00:47:17] INFO: Entering full name: Full refresh_ui_user_UzIxp
+[2026-08-31 00:47:17] INFO: Entering username: refresh_ui_user_UzIxp
+[2026-08-31 00:47:17] INFO: Entering password: Password123!
+[2026-08-31 00:47:17] INFO: Entering confirming password: Password123!
+[2026-08-31 00:47:17] INFO: Clicking on Create Account button
+[2026-08-31 00:47:18] INFO: Verifying landing on Checkout Page
+[2026-08-31 00:47:18] INFO: Checking if Checkout label is visible
+[2026-08-31 00:47:19] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 00:47:19] INFO: Clicking on Profile navbar link

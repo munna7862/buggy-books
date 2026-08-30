@@ -1,0 +1,27 @@
+[2026-08-31 00:47:54] INFO: Clicking on Sign Up link
+[2026-08-31 00:47:54] INFO: Entering full name: Full ws_user_aHAZS
+[2026-08-31 00:47:54] INFO: Entering username: ws_user_aHAZS
+[2026-08-31 00:47:54] INFO: Entering password: Password123!
+[2026-08-31 00:47:54] INFO: Entering confirming password: Password123!
+[2026-08-31 00:47:54] INFO: Clicking on Create Account button
+[2026-08-31 00:47:55] INFO: Verifying landing on Checkout Page
+[2026-08-31 00:47:55] INFO: Checking if Checkout label is visible
+[2026-08-31 00:47:56] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 00:47:56] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-31 00:47:56] INFO: Waiting for cart status message: added to cart
+[2026-08-31 00:47:58] INFO: Cart status message "added to cart" is visible
+[2026-08-31 00:47:58] INFO: Clicking on Cart link
+[2026-08-31 00:47:58] INFO: Clicking on Proceed to Checkout button
+[2026-08-31 00:47:58] INFO: Entering first name: Web
+[2026-08-31 00:47:58] INFO: Entering last name: SocketUser
+[2026-08-31 00:47:58] INFO: Entering shipping address: 123 Buggy Lane
+[2026-08-31 00:47:58] INFO: Entering city: Stack City
+[2026-08-31 00:47:58] INFO: Clicking on Next Step button
+[2026-08-31 00:47:58] INFO: Entering card number
+[2026-08-31 00:47:58] INFO: Entering card expiry: 12/30
+[2026-08-31 00:47:58] INFO: Entering card CVV: 123
+[2026-08-31 00:47:58] INFO: Checking if Next Step button is visible - Element is visible
+[2026-08-31 00:47:58] INFO: Clicking on Next Step button on Payment page
+[2026-08-31 00:47:58] INFO: Waiting for confirmation message containing: Thank you for your order
+[2026-08-31 00:47:59] INFO: Payment completed successfully and order confirmation message is displayed.
+[2026-08-31 00:47:59] INFO:  Verifying hot-toast alert banner is rendered for purchase socket event Success !! Actual and Expected Values are:: true
