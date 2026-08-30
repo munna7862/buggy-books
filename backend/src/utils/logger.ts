@@ -5,6 +5,7 @@ import { config } from '../config';
 export interface LogStore {
   correlationId?: string;
   username?: string;
+  sessionId?: string;
 }
 
 // Thread-local store for request-scoped logger metadata
@@ -20,6 +21,9 @@ const format = winston.format.combine(
       }
       if (store.username) {
         info.username = store.username;
+      }
+      if (store.sessionId) {
+        info.sessionId = store.sessionId;
       }
     }
     return info;

@@ -107,9 +107,10 @@ export class CatalogPage extends BasePage {
   }
 
   public async clearSearch(): Promise<void> {
+    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/books') && res.status() === 200);
     await this.doClick(this.btnClearSearch, `Clicking Clear search button`);
+    await responsePromise;
     await this.btnClearSearch.waitFor({ state: 'hidden', timeout: 10000 });
-    await this.page.waitForResponse(res => res.url().includes('/api/books') && res.status() === 200);
   }
 
 

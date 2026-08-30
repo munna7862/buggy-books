@@ -67,7 +67,7 @@ test.describe('JWT Expiration & Silent Refresh UI Suite', () => {
     });
 
     await test.step('Attempt protected UI action (open profile page via navbar)', async () => {
-      await profilePage.openProfile();
+      await profilePage.clickProfileLink();
     });
 
     await test.step('Verify user is redirected to /login page', async () => {

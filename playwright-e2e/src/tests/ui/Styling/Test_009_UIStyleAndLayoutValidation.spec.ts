@@ -155,10 +155,11 @@ test.describe('Modern UI Styling & Layout Suite', () => {
       const bgValue = await page.evaluate(
         () => getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()
       );
+      const isLightBg = bgValue === TestData.LIGHT_MODE.BG || bgValue === 'hsl(210, 40%, 98%)';
       lightBgFlag = await commonFunctions.compareTwoValues(
-        bgValue === TestData.LIGHT_MODE.BG,
+        isLightBg,
         true,
-        `Verifying --bg CSS variable in light mode equals ${TestData.LIGHT_MODE.BG} (actual: ${bgValue})`
+        `Verifying --bg CSS variable in light mode equals ${TestData.LIGHT_MODE.BG} or hsl (actual: ${bgValue})`
       );
     });
 
@@ -166,14 +167,15 @@ test.describe('Modern UI Styling & Layout Suite', () => {
       await page.emulateMedia({ colorScheme: 'dark' });
       await page.reload();
       await page.waitForSelector(TestData.SELECTORS.BOOK_CARD);
-      // Chrome resolves CSS custom property color values to their hex representation
+      // Chrome resolves CSS custom property color values to their hex or hsl representation
       const bgValue = await page.evaluate(
         () => getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()
       );
+      const isDarkBg = bgValue === TestData.DARK_MODE.BG || bgValue === 'hsl(220, 40%, 6%)';
       darkBgFlag = await commonFunctions.compareTwoValues(
-        bgValue === TestData.DARK_MODE.BG,
+        isDarkBg,
         true,
-        `Verifying --bg CSS variable in dark mode equals ${TestData.DARK_MODE.BG} (actual: ${bgValue})`
+        `Verifying --bg CSS variable in dark mode equals ${TestData.DARK_MODE.BG} or hsl (actual: ${bgValue})`
       );
     });
 

@@ -2,6 +2,7 @@ import http from 'http';
 import { Server } from 'socket.io';
 import app from './app';
 import { chaosStore } from './data/chaosStore';
+import { sessionStorageContext } from './data/storage';
 import { logger } from './utils/logger';
 import { config } from './config';
 
@@ -21,9 +22,14 @@ const io = new Server(server, {
 io.on('connection', (socket) => {
   logger.info(`WebSocket client connected: ${socket.id}`, { socketId: socket.id });
 
+  const sessionId = (socket.handshake.headers['x-test-session-id'] as string) || (socket.handshake.query?.sessionId as string) || undefined;
+  const dropRate = sessionStorageContext.run({ sessionId }, () => chaosStore.getConfig().websocketDropRate);
+
   // Flaky socket connection drop simulation
-  const dropRate = chaosStore.getConfig().websocketDropRate;
-  if (dropRate > 0 && Math.random() < dropRate) {
+  if (dropRate >= 1.0) {
+    logger.warn(`Chaos: Force-disconnecting WebSocket client ${socket.id} immediately (rate: ${dropRate})`);
+    socket.disconnect(true);
+  } else if (dropRate > 0 && Math.random() < dropRate) {
     const delay = Math.floor(Math.random() * 3000) + 1000; // 1 to 4 seconds
     setTimeout(() => {
       logger.warn(`Chaos: Force-disconnecting WebSocket client ${socket.id} (rate: ${dropRate})`);
@@ -48,37 +54,46 @@ const CITIES = ['San Francisco', 'London', 'Tokyo', 'Berlin', 'Sydney', 'Mumbai'
 const BOOKS = [
   'The Great Buggy Gatsby',
   'To Kill a Mockingbird Exception',
-  '1984 Bugs',
-  'Pride and Prejudice and Performance Issues',
-  'The Null and the Furious',
-  'Harry Potter and the Goblet of Fire Events',
-  'The Hitchhiker\'s Guide to the API',
-  'Moby Stack Overflow'
+  '1984 Syntax Errors',
+  'The Catcher in the Try-Catch',
+  'Pride and Null Pointer Exception',
+  'The Lord of the Rings: The Fellowship of the Segfault',
+  'Harry Potter and the Infinite Recursion',
+  'Brave New Backend'
 ];
 
+function getRandomElement<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 setInterval(() => {
-  if (io.sockets.sockets.size > 0) {
-    const templateObj = EVENT_TEMPLATES[Math.floor(Math.random() * EVENT_TEMPLATES.length)];
-    const city = CITIES[Math.floor(Math.random() * CITIES.length)];
-    const book = BOOKS[Math.floor(Math.random() * BOOKS.length)];
-    const count = Math.floor(Math.random() * 12) + 2;
+  const templateObj = getRandomElement(EVENT_TEMPLATES);
+  const city = getRandomElement(CITIES);
+  const book = getRandomElement(BOOKS);
+  const count = Math.floor(Math.random() * 40) + 5;
 
-    const message = templateObj.template
-      .replace('{city}', city)
-      .replace('{book}', `"${book}"`)
-      .replace('{count}', String(count));
+  const message = templateObj.template
+    .replace('{city}', city)
+    .replace('{book}', book)
+    .replace('{count}', count.toString());
 
-    const eventPayload = {
-      id: Math.random().toString(36).substring(2, 9),
-      message,
-      type: templateObj.type,
-      timestamp: new Date().toISOString()
-    };
+  const eventPayload = {
+    id: `evt-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+    type: templateObj.type,
+    message,
+    timestamp: new Date().toISOString()
+  };
 
-    io.emit('bookstore-event', eventPayload);
-  }
+  io.emit('bookstore-event', eventPayload);
 }, 8000);
 
-server.listen(PORT, () => {
-  logger.info(`Backend server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(PORT, () => {
+    logger.info(`BuggyBooks Backend API Server running on port ${PORT}`, {
+      port: PORT,
+      nodeEnv: config.nodeEnv
+    });
+  });
+}
+
+export { server, io };

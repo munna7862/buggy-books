@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import { doubleCsrf } from 'csrf-csrf';
 import apiRoutes from './routes/api';
 import { correlationIdMiddleware } from './middleware/correlationId';
+import { sessionMiddleware } from './middleware/session.middleware';
 import { logger, loggerStore } from './utils/logger';
 import { config } from './config';
 import { errorHandler } from './middleware/error.middleware';
@@ -14,6 +15,7 @@ const app = express();
 
 app.use(cookieParser());
 app.use(correlationIdMiddleware);
+app.use(sessionMiddleware);
 app.use(express.json());
 
 // --- CSRF Protection (Double-Submit Cookie Pattern) ---

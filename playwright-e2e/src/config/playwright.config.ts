@@ -5,10 +5,10 @@ import * as path from 'path';
 export default defineConfig({
   testDir: '../tests',
   testMatch: ['**/*.spec.ts'],
-  fullyParallel: false,
+  fullyParallel: true,
   timeout: 300 * 1000,
   retries: 1,
-  workers: process.env.CI ? 2 : 1,
+  workers: process.env.CI ? 4 : undefined,
 
   reporter: [
     ['html', { open: 'never' }],

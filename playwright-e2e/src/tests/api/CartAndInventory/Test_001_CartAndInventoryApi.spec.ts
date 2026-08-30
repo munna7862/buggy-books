@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../../core/base/base.fixture';
 import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
@@ -22,7 +22,7 @@ test.describe('Cart & Inventory API', () => {
   let cookieHeader = '';
   let username = '';
 
-  test.beforeAll(async () => {
+  test.beforeEach(async () => {
     // 1. Register a new user
     username = uniqueUsername();
     const password = 'Password123!';
@@ -49,11 +49,11 @@ test.describe('Cart & Inventory API', () => {
 
     const setCookieHeader = loginRes.headers['set-cookie'];
     if (setCookieHeader) {
-      cookieHeader = setCookieHeader.map(cookie => cookie.split(';')[0]).join('; ');
+      cookieHeader = setCookieHeader.map((cookie: string) => cookie.split(';')[0]).join('; ');
     }
   });
 
-  test('API_CART_01: Cart persistence after server crash @smoke @regression', async () => {
+  test('API_CART_01: Cart persistence after server crash @smoke @regression', async ({}, testInfo) => {
     // 1. Add item to cart
     const addRes = await apiUtil.makeRequest<AxiosResponse<Array<{ id: string }>>>({
       method: 'POST',
@@ -66,8 +66,9 @@ test.describe('Cart & Inventory API', () => {
     expect(addRes.status).toBe(200);
     expect(addRes.data).toContainEqual(expect.objectContaining({ id: '3' }));
 
-    // 2. Restart server locally (if applicable)
-    if (envConfig.apiBaseUrl.includes('localhost')) {
+    // 2. Restart server locally (only if single worker to avoid crashing concurrent tests)
+    const isParallelRun = Boolean(process.env.CI || testInfo.workerIndex > 0);
+    if (envConfig.apiBaseUrl.includes('localhost') && !isParallelRun) {
       await commonUtil.logMessage('INFO', 'Restarting local server by touching backend server.ts...');
       // Touch backend/src/server.ts to trigger ts-node-dev reload
       const serverFilePath = path.join(__dirname, '../../../../../backend/src/server.ts');
@@ -79,7 +80,7 @@ test.describe('Cart & Inventory API', () => {
         await commonUtil.logMessage('WARNING', `Could not find server.ts at path: ${serverFilePath}`);
       }
     } else {
-      await commonUtil.logMessage('INFO', 'Remote server detected. Skipping server reload step.');
+      await commonUtil.logMessage('INFO', 'Parallel run or remote server detected. Skipping server reload step.');
     }
 
     // 3. Get Cart and verify book 3 is still there

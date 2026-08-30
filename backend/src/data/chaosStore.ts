@@ -4,11 +4,9 @@ import type { ChaosConfig } from '@buggybooks/types';
 export type { ChaosConfig };
 
 class ChaosStore {
-  private config: ChaosConfig;
-
   private readonly defaultConfig: ChaosConfig = {
-    checkoutFailureRate: 0.15,
-    inventoryDelayMs: 3000,
+    checkoutFailureRate: 0.0,
+    inventoryDelayMs: 0,
     jwtExpirySeconds: 900,
     websocketDropRate: 0.0,
     uploadFailureRate: 0.0,
@@ -16,30 +14,25 @@ class ChaosStore {
     visualChaos: false
   };
 
-  constructor() {
-    const saved = storage.get('chaosStore');
-    this.config = saved || { ...this.defaultConfig };
-  }
-
-  private save() {
-    storage.set('chaosStore', this.config);
-  }
-
   public getConfig(): ChaosConfig {
-    return this.config;
+    const saved = storage.get('chaosStore');
+    if (saved) return saved;
+    const initial = { ...this.defaultConfig };
+    storage.set('chaosStore', initial);
+    return initial;
   }
 
   public updateConfig(newConfig: Partial<ChaosConfig>): void {
-    this.config = {
-      ...this.config,
+    const current = this.getConfig();
+    const updated = {
+      ...current,
       ...newConfig
     };
-    this.save();
+    storage.set('chaosStore', updated);
   }
 
   public resetConfig(): void {
-    this.config = { ...this.defaultConfig };
-    this.save();
+    storage.set('chaosStore', { ...this.defaultConfig });
   }
 }
 

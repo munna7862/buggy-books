@@ -62,16 +62,22 @@ export class ProfilePage extends BasePage {
   }
 
   public async uploadAvatar(filePath: string): Promise<void> {
-    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/profile/upload')).catch(() => undefined);
     await this.selectAvatarFile(filePath);
+    await expect(this.uploadButton).toBeEnabled({ timeout: 5000 });
+    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/profile/upload')).catch(() => undefined);
     await this.clickUploadButton();
     await responsePromise;
+    // Wait for either success status or error banner to appear in DOM so React has finished state update
+    await Promise.race([
+      this.uploadStatusSuccess.waitFor({ state: 'visible', timeout: 5000 }).catch(() => undefined),
+      this.uploadStatusError.waitFor({ state: 'visible', timeout: 5000 }).catch(() => undefined),
+    ]);
   }
-
 
   public async getAvatarPreviewSrc(): Promise<string> {
     await this.logMessage('INFO', "Getting profile avatar preview image src");
     await this.avatarPreview.waitFor({ state: 'visible', timeout: 10000 });
+    await expect(this.avatarPreview).toHaveAttribute('src', /\/uploads\//, { timeout: 5000 }).catch(() => undefined);
     return (await this.avatarPreview.getAttribute('src')) ?? '';
   }
 

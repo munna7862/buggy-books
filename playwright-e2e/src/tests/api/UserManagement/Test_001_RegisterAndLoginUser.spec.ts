@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../../core/base/base.fixture';
 import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
@@ -253,7 +253,7 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
 test.describe('Login API - Positive, Negative and Security', () => {
   let registeredUser: RegisterPayload;
 
-  test.beforeAll(async () => {
+  test.beforeEach(async () => {
     registeredUser = await createRegisteredUser();
   });
 

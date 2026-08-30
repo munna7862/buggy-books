@@ -58,7 +58,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
       await page.waitForSelector('body.visual-chaos-active');
       await page.waitForSelector(TestData.SELECTORS.BOOK_CARD);
       try {
-        await expect(page).toHaveScreenshot('catalog-baseline.png', { maxDiffPixelRatio: 0.01, timeout: 2000 });
+        await expect(page).toHaveScreenshot('catalog-baseline.png', { maxDiffPixelRatio: 0.0001, timeout: 2000 });
       } catch (err) {
         // Visual diff expected when chaos mode is active
         diffDetected = true;

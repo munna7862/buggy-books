@@ -37,18 +37,22 @@ const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ error: 'Unauthorized: Token required' });
   }
 
-  jwt.verify(token, JWT_SECRET, (err: jwt.VerifyErrors | null, decoded: unknown) => {
-    const user = decoded as AuthUser | undefined;
-    if (err || user?.type !== 'access') return res.status(403).json({ error: 'Forbidden: Invalid token' });
+  try {
+    const user = jwt.verify(token, JWT_SECRET) as AuthUser;
+    if (!user || user.type !== 'access') {
+      return res.status(403).json({ error: 'Forbidden: Invalid token' });
+    }
     req.user = user;
-    
+
     const store = loggerStore.getStore();
-    if (store && user?.username) {
+    if (store && user.username) {
       store.username = user.username;
     }
-    
+
     next();
-  });
+  } catch {
+    return res.status(403).json({ error: 'Forbidden: Invalid token' });
+  }
 };
 
 // --- Standard API Routes ---
@@ -76,5 +80,6 @@ router.post('/profile/upload', profileController.handleAvatarUpload, authenticat
 router.get('/test/config', asyncHandler(testController.getConfig));
 router.post('/test/config', asyncHandler(testController.updateConfig));
 router.post('/test/reset', asyncHandler(testController.resetData));
+router.delete('/test/session/:id', asyncHandler(testController.deleteSession));
 
 export default router;
