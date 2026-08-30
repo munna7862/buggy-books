@@ -1,0 +1,24 @@
+{
+  "defaultPagination": {
+    "page": 1,
+    "limit": 8
+  },
+  "page2Pagination": {
+    "page": 2,
+    "limit": 8
+  },
+  "paginationScenarios": [
+    { "page": 1, "limit": 5, "description": "Standard page 1" },
+    { "page": 2, "limit": 5, "description": "Standard page 2" },
+    { "page": 1, "limit": 1, "description": "Minimum limit" },
+    { "page": 9999, "limit": 10, "description": "Exceeding total pages" }
+  ],
+  "negativeScenarios": [
+    { "query": "page=abc&limit=10", "description": "String instead of number" },
+    { "query": "page=-1&limit=10", "description": "Negative page number" },
+    { "query": "page=1&limit=0", "description": "Zero limit" }
+  ],
+  "expectedAllBooksCount": 15,
+  "unsupportedMethodStatus": [404, 405],
+  "allowedInvalidParameterStatus": [200, 400]
+}

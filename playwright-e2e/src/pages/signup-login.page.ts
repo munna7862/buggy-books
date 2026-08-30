@@ -32,6 +32,9 @@ export class SignUpPage extends BasePage {
   private get elePwdStrengthText(): Locator {
     return this.page.locator('.pwd-text');
   }
+  private get eleLoginTitle(): Locator {
+    return this.page.locator('.auth-title');
+  }
 
   // Add methods to interact with the Sign Up page elements
   public async getErrorBannerText(): Promise<string> {
@@ -94,10 +97,6 @@ export class SignUpPage extends BasePage {
     await this.enterUsername(username);
     await this.enterPassword(password);
     await this.clickSignIn();
-  }
-
-  private get eleLoginTitle(): Locator {
-    return this.page.locator('.auth-title');
   }
 
   public async isSignInPageLoaded(): Promise<boolean> {

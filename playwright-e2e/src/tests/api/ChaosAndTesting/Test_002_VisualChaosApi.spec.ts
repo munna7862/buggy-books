@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
@@ -15,7 +16,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     let isVisualChaosTrue = false;
 
     try {
-      const configRes = await apiUtil.makeRequest({
+      const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'POST',
         url: CONFIG_URL,
         data: TestData.TOGGLE_PAYLOAD,
@@ -26,7 +27,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
       isStatusOk = await commonUtil.compareTwoValues(configRes.status, 200, "Verifying POST /api/test/config status is 200");
       isVisualChaosTrue = await commonUtil.compareTwoValues(configRes.data.config.visualChaos, true, "Verifying visualChaos field is true in response config");
     } finally {
-      await apiUtil.makeRequest({
+      await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'POST',
         url: CONFIG_URL,
         data: { visualChaos: false },
@@ -42,7 +43,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     let isStatusOk = false;
     let isVisualChaosFalse = false;
 
-    const resetRes = await apiUtil.makeRequest({
+    const resetRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: RESET_URL,
       logMessage: 'Call POST /api/test/reset',
@@ -50,7 +51,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     });
     expect(resetRes.status).toBe(200);
 
-    const configRes = await apiUtil.makeRequest({
+    const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'GET',
       url: CONFIG_URL,
       logMessage: 'Get chaos config post-reset',
@@ -67,7 +68,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     let isStatus400 = false;
     let hasValidationError = false;
 
-    const configRes = await apiUtil.makeRequest({
+    const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: CONFIG_URL,
       data: TestData.INVALID_TYPE_PAYLOAD,
@@ -90,7 +91,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     let isCheckoutRateSaved = false;
 
     try {
-      const configRes = await apiUtil.makeRequest({
+      const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'POST',
         url: CONFIG_URL,
         data: TestData.COMBINED_PAYLOAD,
@@ -102,7 +103,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
       isVisualChaosSaved = await commonUtil.compareTwoValues(configRes.data.config.visualChaos, true, "Verifying visualChaos saved as true");
       isCheckoutRateSaved = await commonUtil.compareTwoValues(configRes.data.config.checkoutFailureRate, 0.5, "Verifying checkoutFailureRate saved as 0.5");
     } finally {
-      await apiUtil.makeRequest({
+      await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'POST',
         url: CONFIG_URL,
         data: TestData.RESET_PAYLOAD,

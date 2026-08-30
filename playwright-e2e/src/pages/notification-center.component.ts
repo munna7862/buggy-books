@@ -24,6 +24,10 @@ export class NotificationCenterComponent extends BasePage {
     return this.page.locator('div[role="status"], .react-hot-toast, div:has-text("🛒"), div:has-text("🔥")');
   }
 
+  private get eleStatusConnected(): Locator {
+    return this.page.locator('#ws-status-dot.status-connected');
+  }
+
   // Action and state query methods
   public async clickBellButton(): Promise<void> {
     await this.doClick(this.btnBellNotification, "Clicking on WebSocket Notification Bell button");
@@ -31,7 +35,7 @@ export class NotificationCenterComponent extends BasePage {
 
   public async isStatusConnected(): Promise<boolean> {
     try {
-      await this.page.waitForSelector('#ws-status-dot.status-connected', { timeout: 10000 });
+      await this.eleStatusConnected.waitFor({ state: 'visible', timeout: 10000 });
       return true;
     } catch {
       return false;

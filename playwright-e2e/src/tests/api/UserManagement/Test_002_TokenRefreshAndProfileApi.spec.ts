@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
@@ -28,7 +29,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     let isForbiddenReturned = false;
 
     try {
-      await apiUtil.makeRequest({
+      await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'POST',
         url: REGISTER_URL,
         data: { username, password, fullName },
@@ -36,7 +37,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
         responseType: 'full'
       });
 
-      const configRes = await apiUtil.makeRequest({
+      const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'POST',
         url: CONFIG_URL,
         data: { jwtExpirySeconds: 2 },
@@ -45,7 +46,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
       });
       expect(configRes.status).toBe(200);
 
-      const loginRes = await apiUtil.makeRequest({
+      const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'POST',
         url: LOGIN_URL,
         data: { username, password },
@@ -60,7 +61,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
       await new Promise(r => setTimeout(r, 3000));
 
 
-      const protectedRes = await apiUtil.makeRequest({
+      const protectedRes = await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'GET',
         url: CART_URL,
         headers: { 'Cookie': cookieHeader },
@@ -70,7 +71,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
 
       isForbiddenReturned = await commonUtil.compareTwoValues(protectedRes.status, 403, "Verifying 403 Forbidden returned for expired token");
     } finally {
-      await apiUtil.makeRequest({
+      await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'POST',
         url: CONFIG_URL,
         data: { jwtExpirySeconds: 900 },
@@ -91,7 +92,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     let hasRefreshToken = false;
     let hasHttpOnlyFlag = false;
 
-    await apiUtil.makeRequest({
+    await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: REGISTER_URL,
       data: { username, password, fullName },
@@ -99,7 +100,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
       responseType: 'full'
     });
 
-    const loginRes = await apiUtil.makeRequest({
+    const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: LOGIN_URL,
       data: { username, password },
@@ -126,7 +127,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     let isRefreshOk = false;
     let hasNewAccessToken = false;
 
-    await apiUtil.makeRequest({
+    await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: REGISTER_URL,
       data: { username, password, fullName },
@@ -134,7 +135,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
       responseType: 'full'
     });
 
-    const loginRes = await apiUtil.makeRequest({
+    const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: LOGIN_URL,
       data: { username, password },
@@ -147,7 +148,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     const refreshCookie = setCookieHeader.find(c => c.startsWith('refreshToken='));
     const refreshTokenHeader = refreshCookie ? refreshCookie.split(';')[0] : '';
 
-    const refreshRes = await apiUtil.makeRequest({
+    const refreshRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: REFRESH_URL,
       headers: { 'Cookie': refreshTokenHeader },
@@ -167,7 +168,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
   test('API_UPL_01: Unauthorized Session Check @regression', async () => {
     let isUnauthorized = false;
 
-    const uploadRes = await apiUtil.makeRequest({
+    const uploadRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: UPLOAD_URL,
       logMessage: 'Attempt POST /api/profile/upload without auth cookies',

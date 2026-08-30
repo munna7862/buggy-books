@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
@@ -24,7 +25,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     let hasCorrelationIdHeader = false;
     let isValidUuid = false;
 
-    const res = await apiUtil.makeRequest({
+    const res = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'GET',
       url: BOOKS_URL,
       logMessage: 'GET /api/books to check correlation ID generation',
@@ -46,7 +47,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     let isCorrelationIdPreserved = false;
     const customCorrelationId = TestData.CUSTOM_CORRELATION_ID;
 
-    const res = await apiUtil.makeRequest({
+    const res = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'GET',
       url: BOOKS_URL,
       headers: { 'x-correlation-id': customCorrelationId },
@@ -67,7 +68,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     let isBodyCorrelationIdMatching = false;
     const customCorrelationId = TestData.CUSTOM_CORRELATION_ID + '_err';
 
-    const res = await apiUtil.makeRequest({
+    const res = await apiUtil.makeRequest<AxiosResponse<{ correlationId?: string }>>({
       method: 'POST',
       url: CONFIG_URL,
       data: { visualChaos: "invalid_string_type" },
@@ -96,7 +97,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     let isCheckoutOk = false;
     let isCorrelationPreserved = false;
 
-    const registerRes = await apiUtil.makeRequest({
+    const registerRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: REGISTER_URL,
       data: { username, password, fullName },
@@ -106,7 +107,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     });
     isRegisterOk = await commonUtil.compareTwoValues(registerRes.status, 201, "Verifying user registration status is 201");
 
-    const loginRes = await apiUtil.makeRequest({
+    const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: LOGIN_URL,
       data: { username, password },
@@ -119,7 +120,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     const setCookieHeader: string[] = loginRes.headers['set-cookie'] || [];
     const cookieHeader = setCookieHeader.map(c => c.split(';')[0]).join('; ');
 
-    const cartRes = await apiUtil.makeRequest({
+    const cartRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: CART_URL,
       data: { bookId: '1' },
@@ -129,7 +130,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     });
     isCartOk = await commonUtil.compareTwoValues(cartRes.status, 200, "Verifying add to cart status is 200");
 
-    const checkoutRes = await apiUtil.makeRequest({
+    const checkoutRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: CHECKOUT_URL,
       data: { firstName: 'LogUser', lastName: 'Test', creditCard: '4111222233334444' },

@@ -32,6 +32,10 @@ export class ProfilePage extends BasePage {
     return this.page.getByRole('heading', { name: 'User Profile' });
   }
 
+  private get profileInfoSection(): Locator {
+    return this.page.locator('.profile-info-section');
+  }
+
   constructor(page: Page) {
     super(page);
   }
@@ -73,10 +77,6 @@ export class ProfilePage extends BasePage {
 
   public async getSuccessMessageText(): Promise<string> {
     return await this.doGetText(this.uploadStatusSuccess, "Getting upload success message text");
-  }
-
-  private get profileInfoSection(): Locator {
-    return this.page.locator('.profile-info-section');
   }
 
   public async getProfileInfoText(): Promise<string> {

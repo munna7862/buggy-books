@@ -12,7 +12,7 @@ export class ApiUtil {
    * Enhanced method to make HTTP requests with better error handling and logging
    * Combines functionality from processAPIRequest with full method support
    */
-  public async makeRequest(options: {
+  public async makeRequest<T = any>(options: {
     method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
     url: string;
     data?: any;
@@ -20,7 +20,7 @@ export class ApiUtil {
     logMessage: string;
     responseType?: "data" | "status" | "headers" | "full";
     timeout?: number;
-  }): Promise<any> {
+  }): Promise<T> {
     const { method, url, data, headers = {}, logMessage, responseType = "data", timeout = 30000 } = options;
 
     try {
@@ -49,7 +49,7 @@ export class ApiUtil {
       }
       await this.objCommonFunctions.logMessage("INFO", `📥 Response Payload: ${JSON.stringify(response.data, null, 2)}`);
 
-      return responseType === "full" ? response : response[responseType];
+      return (responseType === "full" ? response : response[responseType]) as T;
     } catch (error: any) {
       const errorDetails = error.response
         ? `Status: ${error.response.status} ${error.response.statusText} | Response: ${JSON.stringify(error.response.data, null, 2)}`
@@ -64,7 +64,7 @@ export class ApiUtil {
         data: error.response?.data ?? null,
         headers: error.response?.headers ?? {},
         message: error.message
-      };
+      } as unknown as T;
     }
   }
 
@@ -81,7 +81,7 @@ export class ApiUtil {
     };
 
     await this.objCommonFunctions.logMessage("INFO", `Fetching Bearer Token from ${url} with data: ${requestData.toString()}`);
-    const response = await this.makeRequest({
+    const response = await this.makeRequest<{ access_token: string }>({
       method: "POST",
       url,
       data: requestData,

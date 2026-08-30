@@ -1,0 +1,6 @@
+{
+  "description": "Test data for Chaos and Testing API tests",
+  "bookId": "1",
+  "inventoryDelayMs": 3000,
+  "checkoutFailureRate": 1.0
+}

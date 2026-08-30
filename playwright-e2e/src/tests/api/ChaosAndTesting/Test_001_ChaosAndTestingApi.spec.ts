@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
@@ -22,7 +23,7 @@ test.describe('Chaos and Testing Utilities API', () => {
 
   test.beforeEach(async () => {
     // Clean up state before each test
-    const resetRes = await apiUtil.makeRequest({
+    const resetRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: RESET_URL,
       logMessage: 'Reset state before test',
@@ -33,7 +34,7 @@ test.describe('Chaos and Testing Utilities API', () => {
 
   test.afterAll(async () => {
     // Final cleanup after all tests in this suite run
-    await apiUtil.makeRequest({
+    await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: RESET_URL,
       logMessage: 'Final state reset',
@@ -47,7 +48,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     const fullName = 'Chaos Test User';
 
     // 1. Register a new user
-    const registerRes = await apiUtil.makeRequest({
+    const registerRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: REGISTER_URL,
       data: { username, password, fullName },
@@ -57,7 +58,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(registerRes.status).toBe(201);
 
     // 2. Login to get cookies
-    const loginRes = await apiUtil.makeRequest({
+    const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: LOGIN_URL,
       data: { username, password },
@@ -73,7 +74,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     }
 
     // 3. Add book 3 to cart
-    const addRes = await apiUtil.makeRequest({
+    const addRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: CART_URL,
       data: { bookId: '3' },
@@ -84,7 +85,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(addRes.status).toBe(200);
 
     // 4. Perform Global Reset
-    const resetRes = await apiUtil.makeRequest({
+    const resetRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: RESET_URL,
       logMessage: 'Call Global Reset',
@@ -93,7 +94,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(resetRes.status).toBe(200);
 
     // 5. Verify the registered user is cleared (Login should fail)
-    const loginPostReset = await apiUtil.makeRequest({
+    const loginPostReset = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: LOGIN_URL,
       data: { username, password },
@@ -104,7 +105,7 @@ test.describe('Chaos and Testing Utilities API', () => {
 
     // 6. Verify cart is cleared (Get Cart with default user should be empty)
     // Default user is testuser/buggybooks
-    const defaultLoginRes = await apiUtil.makeRequest({
+    const defaultLoginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: LOGIN_URL,
       data: { username: 'testuser', password: 'buggybooks' },
@@ -119,7 +120,7 @@ test.describe('Chaos and Testing Utilities API', () => {
       defaultCookieHeader = defaultSetCookie.map(cookie => cookie.split(';')[0]).join('; ');
     }
 
-    const getCartRes = await apiUtil.makeRequest({
+    const getCartRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'GET',
       url: CART_URL,
       headers: { 'Cookie': defaultCookieHeader },
@@ -136,7 +137,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     const fullName = 'Chaos Checkout User';
 
     // 1. Register & Login
-    const registerRes = await apiUtil.makeRequest({
+    const registerRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: REGISTER_URL,
       data: { username, password, fullName },
@@ -145,7 +146,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     });
     expect(registerRes.status).toBe(201);
 
-    const loginRes = await apiUtil.makeRequest({
+    const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: LOGIN_URL,
       data: { username, password },
@@ -161,7 +162,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     }
 
     // 2. Add book to cart
-    const addRes = await apiUtil.makeRequest({
+    const addRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: CART_URL,
       data: { bookId: '1' },
@@ -172,7 +173,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(addRes.status).toBe(200);
 
     // 3. Set checkout failure rate to 1.0 (always fail)
-    const configRes = await apiUtil.makeRequest({
+    const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: CONFIG_URL,
       data: { checkoutFailureRate: 1.0 },
@@ -182,7 +183,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(configRes.status).toBe(200);
 
     // 4. Try checkout and verify it returns 500
-    const checkoutRes = await apiUtil.makeRequest({
+    const checkoutRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: CHECKOUT_URL,
       data: {
@@ -200,7 +201,7 @@ test.describe('Chaos and Testing Utilities API', () => {
 
   test('API_CHAOS_02: Inject API latency @smoke @regression @chaos', async () => {
     // 1. Set inventory latency to 3000 ms
-    const configRes = await apiUtil.makeRequest({
+    const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: CONFIG_URL,
       data: { inventoryDelayMs: 3000 },
@@ -211,7 +212,7 @@ test.describe('Chaos and Testing Utilities API', () => {
 
     // 2. Query inventory report and measure latency
     const startTime = Date.now();
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<{ totalBooks: number; totalValue: number; timestamp: string }>>({
       method: 'GET',
       url: INVENTORY_URL,
       logMessage: 'Get inventory report under latency injection',

@@ -27,7 +27,7 @@
   *So that* response payloads in API tests are strictly typed rather than `any`.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Refactor `playwright-e2e/src/utils/api.util.ts`:
+  - [x] Refactor `playwright-e2e/src/utils/api.util.ts`:
     ```typescript
     public async makeRequest<T = any>(options: {
       method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -39,10 +39,10 @@
       timeout?: number;
     }): Promise<T>
     ```
-  - [ ] Update API specs in `src/tests/api/` to use typed models from `/shared/types/`.
+  - [x] Update API specs in `src/tests/api/` to use typed models from `/shared/types/`.
 - **Acceptance Criteria**:
-  - [ ] `ApiUtil.makeRequest<Book[]>(...)` returns strongly-typed array of `Book`.
-  - [ ] TypeScript compiles cleanly with zero `any` return warnings.
+  - [x] `ApiUtil.makeRequest<Book[]>(...)` returns strongly-typed array of `Book`.
+  - [x] TypeScript compiles cleanly with zero `any` return warnings.
 
 ---
 
@@ -53,13 +53,13 @@
   *So that* anti-patterns like raw `page.click()` or public locators are blocked before merging.
 - **Story Points**: 3 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Add Page Object validator logic in `scripts/finalize-spec.ts`:
+  - [x] Add Page Object validator logic in `scripts/finalize-spec.ts`:
     - Rule 1: Check for forbidden raw calls (`page.click(`, `page.fill(`, `page.textContent(`); must use `this.doClick`, `this.doEnterText`, `this.doGetText`.
     - Rule 2: Check that locators are defined as `private get <name>()`.
-  - [ ] Add command option: `npm run finalize-spec -- --all-poms` to validate all POMs.
+  - [x] Add command option: `npm run finalize-spec -- --all-poms` to validate all POMs.
 - **Acceptance Criteria**:
-  - [ ] `npm run finalize-spec -- src/pages/checkout.page.ts` validates checkout POM cleanly.
-  - [ ] Anti-pattern violations in Page Objects are reported with actionable error messages.
+  - [x] `npm run finalize-spec -- src/pages/checkout.page.ts` validates checkout POM cleanly.
+  - [x] Anti-pattern violations in Page Objects are reported with actionable error messages.
 
 ---
 
@@ -67,20 +67,20 @@
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **SDET Quality Gate** | SDET Architect | Verify POM static linter catches prohibited raw locator calls. | `[PENDING]` |
-| **Dev Technical Review** | Dev Architect | Review generic type signatures in `api.util.ts`. | `[PENDING]` |
-| **PO Acceptance Gate** | Product Owner | Verify clean developer output from `finalize-spec`. | `[PENDING]` |
+| **SDET Quality Gate** | SDET Architect | Verified POM static linter catches prohibited raw locator calls and enforces private getter encapsulation. 29/29 checks passing across all 7 Page Objects. | `[APPROVED]` |
+| **Dev Technical Review** | Dev Architect | Reviewed generic type signatures in `api.util.ts` and integration with `@buggybooks/types`. Zero compile warnings. | `[APPROVED]` |
+| **PO Acceptance Gate** | Product Owner | Verified clear and actionable developer feedback for both Page Objects and API specs from `finalize-spec`. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [ ] `ApiUtil` generic method implemented and verified with typed API specs.
-- [ ] `finalize-spec.ts` extended to lint Page Objects.
-- [ ] All Page Objects in `src/pages/` pass the new static linter rules.
-- [ ] Playwright E2E and API suites pass 100%.
-- [ ] Changes committed to feature branch with conventional commits.
-- [ ] Handoff verified by Scrum Master for Sprint 2.3 kickoff.
+- [x] `ApiUtil` generic method implemented and verified with typed API specs.
+- [x] `finalize-spec.ts` extended to lint Page Objects.
+- [x] All Page Objects in `src/pages/` pass the new static linter rules.
+- [x] Playwright E2E and API suites pass 100%.
+- [x] Changes committed to feature branch with conventional commits.
+- [x] Handoff verified by Scrum Master for Sprint 2.3 kickoff.
 
 ---
 

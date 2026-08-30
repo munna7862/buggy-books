@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
@@ -27,7 +28,7 @@ test.describe('Cart & Inventory API', () => {
     const password = 'Password123!';
     const fullName = 'Cart Test User';
 
-    const registerRes = await apiUtil.makeRequest({
+    const registerRes = await apiUtil.makeRequest<AxiosResponse<{ message: string; username: string }>>({
       method: 'POST',
       url: REGISTER_URL,
       data: { username, password, fullName },
@@ -37,7 +38,7 @@ test.describe('Cart & Inventory API', () => {
     expect(registerRes.status).toBe(201);
 
     // 2. Login to get cookies
-    const loginRes = await apiUtil.makeRequest({
+    const loginRes = await apiUtil.makeRequest<AxiosResponse<{ message: string; username: string }>>({
       method: 'POST',
       url: LOGIN_URL,
       data: { username, password },
@@ -54,7 +55,7 @@ test.describe('Cart & Inventory API', () => {
 
   test('API_CART_01: Cart persistence after server crash @smoke @regression', async () => {
     // 1. Add item to cart
-    const addRes = await apiUtil.makeRequest({
+    const addRes = await apiUtil.makeRequest<AxiosResponse<Array<{ id: string }>>>({
       method: 'POST',
       url: CART_URL,
       data: { bookId: '3' },
@@ -82,7 +83,7 @@ test.describe('Cart & Inventory API', () => {
     }
 
     // 3. Get Cart and verify book 3 is still there
-    const getRes = await apiUtil.makeRequest({
+    const getRes = await apiUtil.makeRequest<AxiosResponse<Array<{ id: string }>>>({
       method: 'GET',
       url: CART_URL,
       headers: { 'Cookie': cookieHeader },
@@ -94,7 +95,7 @@ test.describe('Cart & Inventory API', () => {
   });
 
   test('API_INV_01: Trigger inventory report @smoke @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<{ totalBooks: number; totalValue: number; timestamp: string }>>({
       method: 'GET',
       url: INVENTORY_URL,
       logMessage: 'Get inventory report',

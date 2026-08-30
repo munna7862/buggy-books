@@ -1,5 +1,5 @@
 import { spawnSync } from 'child_process';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, statSync } from 'fs';
 import { isAbsolute, join, relative, resolve, sep } from 'path';
 
 type CheckResult = {
@@ -10,37 +10,198 @@ type CheckResult = {
 
 const args = process.argv.slice(2);
 const shouldRun = args.includes('run') || args.includes('--run');
-const specArg = args.find(arg => arg !== 'run' && !arg.startsWith('--'));
+const isAllPoms = args.includes('--all-poms');
+const targetArg = args.find(arg => arg !== 'run' && !arg.startsWith('--'));
 
-if (!specArg) {
-  console.error('Usage: npm run finalize-spec -- <spec-path> [run]');
+if (!isAllPoms && !targetArg) {
+  console.error('Usage: npm run finalize-spec -- <spec-path|page-path> [run]');
+  console.error('       npm run finalize-spec -- --all-poms');
   process.exit(2);
 }
 
 const projectRoot = resolve(__dirname, '..');
-const specPath = isAbsolute(specArg) ? resolve(specArg) : resolve(projectRoot, specArg);
+const pagesRoot = join(projectRoot, 'src', 'pages');
 const testsRoot = join(projectRoot, 'src', 'tests');
+
+function normalizePath(filePath: string): string {
+  return filePath.split(sep).join('/');
+}
+
+function runTypeScriptCheck(): CheckResult {
+  const compileResult = spawnSync(process.execPath, [require.resolve('typescript/bin/tsc'), '--noEmit'], {
+    cwd: projectRoot,
+    stdio: 'pipe',
+    encoding: 'utf-8'
+  });
+
+  return {
+    name: 'TypeScript compilation',
+    passed: compileResult.status === 0,
+    detail: compileResult.status === 0
+      ? 'Project compiles with no TypeScript errors.'
+      : compileResult.error
+        ? `TypeScript compiler could not start: ${compileResult.error.message}`
+        : `TypeScript compiler failed:\n${compileResult.stdout || compileResult.stderr || 'Unknown error'}`
+  };
+}
+
+function validatePageObjectFile(pagePath: string): CheckResult[] {
+  const results: CheckResult[] = [];
+  const relPath = normalizePath(relative(projectRoot, pagePath));
+
+  if (!existsSync(pagePath)) {
+    results.push({
+      name: 'Page Object path',
+      passed: false,
+      detail: `File not found: ${relPath}`
+    });
+    return results;
+  }
+
+  const content = readFileSync(pagePath, 'utf-8');
+
+  // Rule 1: BasePage inheritance
+  const extendsBasePage = /class\s+\w+\s+extends\s+BasePage\b/.test(content);
+  results.push({
+    name: 'BasePage inheritance',
+    passed: extendsBasePage,
+    detail: extendsBasePage
+      ? 'Class extends BasePage.'
+      : 'Page Object class must extend BasePage.'
+  });
+
+  // Rule 2: No forbidden raw page interaction calls (must use BasePage wrappers)
+  const forbiddenRawCalls = content.match(/\b(?:this\.)?page\.(?:click|fill|textContent|dblclick|check|uncheck)\s*\(/g) ?? [];
+  results.push({
+    name: 'Wrapper method usage',
+    passed: forbiddenRawCalls.length === 0,
+    detail: forbiddenRawCalls.length === 0
+      ? 'No prohibited raw page.click/fill/textContent calls found; all actions use BasePage wrappers.'
+      : `Found ${forbiddenRawCalls.length} raw Playwright call(s) (${forbiddenRawCalls.slice(0, 3).join(', ')}); must use BasePage wrapper methods (this.doClick, this.doEnterText, this.doGetText).`
+  });
+
+  // Rule 3: Locators must be defined as private getters or helper methods (no public locators, no class property locators)
+  const publicLocatorMatches = content.match(/public\s+(?:readonly\s+)?(?:get\s+)?([a-zA-Z0-9_$]+)\s*(?:\(\s*\))?\s*:\s*Locator\b/g) ?? [];
+  const propertyLocatorMatches = content.match(/(?:private|protected)\s+(?:readonly\s+)?([a-zA-Z0-9_$]+)\s*:\s*Locator\s*;/g) ?? [];
+  const totalLocatorEncapsulationViolations = publicLocatorMatches.length + propertyLocatorMatches.length;
+
+  results.push({
+    name: 'Locator encapsulation',
+    passed: totalLocatorEncapsulationViolations === 0,
+    detail: totalLocatorEncapsulationViolations === 0
+      ? 'All locators are properly encapsulated as private getters or private helper methods.'
+      : `Found locator encapsulation issue(s): ${publicLocatorMatches.length} public locator(s), ${propertyLocatorMatches.length} property field locator(s). Define locators as 'private get <name>(): Locator'.`
+  });
+
+  // Rule 4: No static waits (waitForTimeout)
+  const staticWaits = content.match(/\bwaitForTimeout\s*\(/g) ?? [];
+  results.push({
+    name: 'No static waits',
+    passed: staticWaits.length === 0,
+    detail: staticWaits.length === 0
+      ? 'No waitForTimeout calls found.'
+      : `Found ${staticWaits.length} waitForTimeout call(s); use dynamic Playwright locator waits or expectations.`
+  });
+
+  return results;
+}
+
+function getAllPageObjectFiles(dir: string): string[] {
+  let files: string[] = [];
+  const entries = readdirSync(dir);
+  for (const entry of entries) {
+    const fullPath = join(dir, entry);
+    const stat = statSync(fullPath);
+    if (stat.isDirectory()) {
+      files = files.concat(getAllPageObjectFiles(fullPath));
+    } else if (entry.endsWith('.ts') && !entry.endsWith('.d.ts')) {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+// ---------------- EXECUTION DISPATCHER ----------------
+
+if (isAllPoms) {
+  console.log('Validating all Page Objects in src/pages/...\n');
+  const pomFiles = getAllPageObjectFiles(pagesRoot);
+  let totalChecks = 0;
+  let passedChecks = 0;
+  let hasAnyFailure = false;
+
+  for (const pomFile of pomFiles) {
+    const relPomPath = normalizePath(relative(projectRoot, pomFile));
+    console.log(`Page Object: ${relPomPath}`);
+    const results = validatePageObjectFile(pomFile);
+
+    for (const res of results) {
+      totalChecks++;
+      if (res.passed) {
+        passedChecks++;
+        console.log(`  PASS | ${res.name} | ${res.detail}`);
+      } else {
+        hasAnyFailure = true;
+        console.log(`  FAIL | ${res.name} | ${res.detail}`);
+      }
+    }
+    console.log('');
+  }
+
+  const tsCheck = runTypeScriptCheck();
+  totalChecks++;
+  if (tsCheck.passed) {
+    passedChecks++;
+    console.log(`PASS | ${tsCheck.name} | ${tsCheck.detail}`);
+  } else {
+    hasAnyFailure = true;
+    console.log(`FAIL | ${tsCheck.name} | ${tsCheck.detail}`);
+  }
+
+  console.log(`\nPage Object Validation Summary: ${passedChecks}/${totalChecks} checks passed across ${pomFiles.length} Page Objects.`);
+  process.exit(hasAnyFailure ? 1 : 0);
+}
+
+// Single target execution (Page Object or Spec)
+const targetPath = isAbsolute(targetArg!) ? resolve(targetArg!) : resolve(projectRoot, targetArg!);
+const relativePagesPath = relative(pagesRoot, targetPath);
+const isPageObject = relativePagesPath.length > 0
+  && !relativePagesPath.startsWith('..')
+  && (targetPath.endsWith('.page.ts') || targetPath.endsWith('.component.ts') || targetPath.endsWith('.ts'));
+
+const relativeSpecPath = relative(testsRoot, targetPath);
+const isSpec = relativeSpecPath.length > 0
+  && !relativeSpecPath.startsWith('..')
+  && relativeSpecPath.endsWith('.spec.ts');
+
+if (isPageObject) {
+  console.log(`\nFinalize Page Object Results: ${normalizePath(relative(projectRoot, targetPath))}\n`);
+  const results = validatePageObjectFile(targetPath);
+  const tsCheck = runTypeScriptCheck();
+  results.push(tsCheck);
+
+  for (const result of results) {
+    console.log(`${result.passed ? 'PASS' : 'FAIL'} | ${result.name} | ${result.detail}`);
+  }
+
+  const failed = results.filter(r => !r.passed);
+  console.log(`\n${results.length - failed.length}/${results.length} checks passed.`);
+  process.exit(failed.length === 0 ? 0 : 1);
+}
+
+// Default: Spec validation
 const results: CheckResult[] = [];
 
 function addResult(name: string, passed: boolean, detail: string): void {
   results.push({ name, passed, detail });
 }
 
-function normalizePath(filePath: string): string {
-  return filePath.split(sep).join('/');
-}
+addResult('Spec path', isSpec && existsSync(targetPath), isSpec
+  ? normalizePath(relative(projectRoot, targetPath))
+  : 'Path must reference an existing .spec.ts file under src/tests/ or a Page Object under src/pages/.');
 
-const relativeSpecPath = relative(testsRoot, specPath);
-const isSpec = relativeSpecPath.length > 0
-  && !relativeSpecPath.startsWith('..')
-  && relativeSpecPath.endsWith('.spec.ts');
-
-addResult('Spec path', isSpec && existsSync(specPath), isSpec
-  ? normalizePath(relative(projectRoot, specPath))
-  : 'Path must reference an existing .spec.ts file under src/tests/.');
-
-if (isSpec && existsSync(specPath)) {
-  const specContent = readFileSync(specPath, 'utf-8');
+if (isSpec && existsSync(targetPath)) {
+  const specContent = readFileSync(targetPath, 'utf-8');
   const pathParts = normalizePath(relativeSpecPath).split('/');
   const isUiSpec = pathParts[0] === 'ui';
   const staticWaitMatches = specContent.match(/\bwaitForTimeout\s*\(/g) ?? [];
@@ -107,21 +268,14 @@ if (isSpec && existsSync(specPath)) {
     addResult('Docker matrix registration', false, `${normalizePath(relativeSpecPath)} is not covered by the ui or api CI shards.`);
   }
 
-  const compileResult = spawnSync(process.execPath, [require.resolve('typescript/bin/tsc'), '--noEmit'], {
-    cwd: projectRoot,
-    stdio: 'inherit'
-  });
-  addResult('TypeScript compilation', compileResult.status === 0, compileResult.status === 0
-    ? 'Project compiles with no TypeScript errors.'
-    : compileResult.error
-      ? `TypeScript compiler could not start: ${compileResult.error.message}`
-      : `TypeScript compiler exited with code ${compileResult.status ?? 'unknown'}.`);
+  const tsCheck = runTypeScriptCheck();
+  results.push(tsCheck);
 
   if (shouldRun && results.every(result => result.passed)) {
     const testResult = spawnSync(process.execPath, [
       require.resolve('@playwright/test/cli'),
       'test',
-      normalizePath(relative(projectRoot, specPath)),
+      normalizePath(relative(projectRoot, targetPath)),
       '--config=src/config/playwright.config.ts',
       '--workers=1'
     ], {
@@ -150,3 +304,4 @@ for (const result of results) {
 const failed = results.filter(result => !result.passed);
 console.log(`\n${results.length - failed.length}/${results.length} checks passed.`);
 process.exit(failed.length === 0 ? 0 : 1);
+
