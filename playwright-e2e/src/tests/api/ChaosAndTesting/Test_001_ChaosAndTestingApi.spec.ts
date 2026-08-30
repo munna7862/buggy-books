@@ -1,7 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../../core/base/base.fixture';
 import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
-import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
 
 const commonUtil = new CommonFunctions();
@@ -21,8 +20,8 @@ function uniqueUsername(prefix: string = 'chaosuser'): string {
 
 test.describe('Chaos and Testing Utilities API', () => {
 
-  test.beforeEach(async () => {
-    // Clean up state before each test
+  test.beforeEach(async ({ apiUtil }) => {
+    // Clean up state before each test in the isolated session
     const resetRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: RESET_URL,
@@ -32,17 +31,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(resetRes.status).toBe(200);
   });
 
-  test.afterAll(async () => {
-    // Final cleanup after all tests in this suite run
-    await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: RESET_URL,
-      logMessage: 'Final state reset',
-      responseType: 'full'
-    });
-  });
-
-  test('API_TEST_01: Global reset clears all non-default users and carts @smoke @regression', async () => {
+  test('API_TEST_01: Global reset clears all non-default users and carts @smoke @regression', async ({ apiUtil }) => {
     const username = uniqueUsername();
     const password = 'Password123!';
     const fullName = 'Chaos Test User';
@@ -131,7 +120,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(getCartRes.data).toEqual([]);
   });
 
-  test('API_CHAOS_01: Inject checkout failures @smoke @regression @chaos', async () => {
+  test('API_CHAOS_01: Inject checkout failures @smoke @regression @chaos', async ({ apiUtil }) => {
     const username = uniqueUsername();
     const password = 'Password123!';
     const fullName = 'Chaos Checkout User';
@@ -199,7 +188,7 @@ test.describe('Chaos and Testing Utilities API', () => {
     expect(checkoutRes.data.error).toContain('Internal Server Error: Payment Gateway Timeout');
   });
 
-  test('API_CHAOS_02: Inject API latency @smoke @regression @chaos', async () => {
+  test('API_CHAOS_02: Inject API latency @smoke @regression @chaos', async ({ apiUtil }) => {
     // 1. Set inventory latency to 3000 ms
     const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',

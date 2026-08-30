@@ -1,10 +1,18 @@
 {
   "users": {
     "admin": {
-      "passwordHash": "$2b$10$1pYIx8UcmFqev/6Yb2cCEewExLf7Q39L0tdRlVAHc4Eo/KCcTN91q"
+      "passwordHash": "$2b$10$Cv45IVM1fqkz9RXYskVKReh7kgrDcw1pH.AlgaFpio8JqQOObojti"
     },
     "testuser": {
-      "passwordHash": "$2b$10$fdhhYryAWo99lpx8tpHQSO9gSGodqWWhbe07UO44V6AVtIv915nbS"
+      "passwordHash": "$2b$10$sJPLlUEErZUrfnsPHuAcne.jfPUPs7M0Xe1pojqtlXt4hSOK5ON0i"
+    },
+    "cartuser17881037770953fec851e@": {
+      "passwordHash": "$2b$10$BfPnixvwv.V7rRZTqqgGNOPjnXP19FFtp7fCAMf6okxuLPmoHJosG",
+      "fullName": "Cart Test User"
+    },
+    "johndoe178810378222053c1f1fd@": {
+      "passwordHash": "$2b$10$UqHY02FO4oWdMTF7kaPUBOBmjrSU.gZbO1ArIBtsEaalRSEZNFLv2",
+      "fullName": "john doe"
     }
   },
   "dataStore": {

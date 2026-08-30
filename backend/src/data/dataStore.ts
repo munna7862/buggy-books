@@ -1,7 +1,5 @@
-
-
-import type { Book, PaginatedBooks } from '@buggybooks/types';
-import type { Order } from '@buggybooks/types';
+import type { Book, PaginatedBooks, Order } from '@buggybooks/types';
+import { storage } from './storage';
 
 export type { Book, PaginatedBooks, Order };
 
@@ -11,10 +9,7 @@ export interface AppData {
   orders: Record<string, Order[]>;
 }
 
-import { storage } from './storage';
-
 class DataStore {
-  private data: AppData;
   private readonly defaultBooks: Book[] = [
     { id: '1', title: 'The Great Buggy Gatsby', author: 'F. Scott Fitzgerald', price: 10.99, genre: 'Classic', description: 'A story of wealth, obsession, and bugs in the Jazz Age.', image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop' },
     { id: '2', title: 'To Kill a Mockingbird Exception', author: 'Harper Lee', price: 15.50, genre: 'Classic', description: 'A coming-of-age tale with unhandled exceptions.', image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?q=80&w=600&auto=format&fit=crop' },
@@ -33,29 +28,33 @@ class DataStore {
     { id: '15', title: 'Don Quixote de la Repository', author: 'Miguel de Cervantes', price: 16.99, genre: 'Classic', description: 'A delusional developer tilts at windmill microservices.', image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=600&auto=format&fit=crop' },
   ];
 
-  constructor() {
-    const saved = storage.get('dataStore');
-    if (saved) {
-      this.data = saved;
-    } else {
-      this.data = {
-        books: [...this.defaultBooks],
-        cart: {},
-        orders: {}
-      };
-    }
+  private getDefaultData(): AppData {
+    return {
+      books: [...this.defaultBooks],
+      cart: {},
+      orders: {}
+    };
   }
 
-  private save() {
-    storage.set('dataStore', this.data);
+  private getData(): AppData {
+    const saved = storage.get('dataStore');
+    if (saved) return saved;
+    const initial = this.getDefaultData();
+    storage.set('dataStore', initial);
+    return initial;
+  }
+
+  private save(data: AppData) {
+    storage.set('dataStore', data);
   }
 
   public getBooks(): Book[] {
-    return this.data.books;
+    return this.getData().books;
   }
 
   public getBooksPaginated(query: string, page: number, limit: number): PaginatedBooks {
-    let filtered = this.data.books;
+    const data = this.getData();
+    let filtered = data.books;
 
     if (query) {
       const q = query.toLowerCase();
@@ -75,54 +74,51 @@ class DataStore {
   }
 
   public getBookById(id: string): Book | undefined {
-    return this.data.books.find(b => b.id === id);
+    return this.getData().books.find(b => b.id === id);
   }
 
   public getCart(username: string): Book[] {
-    return this.data.cart[username] || [];
+    return this.getData().cart[username] || [];
   }
 
   public addToCart(username: string, book: Book): void {
-    if (!this.data.cart[username]) this.data.cart[username] = [];
-    this.data.cart[username].push(book);
-    this.save();
+    const data = this.getData();
+    if (!data.cart[username]) data.cart[username] = [];
+    data.cart[username].push(book);
+    this.save(data);
   }
 
   public removeFromCart(username: string, bookId: string): boolean {
-    if (!this.data.cart[username]) return false;
-    const index = this.data.cart[username].findIndex(b => b.id === bookId);
+    const data = this.getData();
+    if (!data.cart[username]) return false;
+    const index = data.cart[username].findIndex(b => b.id === bookId);
     if (index === -1) return false;
-    this.data.cart[username].splice(index, 1);
-    this.save();
+    data.cart[username].splice(index, 1);
+    this.save(data);
     return true;
   }
 
   public clearCart(username: string): void {
-    this.data.cart[username] = [];
-    this.save();
+    const data = this.getData();
+    data.cart[username] = [];
+    this.save(data);
   }
 
   public getOrders(username: string): Order[] {
-    return this.data.orders[username] || [];
+    return this.getData().orders[username] || [];
   }
 
   public addOrder(username: string, order: Order): void {
-    if (!this.data.orders[username]) this.data.orders[username] = [];
-    this.data.orders[username].push(order);
-    this.save();
+    const data = this.getData();
+    if (!data.orders[username]) data.orders[username] = [];
+    data.orders[username].push(order);
+    this.save(data);
   }
 
   public resetData(): void {
-    this.data = {
-      books: [...this.defaultBooks],
-      cart: {},
-      orders: {}
-    };
-    this.save();
+    const fresh = this.getDefaultData();
+    this.save(fresh);
   }
 }
 
-
-
 export const dataStore = new DataStore();
-

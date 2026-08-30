@@ -210,3 +210,20 @@ These test cases isolate frontend logic and UI pages by mocking backend API resp
 5. **Verify & Reset**: Confirm successful order completion banner, reset chaos configuration via `POST /api/test/reset`.
 
 **Automated**: **No** — *Planned for automation*
+
+---
+
+## 5. Session Sandboxing & Parallel Isolation Tests
+
+*Sprint Source: [Sprint 3.1: Multi-User Session Isolation & Parallel Sandboxing](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_3_1_multi_user_isolation_and_sandboxing.md)*
+
+These test cases validate multi-user ephemeral session isolation and parallel worker sandboxing infrastructure.
+
+### **Suite: Session Isolation Infrastructure**
+| ID | Title | Description | Priority | Target Coverage | Tags | Covered |
+|:---|:---|:---|:---|:---|:---|:---|
+| **TC-SAN-001** | Multi-User Ephemeral Session Creation | Verify that sending `x-test-session-id` header creates an isolated ephemeral data store. Two distinct session IDs can register different users and add items to independent carts without cross-contamination. | Critical | Backend Integration / Playwright E2E | `@smoke` `@regression` | **Yes**<br>- Infrastructure: `backend/src/data/storage.ts` (`SessionStorageManager`)<br>- Middleware: `backend/src/routes/api.ts` (`sessionMiddleware` via `AsyncLocalStorage`)<br>- Fixture: `playwright-e2e/src/core/base/base.fixture.ts` (auto-injected `x-test-session-id`) |
+| **TC-SAN-002** | DataStore & ChaosStore Session Partitioning | Verify that `storage.get()` and `storage.set()` route to session-scoped data when `sessionStorageContext` contains an active `sessionId`. Chaos config changes in one session do not affect another session's chaos state. | Critical | Backend Unit / Integration | `@regression` | **Yes**<br>- Implementation: `backend/src/data/storage.ts` (`Storage.get/set` with `getActiveSessionId`)<br>- Chaos Seed: `createSeedClone()` returns `chaosStore: null` for clean defaults per session<br>- Verified: 72/72 backend tests pass, 105/105 E2E tests pass under 4 workers |
+| **TC-SAN-003** | Session Teardown & TTL Expiration | Verify that `DELETE /api/test/session/:id` removes the ephemeral session data store. Verify that `SessionStorageManager.cleanupExpiredSessions()` evicts sessions older than the configured TTL (default 30 minutes). | High | Backend Unit / Playwright Fixture | `@regression` | **Yes**<br>- Endpoint: `DELETE /api/test/session/:id` in `backend/src/routes/api.ts`<br>- Fixture teardown: `base.fixture.ts` calls `DELETE /api/test/session/${testSessionId}` in `afterEach`<br>- TTL: 60s sweep interval, 30-minute default TTL |
+| **TC-SAN-004** | Playwright 4-Worker Parallel Execution with Zero State Leakage | Execute the full Playwright suite with `--workers=4`. Verify all 105 tests pass with zero failures and zero flakiness. Each worker operates on an independent `x-test-session-id` scoped backend data store. | Critical | Playwright E2E (Full Suite) | `@smoke` `@regression` | **Yes**<br>- Command: `npx playwright test --workers=4`<br>- Result: **105 passed (52.4s)**, 0 failed, 0 flaky<br>- Workers: 4 parallel Chromium instances with unique session IDs |
+

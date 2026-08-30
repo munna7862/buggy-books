@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../../core/base/base.fixture';
 import * as path from 'path';
 import { randomBytes } from 'crypto';
 import { envConfig } from '../../../config/env.config';

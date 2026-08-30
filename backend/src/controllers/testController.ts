@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { dataStore } from '../data/dataStore';
 import { chaosStore } from '../data/chaosStore';
 import { authService } from '../services/auth.service';
+import { storage } from '../data/storage';
 
 const chaosConfigSchema = z.object({
   checkoutFailureRate: z.number().min(0).max(1).optional(),
@@ -29,4 +30,15 @@ export const resetData = (req: Request, res: Response) => {
 
 export const getConfig = (req: Request, res: Response) => {
   res.json(chaosStore.getConfig());
+};
+
+export const deleteSession = (req: Request, res: Response) => {
+  const { id } = req.params;
+  const deleted = storage.deleteSession(id);
+  res.json({
+    success: true,
+    message: `Session ${id} deleted successfully`,
+    deleted,
+    activeSessions: storage.getActiveSessionCount()
+  });
 };

@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken';
 import { config, JWT_SECRET } from '../config';
 import { profileService } from '../services/profile.service';
 import { BadRequestError } from '../errors/app-error';
+import { sessionStorageContext } from '../data/storage';
 
 // Ensure uploads folder exists inside workspace root (outside src/ to avoid build triggers)
 const UPLOADS_DIR = config.uploadsDir;
@@ -56,6 +57,7 @@ const uploadConfig = multer({
 
 // Wrapper middleware to intercept and format Multer errors
 export const handleAvatarUpload = (req: Request, res: Response, next: NextFunction) => {
+  const sessionId = req.sessionId || (req.headers['x-test-session-id'] as string) || undefined;
   uploadConfig(req, res, (err: unknown) => {
     if (err) {
       if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
@@ -64,7 +66,10 @@ export const handleAvatarUpload = (req: Request, res: Response, next: NextFuncti
       const message = err instanceof Error ? err.message : String(err);
       return next(new BadRequestError(`Bad Request: ${message}`));
     }
-    next();
+    // Re-bind sessionStorageContext across asynchronous Multer stream processing
+    sessionStorageContext.run({ sessionId }, () => {
+      next();
+    });
   });
 };
 

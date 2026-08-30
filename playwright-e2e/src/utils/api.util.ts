@@ -3,9 +3,19 @@ import { CommonFunctions } from "./common.util";
 
 export class ApiUtil {
   private objCommonFunctions: CommonFunctions;
+  private sessionId?: string;
 
-  constructor() {
+  constructor(sessionId?: string) {
     this.objCommonFunctions = new CommonFunctions();
+    this.sessionId = sessionId;
+  }
+
+  public setSessionId(sessionId?: string): void {
+    this.sessionId = sessionId;
+  }
+
+  public getSessionId(): string | undefined {
+    return this.sessionId;
   }
 
   /**
@@ -29,12 +39,15 @@ export class ApiUtil {
         await this.objCommonFunctions.logMessage("INFO", `📤 Request Payload: ${JSON.stringify(data, null, 2)}`);
       }
 
+      const sessionHeaders: Record<string, string> = this.sessionId ? { "x-test-session-id": this.sessionId } : {};
+
       const config: any = {
         method,
         url,
         headers: { 
           "Content-Type": "application/json", 
           "x-bypass-rate-limit": "true",
+          ...sessionHeaders,
           ...headers 
         },
         timeout,

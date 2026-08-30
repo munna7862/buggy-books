@@ -1,7 +1,6 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../../../core/base/base.fixture';
 import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
-import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
 import TestData from '../../../test-data/api/ChaosAndTesting/Test_002_VisualChaosApi.json';
 
@@ -11,7 +10,7 @@ const RESET_URL = `${envConfig.apiBaseUrl}/api/test/reset`;
 
 test.describe('Visual Chaos Configuration API Suite', () => {
 
-  test('API_VIS_01: Toggle visualChaos Config via API @smoke @regression @chaos', async () => {
+  test('API_VIS_01: Toggle visualChaos Config via API @smoke @regression @chaos', async ({ apiUtil }) => {
     let isStatusOk = false;
     let isVisualChaosTrue = false;
 
@@ -39,7 +38,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     expect(isStatusOk && isVisualChaosTrue).toBeTruthy();
   });
 
-  test('API_VIS_02: Default visualChaos is False @smoke @regression', async () => {
+  test('API_VIS_02: Default visualChaos is False @smoke @regression', async ({ apiUtil }) => {
     let isStatusOk = false;
     let isVisualChaosFalse = false;
 
@@ -64,7 +63,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     expect(isStatusOk && isVisualChaosFalse).toBeTruthy();
   });
 
-  test('API_VIS_03: Invalid Type Rejected @regression', async () => {
+  test('API_VIS_03: Invalid Type Rejected @regression', async ({ apiUtil }) => {
     let isStatus400 = false;
     let hasValidationError = false;
 
@@ -85,7 +84,7 @@ test.describe('Visual Chaos Configuration API Suite', () => {
     expect(isStatus400 && hasValidationError).toBeTruthy();
   });
 
-  test('API_VIS_04: Combine with Other Chaos Params @regression @chaos', async () => {
+  test('API_VIS_04: Combine with Other Chaos Params @regression @chaos', async ({ apiUtil }) => {
     let isStatusOk = false;
     let isVisualChaosSaved = false;
     let isCheckoutRateSaved = false;

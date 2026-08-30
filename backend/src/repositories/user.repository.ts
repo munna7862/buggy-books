@@ -15,7 +15,14 @@ const UNSAFE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
 
 class UserRepository {
   private getUsersMap(): Record<string, UserRecord> {
-    return storage.get('users') || defaultUsers;
+    const saved = storage.get('users');
+    if (saved) return saved;
+    const cloned: Record<string, UserRecord> = {};
+    for (const [k, v] of Object.entries(defaultUsers)) {
+      cloned[k] = { ...v };
+    }
+    storage.set('users', cloned);
+    return cloned;
   }
 
   private saveUsersMap(users: Record<string, UserRecord>) {
