@@ -76,6 +76,7 @@
 - [x] Playwright worker fixture auto-injecting session headers (`x-test-session-id`, `x-bypass-rate-limit`).
 - [x] All unit, integration, and E2E tests passing cleanly with `--workers=4` (105/105 E2E, 72/72 backend).
 - [x] Changes committed with conventional commits and synced with `origin/main`.
+- [x] Remote Pull Request created via GitHub CLI — [PR #71](https://github.com/munna7862/buggy-books/pull/71).
 - [x] Test cases catalog updated with TC-SAN-001 through TC-SAN-004.
 
 ---
