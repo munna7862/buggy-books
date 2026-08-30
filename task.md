@@ -15,7 +15,7 @@
 | **SDET Architect** | AI Agent / SDET | Reviewing static analysis rules, API contract definitions, and POM encapsulation patterns. |
 | **Playwright QA Specialist** | AI Agent / QA Spec | Refactoring `api.util.ts` with generics, expanding `finalize-spec.ts`, refactoring Page Objects. |
 | **Product Owner** | AI Agent / PO | Reviewing quality gate validator output and sprint acceptance criteria. |
-| **DevOps Engineer** | AI Agent / DevOps | Git branch management, GitHub CLI Pull Request creation (`gh pr create`). |
+| **DevOps Engineer** | AI Agent / DevOps | Git branch management, upstream sync with `main`, GitHub CLI Pull Request creation (`gh pr create`). |
 
 ---
 
@@ -55,7 +55,7 @@
 - [x] `finalize-spec.ts` extended to lint Page Objects.
 - [x] All Page Objects in `src/pages/` pass the new static linter rules (29/29 checks passed).
 - [x] Playwright E2E and API suites pass 100% with zero TypeScript errors (`npm run typecheck`).
+- [x] Upstream changes pulled from `origin/main` and all merge conflicts resolved cleanly.
 - [x] Changes committed to feature branch `feature/sprint-2-2-api-and-pom-hardening` with conventional commits.
-- [x] Remote Pull Request created via GitHub CLI (`gh pr create`) with structured summary.
+- [x] Remote Pull Request created/updated via GitHub CLI (`gh pr create`) with structured summary.
 - [x] Handoff verified by Scrum Master for Sprint 2.3 kickoff.
-
