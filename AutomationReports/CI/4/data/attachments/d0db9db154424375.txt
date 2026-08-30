@@ -1,0 +1,19 @@
+[2026-08-31 02:35:52] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788109552631-prk6
+[2026-08-31 02:35:52] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-31 02:35:52] INFO: 📤 Request Payload: {
+  "username": "emptypass1788109552621bcfe0123@",
+  "password": "",
+  "fullName": "john doe"
+}
+[2026-08-31 02:35:52] ERROR: ❌ Register user with empty password Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "969e97fd-719d-4c97-9858-82f968f660be"
+}
+[2026-08-31 02:35:52] ERROR: ❌ Register user with empty password Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "969e97fd-719d-4c97-9858-82f968f660be"
+}
+[2026-08-31 02:35:52] INFO:  Status code for empty password Success !! Actual and Expected Values are:: true
+[2026-08-31 02:35:52] INFO: Cleaned up ephemeral test session: pw-w3-3-1788109552631-prk6

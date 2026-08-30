@@ -1,0 +1,3 @@
+[2026-08-31 02:37:13] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-3-1788109633980-xtwv
+[2026-08-31 02:37:15] INFO:  Verifying WebSocket status dot has status-connected class Success !! Actual and Expected Values are:: true
+[2026-08-31 02:37:15] INFO: Cleaned up ephemeral test session: pw-w7-3-1788109633980-xtwv

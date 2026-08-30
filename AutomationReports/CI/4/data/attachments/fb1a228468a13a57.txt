@@ -1,0 +1,2 @@
+[2026-08-31 02:37:12] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w8-0-1788109632572-ib20
+[2026-08-31 02:37:18] INFO: Cleaned up ephemeral test session: pw-w8-0-1788109632572-ib20

@@ -1,0 +1,13 @@
+[2026-08-31 02:35:53] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788109553715-ecfr
+[2026-08-31 02:35:53] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-08-31 02:35:53] INFO: 📤 Request Payload: {
+  "username": "security1788109551402401a5c76@",
+  "password": "johna123@"
+}
+[2026-08-31 02:35:54] INFO: ✅ Security validation for oversized username Success! Status: 201 Created
+[2026-08-31 02:35:54] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "security1788109551402401a5c76@"
+}
+[2026-08-31 02:35:54] INFO:  Security status for oversized username Success !! Actual and Expected Values are:: true
+[2026-08-31 02:35:55] INFO: Cleaned up ephemeral test session: pw-w1-1-1788109553715-ecfr

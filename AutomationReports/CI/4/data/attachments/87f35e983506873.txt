@@ -1,0 +1,28 @@
+[2026-08-31 02:36:17] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w6-1-1788109577334-pm1e
+[2026-08-31 02:36:17] INFO: Network interception enabled with mode: api-only
+[2026-08-31 02:36:18] INFO: Clicking on Sign Up link
+[2026-08-31 02:36:18] INFO: Entering full name: Full user_a_cart_I2oaS
+[2026-08-31 02:36:18] INFO: Entering username: user_a_cart_I2oaS
+[2026-08-31 02:36:18] INFO: Entering password: Password123!
+[2026-08-31 02:36:18] INFO: Entering confirming password: Password123!
+[2026-08-31 02:36:18] INFO: Clicking on Create Account button
+[2026-08-31 02:36:19] INFO: Verifying landing on Checkout Page
+[2026-08-31 02:36:19] INFO: Checking if Checkout label is visible
+[2026-08-31 02:36:19] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-08-31 02:36:19] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-08-31 02:36:20] INFO: Total Books displayed in Catalog page are: 8
+[2026-08-31 02:36:20] INFO: Clicking on Add to Cart button for book id: 1
+[2026-08-31 02:36:21] INFO: Waiting for cart status message: added to cart
+[2026-08-31 02:36:21] INFO: Cart status message "added to cart" is visible
+[2026-08-31 02:36:21] INFO: Clicking on Add to Cart button for book id: 2
+[2026-08-31 02:36:23] INFO: Waiting for cart status message: added to cart
+[2026-08-31 02:36:23] INFO: Cart status message "added to cart" is visible
+[2026-08-31 02:36:23] INFO: Clicking on Cart link
+[2026-08-31 02:36:23] INFO:  Verifying initial cart item count Success !! Actual and Expected Values are:: 2
+[2026-08-31 02:36:23] INFO: Getting cart total text
+[2026-08-31 02:36:23] INFO: Clicking Remove item button
+[2026-08-31 02:36:24] INFO:  Verifying cart item count after removal Success !! Actual and Expected Values are:: 1
+[2026-08-31 02:36:24] INFO: Getting cart total text
+[2026-08-31 02:36:24] INFO:  Verifying total price updated after item removal Success !! Actual and Expected Values are:: true
+[2026-08-31 02:36:24] INFO: Captured 22 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_003_CartA-5f314-e-Item-from-Cart-regression-Google-Chrome/network-log.json
+[2026-08-31 02:36:24] INFO: Cleaned up ephemeral test session: pw-w6-1-1788109577334-pm1e
