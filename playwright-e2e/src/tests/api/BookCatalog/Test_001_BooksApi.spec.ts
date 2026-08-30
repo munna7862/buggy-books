@@ -1,42 +1,44 @@
 import { test, expect } from '@playwright/test';
+import { AxiosResponse } from 'axios';
+import type { Book, PaginatedBooks } from '@buggybooks/types';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
-import testData from '../../../test-data/api/Test_001_BooksApi.json';
+import testData from '../../../test-data/api/BookCatalog/Test_001_BooksApi.json';
 
 const commonUtil = new CommonFunctions();
 const BOOKS_URL = `${envConfig.apiBaseUrl}/api/books`;
 
-async function validateBookContract(book: any) {
+async function validateBookContract(book: Book | Record<string, unknown>) {
   await commonUtil.compareTwoValues(typeof book, 'object', 'Book entry is an object');
   await commonUtil.compareTwoValues(book !== null, true, 'Book entry is not null');
-  await commonUtil.compareTwoValues(typeof book?.id, 'string', 'Book id is a string');
-  await commonUtil.compareTwoValues(typeof book?.title, 'string', 'Book title is a string');
-  await commonUtil.compareTwoValues(typeof book?.author, 'string', 'Book author is a string');
-  await commonUtil.compareTwoValues(typeof book?.price, 'number', 'Book price is a number');
-  await commonUtil.compareTwoValues(typeof book?.genre, 'string', 'Book genre is a string');
-  await commonUtil.compareTwoValues(typeof book?.description, 'string', 'Book description is a string');
-  await commonUtil.compareTwoValues(typeof book?.image, 'string', 'Book image is a string');
+  await commonUtil.compareTwoValues(typeof (book as Book)?.id, 'string', 'Book id is a string');
+  await commonUtil.compareTwoValues(typeof (book as Book)?.title, 'string', 'Book title is a string');
+  await commonUtil.compareTwoValues(typeof (book as Book)?.author, 'string', 'Book author is a string');
+  await commonUtil.compareTwoValues(typeof (book as Book)?.price, 'number', 'Book price is a number');
+  await commonUtil.compareTwoValues(typeof (book as Book)?.genre, 'string', 'Book genre is a string');
+  await commonUtil.compareTwoValues(typeof (book as Book)?.description, 'string', 'Book description is a string');
+  await commonUtil.compareTwoValues(typeof (book as Book)?.image, 'string', 'Book image is a string');
   return (
-    typeof book?.id === 'string' &&
-    typeof book?.title === 'string' &&
-    typeof book?.author === 'string' &&
-    typeof book?.price === 'number' &&
-    typeof book?.genre === 'string' &&
-    typeof book?.description === 'string' &&
-    typeof book?.image === 'string'
+    typeof (book as Book)?.id === 'string' &&
+    typeof (book as Book)?.title === 'string' &&
+    typeof (book as Book)?.author === 'string' &&
+    typeof (book as Book)?.price === 'number' &&
+    typeof (book as Book)?.genre === 'string' &&
+    typeof (book as Book)?.description === 'string' &&
+    typeof (book as Book)?.image === 'string'
   );
 }
 
 test.describe('Books API - List and Security', () => {
-  let header: any;
+  let header: Record<string, string>;
 
   test.beforeAll(async () => {
     header = { 'Content-Type': 'application/json' };
   });
 
   test('Testcase 1: GET /api/books?page=1&limit=8 - should return a paged book list with valid contract for page 1 @smoke @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<PaginatedBooks>>({
       method: 'GET',
       url: `${BOOKS_URL}?page=${testData.defaultPagination.page}&limit=${testData.defaultPagination.limit}`,
       headers: header,
@@ -76,7 +78,7 @@ test.describe('Books API - List and Security', () => {
   });
 
   test('Testcase 2: GET /api/books?page=2&limit=8 - should return a paged book list with valid contract for page 2 @smoke @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<PaginatedBooks>>({
       method: 'GET',
       url: `${BOOKS_URL}?page=${testData.page2Pagination.page}&limit=${testData.page2Pagination.limit}`,
       headers: header,
@@ -120,7 +122,7 @@ test.describe('Books API - List and Security', () => {
 
   for (const scenario of paginationScenarios) {
     test(`Testcase 3: Pagination: ${scenario.description} (page=${scenario.page}, limit=${scenario.limit}) @regression`, async () => {
-      const response = await apiUtil.makeRequest({
+      const response = await apiUtil.makeRequest<AxiosResponse<PaginatedBooks>>({
         method: 'GET',
         url: `${BOOKS_URL}?page=${scenario.page}&limit=${scenario.limit}`,
         headers: header,
@@ -144,8 +146,8 @@ test.describe('Books API - List and Security', () => {
 
   // Data Integrity - No Duplicates across pages
   test('Testcase 4: Data Integrity: Page 1 last item should not be Page 2 first item @regression', async () => {
-    const page1 = await apiUtil.makeRequest({ method: 'GET', url: `${BOOKS_URL}?page=1&limit=5`, headers: header, logMessage: 'Get books for page 1', responseType: 'full' });
-    const page2 = await apiUtil.makeRequest({ method: 'GET', url: `${BOOKS_URL}?page=2&limit=5`, headers: header, logMessage: 'Get books for page 2', responseType: 'full' });
+    const page1 = await apiUtil.makeRequest<AxiosResponse<PaginatedBooks>>({ method: 'GET', url: `${BOOKS_URL}?page=1&limit=5`, headers: header, logMessage: 'Get books for page 1', responseType: 'full' });
+    const page2 = await apiUtil.makeRequest<AxiosResponse<PaginatedBooks>>({ method: 'GET', url: `${BOOKS_URL}?page=2&limit=5`, headers: header, logMessage: 'Get books for page 2', responseType: 'full' });
 
     const lastItemP1 = page1.data.books[page1.data.books.length - 1].id;
     await commonUtil.logMessage('INFO', `Last item on page 1 ID: ${lastItemP1}`);
@@ -160,7 +162,7 @@ test.describe('Books API - List and Security', () => {
 
   for (const neg of negativeScenarios) {
     test(`Testcase 5: Negative: ${neg.description} @regression`, async () => {
-      const response = await apiUtil.makeRequest({
+      const response = await apiUtil.makeRequest<AxiosResponse<any>>({
         method: 'GET',
         url: `${BOOKS_URL}?${neg.query}`,
         headers: header,
@@ -176,7 +178,7 @@ test.describe('Books API - List and Security', () => {
 
   // Security - Unauthorized Access (If applicable)
   test('Testcase 6: Security: Request without Content-Type header should be handled @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'GET',
       url: BOOKS_URL,
       headers: {}, // Empty headers
@@ -190,7 +192,7 @@ test.describe('Books API - List and Security', () => {
 
   // 5. Default Parameters
   test('Testcase 7: Defaults: Verify API works without query parameters @smoke @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<Book[]>>({
       method: 'GET',
       url: BOOKS_URL,
       headers: header,

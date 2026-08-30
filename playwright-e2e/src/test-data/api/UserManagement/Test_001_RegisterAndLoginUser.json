@@ -1,0 +1,37 @@
+{
+  "defaultPassword": "johna123@",
+  "defaultFullName": "john doe",
+  "messages": {
+    "registrationSuccess": "Registration successful",
+    "loginSuccess": "Login successful"
+  },
+  "missingRegisterFieldScenarios": [
+    { "description": "missing username", "payload": { "password": "johna123@", "fullName": "john doe" } },
+    { "description": "missing password", "payload": { "username": "missingpass_placeholder", "fullName": "john doe" } },
+    { "description": "empty username", "payload": { "username": "", "password": "johna123@", "fullName": "john doe" } },
+    { "description": "empty password", "payload": { "username": "emptypass_placeholder", "password": "", "fullName": "john doe" } }
+  ],
+  "invalidLoginScenarios": [
+    { "description": "missing username", "payload": { "password": "johna123@" } },
+    { "description": "missing password", "payload": { "username": "loginmissingpass_placeholder" } },
+    { "description": "empty username", "payload": { "username": "", "password": "johna123@" } },
+    { "description": "empty password", "payload": { "username": "loginemptypass_placeholder", "password": "" } },
+    { "description": "unregistered user", "payload": { "username": "unregistered_placeholder", "password": "johna123@" } }
+  ],
+  "registerSecurityScenarios": [
+    { "description": "SQL injection pattern in username", "payload": { "usernamePattern": "' OR '1'='1", "field": "username" } },
+    { "description": "script tag in fullName", "payload": { "fullName": "<script>alert(\"xss\")</script>", "field": "fullName" } },
+    { "description": "oversized username", "payload": { "usernamePattern": "oversized_username", "field": "username" } }
+  ],
+  "loginSecurityScenarios": [
+    { "description": "SQL injection pattern in username", "payload": { "usernamePattern": "' OR '1'='1", "password": "johna123@" } },
+    { "description": "script tag in username", "payload": { "usernamePattern": "<script>alert(\"xss\")</script>", "password": "johna123@" } },
+    { "description": "oversized username", "payload": { "usernamePattern": "oversized_username", "password": "johna123@" } }
+  ],
+  "wrongPassword": "wrongPassword123@",
+  "unsupportedContentTypeStatus": [400, 415],
+  "unsupportedMethodStatus": [404, 405],
+  "duplicateRegisterStatus": [400, 409, 422],
+  "negativeRegisterStatus": [400, 422],
+  "invalidLoginStatus": [400, 401, 403, 404, 422]
+}

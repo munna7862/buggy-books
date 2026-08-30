@@ -95,13 +95,34 @@ sequenceDiagram
   feature/<feature-name>
   bugfix/<bug-name>
   test/<test-name>
-  refactor/<area-name>
-  ```
-- **Incremental Commits**: Commit work incrementally using clear conventional commit messages (`feat:`, `fix:`, `test:`, `refactor:`, `docs:`).
-- **Remote Pull Requests**: DevOps Engineer must push the branch to GitHub (`git push -u origin <branch-name>`) and open a structured PR via GitHub CLI:
-  ```bash
-  gh pr create --title "<type>(<scope>): <summary>" --body "<structured description>" --head <branch-name> --base main
-  ```
+- **Pre-PR Sync & Conflict Resolution Policy (MANDATORY)**:
+  Before pushing the feature branch or raising a Pull Request, the agent MUST:
+  1. Fetch and merge latest changes from `origin/main` into the feature branch:
+     ```bash
+     git fetch origin main
+     git merge origin/main
+     ```
+  2. If any merge conflicts arise, resolve all conflict markers immediately in the affected files.
+  3. Validate project health after conflict resolution:
+     ```bash
+     npm run typecheck
+     ```
+  4. Stage and commit the merge:
+     ```bash
+     git commit -m "chore: merge origin/main into <branch-name> and resolve conflicts"
+     ```
+  5. Push the synchronized branch to remote:
+     ```bash
+     git push -u origin <branch-name>
+     ```
+  6. Only after the branch is fully up-to-date and conflict-free with `origin/main`, open or update the Pull Request.
+
+- **Remote Pull Requests & Automated Sprint Closeout**:
+  - **Automatic PR Creation**: As soon as a sprint's Definition of Done and Quality Gates are approved, and after `origin/main` is merged with conflicts resolved, the DevOps Engineer (or active closing persona) MUST automatically push the feature branch to remote (`git push -u origin <branch-name>`) and open a Pull Request using `gh pr create` without requiring manual user intervention.
+  - Command:
+    ```bash
+    gh pr create --title "<type>(<scope>): <summary>" --body "<structured description>" --head <branch-name> --base main
+    ```
 - **PR Description Maintenance**: If subsequent fixes are pushed after opening a PR, update the PR description using `gh pr edit <pr-number> --body-file <path>`.
 
 ---
@@ -183,4 +204,4 @@ A task or story is complete only when ALL of the following criteria are satisfie
 - [ ] Security audit passes with no exposed secrets or missing auth guards.
 - [ ] Code review checklist is satisfied (no debug logs, clean formatting, proper encapsulation).
 - [ ] Changes are committed to a feature/bugfix branch with conventional commits.
-- [ ] Pull Request is opened via `gh pr create` with structured summary and test evidence.
+- [ ] Pull Request is automatically opened via `gh pr create` with structured summary and test evidence upon sprint completion.

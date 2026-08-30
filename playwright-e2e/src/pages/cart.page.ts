@@ -31,6 +31,10 @@ export class CartPage extends BasePage {
     return this.page.locator('p:has-text("Your cart is empty.")');
   }
 
+  private get cartHeader(): Locator {
+    return this.page.locator('h1:has-text("Your Cart")');
+  }
+
   constructor(page: Page) {
     super(page);
   }
@@ -42,7 +46,7 @@ export class CartPage extends BasePage {
 
   public async openCart(): Promise<void> {
     await this.clickCartLink();
-    await this.page.locator('h1:has-text("Your Cart")').waitFor({ state: 'visible', timeout: 10000 });
+    await this.cartHeader.waitFor({ state: 'visible', timeout: 10000 });
   }
 
 
@@ -61,11 +65,11 @@ export class CartPage extends BasePage {
   public async removeFirstCartItem(): Promise<void> {
     const initialCount = await this.getCartItemsCount();
     await this.doClick(this.removeButtons.first(), "Clicking Remove item button");
-    // Wait until items count decreases or cart becomes empty
-    for (let i = 0; i < 10; i++) {
-      await this.page.waitForTimeout(500);
-      const currentCount = await this.getCartItemsCount();
-      if (currentCount < initialCount) break;
+    // Wait until item count decreases or cart becomes empty
+    if (initialCount > 1) {
+      await this.cartItems.nth(initialCount - 1).waitFor({ state: 'detached', timeout: 10000 }).catch(() => undefined);
+    } else {
+      await this.emptyCartMessage.waitFor({ state: 'visible', timeout: 10000 }).catch(() => undefined);
     }
   }
 

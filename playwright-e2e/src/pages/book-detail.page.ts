@@ -2,23 +2,36 @@ import { BasePage } from '../core/base/base.page';
 import { Locator, Page } from '@playwright/test';
 
 export class BookDetailPage extends BasePage {
-  private readonly eleTitle: Locator;
-  private readonly eleAuthor: Locator;
-  private readonly eleDescription: Locator;
-  private readonly elePrice: Locator;
-  private readonly eleCoverImg: Locator;
-  private readonly linkBack: Locator;
-  private readonly btnAddToCart: Locator;
+  private get eleTitle(): Locator {
+    return this.page.locator('#book-detail-title');
+  }
+
+  private get eleAuthor(): Locator {
+    return this.page.locator('#book-detail-author');
+  }
+
+  private get eleDescription(): Locator {
+    return this.page.locator('#book-detail-description');
+  }
+
+  private get elePrice(): Locator {
+    return this.page.locator('#book-detail-price');
+  }
+
+  private get eleCoverImg(): Locator {
+    return this.page.locator('#book-detail-cover-img');
+  }
+
+  private get linkBack(): Locator {
+    return this.page.locator('#book-detail-back-link');
+  }
+
+  private get btnAddToCart(): Locator {
+    return this.page.locator('#book-detail-add-to-cart');
+  }
 
   constructor(page: Page) {
     super(page);
-    this.eleTitle = this.page.locator('#book-detail-title');
-    this.eleAuthor = this.page.locator('#book-detail-author');
-    this.eleDescription = this.page.locator('#book-detail-description');
-    this.elePrice = this.page.locator('#book-detail-price');
-    this.eleCoverImg = this.page.locator('#book-detail-cover-img');
-    this.linkBack = this.page.locator('#book-detail-back-link');
-    this.btnAddToCart = this.page.locator('#book-detail-add-to-cart');
   }
 
   public async getBookTitle(): Promise<string> {

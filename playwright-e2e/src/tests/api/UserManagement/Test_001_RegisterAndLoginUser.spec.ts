@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
+import { AxiosResponse } from 'axios';
 import { envConfig } from '../../../config/env.config';
 import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
-import testData from '../../../test-data/api/Test_002_RegisterAndLoginUser.json';
+import testData from '../../../test-data/api/UserManagement/Test_001_RegisterAndLoginUser.json';
 
 const commonUtil = new CommonFunctions();
 const REGISTER_URL = `${envConfig.apiBaseUrl}/api/register`;
@@ -79,8 +80,8 @@ function buildLoginSecurityPayload(template: any): LoginPayload {
   };
 }
 
-async function registerUser(payload: RegisterPayload, logMessage: string) {
-  return apiUtil.makeRequest({
+async function registerUser(payload: RegisterPayload, logMessage: string): Promise<AxiosResponse<any>> {
+  return apiUtil.makeRequest<AxiosResponse<any>>({
     method: 'POST',
     url: REGISTER_URL,
     data: payload,
@@ -90,8 +91,8 @@ async function registerUser(payload: RegisterPayload, logMessage: string) {
   });
 }
 
-async function loginUser(payload: LoginPayload, logMessage: string) {
-  return apiUtil.makeRequest({
+async function loginUser(payload: LoginPayload, logMessage: string): Promise<AxiosResponse<any>> {
+  return apiUtil.makeRequest<AxiosResponse<any>>({
     method: 'POST',
     url: LOGIN_URL,
     data: payload,
@@ -209,7 +210,7 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
   });
 
   test('Testcase 4: Negative: GET /api/register should not be allowed for user registration @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'GET',
       url: REGISTER_URL,
       headers: { 'Content-Type': 'application/json' },
@@ -236,7 +237,7 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
   }
 
   test('Testcase 6: Security: POST /api/register should reject unsupported content type @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: REGISTER_URL,
       data: JSON.stringify(buildValidPayload()),
@@ -295,7 +296,7 @@ test.describe('Login API - Positive, Negative and Security', () => {
   }
 
   test('Testcase 10: Negative: GET /api/login should not be allowed for login @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'GET',
       url: LOGIN_URL,
       headers: { 'Content-Type': 'application/json' },
@@ -322,7 +323,7 @@ test.describe('Login API - Positive, Negative and Security', () => {
   }
 
   test('Testcase 12: Security: POST /api/login should reject unsupported content type @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'POST',
       url: LOGIN_URL,
       data: JSON.stringify({ username: uniqueUsername('logincontent'), password: testData.defaultPassword }),
@@ -335,7 +336,7 @@ test.describe('Login API - Positive, Negative and Security', () => {
   });
 
   test('Testcase 13: Security: GET /api/cart without auth cookies should return 401 Unauthorized @smoke @regression', async () => {
-    const response = await apiUtil.makeRequest({
+    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
       method: 'GET',
       url: `${envConfig.apiBaseUrl}/api/cart`,
       headers: {}, // No credentials/cookies

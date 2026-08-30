@@ -33,9 +33,26 @@ Enforce the following execution order for every single feature or bug fix:
 2. **Branch Policy**: Always pull latest `origin/main` before creating a new branch (`git checkout main && git pull origin main && git checkout -b <branch-name>`), and verify that an isolated Git branch conforming to `feature/`, `bugfix/`, or `test/` is checked out.
 3. **Definition of Done (DoD)**: A task cannot be marked complete `[x]` until it satisfies all quality review gates (SDET 100% green tests, Dev build & typing, PO acceptance, and DevOps PR readiness).
 
+#### D. Automated Sprint Closeout & Pull Request Creation
+Once all User Stories are implemented, DoD checklist items are checked `[x]`, and Review Gates are `[APPROVED]`, the Scrum Master / DevOps Engineer MUST automatically perform sprint closeout without waiting for manual user instruction:
+1. Update `task.md` and the sprint markdown document in `planning/Sprints/`.
+2. Stage and commit all pending feature changes with conventional commits (`feat:`, `fix:`, `docs:`, `chore:`).
+3. **Mandatory Pre-PR Sync**: Fetch and merge `origin/main` to ensure zero conflicts:
+   ```bash
+   git fetch origin main
+   git merge origin/main
+   ```
+   If conflicts occur, resolve them immediately, run `npm run typecheck` to verify build integrity, and commit the merge.
+4. Push the synchronized feature branch to remote (`git push -u origin <branch-name>`).
+5. Automatically create a Pull Request using GitHub CLI:
+   ```bash
+   gh pr create --title "<type>(<scope>): <Sprint Title> (#US-...)" --body "<structured summary & verification>" --head <branch-name> --base main
+   ```
+6. Report the created PR URL and sprint sign-off summary to the user.
+
 ---
 
 ### 2. Operating Mode & Handoff Protocols
 - **Radical Clarity**: Be concise, objective, and structured.
 - **Structured Checklists**: Present sprint updates, daily progress states, and action items using scannable markdown task lists.
-- **Deterministic Handoffs**: Conclude every step by explicitly naming the next persona inline to assume operational control.
+- **Deterministic Handoffs**: Conclude every step by explicitly naming the next persona inline to assume operational control, culminating in automated PR delivery.

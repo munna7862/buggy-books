@@ -1,0 +1,6 @@
+{
+  "description": "Test data for Cart and Inventory API tests",
+  "bookId": "3",
+  "expectedTotalBooks": 15,
+  "expectedTotalValue": 196.91
+}

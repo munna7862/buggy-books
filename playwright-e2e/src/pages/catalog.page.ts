@@ -48,6 +48,10 @@ export class CatalogPage extends BasePage {
     return this.page.locator('.catalog-empty');
   }
 
+  private get firstBookTitle(): Locator {
+    return this.page.locator('.title-variant-2 a').first();
+  }
+
   private getBookTitleLink(bookId: string | number): Locator {
     return this.page.locator(`.info-cell-beta a[href="/books/${bookId}"]`);
   }
@@ -91,18 +95,9 @@ export class CatalogPage extends BasePage {
   }
 
   public async clickPaginationButton(btnNumber: number) {
-    await this.doClick(this.getpaginationButton(btnNumber), `Clicking on Pagination button number ${btnNumber}`);
-    for (let i = 0; i < 5; i++) { // Retry mechanism to handle potential timing issues
-      await this.page.waitForTimeout(2000); // Wait before retrying
-      let buttonClass = await this.doGetAttribute(this.getpaginationButton(btnNumber), "class", `Checking if Pagination button number ${btnNumber} is active after click`);
-      await this.logMessage('INFO', `Pagination button number ${btnNumber} class attribute after click: ${buttonClass}`);
-      if (buttonClass && buttonClass.includes("active")) {
-        break; // Exit loop if button is active
-      }
-      else {
-        await this.logMessage('WARN', `Pagination button number ${btnNumber} is not active yet. Retrying... (${i + 1}/5)`);
-      }
-    }
+    const btn = this.getpaginationButton(btnNumber);
+    await this.doClick(btn, `Clicking on Pagination button number ${btnNumber}`);
+    await expect(btn).toHaveClass(/active/, { timeout: 10000 }).catch(() => undefined);
   }
 
   public async searchBooks(term: string): Promise<void> {
@@ -132,7 +127,7 @@ export class CatalogPage extends BasePage {
   }
 
   public async getFirstBookTitle(): Promise<string> {
-    return await this.doGetText(this.page.locator('.title-variant-2 a').first(), `Getting first book title in catalog`);
+    return await this.doGetText(this.firstBookTitle, `Getting first book title in catalog`);
   }
 
   public async clickAddToCartForBook(bookId: number): Promise<void> {
