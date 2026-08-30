@@ -38,7 +38,7 @@ export default function Profile() {
       // Reset input element
       const fileInput = document.getElementById('profile-avatar-input') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
-    } catch (err: any) {
+    } catch {
       // toast and uploadError are handled by the hook
     }
   };

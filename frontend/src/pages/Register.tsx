@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../api';
 import { useAuth } from '../AuthContext';
@@ -12,33 +12,29 @@ export default function Register() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   
-  // Password Strength
-  const [strength, setStrength] = useState({ score: 0, label: '' });
-
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  useEffect(() => {
-    // Calculate password strength
+  // Password Strength derived state
+  const getPasswordStrength = (pwd: string) => {
     let score = 0;
-    if (password.length > 5) score += 1;
-    if (password.length > 8) score += 1;
-    if (/[A-Z]/.test(password)) score += 1;
-    if (/[0-9]/.test(password)) score += 1;
-    if (/[^A-Za-z0-9]/.test(password)) score += 1;
-    
-    // Normalize to max 4
+    if (pwd.length > 5) score += 1;
+    if (pwd.length > 8) score += 1;
+    if (/[A-Z]/.test(pwd)) score += 1;
+    if (/[0-9]/.test(pwd)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) score += 1;
     score = Math.min(4, score);
     
     let label = '';
-    if (password.length === 0) label = '';
+    if (pwd.length === 0) label = '';
     else if (score <= 1) label = 'weak';
     else if (score === 2) label = 'fair';
     else if (score === 3) label = 'good';
     else label = 'strong';
-    
-    setStrength({ score, label });
-  }, [password]);
+    return { score, label };
+  };
+
+  const strength = getPasswordStrength(password);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,9 +56,10 @@ export default function Register() {
       } else {
         navigate('/login');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message || 'Registration failed. Please try again.');
+      const message = err instanceof Error ? err.message : 'Registration failed. Please try again.';
+      setError(message);
     } finally {
       setIsLoading(false);
     }

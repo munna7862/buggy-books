@@ -77,7 +77,8 @@ describe('Register Component', () => {
   });
 
   it('shows error banner when API registration fails', async () => {
-    (api.register as any).mockRejectedValue(new Error('Registration failed. Please try again.'));
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.mocked(api.register).mockRejectedValue(new Error('Registration failed. Please try again.'));
     
     renderRegister();
     
@@ -97,10 +98,11 @@ describe('Register Component', () => {
     await waitFor(() => {
       expect(screen.getByText('Registration failed. Please try again.')).toBeInTheDocument();
     });
+    consoleSpy.mockRestore();
   });
 
   it('calls register api on successful form submission', async () => {
-    (api.register as any).mockResolvedValue({ token: 'mock-jwt-token' });
+    vi.mocked(api.register).mockResolvedValue({ message: 'Registration successful', username: 'testuser', token: 'mock-jwt-token' });
     
     renderRegister();
     

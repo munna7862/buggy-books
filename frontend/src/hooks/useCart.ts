@@ -9,7 +9,7 @@ export function useCart() {
   try {
     const auth = useAuth();
     isAuthenticated = auth.isAuthenticated;
-  } catch (e) {
+  } catch {
     // Default to true when used outside AuthProvider (e.g. in some unit tests)
   }
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -24,7 +24,7 @@ export function useCart() {
     try {
       const items = await api.getCart();
       setCart(items);
-    } catch (err) {
+    } catch (err: unknown) {
       console.error('Failed to fetch cart:', err);
     } finally {
       setLoading(false);
@@ -32,12 +32,22 @@ export function useCart() {
   }, [isAuthenticated]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchCart();
-    } else {
-      setCart([]);
-    }
-  }, [isAuthenticated, fetchCart]);
+    if (!isAuthenticated) return;
+    let ignore = false;
+    api.getCart()
+      .then((items) => {
+        if (!ignore) setCart(items);
+      })
+      .catch((err: unknown) => {
+        if (!ignore) console.error('Failed to fetch cart:', err);
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
+  }, [isAuthenticated]);
 
   const addToCart = useCallback(async (bookId: string) => {
     setAddingId(bookId);
@@ -51,9 +61,10 @@ export function useCart() {
           setCart(updatedCart);
           toast.success('Added to cart!');
           resolve();
-        } catch (err: any) {
+        } catch (err: unknown) {
           console.error(err);
-          toast.error(err.message || 'Failed to add to cart');
+          const message = err instanceof Error ? err.message : 'Failed to add to cart';
+          toast.error(message);
           reject(err);
         } finally {
           setAddingId(null);
@@ -68,9 +79,10 @@ export function useCart() {
       const updatedCart = await api.removeFromCart(bookId);
       setCart(updatedCart);
       toast.success('Item removed from cart');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err.message || 'Failed to remove item');
+      const message = err instanceof Error ? err.message : 'Failed to remove item';
+      toast.error(message);
     } finally {
       setRemovingId(null);
     }
@@ -82,18 +94,20 @@ export function useCart() {
       await api.clearCart();
       setCart([]);
       toast.success('Cart cleared');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      toast.error(err.message || 'Failed to clear cart');
+      const message = err instanceof Error ? err.message : 'Failed to clear cart';
+      toast.error(message);
     } finally {
       setClearing(false);
     }
   }, []);
 
-  const total = cart.reduce((acc, item) => acc + item.price, 0);
+  const visibleCart = isAuthenticated ? cart : [];
+  const total = visibleCart.reduce((acc, item) => acc + item.price, 0);
 
   return {
-    cart,
+    cart: visibleCart,
     loading,
     addingId,
     removingId,

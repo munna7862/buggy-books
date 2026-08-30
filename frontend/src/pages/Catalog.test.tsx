@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Catalog from './Catalog';
 import { api } from '../api';
@@ -8,7 +8,8 @@ import { vi } from 'vitest';
 vi.mock('../api', () => ({
   api: {
     getBooks: vi.fn(),
-    addToCart: vi.fn()
+    addToCart: vi.fn(),
+    getCart: vi.fn().mockResolvedValue([]),
   }
 }));
 
@@ -80,10 +81,8 @@ describe('Catalog Component Features', () => {
     const searchInput = screen.getByPlaceholderText(/search by title/i);
     const searchBtn = screen.getByRole('button', { name: /search/i });
 
-    import('@testing-library/react').then(({ fireEvent }) => {
-      fireEvent.change(searchInput, { target: { value: '1984' } });
-      fireEvent.click(searchBtn);
-    });
+    fireEvent.change(searchInput, { target: { value: '1984' } });
+    fireEvent.click(searchBtn);
 
     await waitFor(() => {
       expect(api.getBooks).toHaveBeenCalledWith(expect.objectContaining({ q: '1984' }));
@@ -114,9 +113,7 @@ describe('Catalog Component Features', () => {
     await waitFor(() => expect(screen.getByText('Book 0')).toBeInTheDocument());
 
     const nextBtn = screen.getByText('Next →');
-    import('@testing-library/react').then(({ fireEvent }) => {
-      fireEvent.click(nextBtn);
-    });
+    fireEvent.click(nextBtn);
 
     await waitFor(() => {
       expect(api.getBooks).toHaveBeenCalledWith(expect.objectContaining({ page: 2 }));

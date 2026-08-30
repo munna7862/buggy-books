@@ -13,13 +13,13 @@ export function useBooks({ limit = 8 }: UseBooksOptions = {}) {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const fetchBooks = useCallback(() => {
     setLoading(true);
     setError(null);
-    api.getBooks({ q: query, page, limit })
+    return api.getBooks({ q: query, page, limit })
       .then((data) => {
         if (Array.isArray(data)) {
           setBooks(data);
@@ -31,16 +31,44 @@ export function useBooks({ limit = 8 }: UseBooksOptions = {}) {
           setTotal(data.total);
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         console.error('Failed to fetch books:', err);
-        setError(err.message || 'Failed to fetch books');
+        const message = err instanceof Error ? err.message : 'Failed to fetch books';
+        setError(message);
       })
       .finally(() => setLoading(false));
   }, [query, page, limit]);
 
   useEffect(() => {
-    fetchBooks();
-  }, [fetchBooks]);
+    let ignore = false;
+    api.getBooks({ q: query, page, limit })
+      .then((data) => {
+        if (ignore) return;
+        setError(null);
+        if (Array.isArray(data)) {
+          setBooks(data);
+          setTotalPages(1);
+          setTotal(data.length);
+        } else {
+          setBooks(data.books);
+          setTotalPages(data.totalPages);
+          setTotal(data.total);
+        }
+      })
+      .catch((err: unknown) => {
+        if (ignore) return;
+        console.error('Failed to fetch books:', err);
+        const message = err instanceof Error ? err.message : 'Failed to fetch books';
+        setError(message);
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, [query, page, limit]);
 
   const search = useCallback((searchQuery: string) => {
     setPage(1);

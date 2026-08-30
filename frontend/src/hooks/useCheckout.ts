@@ -7,7 +7,8 @@ interface UseCheckoutProps {
   total?: number;
 }
 
-export function useCheckout({ total: _total }: UseCheckoutProps = {}) {
+export function useCheckout({ total }: UseCheckoutProps = {}) {
+  void total;
   // Shipping Data
   const [shippingData, setShippingData] = useState<ShippingData>({
     firstName: '',

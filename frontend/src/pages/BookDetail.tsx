@@ -13,11 +13,20 @@ export default function BookDetail() {
 
   useEffect(() => {
     if (!id) return;
-    setLoading(true);
+    let ignore = false;
     api.getBookById(id)
-      .then(setBook)
-      .catch(() => setNotFound(true))
-      .finally(() => setLoading(false));
+      .then((data) => {
+        if (!ignore) setBook(data);
+      })
+      .catch(() => {
+        if (!ignore) setNotFound(true);
+      })
+      .finally(() => {
+        if (!ignore) setLoading(false);
+      });
+    return () => {
+      ignore = true;
+    };
   }, [id]);
 
   const handleAddToCart = () => {

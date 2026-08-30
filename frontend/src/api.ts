@@ -1,3 +1,34 @@
+import type { Book, CartItem, PaginatedBooks, ChaosConfig, Order } from '@buggybooks/types';
+
+export interface AuthResponse {
+  message: string;
+  username: string;
+  token?: string;
+}
+
+export interface ProfileResponse {
+  username: string;
+  fullName: string;
+  avatarUrl: string | null;
+}
+
+export interface UploadAvatarResponse {
+  success: boolean;
+  message: string;
+  avatarUrl: string;
+}
+
+export interface CheckoutResponse {
+  success: boolean;
+  message: string;
+  orderId?: string;
+}
+
+export interface MessageResponse {
+  message?: string;
+  success?: boolean;
+}
+
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 // --- CSRF Token Management ---
@@ -8,9 +39,9 @@ const fetchCsrfToken = async (): Promise<string> => {
   try {
     const res = await fetch(`${BASE_URL}/csrf-token`, { credentials: 'include' });
     if (res.ok) {
-      const data = await res.json();
-      csrfToken = data.csrfToken;
-      return csrfToken!;
+      const data = (await res.json()) as { csrfToken?: string };
+      csrfToken = data.csrfToken || null;
+      return csrfToken || '';
     }
   } catch (err) {
     console.error('Failed to fetch CSRF token:', err);
@@ -19,17 +50,16 @@ const fetchCsrfToken = async (): Promise<string> => {
 };
 
 /**
- * Fix #5: Centralized request helper.
+ * Centralized request response processor.
  * - Always checks res.ok and throws a descriptive Error on failure.
- * - On 401, clears the stale storage and redirects to /login automatically.
- * - Includes credentials for httpOnly cookies.
+ * - Parses JSON safely and rejects unexpected content types.
  */
-const processResponse = async (res: Response): Promise<any> => {
+const processResponse = async <T = unknown>(res: Response): Promise<T> => {
   const contentType = res.headers.get('content-type');
-  let data: any;
+  let data: Record<string, unknown>;
 
   if (contentType && contentType.includes('application/json')) {
-    data = await res.json();
+    data = (await res.json()) as Record<string, unknown>;
   } else {
     const text = await res.text();
     throw new Error(
@@ -40,13 +70,14 @@ const processResponse = async (res: Response): Promise<any> => {
   }
 
   if (!res.ok) {
-    throw new Error(data.error || `Request failed with status ${res.status}`);
+    const errorMessage = typeof data.error === 'string' ? data.error : `Request failed with status ${res.status}`;
+    throw new Error(errorMessage);
   }
 
-  return data;
+  return data as unknown as T;
 };
 
-const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
+const apiRequest = async <T = unknown>(url: string, options?: RequestInit): Promise<T> => {
   const isFormData = options?.body instanceof FormData;
   const isMutating = options?.method && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(options.method);
 
@@ -59,7 +90,7 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
     }
   }
 
-  const mergedOptions = {
+  const mergedOptions: RequestInit = {
     ...options,
     credentials: 'include' as RequestCredentials,
     headers: {
@@ -77,7 +108,7 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
       csrfToken = null;
       localStorage.removeItem('authUser');
       window.location.href = '/login';
-      return;
+      return undefined as unknown as T;
     }
 
     try {
@@ -95,9 +126,9 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
         if (retryRes.status === 401) {
           localStorage.removeItem('authUser');
           window.location.href = '/login';
-          return;
+          return undefined as unknown as T;
         }
-        return processResponse(retryRes);
+        return processResponse<T>(retryRes);
       }
     } catch (err) {
       console.error('Silent token refresh failed:', err);
@@ -106,85 +137,88 @@ const apiRequest = async (url: string, options?: RequestInit): Promise<any> => {
     csrfToken = null;
     localStorage.removeItem('authUser');
     window.location.href = '/login';
-    return;
+    return undefined as unknown as T;
   }
 
-  return processResponse(res);
+  return processResponse<T>(res);
 };
 
 export const api = {
-  login: async (username: string, password: string) => {
+  login: async (username: string, password: string): Promise<AuthResponse> => {
     csrfToken = null;
-    return apiRequest(`${BASE_URL}/login`, {
+    return apiRequest<AuthResponse>(`${BASE_URL}/login`, {
       method: 'POST',
       body: JSON.stringify({ username, password }),
     });
   },
 
-  register: async (username: string, password: string, fullName?: string) => {
+  register: async (username: string, password: string, fullName?: string): Promise<AuthResponse> => {
     csrfToken = null;
-    return apiRequest(`${BASE_URL}/register`, {
+    return apiRequest<AuthResponse>(`${BASE_URL}/register`, {
       method: 'POST',
       body: JSON.stringify({ username, password, fullName }),
     });
   },
 
-  logout: async () => {
+  logout: async (): Promise<MessageResponse> => {
     csrfToken = null;
-    return apiRequest(`${BASE_URL}/logout`, { method: 'POST' });
+    return apiRequest<MessageResponse>(`${BASE_URL}/logout`, { method: 'POST' });
   },
 
-  getBooks: async (params?: { q?: string; page?: number; limit?: number }) => {
+  getBooks: async (params?: { q?: string; page?: number; limit?: number }): Promise<PaginatedBooks> => {
     const query = new URLSearchParams();
     if (params?.q) query.set('q', params.q);
     if (params?.page) query.set('page', String(params.page));
     if (params?.limit) query.set('limit', String(params.limit));
     const qs = query.toString();
-    return apiRequest(`${BASE_URL}/books${qs ? `?${qs}` : ''}`);
+    return apiRequest<PaginatedBooks>(`${BASE_URL}/books${qs ? `?${qs}` : ''}`);
   },
 
-  getBookById: async (id: string) => {
-    return apiRequest(`${BASE_URL}/books/${id}`);
+  getBookById: async (id: string): Promise<Book> => {
+    return apiRequest<Book>(`${BASE_URL}/books/${id}`);
   },
 
-  getCart: async () => {
-    return apiRequest(`${BASE_URL}/cart`);
+  getCart: async (): Promise<CartItem[]> => {
+    return apiRequest<CartItem[]>(`${BASE_URL}/cart`);
   },
 
-  addToCart: async (bookId: string) => {
-    return apiRequest(`${BASE_URL}/cart`, {
+  addToCart: async (bookId: string): Promise<CartItem[]> => {
+    return apiRequest<CartItem[]>(`${BASE_URL}/cart`, {
       method: 'POST',
       body: JSON.stringify({ bookId }),
     });
   },
 
-  removeFromCart: async (bookId: string) => {
-    return apiRequest(`${BASE_URL}/cart/${bookId}`, {
+  removeFromCart: async (bookId: string): Promise<CartItem[]> => {
+    return apiRequest<CartItem[]>(`${BASE_URL}/cart/${bookId}`, {
       method: 'DELETE',
     });
   },
 
-  clearCart: async () => {
-    return apiRequest(`${BASE_URL}/cart`, {
+  clearCart: async (): Promise<MessageResponse> => {
+    return apiRequest<MessageResponse>(`${BASE_URL}/cart`, {
       method: 'DELETE',
     });
   },
 
-  checkout: async (payload: { firstName: string, lastName: string, creditCard: string }) => {
-    return apiRequest(`${BASE_URL}/checkout/process`, {
+  checkout: async (payload: { firstName: string; lastName: string; creditCard: string }): Promise<CheckoutResponse> => {
+    return apiRequest<CheckoutResponse>(`${BASE_URL}/checkout/process`, {
       method: 'POST',
       body: JSON.stringify(payload),
     });
   },
 
-  getProfile: async () => {
-    return apiRequest(`${BASE_URL}/profile`);
+  getProfile: async (): Promise<ProfileResponse> => {
+    return apiRequest<ProfileResponse>(`${BASE_URL}/profile`);
   },
 
-  uploadAvatar: async (formData: FormData) => {
-    return apiRequest(`${BASE_URL}/profile/upload`, {
+  uploadAvatar: async (formData: FormData): Promise<UploadAvatarResponse> => {
+    return apiRequest<UploadAvatarResponse>(`${BASE_URL}/profile/upload`, {
       method: 'POST',
       body: formData,
     });
   },
 };
+
+export type { Book, CartItem, PaginatedBooks, ChaosConfig, Order };
+

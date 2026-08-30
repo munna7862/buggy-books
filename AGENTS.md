@@ -84,7 +84,13 @@ sequenceDiagram
 ## 3. Git, Branching & Pull Request Policy
 
 - **No Direct Commits to Main**: NEVER push directly to the `main` branch.
-- **Branching Strategy**: Always checkout a dedicated branch:
+- **Always Branch from Latest Main**: Before creating any new branch at the start of a sprint or feature, the agent (Scrum Master or Dev Architect) MUST ALWAYS pull the latest changes from `origin/main` to prevent upstream merge conflicts:
+  ```bash
+  git checkout main
+  git pull origin main
+  git checkout -b <branch-name>
+  ```
+- **Branching Strategy & Naming**: Always checkout a dedicated branch:
   ```text
   feature/<feature-name>
   bugfix/<bug-name>

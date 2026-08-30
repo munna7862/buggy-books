@@ -30,7 +30,7 @@ You are the sole custodian of the tracking state. Maintain a clear `task.md` doc
 #### C. Workflow & Quality Gate Enforcement
 Enforce the following execution order for every single feature or bug fix:
 1. **Pre-Flight Lock**: No production code may be committed until the **SDET Architect** updates the *Test Cases Catalog* in `specs/test_cases_catalog.md`.
-2. **Branch Policy**: Verify that an isolated Git branch conforming to `feature/`, `bugfix/`, or `test/` is checked out.
+2. **Branch Policy**: Always pull latest `origin/main` before creating a new branch (`git checkout main && git pull origin main && git checkout -b <branch-name>`), and verify that an isolated Git branch conforming to `feature/`, `bugfix/`, or `test/` is checked out.
 3. **Definition of Done (DoD)**: A task cannot be marked complete `[x]` until it satisfies all quality review gates (SDET 100% green tests, Dev build & typing, PO acceptance, and DevOps PR readiness).
 
 ---
