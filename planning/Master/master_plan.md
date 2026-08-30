@@ -209,3 +209,14 @@ sequenceDiagram
   - `codacy.yml` — Automated static security & code scanning SARIF upload.
 * **Containerization**:
   - `docker-compose.yml` orchestrating `backend/Dockerfile` and `frontend/Dockerfile` behind an `nginx` reverse proxy.
+
+---
+
+## 9. Phase Roadmap & Milestone Matrix
+
+| Phase | Theme & Focus | Status | Key Deliverables |
+| :--- | :--- | :--- | :--- |
+| **[Phase 1](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_1_foundations_and_quality.md)** | Full-Stack Quality & Developer Foundations | `[COMPLETED]` | Monorepo DX scripts, Jest teardown leak fixes, 34 frontend ESLint fixes. |
+| **[Phase 2](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_2_automation_and_resilience.md)** | Test Automation Modernization & CI/CD Resilience | `[COMPLETED]` | Dynamic Playwright discovery, generic `ApiUtil<T>`, POM static linter, staged CI/CD. |
+| **[Phase 3](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_3_sandboxing_chaos_and_performance.md)** | Multi-User Sandboxing, Chaos Engineering & Performance Resilience | `[PLANNED]` | Session sandboxing (`x-test-session-id`), Chaos UI Dashboard, k6 & Lighthouse CI gates. |
+
