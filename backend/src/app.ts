@@ -17,7 +17,7 @@ app.use(correlationIdMiddleware);
 app.use(express.json());
 
 // --- CSRF Protection (Double-Submit Cookie Pattern) ---
-const csrfUtilities = doubleCsrf({
+const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf({
   getSecret: () => config.jwtSecret,
   getSessionIdentifier: (req) => req.cookies?.token || '',
   cookieName: 'psifi.x-csrf-token',
@@ -28,32 +28,28 @@ const csrfUtilities = doubleCsrf({
     path: '/',
   },
   size: 64,
+  ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
   getCsrfTokenFromRequest: (req) => req.headers['x-csrf-token'] as string,
+  skipCsrfProtection: (req) => {
+    // Skip for auth endpoints (login, register, logout, refresh)
+    const authPaths = ['/api/login', '/api/register', '/api/logout', '/api/auth/refresh'];
+    if (authPaths.includes(req.path)) return true;
+
+    // Skip for test/chaos endpoints
+    if (req.path.startsWith('/api/test/')) return true;
+
+    // Skip in test mode or if bypass headers are set (allows E2E tests to bypass CSRF)
+    if (
+      config.isTest ||
+      req.headers['x-bypass-csrf'] === 'true' ||
+      req.headers['x-bypass-rate-limit'] === 'true'
+    ) return true;
+
+    return false;
+  },
 });
 
-export const generateCsrfToken = csrfUtilities.generateCsrfToken;
-
-// CSRF protection middleware passed directly to app.use
-const doubleCsrfProtection = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-  const safeMethods = ['GET', 'HEAD', 'OPTIONS'];
-  if (safeMethods.includes(req.method)) return next();
-
-  // Skip for auth endpoints (login, register, logout, refresh)
-  const authPaths = ['/api/login', '/api/register', '/api/logout', '/api/auth/refresh'];
-  if (authPaths.includes(req.path)) return next();
-
-  // Skip for test/chaos endpoints
-  if (req.path.startsWith('/api/test/')) return next();
-
-  // Skip in test mode or if bypass headers are set (allows E2E tests to bypass CSRF)
-  if (
-    config.isTest ||
-    req.headers['x-bypass-csrf'] === 'true' ||
-    req.headers['x-bypass-rate-limit'] === 'true'
-  ) return next();
-
-  csrfUtilities.doubleCsrfProtection(req, res, next);
-};
+export { generateCsrfToken };
 
 app.use(doubleCsrfProtection);
 

@@ -28,7 +28,6 @@ test.describe('Login With Existing User', () => {
       const isLogout = await commonFunctions.compareTwoValues(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
       expect(isLogout).toBeTruthy();
     });
-    await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
   test('Testcase 2: Login Using Saved Session Storage @smoke @regression', async ({ browser, signUpPage, catalogPage, commonFunctions, networkInterceptor }) => {
@@ -53,7 +52,6 @@ test.describe('Login With Existing User', () => {
         const isLogout = await commonFunctions.compareTwoValues(await catalogPageWithNewContext.isLoginVisible(), true, "Verifying if user logged out successfully");
         expect(isLogout).toBeTruthy();
       });
-      await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
     } finally {
       // Cleanup
       await context?.close();
@@ -75,7 +73,6 @@ test.describe('Login With Existing User', () => {
       let isErrorVerified = await commonFunctions.compareTwoValues(errorText, "Unauthorized: Invalid credentials", "Verifying if error message is correct");
       expect(isErrorVerified).toBeTruthy();
     });
-    await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
 });

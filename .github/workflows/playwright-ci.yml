@@ -11,6 +11,11 @@ on:
         description: 'Git branch to checkout for this run'
         required: false
         default: 'main'
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+    branches: [main]
 
 permissions:
   contents: write
@@ -18,36 +23,61 @@ permissions:
   id-token: write
 
 jobs:
-  # JOB 1: Run Sharded Tests
+  # JOB 1: Run Automation Tests
   test:
     name: UI & API Automation
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     runs-on: ubuntu-latest
     
     env:
       ENV: INTEROP
       BASE_URL: https://buggy-books-fe.onrender.com/
       API_BASE_URL: https://buggy-books.onrender.com
-      HEADLESS: ${{ github.event.inputs.headless }}
+      HEADLESS: ${{ github.event.inputs.headless || 'true' }}
       BROWSER: chrome
       USER_NAME: ${{ secrets.E2E_USER_NAME }}
       PASSWORD: ${{ secrets.E2E_PASSWORD }}
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
-      - uses: actions/setup-node@v4
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: playwright-e2e/package-lock.json
       
       - name: Install dependencies
         working-directory: playwright-e2e
-        run: |
-          npm ci
-          npx playwright install --with-deps chrome
+        run: npm ci
 
-      - name: Run tests
+      - name: Get Playwright version
+        id: playwright-version
+        working-directory: playwright-e2e
+        run: echo "version=$(node -e "console.log(require('@playwright/test/package.json').version)")" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browser Binaries
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Playwright Browsers & OS Dependencies
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: playwright-e2e
+        run: npx playwright install --with-deps chrome
+
+      - name: Install Playwright OS Dependencies Only
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: playwright-e2e
+        run: npx playwright install-deps chrome
+
+      - name: Run Playwright Tests
         working-directory: playwright-e2e
         env:
           ENVIRONMENT: INTEROP
@@ -59,16 +89,14 @@ jobs:
         continue-on-error: true
 
       # Explicitly upload the allure-results folder
-      # Ensure your playwright.config.ts is actually outputting to 'playwright-e2e/reports/allure-results'
       - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-         name: allure-results
-         path: playwright-e2e/reports/allure-results
+          name: allure-results
+          path: playwright-e2e/reports/allure-results
 
-
-  # JOB 2: Merge and Deploy
+  # JOB 2: Merge and Deploy Allure Report
   deploy-report:
     name: Deploy Allure Report
     needs: [test]
@@ -88,13 +116,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: allure-results
-          path: allure-results # This creates a folder named 'allure-results' in the root
+          path: allure-results
 
-      - name: Test Report
+      - name: Test Report Summary
         run: |
           echo "- **Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/CI/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
 
-      # 3. Generate the single consolidated report. Point the generator to the folder we just downloaded
+      # 3. Generate consolidated Allure report
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         with:

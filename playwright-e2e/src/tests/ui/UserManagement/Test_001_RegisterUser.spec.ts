@@ -20,7 +20,6 @@ test.describe('Register New User', () => {
       let isNavigated = await commonFunctions.compareTwoValues(isRegistered, true, "Verifying if user registered successfully");
       expect(isNavigated).toBeTruthy();
     });
-    await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
   test('Testcase 2: Login With Registered User and Logout @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
@@ -33,7 +32,6 @@ test.describe('Register New User', () => {
       await test.step('Register User for Login Test', async () => {
         await signUpPage.clickSignUp();
         await signUpPage.registerNewUser(fullName, username, TestData.PASSWORD, TestData.PASSWORD);
-        await page.waitForTimeout(1000);
         await catalogPage.clickLogout();
       });
     }
@@ -50,7 +48,6 @@ test.describe('Register New User', () => {
       const isLogout = await commonFunctions.compareTwoValues(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
       expect(isLogout).toBeTruthy();
     });
-    await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
   test('Testcase 3: Password Strength Indicator @regression', async ({ signUpPage, commonFunctions, page, networkInterceptor }) => {
@@ -74,7 +71,6 @@ test.describe('Register New User', () => {
       let isStrong = await commonFunctions.compareTwoValues(strengthText, 'Strong', 'Verifying if password strength is Strong');
       expect(isStrong).toBeTruthy();
     });
-    await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
 });
