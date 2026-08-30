@@ -110,7 +110,7 @@ describe('Checkout Component Stepper Wizard', () => {
 
   it('submits checkout form with proper payload on Step 3', async () => {
     vi.mocked(api.getCart).mockResolvedValue([{ id: '1', title: 'Book', price: 10 }]);
-    vi.mocked(api.checkout).mockResolvedValue({ success: true });
+    vi.mocked(api.checkout).mockResolvedValue({ success: true, message: 'Order placed successfully', orderId: 'ORD-12345' });
 
     render(
       <MemoryRouter>

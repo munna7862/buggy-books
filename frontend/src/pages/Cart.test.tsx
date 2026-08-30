@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Cart from './Cart';
 import { api } from '../api';
@@ -49,10 +49,11 @@ describe('Cart Component rendering', () => {
     });
 
     const removeBtn = screen.getByText('✕');
-    removeBtn.click();
+    fireEvent.click(removeBtn);
 
     await waitFor(() => {
       expect(api.removeFromCart).toHaveBeenCalledWith('1');
+      expect(screen.queryByText('Test Cart Book')).not.toBeInTheDocument();
     });
   });
 
@@ -60,7 +61,7 @@ describe('Cart Component rendering', () => {
     vi.mocked(api.getCart).mockResolvedValue([
       { id: '1', title: 'Test Cart Book', price: 9.99 }
     ]);
-    vi.mocked(api.clearCart).mockResolvedValue({ success: true });
+    vi.mocked(api.clearCart).mockResolvedValue({ success: true, message: 'Cart cleared' });
 
     render(
       <MemoryRouter>
@@ -73,10 +74,11 @@ describe('Cart Component rendering', () => {
     });
 
     const clearBtn = screen.getByText('Clear All');
-    clearBtn.click();
+    fireEvent.click(clearBtn);
 
     await waitFor(() => {
       expect(api.clearCart).toHaveBeenCalled();
+      expect(screen.getByText(/Your cart is empty/i)).toBeInTheDocument();
     });
   });
 });

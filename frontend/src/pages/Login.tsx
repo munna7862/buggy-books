@@ -26,9 +26,10 @@ export default function Login() {
         login(data.username);
         navigate('/');
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err.message || 'Login failed. Please try again.');
+      const message = err instanceof Error ? err.message : 'Login failed. Please try again.';
+      setError(message);
     } finally {
       setIsLoading(false);
     }

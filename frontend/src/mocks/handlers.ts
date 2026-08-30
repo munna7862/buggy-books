@@ -63,7 +63,7 @@ export const handlers = [
     });
   }),
 
-  http.get(`${BASE}/books/:id`, ({ params }: any) => {
+  http.get(`${BASE}/books/:id`, ({ params }) => {
     const book = MOCK_BOOKS.find((b) => b.id === params.id);
     if (!book) {
       return HttpResponse.json({ error: "Book not found" }, { status: 404 });
@@ -74,7 +74,7 @@ export const handlers = [
   // -------------------------------------------------------------------------
   // Auth
   // -------------------------------------------------------------------------
-  http.post(`${BASE}/login`, async ({ request }: any) => {
+  http.post(`${BASE}/login`, async ({ request }) => {
     const body = (await request.json()) as { username: string; password: string };
     if (body.username === "testuser" && body.password === "password123") {
       return HttpResponse.json(
@@ -96,7 +96,7 @@ export const handlers = [
     return HttpResponse.json({ message: "Logged out successfully" });
   }),
 
-  http.post(`${BASE}/register`, async ({ request }: any) => {
+  http.post(`${BASE}/register`, async ({ request }) => {
     const body = (await request.json()) as { username: string };
     return HttpResponse.json({ username: body.username, message: "Registration successful" });
   }),
@@ -112,7 +112,7 @@ export const handlers = [
     return HttpResponse.json([]);
   }),
 
-  http.post(`${BASE}/cart`, async ({ request }: any) => {
+  http.post(`${BASE}/cart`, async ({ request }) => {
     const body = (await request.json()) as { bookId: string };
     const book = MOCK_BOOKS.find((b) => b.id === body.bookId);
     if (!book) {
@@ -160,7 +160,7 @@ export const handlers = [
     });
   }),
 
-  http.post(`${BASE}/test/config`, async ({ request }: any) => {
+  http.post(`${BASE}/test/config`, async ({ request }) => {
     const body = await request.json();
     return HttpResponse.json({ success: true, config: body });
   }),

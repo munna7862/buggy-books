@@ -74,7 +74,7 @@ describe('BookDetail Component', () => {
 
   it('calls addToCart when add button is clicked', async () => {
     vi.mocked(api.getBookById).mockResolvedValue(mockBook);
-    vi.mocked(api.addToCart).mockResolvedValue({ success: true });
+    vi.mocked(api.addToCart).mockResolvedValue([{ id: '1', title: 'Detail Test Book', price: 19.99 }]);
 
     render(
       <MemoryRouter initialEntries={['/books/1']}>

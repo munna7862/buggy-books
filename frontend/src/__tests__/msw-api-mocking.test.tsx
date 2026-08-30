@@ -52,6 +52,7 @@ describe('MSW API Mocking Test Suite', () => {
 
 
   it('MSW_04: Override Checkout to Always Fail - POST /api/checkout/process returns 500 and Checkout renders error banner', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     server.use(
       http.post('http://localhost:4000/api/checkout/process', () => {
         return HttpResponse.json(
@@ -104,6 +105,7 @@ describe('MSW API Mocking Test Suite', () => {
     // Assert error banner displays server failure message
     const errorBanner = await screen.findByText(/payment processing failed due to server error/i);
     expect(errorBanner).toBeInTheDocument();
+    consoleSpy.mockRestore();
   });
 
 });

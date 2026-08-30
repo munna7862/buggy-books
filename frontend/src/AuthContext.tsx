@@ -17,14 +17,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [username, setUsername] = useState<string | null>(() => localStorage.getItem(AUTH_USER_KEY));
 
   useEffect(() => {
-    const savedUser = localStorage.getItem(AUTH_USER_KEY);
-    if (savedUser) {
-      setIsAuthenticated(true);
-      setUsername(savedUser);
-    } else {
-      setIsAuthenticated(false);
-      setUsername(null);
-    }
+    const handleStorage = () => {
+      const savedUser = localStorage.getItem(AUTH_USER_KEY);
+      if (savedUser) {
+        setIsAuthenticated(true);
+        setUsername(savedUser);
+      } else {
+        setIsAuthenticated(false);
+        setUsername(null);
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
   const login = useCallback((user: string) => {
@@ -36,7 +40,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = useCallback(async () => {
     try {
       await api.logout();
-    } catch (e) {
+    } catch {
       console.error('Logout API failed, proceeding with local clear');
     }
     localStorage.removeItem(AUTH_USER_KEY);

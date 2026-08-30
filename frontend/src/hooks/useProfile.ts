@@ -6,7 +6,7 @@ export function useProfile() {
   const [username, setUsername] = useState('');
   const [fullName, setFullName] = useState('');
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState('');
@@ -19,7 +19,7 @@ export function useProfile() {
       setUsername(data.username);
       setFullName(data.fullName);
       setAvatarUrl(data.avatarUrl);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to load profile details:', err);
       toast.error('Unable to fetch profile details');
     } finally {
@@ -28,8 +28,31 @@ export function useProfile() {
   }, []);
 
   useEffect(() => {
-    fetchProfile();
-  }, [fetchProfile]);
+    let ignore = false;
+    api.getProfile()
+      .then((data) => {
+        if (!ignore) {
+          setUsername(data.username);
+          setFullName(data.fullName);
+          setAvatarUrl(data.avatarUrl);
+        }
+      })
+      .catch((err: unknown) => {
+        if (!ignore) {
+          console.error('Failed to load profile details:', err);
+          toast.error('Unable to fetch profile details');
+        }
+      })
+      .finally(() => {
+        if (!ignore) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
 
   const uploadAvatar = useCallback(async (file: File) => {
     setUploading(true);
@@ -45,10 +68,11 @@ export function useProfile() {
       setUploadStatus('Avatar updated successfully!');
       toast.success('Avatar uploaded successfully!');
       return data.avatarUrl;
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Failed to upload avatar:', err);
-      setUploadError(err.message || 'Failed to upload avatar');
-      toast.error(err.message || 'Failed to upload avatar');
+      const message = err instanceof Error ? err.message : 'Failed to upload avatar';
+      setUploadError(message);
+      toast.error(message);
       throw err;
     } finally {
       setUploading(false);

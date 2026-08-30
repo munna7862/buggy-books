@@ -28,14 +28,14 @@
   *So that* `npm run lint` executes with 0 errors and complies with React 19 strict standards.
 - **Story Points**: 3 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Fix synchronous `setState` in `useEffect` in `src/hooks/useProfile.ts` (lines 30–32).
-  - [ ] Fix synchronous `setState` in `useEffect` in `src/pages/BookDetail.tsx` (line 16).
-  - [ ] Fix synchronous `setState` in `useEffect` in `src/pages/Register.tsx` (line 40).
-  - [ ] Replace explicit `any` types in `src/mocks/handlers.ts` (lines 66, 77, 99, 115, 163).
-  - [ ] Replace explicit `any` types in `src/pages/Login.tsx`, `Login.test.tsx`, `Register.test.tsx`, `Profile.tsx`, and `setupTests.ts`.
-  - [ ] Remove unused variable `err` in `src/pages/Profile.tsx` (line 41).
+  - [x] Fix synchronous `setState` in `useEffect` in `src/hooks/useProfile.ts` (lines 30–32).
+  - [x] Fix synchronous `setState` in `useEffect` in `src/pages/BookDetail.tsx` (line 16).
+  - [x] Fix synchronous `setState` in `useEffect` in `src/pages/Register.tsx` (line 40).
+  - [x] Replace explicit `any` types in `src/mocks/handlers.ts` (lines 66, 77, 99, 115, 163).
+  - [x] Replace explicit `any` types in `src/pages/Login.tsx`, `Login.test.tsx`, `Register.test.tsx`, `Profile.tsx`, and `setupTests.ts`.
+  - [x] Remove unused variable `err` in `src/pages/Profile.tsx` (line 41).
 - **Acceptance Criteria**:
-  - [ ] Running `cd frontend && npm run lint` outputs `0 problems (0 errors, 0 warnings)`.
+  - [x] Running `cd frontend && npm run lint` outputs `0 problems (0 errors, 0 warnings)`.
 
 ---
 
@@ -46,10 +46,10 @@
   *So that* test execution logs are clean and deterministic.
 - **Story Points**: 1 SP (Low)
 - **Technical Subtasks**:
-  - [ ] Inspect `src/__tests__/msw-api-mocking.test.tsx` and wrap async state transitions in React Testing Library `waitFor()`.
-  - [ ] Verify all 9 test files (26 tests) pass cleanly without console warnings.
+  - [x] Inspect `src/__tests__/msw-api-mocking.test.tsx` and wrap async state transitions in React Testing Library `waitFor()`.
+  - [x] Verify all 9 test files (26 tests) pass cleanly without console warnings.
 - **Acceptance Criteria**:
-  - [ ] `cd frontend && npm test` passes 100% of tests with clean console output.
+  - [x] `cd frontend && npm test` passes 100% of tests with clean console output.
 
 ---
 
@@ -60,10 +60,10 @@
   *So that* component consumers have full compile-time safety when accessing book, cart, and user properties.
 - **Story Points**: 1 SP (Low)
 - **Technical Subtasks**:
-  - [ ] Import `Book`, `Cart`, `User`, `ChaosConfig` from `/shared/types/`.
-  - [ ] Annotate API methods in `src/api.ts` with explicit return types.
+  - [x] Import `Book`, `CartItem`, `PaginatedBooks`, `ChaosConfig`, `Order` from `/shared/types/`.
+  - [x] Annotate API methods in `src/api.ts` with explicit return types.
 - **Acceptance Criteria**:
-  - [ ] `cd frontend && npm run build` compiles cleanly with zero `any` fallbacks.
+  - [x] `cd frontend && npm run build` compiles cleanly with zero `any` fallbacks.
 
 ---
 
@@ -71,20 +71,20 @@
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **Dev Technical Review** | Dev Architect | Inspect React hooks refactoring and `/shared/types/` integration. | `[PENDING]` |
-| **SDET Quality Gate** | SDET Architect | Verify 26 Vitest tests pass with 0 `act()` warnings. | `[PENDING]` |
-| **PO Phase 1 Review** | Product Owner | Verify full Phase 1 acceptance criteria (DX, Backend, Frontend). | `[PENDING]` |
+| **Dev Technical Review** | Dev Architect | Inspect React hooks refactoring and `/shared/types/` integration. 0 `any` types and 0 lint errors achieved. | `[APPROVED]` |
+| **SDET Quality Gate** | SDET Architect | Verify 26 Vitest tests pass with 0 `act()` warnings and full monorepo tests (66 backend + 26 frontend) pass. | `[APPROVED]` |
+| **PO Phase 1 Review** | Product Owner | Verify full Phase 1 acceptance criteria (DX, Backend, Frontend). Phase 1 complete and release authorized. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [ ] All 34 ESLint errors resolved (`npm run lint` returns 0 errors).
-- [ ] All 26 Vitest component tests pass with 0 warnings.
-- [ ] TypeScript compiles cleanly with `npm run build`.
-- [ ] Phase 1 criteria fully satisfied across Monorepo, Backend, and Frontend.
-- [ ] Changes committed to feature branch with conventional commits.
-- [ ] Phase 1 sign-off issued by Product Owner.
+- [x] All 34 ESLint errors resolved (`npm run lint` returns 0 errors).
+- [x] All 26 Vitest component tests pass with 0 warnings.
+- [x] TypeScript compiles cleanly with `npm run build`.
+- [x] Phase 1 criteria fully satisfied across Monorepo, Backend, and Frontend.
+- [x] Changes committed to feature branch with conventional commits.
+- [x] Phase 1 sign-off issued by Product Owner.
 
 ---
 

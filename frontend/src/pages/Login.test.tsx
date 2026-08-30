@@ -41,7 +41,8 @@ describe('Login Component', () => {
   });
 
   it('shows error banner when login fails', async () => {
-    (api.login as any).mockRejectedValue(new Error('Unauthorized: Invalid credentials'));
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.mocked(api.login).mockRejectedValue(new Error('Unauthorized: Invalid credentials'));
     
     renderLogin();
     
@@ -57,10 +58,11 @@ describe('Login Component', () => {
     await waitFor(() => {
       expect(screen.getByText('Unauthorized: Invalid credentials')).toBeInTheDocument();
     });
+    consoleSpy.mockRestore();
   });
 
   it('calls login api and navigates on success', async () => {
-    (api.login as any).mockResolvedValue({ token: 'mock-jwt-token' });
+    vi.mocked(api.login).mockResolvedValue({ message: 'Login successful', username: 'admin', token: 'mock-jwt-token' });
     
     renderLogin();
     

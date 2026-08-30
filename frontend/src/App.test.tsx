@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import App from './App';
 
 describe('App Component', () => {
-  it('renders the BuggyBooks glass navigation bar', () => {
+  it('renders the BuggyBooks glass navigation bar', async () => {
     render(<App />);
     
     // Check if the brand title renders correctly
@@ -16,5 +16,9 @@ describe('App Component', () => {
     
     expect(catalogLink).toBeInTheDocument();
     expect(loginLink).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Book 1')).toBeInTheDocument();
+    });
   });
 });
