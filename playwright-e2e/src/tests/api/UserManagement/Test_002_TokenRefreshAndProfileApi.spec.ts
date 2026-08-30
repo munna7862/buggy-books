@@ -20,7 +20,7 @@ function uniqueUsername(prefix: string = 'tokenuser'): string {
 
 test.describe('Token Refresh and Profile Upload API Suite', () => {
 
-  test('API_REF_01: Dynamic Access Token Expiry', async () => {
+  test('API_REF_01: Dynamic Access Token Expiry @smoke @regression @chaos', async () => {
     const username = uniqueUsername('token_exp');
     const password = TestData.PASSWORD;
     const fullName = TestData.FULL_NAME;
@@ -82,7 +82,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     expect(isForbiddenReturned).toBeTruthy();
   });
 
-  test('API_REF_02: Refresh Token Issuance', async () => {
+  test('API_REF_02: Refresh Token Issuance @smoke @regression', async () => {
     const username = uniqueUsername('ref_issue');
     const password = TestData.PASSWORD;
     const fullName = TestData.FULL_NAME;
@@ -118,7 +118,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     expect(hasAccessToken && hasRefreshToken && hasHttpOnlyFlag).toBeTruthy();
   });
 
-  test('API_REF_03: Silent Token Refresh', async () => {
+  test('API_REF_03: Silent Token Refresh @regression', async () => {
     const username = uniqueUsername('silent_ref');
     const password = TestData.PASSWORD;
     const fullName = TestData.FULL_NAME;
@@ -164,7 +164,7 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     expect(isRefreshOk && hasNewAccessToken).toBeTruthy();
   });
 
-  test('API_UPL_01: Unauthorized Session Check', async () => {
+  test('API_UPL_01: Unauthorized Session Check @regression', async () => {
     let isUnauthorized = false;
 
     const uploadRes = await apiUtil.makeRequest({

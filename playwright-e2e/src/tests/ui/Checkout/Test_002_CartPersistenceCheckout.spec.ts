@@ -30,7 +30,7 @@ const TestData = require(testDataPath) as CartPersistenceCheckoutTestData;
 
 test.describe('Cart Persistence Checkout', () => {
 
-  test('Testcase 1: Complete checkout after cart persists across logout and login', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('Testcase 1: Complete checkout after cart persists across logout and login @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);

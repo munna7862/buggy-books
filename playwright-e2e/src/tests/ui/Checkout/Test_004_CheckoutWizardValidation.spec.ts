@@ -5,7 +5,7 @@ import TestData from '../../../test-data/ui/Checkout/Test_004_CheckoutWizardVali
 
 test.describe('Multi-Step Checkout Wizard', () => {
 
-  test('UI_WIZ_01: Stepper Transition Validation', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_WIZ_01: Stepper Transition Validation @smoke @regression', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isStep1Active = false;
@@ -49,7 +49,7 @@ test.describe('Multi-Step Checkout Wizard', () => {
     expect(isStep1Active && isStep1Visible && isStep2Active && isShippingHidden && isPaymentVisible).toBeTruthy();
   });
 
-  test('UI_WIZ_02: Validation Messaging Validation', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_WIZ_02: Validation Messaging Validation @regression', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isFnErrValid = false;
@@ -106,7 +106,7 @@ test.describe('Multi-Step Checkout Wizard', () => {
     expect(isFnErrValid && isLnErrValid && isAddrErrValid && isCityErrValid && isCcErrValid && isExpErrValid && isCvvErrValid).toBeTruthy();
   });
 
-  test('UI_WIZ_03: Wizard Back Step History preservation', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_WIZ_03: Wizard Back Step History preservation @regression', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isReturnedToStep1 = false;
@@ -161,7 +161,7 @@ test.describe('Multi-Step Checkout Wizard', () => {
     expect(isReturnedToStep1 && isBackToStep2 && isCcPreserved && isExpPreserved && isCvvPreserved).toBeTruthy();
   });
 
-  test('UI_WIZ_04: Dirty Navigation Alert Dialog', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_WIZ_04: Dirty Navigation Alert Dialog @regression', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isMsgDismissValid = false;

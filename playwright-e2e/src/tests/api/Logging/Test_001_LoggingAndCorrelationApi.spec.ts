@@ -20,7 +20,7 @@ function uniqueUsername(prefix: string = 'loguser'): string {
 
 test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
 
-  test('API_LOG_01: Correlation ID Header Generation', async () => {
+  test('API_LOG_01: Correlation ID Header Generation @smoke @regression', async () => {
     let hasCorrelationIdHeader = false;
     let isValidUuid = false;
 
@@ -42,7 +42,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     expect(hasCorrelationIdHeader && isValidUuid).toBeTruthy();
   });
 
-  test('API_LOG_02: Correlation ID Header Preservation', async () => {
+  test('API_LOG_02: Correlation ID Header Preservation @regression', async () => {
     let isCorrelationIdPreserved = false;
     const customCorrelationId = TestData.CUSTOM_CORRELATION_ID;
 
@@ -62,7 +62,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     expect(isCorrelationIdPreserved).toBeTruthy();
   });
 
-  test('API_LOG_03: Error Body Correlation ID Mapping', async () => {
+  test('API_LOG_03: Error Body Correlation ID Mapping @regression', async () => {
     let isErrorStatus400 = false;
     let isBodyCorrelationIdMatching = false;
     const customCorrelationId = TestData.CUSTOM_CORRELATION_ID + '_err';
@@ -84,7 +84,7 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     expect(isErrorStatus400 && isBodyCorrelationIdMatching).toBeTruthy();
   });
 
-  test('API_LOG_04: User Context Log Association', async () => {
+  test('API_LOG_04: User Context Log Association @regression', async () => {
     const username = uniqueUsername('user_log');
     const password = TestData.PASSWORD;
     const fullName = TestData.FULL_NAME;

@@ -28,7 +28,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     await request.post(RESET_URL);
   });
 
-  test('VIS_REG_01: Baseline Catalog Screenshot', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_01: Baseline Catalog Screenshot @smoke @regression', async ({ commonFunctions, page, request }) => {
     let flag = false;
     await test.step('Ensure visualChaos is disabled', async () => {
       await syncVisualChaos(request, false);
@@ -47,7 +47,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_02: Chaos-Enabled Catalog Pixel Diff', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_02: Chaos-Enabled Catalog Pixel Diff @regression @chaos', async ({ commonFunctions, page, request }) => {
     let diffDetected = false;
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
@@ -69,7 +69,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     expect(diffDetected).toBeTruthy();
   });
 
-  test('VIS_REG_03: Book Card Border Color Assertion', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_03: Book Card Border Color Assertion @regression @chaos', async ({ commonFunctions, page, request }) => {
     let flag = false;
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
@@ -93,7 +93,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_04: Book Cover Blur Filter Assertion', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_04: Book Cover Blur Filter Assertion @regression @chaos', async ({ commonFunctions, page, request }) => {
     let flag = false;
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
@@ -116,7 +116,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_05: Search Bar Displacement Assertion', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_05: Search Bar Displacement Assertion @regression @chaos', async ({ commonFunctions, page, request }) => {
     let flag = false;
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
@@ -139,7 +139,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_06: Price Tag Rotation Assertion', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_06: Price Tag Rotation Assertion @regression @chaos', async ({ commonFunctions, page, request }) => {
     let flag = false;
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
@@ -161,7 +161,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_07: Checkout Button Margin Shift', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_07: Checkout Button Margin Shift @regression @chaos', async ({ commonFunctions, page, request }) => {
     let flag = false;
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
@@ -196,7 +196,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_08: Book Card Text Line Height Chaos', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_08: Book Card Text Line Height Chaos @regression @chaos', async ({ commonFunctions, page, request }) => {
     let flag = false;
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
@@ -229,7 +229,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_09: Reset Restores Visual Baseline', async ({ page, request }) => {
+  test('VIS_REG_09: Reset Restores Visual Baseline @regression @chaos', async ({ page, request }) => {
     await test.step('Enable visualChaos first', async () => {
       await syncVisualChaos(request, true);
     });

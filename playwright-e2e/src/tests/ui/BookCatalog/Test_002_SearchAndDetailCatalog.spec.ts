@@ -5,7 +5,7 @@ import TestData from '../../../test-data/ui/BookCatalog/Test_002_SearchAndDetail
 
 test.describe('Book Catalog Search and Detail View', () => {
 
-  test('UI_CAT_03: Search Filtering', async ({ catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_CAT_03: Search Filtering @regression', async ({ catalogPage, commonFunctions, page, networkInterceptor }) => {
     await catalogPage.navigateToCatalog(envConfig.baseUrl);
     await catalogPage.getBooksCount();
 
@@ -39,7 +39,7 @@ test.describe('Book Catalog Search and Detail View', () => {
     expect(isCountValid && isResultCountValid && isTitleValid && isResetValid).toBeTruthy();
   });
 
-  test('UI_CAT_04: Search - No Results', async ({ catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_CAT_04: Search - No Results @regression', async ({ catalogPage, commonFunctions, page, networkInterceptor }) => {
     await catalogPage.navigateToCatalog(envConfig.baseUrl);
     await catalogPage.getBooksCount();
 
@@ -61,7 +61,7 @@ test.describe('Book Catalog Search and Detail View', () => {
     expect(isCountZero && isEmptyMessageValid).toBeTruthy();
   });
 
-  test('UI_CAT_05: Book Detail View', async ({ catalogPage, bookDetailPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_CAT_05: Book Detail View @smoke @regression', async ({ catalogPage, bookDetailPage, commonFunctions, page, networkInterceptor }) => {
     await catalogPage.navigateToCatalog(envConfig.baseUrl);
     await catalogPage.getBooksCount();
 

@@ -18,7 +18,7 @@ const TestData = require(testDataPath) as ProtectedRouteGuardTestData;
 
 test.describe('Protected Route Access Guard', () => {
 
-  test('UI_AUTH_06: Direct unauthenticated navigation to protected routes redirects to Login', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_AUTH_06: Direct unauthenticated navigation to protected routes redirects to Login @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
 
     // Ensure session storage and auth cookies are completely clear
     await page.goto(envConfig.baseUrl);

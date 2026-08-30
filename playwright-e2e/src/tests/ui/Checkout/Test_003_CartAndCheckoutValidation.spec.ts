@@ -5,7 +5,7 @@ import TestData from '../../../test-data/ui/Checkout/Test_003_CartAndCheckoutVal
 
 test.describe('Cart Management and Checkout Validation', () => {
 
-  test('UI_CART_02: Remove Item from Cart', async ({ signUpPage, catalogPage, cartPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_CART_02: Remove Item from Cart @regression', async ({ signUpPage, catalogPage, cartPage, commonFunctions, page, networkInterceptor }) => {
     await page.goto(envConfig.baseUrl);
     const testUser = TestData.USER_A_PREFIX + commonFunctions.generateRandomString(5);
 
@@ -45,7 +45,7 @@ test.describe('Cart Management and Checkout Validation', () => {
     expect(isInitialCountValid && isCountReduced && isTotalUpdated).toBeTruthy();
   });
 
-  test('UI_CART_03: User Cart Isolation', async ({ signUpPage, catalogPage, cartPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_CART_03: User Cart Isolation @regression', async ({ signUpPage, catalogPage, cartPage, commonFunctions, page, networkInterceptor }) => {
     const userA = TestData.USER_A_PREFIX + commonFunctions.generateRandomString(5);
     const userB = TestData.USER_B_PREFIX + commonFunctions.generateRandomString(5);
 
@@ -82,7 +82,7 @@ test.describe('Cart Management and Checkout Validation', () => {
     expect(isUserACartPopulated && isUserBCartEmpty).toBeTruthy();
   });
 
-  test('UI_CHECK_01: Checkout Form Validation', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_CHECK_01: Checkout Form Validation @regression', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {
     await page.goto(envConfig.baseUrl);
     const testUser = TestData.USER_A_PREFIX + commonFunctions.generateRandomString(5);
 

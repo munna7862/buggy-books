@@ -8,7 +8,7 @@ export const envConfig = {
   apiBaseUrl: process.env.API_BASE_URL || 'https://buggy-books.onrender.com',
   headless: process.env.HEADLESS === 'true',
   browser: process.env.BROWSER || 'chrome',
-  USE_SPECIFIC_TESTS: process.env.USE_SPECIFIC_TESTS === 'true',
+  timeout: parseInt(process.env.ELEMENT_TIMEOUT || '15000', 10),
   SUITENAME: process.env.SUITENAME || 'Default'
 };
 

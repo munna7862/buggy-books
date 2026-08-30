@@ -52,7 +52,7 @@ test.describe('Cart & Inventory API', () => {
     }
   });
 
-  test('API_CART_01: Cart persistence after server crash', async () => {
+  test('API_CART_01: Cart persistence after server crash @smoke @regression', async () => {
     // 1. Add item to cart
     const addRes = await apiUtil.makeRequest({
       method: 'POST',
@@ -93,7 +93,7 @@ test.describe('Cart & Inventory API', () => {
     expect(getRes.data).toContainEqual(expect.objectContaining({ id: '3' }));
   });
 
-  test('API_INV_01: Trigger inventory report', async () => {
+  test('API_INV_01: Trigger inventory report @smoke @regression', async () => {
     const response = await apiUtil.makeRequest({
       method: 'GET',
       url: INVENTORY_URL,

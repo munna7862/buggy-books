@@ -28,7 +28,7 @@ const TestData = require(testDataPath) as CompleteBookPurchaseTestData;
 
 test.describe('Complete Book Purchase', () => {
 
-  test('Testcase 1: Complete book purchase successfully', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('Testcase 1: Complete book purchase successfully @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);

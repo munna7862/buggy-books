@@ -5,7 +5,7 @@ import TestData from '../../../test-data/ui/BookCatalog/Test_001_InitialCatalog.
 
 test.describe('Initial Catalog', () => {
 
-  test('Testcase: Verify Books Count in pagination', async ({ catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('Verify Books Count in pagination @smoke @regression', async ({ catalogPage, commonFunctions, page, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     await page.goto(envConfig.baseUrl);
     await test.step('Verify Books Count in Catalog Page', async () => {
@@ -29,4 +29,3 @@ test.describe('Initial Catalog', () => {
   });
 
 });
-

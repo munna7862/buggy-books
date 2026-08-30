@@ -32,7 +32,7 @@ async function disableA11yChaos(request: any) {
 
 test.describe('Accessibility (a11y) Scans Suite', () => {
 
-  test('A11Y_01: Standard Accessibility Compliance', async ({ commonFunctions, page, request }) => {
+  test('A11Y_01: Standard Accessibility Compliance @smoke @regression @a11y', async ({ commonFunctions, page, request }) => {
     let isCompliant = false;
 
     await test.step('Ensure injectA11yViolations is disabled', async () => {
@@ -58,7 +58,7 @@ test.describe('Accessibility (a11y) Scans Suite', () => {
     expect(isCompliant).toBeTruthy();
   });
 
-  test('A11Y_02: Image Alternative Text Scan Failure', async ({ commonFunctions, page, request }) => {
+  test('A11Y_02: Image Alternative Text Scan Failure @regression @chaos @a11y', async ({ commonFunctions, page, request }) => {
     let hasImageAltViolation = false;
 
     try {
@@ -89,7 +89,7 @@ test.describe('Accessibility (a11y) Scans Suite', () => {
     expect(hasImageAltViolation).toBeTruthy();
   });
 
-  test('A11Y_03: Orphaned Form Label Scan Failure', async ({ commonFunctions, page, request }) => {
+  test('A11Y_03: Orphaned Form Label Scan Failure @regression @chaos @a11y', async ({ commonFunctions, page, request }) => {
     let hasLabelViolation = false;
 
     try {
@@ -125,7 +125,7 @@ test.describe('Accessibility (a11y) Scans Suite', () => {
     expect(hasLabelViolation).toBeTruthy();
   });
 
-  test('A11Y_04: Text Color Contrast Scan Failure', async ({ commonFunctions, page, request }) => {
+  test('A11Y_04: Text Color Contrast Scan Failure @regression @chaos @a11y', async ({ commonFunctions, page, request }) => {
     let hasContrastViolation = false;
 
     try {

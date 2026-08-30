@@ -35,7 +35,7 @@ test.describe('Books API - List and Security', () => {
     header = { 'Content-Type': 'application/json' };
   });
 
-  test('Testcase 1: GET /api/books?page=1&limit=8 - should return a paged book list with valid contract for page 1', async () => {
+  test('Testcase 1: GET /api/books?page=1&limit=8 - should return a paged book list with valid contract for page 1 @smoke @regression', async () => {
     const response = await apiUtil.makeRequest({
       method: 'GET',
       url: `${BOOKS_URL}?page=${testData.defaultPagination.page}&limit=${testData.defaultPagination.limit}`,
@@ -75,7 +75,7 @@ test.describe('Books API - List and Security', () => {
     }
   });
 
-  test('Testcase 2: GET /api/books?page=2&limit=8 - should return a paged book list with valid contract for page 2', async () => {
+  test('Testcase 2: GET /api/books?page=2&limit=8 - should return a paged book list with valid contract for page 2 @smoke @regression', async () => {
     const response = await apiUtil.makeRequest({
       method: 'GET',
       url: `${BOOKS_URL}?page=${testData.page2Pagination.page}&limit=${testData.page2Pagination.limit}`,
@@ -119,7 +119,7 @@ test.describe('Books API - List and Security', () => {
   const paginationScenarios = testData.paginationScenarios;
 
   for (const scenario of paginationScenarios) {
-    test(`Testcase 3: Pagination: ${scenario.description} (page=${scenario.page}, limit=${scenario.limit})`, async () => {
+    test(`Testcase 3: Pagination: ${scenario.description} (page=${scenario.page}, limit=${scenario.limit}) @regression`, async () => {
       const response = await apiUtil.makeRequest({
         method: 'GET',
         url: `${BOOKS_URL}?page=${scenario.page}&limit=${scenario.limit}`,
@@ -143,7 +143,7 @@ test.describe('Books API - List and Security', () => {
   }
 
   // Data Integrity - No Duplicates across pages
-  test('Testcase 4: Data Integrity: Page 1 last item should not be Page 2 first item', async () => {
+  test('Testcase 4: Data Integrity: Page 1 last item should not be Page 2 first item @regression', async () => {
     const page1 = await apiUtil.makeRequest({ method: 'GET', url: `${BOOKS_URL}?page=1&limit=5`, headers: header, logMessage: 'Get books for page 1', responseType: 'full' });
     const page2 = await apiUtil.makeRequest({ method: 'GET', url: `${BOOKS_URL}?page=2&limit=5`, headers: header, logMessage: 'Get books for page 2', responseType: 'full' });
 
@@ -159,7 +159,7 @@ test.describe('Books API - List and Security', () => {
   const negativeScenarios = testData.negativeScenarios;
 
   for (const neg of negativeScenarios) {
-    test(`Testcase 5: Negative: ${neg.description}`, async () => {
+    test(`Testcase 5: Negative: ${neg.description} @regression`, async () => {
       const response = await apiUtil.makeRequest({
         method: 'GET',
         url: `${BOOKS_URL}?${neg.query}`,
@@ -175,7 +175,7 @@ test.describe('Books API - List and Security', () => {
   }
 
   // Security - Unauthorized Access (If applicable)
-  test('Testcase 6: Security: Request without Content-Type header should be handled', async () => {
+  test('Testcase 6: Security: Request without Content-Type header should be handled @regression', async () => {
     const response = await apiUtil.makeRequest({
       method: 'GET',
       url: BOOKS_URL,
@@ -189,7 +189,7 @@ test.describe('Books API - List and Security', () => {
   });
 
   // 5. Default Parameters
-  test('Testcase 7: Defaults: Verify API works without query parameters', async () => {
+  test('Testcase 7: Defaults: Verify API works without query parameters @smoke @regression', async () => {
     const response = await apiUtil.makeRequest({
       method: 'GET',
       url: BOOKS_URL,

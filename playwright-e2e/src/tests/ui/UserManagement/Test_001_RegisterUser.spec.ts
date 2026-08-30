@@ -5,7 +5,7 @@ import TestData from '../../../test-data/ui/UserManagement/Test_001_RegisterUser
 
 test.describe('Register New User', () => {
   let username: string, fullName: string;
-  test('Testcase 1: Register New User', async ({ signUpPage, commonFunctions, page, networkInterceptor }) => {
+  test('Testcase 1: Register New User @smoke @regression', async ({ signUpPage, commonFunctions, page, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     username = TestData.USER_NAME + commonFunctions.generateRandomString(5);
     fullName = TestData.FULL_NAME + commonFunctions.generateRandomString(5);
@@ -23,7 +23,7 @@ test.describe('Register New User', () => {
     await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
-  test('Testcase 2: Login With Registered User and Logout', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('Testcase 2: Login With Registered User and Logout @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     await page.goto(envConfig.baseUrl);
 
@@ -53,7 +53,7 @@ test.describe('Register New User', () => {
     await page.waitForTimeout(2000); // Wait for a few seconds to ensure all network requests are captured
   });
 
-  test('Testcase 3: Password Strength Indicator', async ({ signUpPage, commonFunctions, page, networkInterceptor }) => {
+  test('Testcase 3: Password Strength Indicator @regression', async ({ signUpPage, commonFunctions, page, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
     await page.goto(envConfig.baseUrl);
 
@@ -78,5 +78,3 @@ test.describe('Register New User', () => {
   });
 
 });
-
-

@@ -23,7 +23,7 @@ function uniqueUsername(prefix: string = 'profile_user'): string {
 
 test.describe('Profile Summary and Order History', () => {
 
-  test('UI_PROF_01: Verify user account profile summary and avatar preview render correctly', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_PROF_01: Verify user account profile summary and avatar preview render correctly @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
     const profilePage = new ProfilePage(page);
     const username = uniqueUsername();
 

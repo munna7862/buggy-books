@@ -5,7 +5,7 @@ import TestData from '../../../test-data/ui/Refresh/Test_006_JwtRefreshValidatio
 
 test.describe('JWT Expiration & Silent Refresh UI Suite', () => {
 
-  test('UI_REF_01: Transparent Client Request Retry', async ({ signUpPage, profilePage, commonFunctions, page, request }) => {
+  test('UI_REF_01: Transparent Client Request Retry @regression', async ({ signUpPage, profilePage, commonFunctions, page, request }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isProfileOpened = false;
@@ -51,7 +51,7 @@ test.describe('JWT Expiration & Silent Refresh UI Suite', () => {
     expect(isProfileOpened && isUserStillLoggedIn).toBeTruthy();
   });
 
-  test('UI_REF_02: Session Expiry Redirection', async ({ signUpPage, profilePage, commonFunctions, page, context }) => {
+  test('UI_REF_02: Session Expiry Redirection @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page, context }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
 
     let isRedirectedToLogin = false;

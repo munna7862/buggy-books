@@ -31,7 +31,7 @@ function uniqueUsername(prefix: string = 'cart_qty_user'): string {
 
 test.describe('Cart Quantity & Total Adjustment', () => {
 
-  test('UI_CART_04: Cart item addition and removal dynamically recalculates item count and order total', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_CART_04: Cart item addition and removal dynamically recalculates item count and order total @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
     const cartPage = new CartPage(page);
     const username = uniqueUsername();
 
