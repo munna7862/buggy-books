@@ -123,12 +123,10 @@ git clone <https://github.com/munna7862/buggy-books.git>
 cd buggy-books
 ```
 
-### 2. Install all dependencies
+### 2. Install all dependencies across monorepo
 ```bash
-npm install
-cd backend && npm install
-cd ../frontend && npm install
-cd ..
+# Installs root, backend, frontend, and playwright-e2e dependencies in one command
+npm run install:all
 ```
 
 ### 3. Configure environment variables
@@ -149,6 +147,19 @@ npm run dev
 |---|---|
 | Frontend | http://localhost:5173 |
 | Backend API | http://localhost:4000 |
+
+### 5. Unified Monorepo Commands
+| Command | Description |
+|---|---|
+| `npm run install:all` | Provision dependencies across root, backend, frontend, and playwright-e2e |
+| `npm run dev` | Start backend and frontend concurrently with hot-reloading |
+| `npm run typecheck` | Run TypeScript compilation checks across all 3 packages concurrently |
+| `npm run test:unit` | Run backend Jest and frontend Vitest unit test suites concurrently |
+| `npm run test:backend` | Run backend Jest test suite |
+| `npm run test:frontend` | Run frontend Vitest component test suite |
+| `npm run test:e2e` | Run Playwright End-to-End test suite |
+| `npm run build` | Compile production builds for backend and frontend |
+| `npm run lint` | Run ESLint check on frontend |
 
 ---
 
@@ -230,21 +241,32 @@ These are **intentional design decisions** that serve as targets for automation 
 
 ## 🧪 Running Tests
 
+### Full Monorepo Unit Test Suite
+```bash
+# Runs backend Jest tests and frontend Vitest tests concurrently from root
+npm run test:unit
+```
+
 ### Backend Tests (Jest)
 ```bash
-cd backend
-npm test
+# From root or inside /backend
+npm run test:backend
+# Or: cd backend && npm test
 ```
-- **31 tests** across 2 suites:
-  - `api.test.ts` — 20 integration tests covering all API routes
-  - `dataStore.test.ts` — 11 unit tests for data layer
 
 ### Frontend Tests (Vitest)
 ```bash
-cd frontend
-npm test
+# From root or inside /frontend
+npm run test:frontend
+# Or: cd frontend && npm test
 ```
-- **19 tests** across 7 component suites
+
+### Playwright E2E Tests
+```bash
+# From root or inside /playwright-e2e
+npm run test:e2e
+# Or: cd playwright-e2e && npm test
+```
 
 ---
 
