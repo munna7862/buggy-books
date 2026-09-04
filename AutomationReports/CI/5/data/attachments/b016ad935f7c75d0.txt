@@ -1,0 +1,12 @@
+[2026-09-05 01:07:46] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w8-2-1788536266139-bqy3
+[2026-09-05 01:07:47] ERROR:  Asserting book card border-color is red (rgb(240, 66, 66) or rgb(242, 36, 36)), actual: rgba(240, 68, 68, 0.996) Failed!! Expected Value:: true || Actual Value:: false
+[2026-09-05 01:07:47] ERROR:  Asserting book card border-color is red (rgb(240, 66, 66) or rgb(242, 36, 36)), actual: rgba(240, 68, 68, 0.996) Failed!! Expected Value:: true || Actual Value:: false
+
+[Failure Hook] Capturing state for failing test: "VIS_REG_03: Book Card Border Color Assertion @regression @chaos"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 01:07:48] INFO: Cleaned up ephemeral test session: pw-w8-2-1788536266139-bqy3

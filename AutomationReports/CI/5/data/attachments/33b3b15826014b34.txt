@@ -1,0 +1,15 @@
+[2026-09-05 01:06:30] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-2-1788536190880-9zu9
+[2026-09-05 01:06:30] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 01:06:30] INFO: 📤 Request Payload: "{\"username\":\"johndoe17885361908819741f012@\",\"password\":\"johna123@\",\"fullName\":\"john doe\"}"
+[2026-09-05 01:06:31] ERROR: ❌ Register user with unsupported content type Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "2689bc6f-51dc-460a-a379-6f946b8e1962"
+}
+[2026-09-05 01:06:31] ERROR: ❌ Register user with unsupported content type Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "2689bc6f-51dc-460a-a379-6f946b8e1962"
+}
+[2026-09-05 01:06:31] INFO:  Unsupported content type status Success !! Actual and Expected Values are:: true
+[2026-09-05 01:06:31] INFO: Cleaned up ephemeral test session: pw-w2-2-1788536190880-9zu9

@@ -1,0 +1,151 @@
+[2026-09-05 01:12:31] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w12-0-1788536551912-rprf
+[2026-09-05 01:12:32] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-09-05 01:12:32] INFO: ✅ Resetting test database to baseline Success! Status: 200 OK
+[2026-09-05 01:12:32] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-09-05 01:12:32] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/books/1/stock
+[2026-09-05 01:12:32] INFO: 📤 Request Payload: {
+  "stock": 1
+}
+[2026-09-05 01:12:32] INFO: ✅ Setting Book 1 stock count to 1 Success! Status: 200 OK
+[2026-09-05 01:12:32] INFO: 📥 Response Payload: {
+  "success": true,
+  "bookId": "1",
+  "stock": 1,
+  "version": 4
+}
+[2026-09-05 01:12:32] INFO:  Verifying stock is set to exactly 1 Success !! Actual and Expected Values are:: 1
+[2026-09-05 01:12:32] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 01:12:32] INFO: 📤 Request Payload: {
+  "username": "racer_a_1788536552071",
+  "password": "Password123!",
+  "fullName": "Alice Racer"
+}
+[2026-09-05 01:12:32] INFO: ✅ Registering Buyer A Success! Status: 201 Created
+[2026-09-05 01:12:32] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "racer_a_1788536552071"
+}
+[2026-09-05 01:12:32] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 01:12:32] INFO: 📤 Request Payload: {
+  "username": "racer_a_1788536552071",
+  "password": "Password123!"
+}
+[2026-09-05 01:12:33] INFO: ✅ Authenticating Buyer A Success! Status: 200 OK
+[2026-09-05 01:12:33] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "racer_a_1788536552071"
+}
+[2026-09-05 01:12:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 01:12:33] INFO: 📤 Request Payload: {
+  "username": "racer_b_1788536552071",
+  "password": "Password123!",
+  "fullName": "Bob Racer"
+}
+[2026-09-05 01:12:33] INFO: ✅ Registering Buyer B Success! Status: 201 Created
+[2026-09-05 01:12:33] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "racer_b_1788536552071"
+}
+[2026-09-05 01:12:33] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 01:12:33] INFO: 📤 Request Payload: {
+  "username": "racer_b_1788536552071",
+  "password": "Password123!"
+}
+[2026-09-05 01:12:34] INFO: ✅ Authenticating Buyer B Success! Status: 200 OK
+[2026-09-05 01:12:34] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "racer_b_1788536552071"
+}
+[2026-09-05 01:12:34] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-09-05 01:12:34] INFO: 📤 Request Payload: {
+  "bookId": "1"
+}
+[2026-09-05 01:12:34] INFO: ✅ Buyer A adding last stock book to cart Success! Status: 200 OK
+[2026-09-05 01:12:34] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop",
+    "stock": 1,
+    "version": 4
+  }
+]
+[2026-09-05 01:12:34] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/cart
+[2026-09-05 01:12:34] INFO: 📤 Request Payload: {
+  "bookId": "1"
+}
+[2026-09-05 01:12:34] INFO: ✅ Buyer B adding last stock book to cart Success! Status: 200 OK
+[2026-09-05 01:12:34] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop",
+    "stock": 1,
+    "version": 4
+  }
+]
+[2026-09-05 01:12:34] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/checkout/process
+[2026-09-05 01:12:34] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/checkout/process
+[2026-09-05 01:12:34] INFO: 📤 Request Payload: {
+  "firstName": "Alice",
+  "lastName": "Racer",
+  "creditCard": "1111222233334444"
+}
+[2026-09-05 01:12:34] INFO: 📤 Request Payload: {
+  "firstName": "Bob",
+  "lastName": "Racer",
+  "creditCard": "5555666677778888"
+}
+[2026-09-05 01:12:34] INFO: ✅ Buyer A initiating concurrent checkout Success! Status: 200 OK
+[2026-09-05 01:12:34] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Order processed successfully",
+  "orderId": "7ae9e0e0-b6f9-4577-811b-6e97b2087d6b"
+}
+[2026-09-05 01:12:34] ERROR: ❌ Buyer B initiating concurrent checkout Failed! Status: 409 Conflict | Response: {
+  "error": "Conflict: Item \"The Great Buggy Gatsby\" is out of stock",
+  "errorName": "ConflictError",
+  "correlationId": "de10d844-478a-4e5e-bfd7-90883b5f379d"
+}
+[2026-09-05 01:12:34] ERROR: ❌ Buyer B initiating concurrent checkout Failed! Status: 409 Conflict | Response: {
+  "error": "Conflict: Item \"The Great Buggy Gatsby\" is out of stock",
+  "errorName": "ConflictError",
+  "correlationId": "de10d844-478a-4e5e-bfd7-90883b5f379d"
+}
+[2026-09-05 01:12:34] INFO:  Verifying exactly one request succeeded with 200 Success !! Actual and Expected Values are:: true
+[2026-09-05 01:12:34] INFO:  Verifying competing request rejected with 409 Conflict Success !! Actual and Expected Values are:: true
+[2026-09-05 01:12:34] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/books/1
+[2026-09-05 01:12:34] INFO: ✅ Fetching updated inventory stock for Book 1 Success! Status: 200 OK
+[2026-09-05 01:12:34] INFO: 📥 Response Payload: {
+  "id": "1",
+  "title": "The Great Buggy Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "price": 10.99,
+  "genre": "Classic",
+  "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+  "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop",
+  "stock": 0,
+  "version": 5
+}
+[2026-09-05 01:12:34] INFO:  Asserting stock count is exactly 0 Success !! Actual and Expected Values are:: 0
+[2026-09-05 01:12:34] INFO: Navigating to Chaos Control Dashboard: https://buggy-books-fe.onrender.com/admin/chaos
+
+[Failure Hook] Capturing state for failing test: "TC-CONC-001: Concurrent buyers competing for final stock unit (stock = 1) results in exactly one 200 OK and one 409 Conflict @smoke @regression @chaos"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 01:17:32] INFO: Cleaned up ephemeral test session: pw-w12-0-1788536551912-rprf

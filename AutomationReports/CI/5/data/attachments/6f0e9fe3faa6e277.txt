@@ -1,0 +1,18 @@
+[2026-09-05 01:06:45] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788536205648-zxaa
+[2026-09-05 01:06:45] INFO: Network interception enabled with mode: api-only
+[2026-09-05 01:06:45] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-09-05 01:06:47] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 01:06:47] INFO: Clicking on book title link for book ID: 2
+[2026-09-05 01:06:47] INFO:  Verifying book detail URL Success !! Actual and Expected Values are:: true
+[2026-09-05 01:06:47] INFO: Getting book detail title
+[2026-09-05 01:06:47] INFO:  Verifying book detail title Success !! Actual and Expected Values are:: To Kill a Mockingbird Exception
+[2026-09-05 01:06:47] INFO: Getting book detail author
+[2026-09-05 01:06:47] INFO:  Verifying book detail author Success !! Actual and Expected Values are:: by Harper Lee
+[2026-09-05 01:06:47] INFO: Getting book detail price
+[2026-09-05 01:06:47] INFO:  Verifying book detail price Success !! Actual and Expected Values are:: $15.50
+[2026-09-05 01:06:47] INFO: Getting book detail description
+[2026-09-05 01:06:47] INFO:  Verifying book detail description Success !! Actual and Expected Values are:: A coming-of-age tale with unhandled exceptions.
+[2026-09-05 01:06:47] INFO: Clicking Back to Catalog link
+[2026-09-05 01:06:47] INFO:  Verifying back to catalog URL Success !! Actual and Expected Values are:: true
+[2026-09-05 01:06:47] INFO: Captured 8 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_002_Se-a5daa-etail-View-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 01:06:47] INFO: Cleaned up ephemeral test session: pw-w0-0-1788536205648-zxaa

@@ -1,0 +1,3 @@
+[2026-09-05 01:06:38] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788536198735-azu2
+[2026-09-05 01:06:41] INFO:  Verifying zero image-alt and label violations in standard compliance mode Success !! Actual and Expected Values are:: 0
+[2026-09-05 01:06:41] INFO: Cleaned up ephemeral test session: pw-w0-0-1788536198735-azu2

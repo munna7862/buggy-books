@@ -1,0 +1,131 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "BuggyBooks" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - heading "BuggyBooks" [level=2] [ref=e6]
+    - navigation [ref=e7]:
+      - link "Catalog" [ref=e8] [cursor=pointer]:
+        - /url: /
+      - link "Chaos Control" [ref=e9] [cursor=pointer]:
+        - /url: /admin/chaos
+      - link "Login" [ref=e10] [cursor=pointer]:
+        - /url: /login
+      - link "Sign Up" [ref=e11] [cursor=pointer]:
+        - /url: /register
+      - button "Toggle notifications" [ref=e13] [cursor=pointer]:
+        - text: 🔔
+        - 'generic "Live Feed: Connected" [ref=e14]'
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - heading "Book Catalog" [level=1] [ref=e17]
+      - generic [ref=e18]:
+        - textbox "Search books" [ref=e19]:
+          - /placeholder: Search by title, author, or genre...
+        - button "Search" [ref=e20] [cursor=pointer]
+      - paragraph [ref=e21]: 15 books available
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - link "The Great Buggy Gatsby" [ref=e25] [cursor=pointer]:
+            - /url: /books/1
+            - img "The Great Buggy Gatsby" [ref=e26]
+          - generic [ref=e27]:
+            - generic [ref=e28]: Classic
+            - heading "The Great Buggy Gatsby" [level=3] [ref=e29]:
+              - link "The Great Buggy Gatsby" [ref=e30] [cursor=pointer]:
+                - /url: /books/1
+            - paragraph [ref=e31]: F. Scott Fitzgerald
+            - paragraph [ref=e32]: $10.99
+            - button "Add to Cart" [ref=e33] [cursor=pointer]
+        - generic [ref=e34]:
+          - link "To Kill a Mockingbird Exception" [ref=e36] [cursor=pointer]:
+            - /url: /books/2
+            - img "To Kill a Mockingbird Exception" [ref=e37]
+          - generic [ref=e38]:
+            - generic [ref=e39]: Classic
+            - heading "To Kill a Mockingbird Exception" [level=3] [ref=e40]:
+              - link "To Kill a Mockingbird Exception" [ref=e41] [cursor=pointer]:
+                - /url: /books/2
+            - paragraph [ref=e42]: Harper Lee
+            - paragraph [ref=e43]: $15.50
+            - button "Add to Cart" [ref=e44] [cursor=pointer]
+        - generic [ref=e45]:
+          - link "1984 Bugs" [ref=e47] [cursor=pointer]:
+            - /url: /books/3
+            - img "1984 Bugs" [ref=e48]
+          - generic [ref=e49]:
+            - generic [ref=e50]: Dystopian
+            - heading "1984 Bugs" [level=3] [ref=e51]:
+              - link "1984 Bugs" [ref=e52] [cursor=pointer]:
+                - /url: /books/3
+            - paragraph [ref=e53]: George Orwell
+            - paragraph [ref=e54]: $12.00
+            - button "Add to Cart" [ref=e55] [cursor=pointer]
+        - generic [ref=e56]:
+          - link "Pride and Prejudice and Performance Issues" [ref=e58] [cursor=pointer]:
+            - /url: /books/4
+            - img "Pride and Prejudice and Performance Issues" [ref=e59]
+          - generic [ref=e60]:
+            - generic [ref=e61]: Classic
+            - heading "Pride and Prejudice and Performance Issues" [level=3] [ref=e62]:
+              - link "Pride and Prejudice and Performance Issues" [ref=e63] [cursor=pointer]:
+                - /url: /books/4
+            - paragraph [ref=e64]: Jane Austen
+            - paragraph [ref=e65]: $9.99
+            - button "Add to Cart" [ref=e66] [cursor=pointer]
+        - generic [ref=e67]:
+          - link "The Null and the Furious" [ref=e69] [cursor=pointer]:
+            - /url: /books/5
+            - img "The Null and the Furious" [ref=e70]
+          - generic [ref=e71]:
+            - generic [ref=e72]: Thriller
+            - heading "The Null and the Furious" [level=3] [ref=e73]:
+              - link "The Null and the Furious" [ref=e74] [cursor=pointer]:
+                - /url: /books/5
+            - paragraph [ref=e75]: Cormac McCarthy
+            - paragraph [ref=e76]: $13.99
+            - button "Add to Cart" [ref=e77] [cursor=pointer]
+        - generic [ref=e78]:
+          - link "Harry Potter and the Goblet of Fire Events" [ref=e80] [cursor=pointer]:
+            - /url: /books/6
+            - img "Harry Potter and the Goblet of Fire Events" [ref=e81]
+          - generic [ref=e82]:
+            - generic [ref=e83]: Fantasy
+            - heading "Harry Potter and the Goblet of Fire Events" [level=3] [ref=e84]:
+              - link "Harry Potter and the Goblet of Fire Events" [ref=e85] [cursor=pointer]:
+                - /url: /books/6
+            - paragraph [ref=e86]: J.K. Rowling
+            - paragraph [ref=e87]: $19.99
+            - button "Add to Cart" [ref=e88] [cursor=pointer]
+        - generic [ref=e89]:
+          - link "The Hitchhiker's Guide to the API" [ref=e91] [cursor=pointer]:
+            - /url: /books/7
+            - img "The Hitchhiker's Guide to the API" [ref=e92]
+          - generic [ref=e93]:
+            - generic [ref=e94]: Sci-Fi
+            - heading "The Hitchhiker's Guide to the API" [level=3] [ref=e95]:
+              - link "The Hitchhiker's Guide to the API" [ref=e96] [cursor=pointer]:
+                - /url: /books/7
+            - paragraph [ref=e97]: Douglas Adams
+            - paragraph [ref=e98]: $11.50
+            - button "Add to Cart" [ref=e99] [cursor=pointer]
+        - generic [ref=e100]:
+          - link "Moby Stack Overflow" [ref=e102] [cursor=pointer]:
+            - /url: /books/8
+            - img "Moby Stack Overflow" [ref=e103]
+          - generic [ref=e104]:
+            - generic [ref=e105]: Classic
+            - heading "Moby Stack Overflow" [level=3] [ref=e106]:
+              - link "Moby Stack Overflow" [ref=e107] [cursor=pointer]:
+                - /url: /books/8
+            - paragraph [ref=e108]: Herman Melville
+            - paragraph [ref=e109]: $8.99
+            - button "Add to Cart" [ref=e110] [cursor=pointer]
+      - generic [ref=e111]:
+        - button "← Prev" [disabled] [ref=e112]
+        - button "1" [ref=e113] [cursor=pointer]
+        - button "2" [ref=e114] [cursor=pointer]
+        - button "Next →" [ref=e115] [cursor=pointer]
+```

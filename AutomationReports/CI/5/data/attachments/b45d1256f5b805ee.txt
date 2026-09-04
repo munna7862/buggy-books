@@ -1,0 +1,3 @@
+[2026-09-05 01:06:21] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788536181819-8tl4
+[2026-09-05 01:06:24] INFO:  Verifying GET /api/orders returns 200 OK and non-empty array of placed orders Success !! Actual and Expected Values are:: true
+[2026-09-05 01:06:24] INFO: Cleaned up ephemeral test session: pw-w1-1-1788536181819-8tl4

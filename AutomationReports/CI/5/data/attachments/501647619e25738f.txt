@@ -1,0 +1,38 @@
+[2026-09-05 01:06:26] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788536186692-ppm0
+[2026-09-05 01:06:26] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-09-05 01:06:26] INFO: 📤 Request Payload: {
+  "visualChaos": "invalid_string_type"
+}
+[2026-09-05 01:06:26] ERROR: ❌ Trigger 400 validation error with custom x-correlation-id Failed! Status: 400 Bad Request | Response: {
+  "error": "Validation failed",
+  "errorName": "ValidationError",
+  "correlationId": "custom-correlation-uuid-99999_err",
+  "details": [
+    {
+      "expected": "boolean",
+      "code": "invalid_type",
+      "path": [
+        "visualChaos"
+      ],
+      "message": "Invalid input: expected boolean, received string"
+    }
+  ]
+}
+[2026-09-05 01:06:26] ERROR: ❌ Trigger 400 validation error with custom x-correlation-id Failed! Status: 400 Bad Request | Response: {
+  "error": "Validation failed",
+  "errorName": "ValidationError",
+  "correlationId": "custom-correlation-uuid-99999_err",
+  "details": [
+    {
+      "expected": "boolean",
+      "code": "invalid_type",
+      "path": [
+        "visualChaos"
+      ],
+      "message": "Invalid input: expected boolean, received string"
+    }
+  ]
+}
+[2026-09-05 01:06:26] INFO:  Verifying status code is 400 Bad Request Success !! Actual and Expected Values are:: 400
+[2026-09-05 01:06:26] INFO:  Verifying error response body contains exact same correlationId Success !! Actual and Expected Values are:: custom-correlation-uuid-99999_err
+[2026-09-05 01:06:26] INFO: Cleaned up ephemeral test session: pw-w0-0-1788536186692-ppm0
