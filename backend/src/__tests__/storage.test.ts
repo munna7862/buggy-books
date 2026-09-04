@@ -14,7 +14,8 @@ describe('Storage Persistence & Session Sandboxing Unit Tests', () => {
     websocketDropRate: 0.0,
     uploadFailureRate: 0.0,
     injectA11yViolations: false,
-    visualChaos: false
+    visualChaos: false,
+    inventoryLockingRate: 0.0
   };
 
   beforeEach(async () => {

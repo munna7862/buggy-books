@@ -1,9 +1,9 @@
-# Sprint 2.3: CI/CD Pipeline Staging & Quality Gate Enforcement
+# Sprint 3.2: Interactive Chaos Dashboard & Dynamic Fault Injection
 
-**Sprint Identifier**: `SPRINT-2.3-CICD-STAGING`  
-**Phase**: Phase 2 (Test Automation Modernization & CI/CD Resilience)  
+**Sprint Identifier**: `SPRINT-3.2-CHAOS-DASHBOARD`  
+**Phase**: Phase 3 (Multi-User Sandboxing, Chaos Engineering & Performance Resilience)  
 **Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Optimize GitHub Actions CI workflows to enforce frontend/backend linting, stage fast failure gates (Lint/Build → Unit Tests → Playwright E2E), and prepare Phase 2 for release sign-off.
+**Sprint Goal**: Build an interactive, dark-mode glassmorphic Chaos Control Dashboard in React (`/admin/chaos`), implement race condition stock locking on checkout in Express, and author Playwright concurrency resilience specs.
 
 ---
 
@@ -11,26 +11,34 @@
 
 | Persona | Assigned Member | Responsibilities for this Sprint |
 | :--- | :--- | :--- |
-| **Scrum Master** | AI Agent / SM | Task tracking, sprint burndown, phase alignment, and handoff management. |
-| **DevOps Engineer** | AI Agent / DevOps | Updating `.github/workflows/ci.yml`, configuring workflow job dependencies, Playwright browser caching, and opening PR. |
-| **SDET Architect** | AI Agent / SDET | Verifying CI pipeline simulation, test execution, POM static rules, and Allure reporting. |
-| **Product Owner** | AI Agent / PO | Conducting Phase 2 Acceptance Review & Final Release Authorization. |
+| **Scrum Master** | AI Agent / SM | Sprint backlog tracking, task deconstruction, and handoff enforcement. |
+| **Dev Architect** | AI Agent / Dev | Implementing Chaos Dashboard page in React, HSL styling, and optimistic stock locking in Express backend. |
+| **SDET Architect** | AI Agent / SDET | Designing test scenarios, catalog updates in `specs/test_cases_catalog.md`, QA quality gate sign-off. |
+| **Security Officer** | AI Agent / Sec | Security audit for chaos endpoints, input validation, and state protection. |
+| **Playwright QA Specialist** | AI Agent / QA Spec | Authoring Chaos Dashboard Page Object and `Test_007_ConcurrentStockRaceCondition.spec.ts`. |
+| **Product Owner** | AI Agent / PO | Reviewing Chaos Dashboard UX aesthetic, chaos toggle usability, and authorizing release. |
+| **DevOps Engineer** | AI Agent / DevOps | Git branch management, upstream sync, conflict checks, and GitHub CLI PR creation. |
 
 ---
 
 ## 2. Sprint Backlog & Subtask Tracking
 
-### User Story US-OPS-201: Integrate Linting in CI Pipelines
-*As a DevOps engineer, I want `.github/workflows/ci.yml` to run `npm run lint` for both frontend and backend on all PRs, so that unformatted or rule-violating code is automatically blocked before merging.*
-- [x] **US-OPS-201.1** (`DevOps Engineer`): Add `npm run lint` step under `backend-tests` job in `.github/workflows/ci.yml`.
-- [x] **US-OPS-201.2** (`DevOps Engineer`): Add `npm run lint` step under `frontend-tests` job in `.github/workflows/ci.yml`.
-- [x] **US-OPS-201.3** (`DevOps Engineer`): Add `frontend-build` job (`npm run build`) in `.github/workflows/ci.yml`.
+### User Story US-FE-302: Interactive Chaos Control Dashboard
+*As a QA engineer / tester, I want a dedicated `/admin/chaos` UI dashboard with real-time sliders and toggles, so that I can visually configure failure rates, delays, visual glitches, and accessibility regressions on the fly.*
+- [x] **US-FE-302.1** (`Dev Architect`): Extend `shared/types` and frontend API client with `inventoryLockingRate` and `getChaosConfig`/`updateChaosConfig`/`resetChaosConfig`.
+- [x] **US-FE-302.2** (`Dev Architect`): Create `frontend/src/pages/ChaosDashboard.tsx` with HSL glassmorphism design tokens (sliders, toggles, presets, reset).
+- [x] **US-FE-302.3** (`Dev Architect`): Configure route `/admin/chaos` in `frontend/src/App.tsx` and navbar navigation link in `Header`.
+- [x] **US-FE-302.4** (`Dev Architect`): Bind controls to `GET /api/test/config` and `POST /api/test/config` with live `react-hot-toast` notifications.
+- [x] **US-FE-302.5** (`SDET Architect`): Add Vitest component test `frontend/src/pages/ChaosDashboard.test.tsx` and update MSW mock handlers.
 
-### User Story US-OPS-202: Fast-Feedback CI Pipeline Staging & Browser Caching
-*As a software team, I want CI jobs to stage sequentially (Fast Gates: Lint/Build → Unit Tests → E2E Suites), so that we save GitHub Actions runner minutes by failing fast on static and unit errors.*
-- [x] **US-OPS-202.1** (`DevOps Engineer`): Configure job dependency chaining (`needs: [backend-tests, frontend-tests, backend-build, frontend-build]`) and add `e2e-quality-gate` in `.github/workflows/ci.yml`.
-- [x] **US-OPS-202.2** (`DevOps Engineer`): Configure dynamic Playwright version browser binary caching (`actions/cache@v4`) and `workflow_run` integration in `.github/workflows/playwright-ci.yml`.
-- [x] **US-OPS-202.3** (`SDET Architect`): Validate local CI simulation parity (`npm run typecheck`, `npm run lint`, `npm run test:unit`, `finalize-spec`).
+### User Story US-BE-302: Optimistic Stock Locking & Race Condition Simulation
+*As an SQE practitioner, I want the checkout service to simulate an inventory race condition when multiple buyers check out the final stock unit, so that automation engineers can practice concurrent test assertions and handle `409 Conflict` responses.*
+- [x] **US-BE-302.1** (`Dev Architect`): Add `inventoryLockingRate` in `backend/src/data/chaosStore.ts` and `testController.ts`.
+- [x] **US-BE-302.2** (`Dev Architect`): Implement atomic inventory decrement with optimistic locking in `backend/src/data/dataStore.ts` and `backend/src/services/checkout.service.ts`.
+- [x] **US-BE-302.3** (`Dev Architect`): Add test helper endpoint `POST /api/test/books/:id/stock` for deterministic stock initialization.
+- [x] **US-BE-302.4** (`Dev Architect`): Add backend unit tests in `backend/src/__tests__/optimisticLocking.test.ts` verifying concurrent 409 conflicts.
+- [x] **US-BE-302.5** (`Playwright QA Specialist`): Create `playwright-e2e/src/pages/chaos-dashboard.page.ts` extending `BasePage`.
+- [x] **US-BE-302.6** (`Playwright QA Specialist`): Author Playwright concurrency spec `playwright-e2e/src/tests/ui/Checkout/Test_007_ConcurrentStockRaceCondition.spec.ts`.
 
 ---
 
@@ -38,20 +46,21 @@
 
 | Reviewer Role | Target Role | Feedback / Action Item | Status |
 | :--- | :--- | :--- | :--- |
-| **DevOps Code Review** | DevOps Engineer | Inspect YAML syntax, action runner versions (`actions/checkout@v4`, `actions/setup-node@v4`, `actions/cache@v4`), and job dependency graph. | `[APPROVED]` |
-| **SDET Quality Gate** | SDET Architect | Verify local and CI test execution parity, zero static wait violations, and POM encapsulation checks. | `[APPROVED]` |
-| **PO Phase 2 Review** | Product Owner | Complete Phase 2 Acceptance Review and issue formal release authorization. | `[APPROVED]` |
+| **Dev Technical Review** | Dev Architect | Inspected Chaos Dashboard React state management, glassmorphic styling, and atomic backend stock decrement. Versioning and stock locks pass all isolation standards. | `[APPROVED]` |
+| **Security Audit** | Security Officer | Verified Zod strict validation on `/api/test/config`, inventoryLockingRate bounded [0.0, 1.0], no state leakage or unhandled exception surfaces. | `[APPROVED]` |
+| **SDET Quality Gate** | SDET Architect | Verified concurrency test scenarios, POM compliance (`finalize-spec` 33/33 checks, 10/10 spec checks), and 100% green execution across all suites. | `[APPROVED]` |
+| **PO Acceptance Review** | Product Owner | Verified Chaos Dashboard UI aesthetics, presets ("Default Clean", "Flaky Gateway", "Network Blackout", "A11y Nightmare"), and race condition behavior. Release authorized. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] `.github/workflows/ci.yml` updated with frontend/backend linting and build checks.
-- [x] Pipeline staged for fast failure feedback with sequential job dependencies.
-- [x] Playwright browser caching implemented in `.github/workflows/playwright-ci.yml`.
-- [x] Local simulation of full CI suite passes cleanly with zero errors or warnings.
-- [x] Phase 2 criteria fully satisfied.
+- [x] Chaos Dashboard UI rendered cleanly in dark and light modes adhering to HSL glassmorphism design.
+- [x] Real-time synchronization with `POST /api/test/config` and live toast feedback.
+- [x] Optimistic stock locking race condition verified with backend unit tests (409 Conflict on collision).
+- [x] Chaos Dashboard Page Object and `Test_007_ConcurrentStockRaceCondition.spec.ts` pass `npm run finalize-spec`.
+- [x] Test Cases Catalog (`specs/test_cases_catalog.md`) updated with `TC-CHAOS-001`, `TC-CHAOS-002`, `TC-CONC-001`, `TC-CONC-002`.
+- [x] All unit, component, and E2E tests passing 100% green.
 - [x] Upstream changes pulled from `origin/main` and all merge conflicts resolved cleanly.
-- [x] Changes committed to feature branch `feature/sprint-2-3-cicd-staging` with conventional commits.
+- [x] Changes committed with conventional commits on branch `feature/sprint-3.2-chaos-dashboard`.
 - [x] Remote Pull Request created via GitHub CLI (`gh pr create`).
-- [x] Phase 2 sign-off issued by Product Owner.

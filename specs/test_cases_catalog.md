@@ -227,3 +227,24 @@ These test cases validate multi-user ephemeral session isolation and parallel wo
 | **TC-SAN-003** | Session Teardown & TTL Expiration | Verify that `DELETE /api/test/session/:id` removes the ephemeral session data store. Verify that `SessionStorageManager.cleanupExpiredSessions()` evicts sessions older than the configured TTL (default 30 minutes). | High | Backend Unit / Playwright Fixture | `@regression` | **Yes**<br>- Endpoint: `DELETE /api/test/session/:id` in `backend/src/routes/api.ts`<br>- Fixture teardown: `base.fixture.ts` calls `DELETE /api/test/session/${testSessionId}` in `afterEach`<br>- TTL: 60s sweep interval, 30-minute default TTL |
 | **TC-SAN-004** | Playwright 4-Worker Parallel Execution with Zero State Leakage | Execute the full Playwright suite with `--workers=4`. Verify all 105 tests pass with zero failures and zero flakiness. Each worker operates on an independent `x-test-session-id` scoped backend data store. | Critical | Playwright E2E (Full Suite) | `@smoke` `@regression` | **Yes**<br>- Command: `npx playwright test --workers=4`<br>- Result: **105 passed (52.4s)**, 0 failed, 0 flaky<br>- Workers: 4 parallel Chromium instances with unique session IDs |
 
+---
+
+## 6. Chaos Dashboard & Concurrency Race Condition Tests
+
+*Sprint Source: [Sprint 3.2: Interactive Chaos Dashboard & Dynamic Fault Injection](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_3_2_interactive_chaos_dashboard.md)*
+
+These test cases validate the interactive Chaos Control Dashboard UI and backend optimistic stock locking under high-concurrency race conditions.
+
+### **Suite: Chaos Control Dashboard**
+| ID | Title | Description | Priority | Target Coverage | Tags | Covered |
+|:---|:---|:---|:---|:---|:---|:---|
+| **TC-CHAOS-001** | Chaos Dashboard Control Binding & Live Feedback | Navigate to `/admin/chaos`. Adjust failure rate sliders, latency values, and toggle switches. Verify live values update, toast notification confirms synchronization, and `GET /api/test/config` reflects updated state. | High | Frontend Component (Vitest) & Playwright UI | `@smoke` `@regression` `@chaos` | **Yes**<br>- Page Object: `playwright-e2e/src/pages/chaos-dashboard.page.ts`<br>- Component Test: `frontend/src/pages/ChaosDashboard.test.tsx` |
+| **TC-CHAOS-002** | Chaos Preset Application & Global Reset | Click preset buttons (e.g. "Clean Baseline", "Flaky Gateway") and "Reset Defaults". Verify inputs adapt immediately to preset parameters and database reset clears state. | Medium | Frontend Component (Vitest) | `@regression` `@chaos` | **Yes**<br>- Component Test: `frontend/src/pages/ChaosDashboard.test.tsx` |
+
+### **Suite: Optimistic Stock Locking & Race Condition Simulation**
+| ID | Title | Description | Priority | Target Coverage | Tags | Covered |
+|:---|:---|:---|:---|:---|:---|:---|
+| **TC-CONC-001** | Concurrent Final Stock Unit Checkout Contention | Two concurrent buyers submit checkout orders simultaneously for a book with `stock: 1`. Assert that exactly one buyer receives `200 OK` (Order placed) and the competing buyer receives `409 Conflict` with optimistic lock error details. Final stock remains 0. | Critical | Playwright Concurrency / API | `@smoke` `@regression` `@chaos` | **Yes**<br>- Spec: `playwright-e2e/src/tests/ui/Checkout/Test_007_ConcurrentStockRaceCondition.spec.ts`<br>- Unit Suite: `backend/src/__tests__/optimisticLocking.test.ts` |
+| **TC-CONC-002** | Atomic Stock Decrement & Depletion Guard | Verify that requesting checkout on an item with `stock: 0` immediately aborts with `409 Conflict` (Insufficient inventory) without modifying orders or corrupting cart state. | High | Backend Integration (Jest) | `@regression` | **Yes**<br>- Unit Suite: `backend/src/__tests__/optimisticLocking.test.ts` |
+
+

@@ -157,6 +157,7 @@ export const handlers = [
       uploadFailureRate: 0,
       injectA11yViolations: false,
       visualChaos: false,
+      inventoryLockingRate: 0,
     });
   }),
 

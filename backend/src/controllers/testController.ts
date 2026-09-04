@@ -13,7 +13,12 @@ const chaosConfigSchema = z.object({
   uploadFailureRate: z.number().min(0).max(1).optional(),
   injectA11yViolations: z.boolean().optional(),
   visualChaos: z.boolean().optional(),
+  inventoryLockingRate: z.number().min(0).max(1).optional(),
 }).strict(); // reject unknown keys
+
+const bookStockSchema = z.object({
+  stock: z.number().int().min(0)
+});
 
 export const updateConfig = (req: Request, res: Response) => {
   const validConfig = chaosConfigSchema.parse(req.body);
@@ -30,6 +35,16 @@ export const resetData = (req: Request, res: Response) => {
 
 export const getConfig = (req: Request, res: Response) => {
   res.json(chaosStore.getConfig());
+};
+
+export const setBookStock = (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { stock } = bookStockSchema.parse(req.body);
+  const updatedBook = dataStore.setStock(id, stock);
+  if (!updatedBook) {
+    return res.status(404).json({ error: `Book with id ${id} not found` });
+  }
+  return res.json({ success: true, bookId: id, stock: updatedBook.stock, version: updatedBook.version });
 };
 
 export const deleteSession = (req: Request, res: Response) => {

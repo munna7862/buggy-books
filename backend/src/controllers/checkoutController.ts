@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 import { checkoutService } from '../services/checkout.service';
 
-export const processCheckout = (req: Request, res: Response) => {
+export const processCheckout = async (req: Request, res: Response) => {
   const username = req.user?.username || 'anonymous';
-  const result = checkoutService.processCheckout(username, req.body);
+  const result = await checkoutService.processCheckout(username, req.body);
   res.json({ success: true, message: 'Order processed successfully', orderId: result.orderId });
 };
 
