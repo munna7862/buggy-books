@@ -13,6 +13,7 @@ globalThis.fetch = vi.fn().mockImplementation((input: RequestInfo | URL) => {
       uploadFailureRate: 0,
       injectA11yViolations: false,
       visualChaos: false,
+      inventoryLockingRate: 0,
     };
     return Promise.resolve(
       new Response(JSON.stringify(configData), {

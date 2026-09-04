@@ -80,6 +80,7 @@ router.post('/profile/upload', profileController.handleAvatarUpload, authenticat
 router.get('/test/config', asyncHandler(testController.getConfig));
 router.post('/test/config', asyncHandler(testController.updateConfig));
 router.post('/test/reset', asyncHandler(testController.resetData));
+router.post('/test/books/:id/stock', asyncHandler(testController.setBookStock));
 router.delete('/test/session/:id', asyncHandler(testController.deleteSession));
 
 export default router;

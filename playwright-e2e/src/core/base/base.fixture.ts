@@ -5,6 +5,7 @@ import { BookDetailPage } from '../../pages/book-detail.page';
 import { CartPage } from '../../pages/cart.page';
 import { CheckoutPage } from '../../pages/checkout.page';
 import { ProfilePage } from '../../pages/profile.page';
+import { ChaosDashboardPage } from '../../pages/chaos-dashboard.page';
 import { NotificationCenterComponent } from '../../pages/notification-center.component';
 import { CommonFunctions } from '../../utils/common.util';
 import defaultApiUtil, { ApiUtil } from '../../utils/api.util';
@@ -24,6 +25,7 @@ type TestFixtures = {
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
   profilePage: ProfilePage;
+  chaosDashboardPage: ChaosDashboardPage;
   notificationCenter: NotificationCenterComponent;
   commonFunctions: CommonFunctions;
   networkInterceptor: NetworkInterceptor;
@@ -119,6 +121,10 @@ export const test = base.extend<TestFixtures>({
 
   profilePage: async ({ page }, use) => {
     await use(new ProfilePage(page));
+  },
+
+  chaosDashboardPage: async ({ page }, use) => {
+    await use(new ChaosDashboardPage(page));
   },
 
   notificationCenter: async ({ page }, use) => {

@@ -1,0 +1,22 @@
+{
+  "book": {
+    "id": 1,
+    "title": "The Great Buggy Gatsby",
+    "stock": 1
+  },
+  "buyerOne": {
+    "firstName": "Alice",
+    "lastName": "Racer",
+    "creditCard": "1111222233334444"
+  },
+  "buyerTwo": {
+    "firstName": "Bob",
+    "lastName": "Racer",
+    "creditCard": "5555666677778888"
+  },
+  "expected": {
+    "successMessage": "Payment Successful!",
+    "conflictStatusCode": 409,
+    "conflictErrorMessage": "Conflict"
+  }
+}

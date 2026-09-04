@@ -3,7 +3,7 @@ import { dataStore } from '../data/dataStore';
 import { chaosStore } from '../data/chaosStore';
 import crypto from 'crypto';
 import { logger } from '../utils/logger';
-import { BadRequestError, InternalServerError } from '../errors/app-error';
+import { BadRequestError, ConflictError, InternalServerError } from '../errors/app-error';
 import type { Order } from '@buggybooks/types';
 
 const checkoutSchema = z.object({
@@ -13,11 +13,12 @@ const checkoutSchema = z.object({
 });
 
 class CheckoutService {
-  public processCheckout(username: string, payload: unknown): { orderId: string } {
+  public async processCheckout(username: string, payload: unknown): Promise<{ orderId: string }> {
     const { firstName, lastName } = checkoutSchema.parse(payload);
     logger.info(`Starting checkout processing for user: ${username}`, { username, firstName, lastName });
 
-    const failureRate = chaosStore.getConfig().checkoutFailureRate;
+    const chaos = chaosStore.getConfig();
+    const failureRate = chaos.checkoutFailureRate;
     if (Math.random() < failureRate) {
       logger.error(`Checkout failed due to stochastic payment gateway timeout (rate: ${failureRate})`, { username });
       throw new InternalServerError('Internal Server Error: Payment Gateway Timeout');
@@ -27,6 +28,45 @@ class CheckoutService {
     if (cart.length === 0) {
       logger.warn(`Checkout failed: Cart is empty for user ${username}`, { username });
       throw new BadRequestError('Bad Request: Cart is empty');
+    }
+
+    // Inspect inventory and capture initial versions for optimistic locking
+    const itemCounts = new Map<string, number>();
+    const expectedVersions = new Map<string, number | undefined>();
+
+    for (const item of cart) {
+      const currentBook = dataStore.getBookById(item.id);
+      if (!currentBook) {
+        throw new BadRequestError(`Bad Request: Book ${item.id} no longer exists`);
+      }
+      if (currentBook.stock !== undefined && currentBook.stock <= 0) {
+        logger.warn(`Checkout failed: Book ${currentBook.title} is out of stock`, { username, bookId: item.id });
+        throw new ConflictError(`Conflict: Item "${currentBook.title}" is out of stock`);
+      }
+      itemCounts.set(item.id, (itemCounts.get(item.id) || 0) + 1);
+      if (!expectedVersions.has(item.id)) {
+        expectedVersions.set(item.id, currentBook.version);
+      }
+    }
+
+    // Check chaos injection for inventory locking
+    const lockingRate = chaos.inventoryLockingRate ?? 0;
+    if (lockingRate > 0 && Math.random() < lockingRate) {
+      logger.warn(`Simulating optimistic lock conflict via chaos engine (rate: ${lockingRate})`, { username });
+      throw new ConflictError('Conflict: Optimistic lock conflict simulated by chaos engine');
+    }
+
+    // Simulate asynchronous concurrency reservation window
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // Execute atomic optimistic stock decrement for each item in cart
+    for (const [bookId, qty] of itemCounts.entries()) {
+      const expectedVersion = expectedVersions.get(bookId);
+      const result = dataStore.decrementStockOptimistic(bookId, qty, expectedVersion);
+      if (!result.success) {
+        logger.warn(`Checkout failed due to stock locking conflict`, { username, bookId, reason: result.reason });
+        throw new ConflictError(`Conflict: ${result.reason || 'Optimistic stock lock conflict'}`);
+      }
     }
 
     const total = cart.reduce((acc, item) => acc + item.price, 0);

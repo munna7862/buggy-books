@@ -7,6 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import BookDetail from './pages/BookDetail';
 import Profile from './pages/Profile';
+import ChaosDashboard from './pages/ChaosDashboard';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './AuthContext';
 import NotificationCenter from './components/NotificationCenter';
@@ -30,6 +31,7 @@ function Header() {
       </Link>
       <nav className="nav-links">
         <Link to="/" className="nav-link">Catalog</Link>
+        <Link to="/admin/chaos" className="nav-link" id="nav-chaos-link">Chaos Control</Link>
         {isAuthenticated ? (
           <>
             <Link to="/cart" className="nav-link">Cart</Link>
@@ -75,6 +77,7 @@ function App() {
               <Route path="/books/:id" element={<BookDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/admin/chaos" element={<ChaosDashboard />} />
               <Route path="/cart" element={
                 <ProtectedRoute>
                   <Cart />

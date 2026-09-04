@@ -11,12 +11,13 @@ class ChaosStore {
     websocketDropRate: 0.0,
     uploadFailureRate: 0.0,
     injectA11yViolations: false,
-    visualChaos: false
+    visualChaos: false,
+    inventoryLockingRate: 0.0
   };
 
   public getConfig(): ChaosConfig {
     const saved = storage.get('chaosStore');
-    if (saved) return saved;
+    if (saved) return { ...this.defaultConfig, ...saved };
     const initial = { ...this.defaultConfig };
     storage.set('chaosStore', initial);
     return initial;

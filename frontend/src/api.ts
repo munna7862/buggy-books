@@ -218,6 +218,23 @@ export const api = {
       body: formData,
     });
   },
+
+  getChaosConfig: async (): Promise<ChaosConfig> => {
+    return apiRequest<ChaosConfig>(`${BASE_URL}/test/config`);
+  },
+
+  updateChaosConfig: async (config: Partial<ChaosConfig>): Promise<{ success: boolean; config: ChaosConfig }> => {
+    return apiRequest<{ success: boolean; config: ChaosConfig }>(`${BASE_URL}/test/config`, {
+      method: 'POST',
+      body: JSON.stringify(config),
+    });
+  },
+
+  resetChaosConfig: async (): Promise<MessageResponse> => {
+    return apiRequest<MessageResponse>(`${BASE_URL}/test/reset`, {
+      method: 'POST',
+    });
+  },
 };
 
 export type { Book, CartItem, PaginatedBooks, ChaosConfig, Order };

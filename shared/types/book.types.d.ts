@@ -14,6 +14,8 @@ export interface Book {
   image: string;
   genre?: string;
   description?: string;
+  stock?: number;
+  version?: number;
 }
 
 /** Subset of Book used in cart displays where only essential fields are needed. */

@@ -13,4 +13,5 @@ export interface ChaosConfig {
   uploadFailureRate: number;     // 0.0 to 1.0 (default 0.0)
   injectA11yViolations: boolean; // default false
   visualChaos: boolean;          // default false
+  inventoryLockingRate: number;  // 0.0 to 1.0 (default 0.0)
 }
