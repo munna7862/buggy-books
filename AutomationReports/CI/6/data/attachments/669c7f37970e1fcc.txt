@@ -1,0 +1,13 @@
+[2026-09-05 01:49:14] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788538754982-o77t
+[2026-09-05 01:49:14] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 01:49:14] INFO: 📤 Request Payload: {
+  "username": "security1788538754970d3aca7f5@",
+  "password": "johna123@"
+}
+[2026-09-05 01:49:16] INFO: ✅ Security validation for SQL injection pattern in username Success! Status: 201 Created
+[2026-09-05 01:49:16] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "security1788538754970d3aca7f5@"
+}
+[2026-09-05 01:49:16] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true
+[2026-09-05 01:49:16] INFO: Cleaned up ephemeral test session: pw-w0-0-1788538754982-o77t

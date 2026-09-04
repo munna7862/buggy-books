@@ -1,0 +1,12 @@
+[2026-09-05 01:49:14] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788538754852-mxgg
+[2026-09-05 01:49:14] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/register
+[2026-09-05 01:49:14] ERROR: ❌ Attempt register endpoint with unsupported GET method Failed! Status: 404 Not Found | Response: {
+  "error": "Not Found",
+  "message": "The requested route /api/register was not found on this server. Make sure your API URL is correct."
+}
+[2026-09-05 01:49:14] ERROR: ❌ Attempt register endpoint with unsupported GET method Failed! Status: 404 Not Found | Response: {
+  "error": "Not Found",
+  "message": "The requested route /api/register was not found on this server. Make sure your API URL is correct."
+}
+[2026-09-05 01:49:14] INFO:  Unsupported method status Success !! Actual and Expected Values are:: true
+[2026-09-05 01:49:15] INFO: Cleaned up ephemeral test session: pw-w1-1-1788538754852-mxgg

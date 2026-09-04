@@ -1,0 +1,11 @@
+[2026-09-05 01:50:39] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w6-2-1788538839130-qd0n
+[2026-09-05 01:50:40] INFO: Clicking on Login link
+[2026-09-05 01:50:40] INFO: Entering username: chaosUser_1788538839474
+[2026-09-05 01:50:40] INFO: Entering password: Password123!
+[2026-09-05 01:50:40] INFO: Clicking on Sign In button
+[2026-09-05 01:50:41] INFO: Verifying landing on Checkout Page
+[2026-09-05 01:50:41] INFO: Checking if Checkout label is visible
+[2026-09-05 01:50:42] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 01:50:42] INFO: Clicking on Checkout link
+[2026-09-05 01:50:42] INFO:  Asserting checkout button has margin-left: 15px, actual: 15px Success !! Actual and Expected Values are:: true
+[2026-09-05 01:50:42] INFO: Cleaned up ephemeral test session: pw-w6-2-1788538839130-qd0n

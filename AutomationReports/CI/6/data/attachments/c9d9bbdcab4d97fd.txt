@@ -1,0 +1,18 @@
+[2026-09-05 01:50:12] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w6-2-1788538812008-rwfl
+[2026-09-05 01:50:12] INFO: Network interception enabled with mode: api-only
+[2026-09-05 01:50:12] INFO: Clicking on Sign Up link
+[2026-09-05 01:50:13] INFO: Entering full name: Full profile_user_4aXBN
+[2026-09-05 01:50:13] INFO: Entering username: profile_user_4aXBN
+[2026-09-05 01:50:13] INFO: Entering password: Password123!
+[2026-09-05 01:50:13] INFO: Entering confirming password: Password123!
+[2026-09-05 01:50:13] INFO: Clicking on Create Account button
+[2026-09-05 01:50:14] INFO: Verifying landing on Checkout Page
+[2026-09-05 01:50:14] INFO: Checking if Checkout label is visible
+[2026-09-05 01:50:15] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 01:50:15] INFO: Clicking on Profile navbar link
+[2026-09-05 01:50:15] INFO: Selecting file for avatar upload: /home/runner/work/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/valid_avatar.png
+[2026-09-05 01:50:15] INFO: Clicking Upload Image button
+[2026-09-05 01:50:16] INFO: Getting upload error message text
+[2026-09-05 01:50:16] INFO:  Verifying upload chaos 500 error message Success !! Actual and Expected Values are:: true
+[2026-09-05 01:50:16] INFO: Captured 13 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_005_Profil-940b0-e-Recovery-regression-chaos-Google-Chrome/network-log.json
+[2026-09-05 01:50:16] INFO: Cleaned up ephemeral test session: pw-w6-2-1788538812008-rwfl

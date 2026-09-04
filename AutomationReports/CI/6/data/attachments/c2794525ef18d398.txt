@@ -1,0 +1,12 @@
+[2026-09-05 01:49:28] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788538768245-zbts
+[2026-09-05 01:49:28] INFO: Network interception enabled with mode: api-only
+[2026-09-05 01:49:29] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 01:49:29] INFO:  Verifying if Books count in Catalog page is correct Success !! Actual and Expected Values are:: 8
+[2026-09-05 01:49:29] INFO: Clicking on Pagination button number 2
+[2026-09-05 01:49:30] INFO: Total Books displayed in Catalog page are: 7
+[2026-09-05 01:49:30] INFO:  Verifying if Books count in Catalog page is correct Success !! Actual and Expected Values are:: 7
+[2026-09-05 01:49:30] INFO: Clicking on Pagination button number 1
+[2026-09-05 01:49:30] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 01:49:30] INFO:  Verifying if Books count in Catalog page is correct Success !! Actual and Expected Values are:: 8
+[2026-09-05 01:49:32] INFO: Captured 9 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_001_In-58b7c-pagination-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 01:49:32] INFO: Cleaned up ephemeral test session: pw-w3-3-1788538768245-zbts

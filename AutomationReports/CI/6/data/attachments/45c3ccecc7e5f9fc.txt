@@ -1,0 +1,29 @@
+[2026-09-05 01:49:16] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788538756640-cclo
+[2026-09-05 01:49:16] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 01:49:16] INFO: 📤 Request Payload: {
+  "username": "johndoe17885387566418dcf490c@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 01:49:18] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 01:49:18] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe17885387566418dcf490c@"
+}
+[2026-09-05 01:49:18] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 01:49:18] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 01:49:18] INFO: 📤 Request Payload: {
+  "password": "johna123@"
+}
+[2026-09-05 01:49:18] ERROR: ❌ Login with missing username Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "78568909-1246-4e93-81c2-6f5de4439000"
+}
+[2026-09-05 01:49:18] ERROR: ❌ Login with missing username Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "78568909-1246-4e93-81c2-6f5de4439000"
+}
+[2026-09-05 01:49:18] INFO:  Status code for missing username Success !! Actual and Expected Values are:: true
+[2026-09-05 01:49:18] INFO: Cleaned up ephemeral test session: pw-w1-1-1788538756640-cclo
