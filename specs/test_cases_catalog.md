@@ -247,4 +247,24 @@ These test cases validate the interactive Chaos Control Dashboard UI and backend
 | **TC-CONC-001** | Concurrent Final Stock Unit Checkout Contention | Two concurrent buyers submit checkout orders simultaneously for a book with `stock: 1`. Assert that exactly one buyer receives `200 OK` (Order placed) and the competing buyer receives `409 Conflict` with optimistic lock error details. Final stock remains 0. | Critical | Playwright Concurrency / API | `@smoke` `@regression` `@chaos` | **Yes**<br>- Spec: `playwright-e2e/src/tests/ui/Checkout/Test_007_ConcurrentStockRaceCondition.spec.ts`<br>- Unit Suite: `backend/src/__tests__/optimisticLocking.test.ts` |
 | **TC-CONC-002** | Atomic Stock Decrement & Depletion Guard | Verify that requesting checkout on an item with `stock: 0` immediately aborts with `409 Conflict` (Insufficient inventory) without modifying orders or corrupting cart state. | High | Backend Integration (Jest) | `@regression` | **Yes**<br>- Unit Suite: `backend/src/__tests__/optimisticLocking.test.ts` |
 
+---
+
+## 7. Automated API Performance & Lighthouse CI Quality Gates
+
+*Sprint Source: [Sprint 3.3: Automated API Performance Testing & Lighthouse CI Quality Gates](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_3_3_automated_performance_and_lighthouse.md)*
+
+These test cases validate automated API performance benchmarking with k6 and frontend quality gate enforcement with Lighthouse CI.
+
+### **Suite: API Performance & Latency Benchmarks (k6)**
+| ID | Title | Description | Priority | Target Coverage | Tags | Covered |
+|:---|:---|:---|:---|:---|:---|:---|
+| **TC-PERF-001** | Catalog Load & Search Performance Benchmark | Execute virtual user ramp (0 to 50 VUs) across catalog endpoints (`GET /api/books`, `GET /api/books?q=gatsby`, `GET /api/books/:id`). Assert p95 latency < 250ms, p99 latency < 500ms, and failure rate < 1.0%. | Critical | API Performance (k6) | `@smoke` `@regression` `@perf` | **Yes**<br>- Script: `performance/k6/catalog-load.js`<br>- Runner: `npm run test:perf`<br>- Threshold: p95 < 250ms, p99 < 500ms under 50 concurrent VUs |
+| **TC-PERF-002** | Inventory Delayed Endpoint Throughput Stress Test | Benchmark `GET /api/inventory/report` throughput and responsiveness under simulated delay and concurrent worker contention. Assert p95 latency < 500ms and report generation success rate > 98%. | High | API Stress (k6) | `@regression` `@perf` | **Yes**<br>- Script: `performance/k6/inventory-stress.js`<br>- Runner: `npm run test:perf:stress`<br>- Metrics: `inventory_duration`, `inventory_success_rate` |
+
+### **Suite: Lighthouse CI Quality Gates**
+| ID | Title | Description | Priority | Target Coverage | Tags | Covered |
+|:---|:---|:---|:---|:---|:---|:---|
+| **TC-LHCI-001** | Lighthouse CI Core Web Vitals & Performance Gate | Audit frontend SPA distribution bundle in headless Chrome. Assert Lighthouse Performance category score is at least 0.90 (90%). Block pull requests on regression. | Critical | CI Quality Gate (Lighthouse CI) | `@smoke` `@regression` `@perf` | **Yes**<br>- Config: `.lighthouserc.json` (`categories:performance >= 0.90`)<br>- Workflow: `.github/workflows/ci.yml` (`lighthouse-ci` job)<br>- Artifacts: Saved in `.lighthouseci/` |
+| **TC-LHCI-002** | Lighthouse CI Accessibility & SEO Quality Gate | Audit frontend SPA pages for WCAG accessibility compliance and SEO metadata. Assert Accessibility score is at least 0.95 (95%) and SEO score is at least 0.90 (90%). | High | CI Quality Gate (Lighthouse CI) | `@regression` `@a11y` | **Yes**<br>- Config: `.lighthouserc.json` (`categories:accessibility >= 0.95`, `categories:seo >= 0.90`)<br>- Optimization: `frontend/index.html` (semantic metadata, theme-color, title) |
+
 

@@ -13,6 +13,9 @@
     "test:backend": "cd backend && npm test",
     "test:frontend": "cd frontend && npm test",
     "test:e2e": "cd playwright-e2e && npm test",
+    "test:perf": "node performance/run-k6.js performance/k6/catalog-load.js",
+    "test:perf:stress": "node performance/run-k6.js performance/k6/inventory-stress.js",
+    "test:lhci": "npx @lhci/cli autorun",
     "lint": "concurrently \"cd frontend && npm run lint\" \"cd backend && npm run lint\"",
     "lint:backend": "cd backend && npm run lint",
     "lint:frontend": "cd frontend && npm run lint"

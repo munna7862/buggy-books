@@ -14,3 +14,14 @@ backend/dist/
 backend/db.test.*.json
 backend/db.test.*.json.tmp
 
+# Frontend build
+frontend/dist/
+
+# Performance tooling binaries
+performance/bin/
+
+# Lighthouse CI reports
+.lighthouseci/
+lhci-reports/
+
+
