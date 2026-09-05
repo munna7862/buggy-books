@@ -1,6 +1,7 @@
 import { BasePage } from '../core/base/base.page';
 import { Locator } from '@playwright/test';
 import { CatalogPage } from './catalog.page';
+import { getLoginCredentials } from '../config/env.config';
 
 export class SignUpPage extends BasePage {
 
@@ -91,6 +92,11 @@ export class SignUpPage extends BasePage {
     await this.clickSignIn();
     const catalogPage = new CatalogPage(this.page);
     return await catalogPage.verifyCheckoutPage();
+  }
+
+  public async loginWithSeedCredentials(): Promise<boolean> {
+    const { userName, password } = getLoginCredentials();
+    return await this.login(userName, password);
   }
 
   public async loginWithInvalidCredentials(username: string, password: string) {

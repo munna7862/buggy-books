@@ -459,7 +459,7 @@ jobs:
           ELEMENT_TIMEOUT: 15000
           CI: "true"
         run: |
-          npx playwright test --grep "@smoke" --grep-invert "@quarantine" --workers=2
+          npx playwright test --project=chromium --grep "@smoke" --grep-invert "@quarantine" --workers=2
 
       - name: Upload Playwright Failure Artifacts (Traces & Screenshots)
         uses: actions/upload-artifact@v4

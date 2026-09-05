@@ -191,8 +191,11 @@ test.describe('Concurrent Stock Race Condition & Chaos Dashboard Resilience', ()
       const isVisible = await chaosDashboardPage.isDashboardVisible();
       expect(isVisible).toBeTruthy();
 
-      const badgeText = await chaosDashboardPage.getStatusBadgeText();
-      expect(badgeText).toContain('Live Engine Active');
+      await expect.poll(async () => await chaosDashboardPage.getStatusBadgeText(), {
+        message: 'Expected Chaos Dashboard status badge to show Live Engine Active',
+        timeout: 10000,
+        intervals: [500, 1000]
+      }).toContain('Live Engine Active');
 
       // Select High Contention preset and apply
       await chaosDashboardPage.selectPreset('high-contention');
