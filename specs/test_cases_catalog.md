@@ -269,17 +269,21 @@ These test cases validate automated API performance benchmarking with k6 and fro
 
 ---
 
-## 8. CI/CD Pipeline Deduplication & Build Artifact Sharing
+## 8. CI/CD Pipeline Optimization, Fast-Feedback Gates & Concurrency Control
 
-*Sprint Source: [Sprint 4.1: Pipeline Deduplication & Build Artifact Sharing](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_4_1_pipeline_deduplication_and_artifact_sharing.md)*
+*Sprint Sources:*
+- *[Sprint 4.1: Pipeline Deduplication & Build Artifact Sharing](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_4_1_pipeline_deduplication_and_artifact_sharing.md)*
+- *[Sprint 4.2: Fast-Feedback Parallelization & Concurrency Control](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_4_2_fast_feedback_parallelization_and_concurrency.md)*
 
-These test cases validate CI/CD pipeline deduplication, GitHub Actions artifact upload/download sharing between build and downstream test jobs, deterministic `npm ci` execution, and single-invocation typechecking.
+These test cases validate CI/CD pipeline deduplication, GitHub Actions artifact upload/download sharing, deterministic `npm ci` execution, Stage 1 parallel static quality gates, workflow concurrency auto-cancellation, and path-based trigger filtering.
 
 ### **Suite: CI/CD Pipeline Optimization & Fast Feedback**
 | ID | Title | Description | Priority | Target Coverage | Tags | Covered |
 |:---|:---|:---|:---|:---|:---|:---|
 | **TC-CI-001** | Pipeline Build Artifact Sharing & Zero-Rebuild Downstream Consumption | Verify that `backend-build` and `frontend-build` upload `dist` directories as GitHub Actions artifacts (`actions/upload-artifact@v4`) and downstream jobs (`lighthouse-ci`, `perf-benchmarks`) download them (`actions/download-artifact@v4`) to execute audits and benchmarks with zero rebuilds and reduced runner time. | Critical | GitHub Actions CI (`ci.yml`) | `@smoke` `@regression` `@perf` | **Yes**<br>- Workflow: `.github/workflows/ci.yml`<br>- Jobs: `backend-build`, `frontend-build`, `lighthouse-ci`, `perf-benchmarks`<br>- Artifacts: `backend-dist`, `frontend-dist` (retention: 1 day) |
 | **TC-CI-002** | Deterministic Dependency Resolution & Compiler Deduplication | Verify that all jobs in `ci.yml` strictly use `npm ci` for deterministic dependency resolution and that `e2e-quality-gate` removes redundant `npx tsc --noEmit`, relying exclusively on internal `runTypeScriptCheck()` inside `finalize-spec.ts`. | High | CI Quality Gate & POM Validator | `@regression` | **Yes**<br>- Workflow: `.github/workflows/ci.yml`<br>- Script: `playwright-e2e/scripts/finalize-spec.ts`<br>- Coverage: 0 `npm install` instances, single-invocation typechecking |
+| **TC-CI-003** | Stage 1 Parallel Static Architecture Quality Gate | Verify that `e2e-quality-gate` executes concurrently in Stage 1 without upstream `needs` dependencies (`backend-tests`, `frontend-tests`, `backend-build`, `frontend-build`), executing POM architecture encapsulation validation and typechecking within ~60 seconds of code push for immediate developer feedback. | High | GitHub Actions CI (`ci.yml`) / Playwright Quality Gate | `@smoke` `@regression` | **Yes**<br>- Workflow: `.github/workflows/ci.yml`<br>- Job: `e2e-quality-gate` (Stage 1C)<br>- Script: `playwright-e2e/scripts/finalize-spec.ts`<br>- Latency: ~60s fast feedback |
+| **TC-CI-004** | Workflow Concurrency Cancellation & Path-Based Trigger Filtering | Verify that `ci.yml` defines top-level `concurrency` with `cancel-in-progress: true` keyed by `${{ github.workflow }}-${{ github.ref }}` to terminate redundant runs upon newer commits, and `paths-ignore` (`'**.md'`, `'docs/**'`, `'.vscode/**'`, `'.gitignore'`) on `push` and `pull_request` triggers to skip CI on documentation-only commits. | Medium | GitHub Actions CI (`ci.yml`) | `@regression` | **Yes**<br>- Workflow: `.github/workflows/ci.yml`<br>- Concurrency: `group: ${{ github.workflow }}-${{ github.ref }}`, `cancel-in-progress: true`<br>- Filter: `paths-ignore` on push & PR |
 
 
 
