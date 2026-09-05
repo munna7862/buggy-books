@@ -13,6 +13,7 @@
 #   Stage 3 (Downstream Performance & Audit Quality Gates):
 #     - lighthouse-ci    — Headless Chrome audit & Core Web Vitals
 #     - perf-benchmarks  — Tiered k6 API benchmarks (PR smoke vs main full stress)
+#     - e2e-smoke        — Ephemeral Playwright E2E smoke gate against pre-built artifacts
 # =============================================================
 
 name: CI
@@ -352,3 +353,132 @@ jobs:
       - name: Stop Backend Server
         if: always()
         run: pkill -f "node dist/server.js" || true
+
+  # -----------------------------------------------------------
+  # Stage 3C: Ephemeral Playwright E2E Smoke Gate
+  # -----------------------------------------------------------
+  e2e-smoke:
+    name: Playwright E2E Smoke Gate
+    runs-on: ubuntu-latest
+    needs: [backend-build, frontend-build]
+
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: playwright-e2e/package-lock.json
+
+      - name: Download Backend Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-dist
+          path: backend/dist
+
+      - name: Download Frontend Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Install Backend Production Dependencies
+        run: |
+          cd backend
+          npm ci --omit=dev
+
+      - name: Install Frontend Preview Dependencies
+        run: |
+          cd frontend
+          npm ci --omit=dev
+
+      - name: Install Playwright Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Get Playwright version
+        id: playwright-version
+        working-directory: playwright-e2e
+        run: echo "version=$(node -e "console.log(require('@playwright/test/package.json').version)")" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browser Binaries
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+      - name: Install Playwright Browsers & OS Dependencies
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: playwright-e2e
+        run: npx playwright install --with-deps chrome
+
+      - name: Install Playwright OS Dependencies Only
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: playwright-e2e
+        run: npx playwright install-deps chrome
+
+      - name: Start Ephemeral Backend Server
+        run: |
+          cd backend
+          nohup node dist/server.js > ../backend-server.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
+        env:
+          PORT: 4000
+          NODE_ENV: development
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Start Ephemeral Frontend Preview Server
+        run: |
+          cd frontend
+          nohup npx vite preview --port 5173 --host 127.0.0.1 > ../frontend-preview.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:5173 || (cat ../frontend-preview.log && exit 1)
+
+      - name: Run Playwright E2E Smoke Tests
+        working-directory: playwright-e2e
+        env:
+          ENV: CI
+          BASE_URL: http://127.0.0.1:5173
+          API_BASE_URL: http://127.0.0.1:4000
+          HEADLESS: "true"
+          BROWSER: chrome
+          USER_NAME: admin
+          PASSWORD: password123
+          ELEMENT_TIMEOUT: 15000
+          CI: "true"
+        run: |
+          npx playwright test --grep "@smoke" --grep-invert "@quarantine" --workers=2
+
+      - name: Upload Playwright Failure Artifacts (Traces & Screenshots)
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-smoke-failure-artifacts
+          path: |
+            playwright-e2e/test-results/
+            playwright-e2e/reports/
+          retention-days: 7
+
+      - name: Upload Ephemeral Server Logs on Failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: ephemeral-server-logs
+          path: |
+            backend-server.log
+            frontend-preview.log
+          retention-days: 3
+
+      - name: Stop Ephemeral Servers
+        if: always()
+        run: |
+          pkill -f "node dist/server.js" || true
+          pkill -f "vite preview" || true
+

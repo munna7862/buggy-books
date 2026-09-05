@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts",
+    "test:smoke": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@smoke\" --grep-invert \"@quarantine\"",
+    "test:quarantine": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@quarantine\" --grep-invert \"\"",
     "generate-allure": "allure generate --clean reports/allure-results -o reports/allure-report",
     "open-allure": "allure open reports/allure-report",
     "report": "npm run generate-allure && npm run open-allure",

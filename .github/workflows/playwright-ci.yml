@@ -86,7 +86,6 @@ jobs:
           PASSWORD: ${{ secrets.E2E_PASSWORD }}
         run: |
           npm run test
-        continue-on-error: true
 
       # Explicitly upload the allure-results folder
       - name: Upload Allure Results

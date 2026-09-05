@@ -9,6 +9,7 @@ export default defineConfig({
   timeout: 300 * 1000,
   retries: 1,
   workers: process.env.CI ? 4 : undefined,
+  grepInvert: /@quarantine/,
 
   reporter: [
     ['html', { open: 'never' }],
