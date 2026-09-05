@@ -1,0 +1,5 @@
+[2026-09-05 21:44:33] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788610473968-guwj
+[2026-09-05 21:44:34] INFO:  Status code should be 200 for Standard page 2 Success !! Actual and Expected Values are:: 200
+[2026-09-05 21:44:34] INFO:  Response page should be 2 for Standard page 2 Success !! Actual and Expected Values are:: 2
+[2026-09-05 21:44:34] INFO:  Books array length should be less than or equal to limit 5 Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:34] INFO: Cleaned up ephemeral test session: pw-w4-3-1788610473968-guwj

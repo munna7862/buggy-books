@@ -1,0 +1,11 @@
+[2026-09-05 21:48:21] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w35-3-1788610701211-3fp6
+[2026-09-05 21:48:21] INFO: Clicking on Sign Up link
+
+[Failure Hook] Capturing state for failing test: "UI_REF_01: Transparent Client Request Retry @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 21:48:36] INFO: Cleaned up ephemeral test session: pw-w35-3-1788610701211-3fp6

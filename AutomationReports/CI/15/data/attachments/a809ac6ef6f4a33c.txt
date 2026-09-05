@@ -1,0 +1,31 @@
+[2026-09-05 21:46:51] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w21-2-1788610611143-6gp4
+[2026-09-05 21:46:51] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:46:51] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-05 21:46:51] INFO: Clicking on Sign Up link
+[2026-09-05 21:46:51] INFO: Entering full name: Cart Quantity User
+[2026-09-05 21:46:51] INFO: Entering username: cart_qty_user_1788610611245_13e0c1ea
+[2026-09-05 21:46:52] INFO: Entering password: Password123!
+[2026-09-05 21:46:52] INFO: Entering confirming password: Password123!
+[2026-09-05 21:46:52] INFO: Clicking on Create Account button
+[2026-09-05 21:46:52] INFO: Verifying landing on Checkout Page
+[2026-09-05 21:46:53] INFO: Checking if Checkout label is visible
+[2026-09-05 21:46:53] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 21:46:53] INFO: Clicking on Catalog link
+[2026-09-05 21:46:53] INFO: Filling search input with: Mockingbird
+[2026-09-05 21:46:53] INFO: Clicking Search button
+[2026-09-05 21:46:53] INFO: Clicking on Add to Cart button for book id: 2
+[2026-09-05 21:46:55] INFO: Waiting for cart status message: added to cart
+[2026-09-05 21:46:55] INFO: Cart status message "added to cart" is visible
+[2026-09-05 21:46:55] INFO: Waiting for cart status message: added to cart
+[2026-09-05 21:46:56] INFO: Cart status message "added to cart" is visible
+[2026-09-05 21:46:56] INFO: Clicking on Cart link
+
+[Failure Hook] Capturing state for failing test: "UI_CART_04: Cart item addition and removal dynamically recalculates item count and order total @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 21:47:11] INFO: Captured 18 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Checkout-Test_006_CartQ-6d4e6--and-order-total-regression-mobile-chrome/network-log.json
+[2026-09-05 21:47:11] INFO: Cleaned up ephemeral test session: pw-w21-2-1788610611143-6gp4

@@ -1,0 +1,5 @@
+[2026-09-05 21:46:56] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w22-1-1788610616123-stwl
+[2026-09-05 21:46:56] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:46:56] INFO: Clicking on Sign Up link
+[2026-09-05 21:47:11] INFO: Captured 11 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Profile-Test_005_Profil-092ae-ure-Upload-smoke-regression-mobile-chrome/network-log.json
+[2026-09-05 21:47:11] INFO: Cleaned up ephemeral test session: pw-w22-1-1788610616123-stwl

@@ -1,0 +1,5 @@
+[2026-09-05 21:48:20] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w34-2-1788610700254-wyqq
+[2026-09-05 21:48:20] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:48:20] INFO: Clicking on Sign Up link
+[2026-09-05 21:48:35] INFO: Captured 10 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-UserManagement-Test_001-8d0dc-r-New-User-smoke-regression-mobile-chrome/network-log.json
+[2026-09-05 21:48:35] INFO: Cleaned up ephemeral test session: pw-w34-2-1788610700254-wyqq

@@ -1,0 +1,5 @@
+[2026-09-05 21:44:43] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788610483076-knv1
+[2026-09-05 21:44:43] INFO:  Verifying POST /api/test/config status is 200 Success !! Actual and Expected Values are:: 200
+[2026-09-05 21:44:43] INFO:  Verifying visualChaos saved as true Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:43] INFO:  Verifying checkoutFailureRate saved as 0.5 Success !! Actual and Expected Values are:: 0.5
+[2026-09-05 21:44:43] INFO: Cleaned up ephemeral test session: pw-w1-0-1788610483076-knv1

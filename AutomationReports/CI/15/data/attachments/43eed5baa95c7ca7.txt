@@ -1,0 +1,2 @@
+[2026-09-05 21:49:02] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w40-2-1788610742935-k6lu
+[2026-09-05 21:49:03] INFO: Cleaned up ephemeral test session: pw-w40-2-1788610742935-k6lu

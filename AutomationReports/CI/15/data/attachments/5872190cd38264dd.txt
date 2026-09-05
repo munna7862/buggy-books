@@ -1,0 +1,36 @@
+[2026-09-05 21:46:34] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w20-3-1788610594878-kq5l
+[2026-09-05 21:46:34] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:46:34] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-05 21:46:35] INFO: Clicking on Sign Up link
+[2026-09-05 21:46:35] INFO: Entering full name: E2E Test User
+[2026-09-05 21:46:35] INFO: Entering username: e2e_customer_1788610594932_9e17d600
+[2026-09-05 21:46:35] INFO: Entering password: Password123!
+[2026-09-05 21:46:35] INFO: Entering confirming password: Password123!
+[2026-09-05 21:46:35] INFO: Clicking on Create Account button
+[2026-09-05 21:46:36] INFO: Verifying landing on Checkout Page
+[2026-09-05 21:46:36] INFO: Checking if Checkout label is visible
+[2026-09-05 21:46:36] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 21:46:36] INFO:  Verifying new user registered and logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 21:46:36] INFO: Clicking on Catalog link
+[2026-09-05 21:46:36] INFO: Filling search input with: Mockingbird
+[2026-09-05 21:46:36] INFO: Clicking Search button
+[2026-09-05 21:46:36] INFO: Getting catalog result count text
+[2026-09-05 21:46:36] INFO:  Verifying catalog search results for 'Mockingbird' Success !! Actual and Expected Values are:: true
+[2026-09-05 21:46:36] INFO: Clicking on book title link for book ID: 2
+[2026-09-05 21:46:36] INFO: Getting book detail title
+[2026-09-05 21:46:36] INFO: Getting book detail price
+[2026-09-05 21:46:36] INFO:  Verifying book detail title and price are displayed Success !! Actual and Expected Values are:: true
+[2026-09-05 21:46:36] INFO: Clicking Add to Cart button on Book Detail page
+[2026-09-05 21:46:36] INFO: Waiting for cart status message: added to cart
+[2026-09-05 21:46:36] INFO: Cart status message "added to cart" is visible
+[2026-09-05 21:46:36] INFO: Clicking on Cart link
+
+[Failure Hook] Capturing state for failing test: "Testcase 1: Complete New Customer E2E Journey from Registration to Checkout @smoke @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 21:46:52] INFO: Captured 18 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Checkout-Test_005_EndTo-554c2-o-Checkout-smoke-regression-mobile-chrome/network-log.json
+[2026-09-05 21:46:52] INFO: Cleaned up ephemeral test session: pw-w20-3-1788610594878-kq5l

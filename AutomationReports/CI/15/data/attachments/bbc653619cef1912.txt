@@ -1,0 +1,4 @@
+[2026-09-05 21:44:43] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788610483186-4v8l
+[2026-09-05 21:44:43] INFO:  Verifying x-correlation-id header is present in response Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:43] INFO:  Verifying x-correlation-id matches valid UUIDv4 format Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:43] INFO: Cleaned up ephemeral test session: pw-w3-2-1788610483186-4v8l

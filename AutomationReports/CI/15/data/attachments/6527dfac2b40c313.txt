@@ -1,0 +1,13 @@
+[2026-09-05 21:46:14] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w16-1-1788610574755-4vdk
+[2026-09-05 21:46:14] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:46:15] INFO: Clicking on Sign Up link
+
+[Failure Hook] Capturing state for failing test: "UI_WIZ_04: Dirty Navigation Alert Dialog @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 21:46:30] INFO: Captured 11 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Checkout-Test_004_Check-73e9a-ion-Alert-Dialog-regression-mobile-chrome/network-log.json
+[2026-09-05 21:46:30] INFO: Cleaned up ephemeral test session: pw-w16-1-1788610574755-4vdk

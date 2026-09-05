@@ -1,0 +1,4 @@
+[2026-09-05 21:44:45] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788610485608-k6zp
+[2026-09-05 21:44:45] INFO:  Verifying POST /api/auth/refresh returns 200 OK Success !! Actual and Expected Values are:: 200
+[2026-09-05 21:44:45] INFO:  Verifying new access token issued in Set-Cookie Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:45] INFO: Cleaned up ephemeral test session: pw-w1-0-1788610485608-k6zp

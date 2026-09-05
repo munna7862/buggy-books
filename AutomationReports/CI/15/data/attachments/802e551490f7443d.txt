@@ -1,0 +1,4 @@
+[2026-09-05 21:44:41] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788610481311-ubgf
+[2026-09-05 21:44:41] INFO: Last item on page 1 ID: 5
+[2026-09-05 21:44:41] INFO: First item on page 2 ID: 6
+[2026-09-05 21:44:41] INFO: Cleaned up ephemeral test session: pw-w1-0-1788610481311-ubgf

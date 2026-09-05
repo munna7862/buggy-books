@@ -1,0 +1,23 @@
+[2026-09-05 21:45:10] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w6-1-1788610510039-3zml
+[2026-09-05 21:45:10] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:45:10] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-05 21:45:10] INFO: Checking if Logout button is visible on Catalog page - Element is visible
+[2026-09-05 21:45:10] INFO:  Verifying user is pre-authenticated via storageState Success !! Actual and Expected Values are:: true
+[2026-09-05 21:45:10] INFO: Clicking on Cart link
+[2026-09-05 21:45:15] INFO: Clicking on Catalog link
+[2026-09-05 21:45:15] INFO: Clicking on Add to Cart button for book id: 1
+[2026-09-05 21:45:15] INFO: Waiting for cart status message: added to cart
+[2026-09-05 21:45:18] INFO: Cart status message "added to cart" is visible
+[2026-09-05 21:45:18] INFO: Waiting for cart status message: Added to cart!
+[2026-09-05 21:45:18] INFO: Cart status message "Added to cart!" is visible
+[2026-09-05 21:45:18] INFO: Clicking on Cart link
+
+[Failure Hook] Capturing state for failing test: "Testcase 1: Complete book purchase successfully @smoke @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 21:45:34] INFO: Captured 19 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Checkout-Test_001_Compl-891ee-ccessfully-smoke-regression-mobile-chrome-retry1/network-log.json
+[2026-09-05 21:45:34] INFO: Cleaned up ephemeral test session: pw-w6-1-1788610510039-3zml

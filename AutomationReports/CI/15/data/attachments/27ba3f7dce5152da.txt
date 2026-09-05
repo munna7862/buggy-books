@@ -1,0 +1,2 @@
+[2026-09-05 21:49:11] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w43-2-1788610751448-ryb4
+[2026-09-05 21:49:15] INFO: Cleaned up ephemeral test session: pw-w43-2-1788610751448-ryb4

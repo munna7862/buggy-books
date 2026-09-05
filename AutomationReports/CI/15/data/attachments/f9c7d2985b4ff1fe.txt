@@ -1,0 +1,3 @@
+[2026-09-05 21:44:38] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788610478753-j4vm
+[2026-09-05 21:44:38] INFO:  Security status for script tag in fullName Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:38] INFO: Cleaned up ephemeral test session: pw-w2-1-1788610478753-j4vm

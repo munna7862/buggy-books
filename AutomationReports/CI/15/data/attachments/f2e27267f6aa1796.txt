@@ -1,0 +1,18 @@
+[2026-09-05 21:44:43] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788610483532-bknt
+[2026-09-05 21:44:43] INFO:  Response status Success !! Actual and Expected Values are:: 201
+[2026-09-05 21:44:43] INFO:  Registration response is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:43] INFO:  Registration response is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:43] INFO:  Message is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:43] INFO:  Username is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:43] INFO:  Registration message Success !! Actual and Expected Values are:: Registration successful
+[2026-09-05 21:44:43] INFO:  Registered username matches request Success !! Actual and Expected Values are:: johndoe1788610483542a5fdeeed@
+[2026-09-05 21:44:43] INFO:  Response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","username"]
+[2026-09-05 21:44:43] INFO:  Login response status after registration Success !! Actual and Expected Values are:: 200
+[2026-09-05 21:44:43] INFO:  Login response is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:43] INFO:  Login response is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:43] INFO:  Login message is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:43] INFO:  Login username is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:43] INFO:  Login message Success !! Actual and Expected Values are:: Login successful
+[2026-09-05 21:44:43] INFO:  Logged in username matches request Success !! Actual and Expected Values are:: johndoe1788610483542a5fdeeed@
+[2026-09-05 21:44:43] INFO:  Login response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","username"]
+[2026-09-05 21:44:43] INFO: Cleaned up ephemeral test session: pw-w3-2-1788610483532-bknt

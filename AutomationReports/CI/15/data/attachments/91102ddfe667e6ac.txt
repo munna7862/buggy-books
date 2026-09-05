@@ -1,0 +1,3 @@
+[2026-09-05 21:49:15] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w43-2-1788610755952-hsth
+[2026-09-05 21:49:16] INFO: Clicking on WebSocket Notification Bell button
+[2026-09-05 21:49:31] INFO: Cleaned up ephemeral test session: pw-w43-2-1788610755952-hsth

@@ -1,0 +1,19 @@
+[2026-09-05 21:45:34] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788610534968-uau2
+[2026-09-05 21:45:35] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:45:36] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-05 21:45:36] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-05 21:45:36] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-05 21:45:36] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-05 21:45:36] INFO:  Verifying direct navigation to /checkout redirects to /login and Login page elements are fully loaded Success !! Actual and Expected Values are:: true
+[2026-09-05 21:45:36] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-05 21:45:36] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-05 21:45:36] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-05 21:45:36] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-05 21:45:36] INFO:  Verifying direct navigation to /profile redirects to /login and Login page elements are fully loaded Success !! Actual and Expected Values are:: true
+[2026-09-05 21:45:36] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-05 21:45:37] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-05 21:45:37] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-05 21:45:37] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-05 21:45:37] INFO:  Verifying direct navigation to /cart redirects to /login and Login page elements are fully loaded Success !! Actual and Expected Values are:: true
+[2026-09-05 21:45:37] INFO: Captured 32 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-UserManagement-Test_003-f1bd5-s-to-Login-smoke-regression-chromium/network-log.json
+[2026-09-05 21:45:37] INFO: Cleaned up ephemeral test session: pw-w1-0-1788610534968-uau2

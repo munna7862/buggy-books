@@ -1,0 +1,7 @@
+[2026-09-05 21:44:43] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788610483438-bil0
+[2026-09-05 21:44:43] INFO:  Verifying user registration status is 201 Success !! Actual and Expected Values are:: 201
+[2026-09-05 21:44:43] INFO:  Verifying user login status is 200 Success !! Actual and Expected Values are:: 200
+[2026-09-05 21:44:43] INFO:  Verifying add to cart status is 200 Success !! Actual and Expected Values are:: 200
+[2026-09-05 21:44:43] INFO:  Verifying process checkout status is 200 Success !! Actual and Expected Values are:: 200
+[2026-09-05 21:44:43] INFO:  Verifying correlation ID preserved in checkout response Success !! Actual and Expected Values are:: custom-correlation-uuid-99999_user_flow
+[2026-09-05 21:44:43] INFO: Cleaned up ephemeral test session: pw-w1-0-1788610483438-bil0

@@ -1,0 +1,18 @@
+[2026-09-05 21:47:56] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w31-3-1788610676439-m7ou
+[2026-09-05 21:47:56] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:47:56] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-05 21:47:57] INFO: Clicking on Sign Up link
+[2026-09-05 21:47:57] INFO: Entering full name: Profile Summary User
+[2026-09-05 21:47:57] INFO: Entering username: profile_user_1788610676518_8a2aa12e
+[2026-09-05 21:47:57] INFO: Entering password: Password123!
+[2026-09-05 21:47:57] INFO: Entering confirming password: Password123!
+[2026-09-05 21:47:57] INFO: Clicking on Create Account button
+[2026-09-05 21:47:57] INFO: Verifying landing on Checkout Page
+[2026-09-05 21:47:57] INFO: Checking if Checkout label is visible
+[2026-09-05 21:47:58] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 21:47:58] INFO: Clicking on Profile navbar link
+[2026-09-05 21:47:58] INFO: Getting profile info section text
+[2026-09-05 21:47:58] INFO: Getting profile avatar preview image src
+[2026-09-05 21:48:03] INFO:  Verifying profile page renders registered full name, username, and avatar preview Success !! Actual and Expected Values are:: true
+[2026-09-05 21:48:03] INFO: Captured 12 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Profile-Test_006_Profil-9cd7f--correctly-smoke-regression-mobile-chrome/network-log.json
+[2026-09-05 21:48:03] INFO: Cleaned up ephemeral test session: pw-w31-3-1788610676439-m7ou

@@ -1,0 +1,5 @@
+[2026-09-05 21:44:46] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788610486079-q4u1
+[2026-09-05 21:44:46] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:44:46] INFO: Clicking on Sign Up link
+[2026-09-05 21:45:01] INFO: Captured 11 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Checkout-Test_003_CartA-5f314-e-Item-from-Cart-regression-mobile-chrome/network-log.json
+[2026-09-05 21:45:01] INFO: Cleaned up ephemeral test session: pw-w4-3-1788610486079-q4u1

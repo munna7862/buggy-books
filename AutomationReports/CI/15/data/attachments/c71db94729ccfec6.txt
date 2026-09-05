@@ -1,0 +1,34 @@
+[2026-09-05 21:44:51] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788610491289-o8en
+[2026-09-05 21:44:51] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:44:51] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-05 21:44:51] INFO: Checking if Logout button is visible on Catalog page - Element is visible
+[2026-09-05 21:44:51] INFO:  Verifying user is pre-authenticated via storageState Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:51] INFO: Clicking on Cart link
+[2026-09-05 21:44:57] INFO: Clicking on Catalog link
+[2026-09-05 21:44:57] INFO: Clicking on Add to Cart button for book id: 1
+[2026-09-05 21:44:57] INFO: Waiting for cart status message: added to cart
+[2026-09-05 21:44:59] INFO: Cart status message "added to cart" is visible
+[2026-09-05 21:44:59] INFO: Waiting for cart status message: Added to cart!
+[2026-09-05 21:44:59] INFO: Cart status message "Added to cart!" is visible
+[2026-09-05 21:44:59] INFO: Clicking on Cart link
+[2026-09-05 21:44:59] INFO: Getting cart item text
+[2026-09-05 21:44:59] INFO: Getting cart total text
+[2026-09-05 21:44:59] INFO: Clicking on Proceed to Checkout button
+[2026-09-05 21:44:59] INFO: Waiting for checkout order total amount: $10.99
+[2026-09-05 21:44:59] INFO: Entering first name: john
+[2026-09-05 21:44:59] INFO: Entering last name: cena
+[2026-09-05 21:44:59] INFO: Entering shipping address: 123 Buggy Lane
+[2026-09-05 21:44:59] INFO: Entering city: Stack City
+[2026-09-05 21:44:59] INFO: Clicking on Next Step button
+[2026-09-05 21:44:59] INFO: Entering card number
+[2026-09-05 21:45:00] INFO: Entering card expiry: 12/30
+[2026-09-05 21:45:00] INFO: Entering card CVV: 123
+[2026-09-05 21:45:00] INFO: Checking if Next Step button is visible - Element is visible
+[2026-09-05 21:45:00] INFO: Clicking on Next Step button on Payment page
+[2026-09-05 21:45:00] INFO: Waiting for confirmation message containing: Payment Successful! Thank you for your order.
+[2026-09-05 21:45:00] INFO: Payment completed successfully and order confirmation message is displayed.
+[2026-09-05 21:45:00] INFO: Clicking on Logout button
+[2026-09-05 21:45:00] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-05 21:45:00] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 21:45:00] INFO: Captured 20 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Checkout-Test_001_Compl-891ee-ccessfully-smoke-regression-chromium/network-log.json
+[2026-09-05 21:45:00] INFO: Cleaned up ephemeral test session: pw-w2-1-1788610491289-o8en

@@ -1,0 +1,15 @@
+[2026-09-05 21:44:46] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788610486166-udbo
+[2026-09-05 21:44:46] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:44:46] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-05 21:44:46] INFO: Checking if Logout button is visible on Catalog page - Element is visible
+[2026-09-05 21:44:46] INFO:  Verifying user is pre-authenticated via storageState Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:46] INFO: Clicking on Cart link
+[2026-09-05 21:44:51] INFO: Clicking on Catalog link
+[2026-09-05 21:44:51] INFO: Clicking on Add to Cart button for book id: 2
+[2026-09-05 21:44:52] INFO: Waiting for cart status message: added to cart
+[2026-09-05 21:44:53] INFO: Cart status message "added to cart" is visible
+[2026-09-05 21:44:53] INFO: Waiting for cart status message: Added to cart!
+[2026-09-05 21:44:53] INFO: Cart status message "Added to cart!" is visible
+[2026-09-05 21:44:53] INFO: Clicking on Cart link
+[2026-09-05 21:45:08] INFO: Captured 19 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Checkout-Test_002_CartP-1609f--and-login-smoke-regression-mobile-chrome/network-log.json
+[2026-09-05 21:45:08] INFO: Cleaned up ephemeral test session: pw-w3-2-1788610486166-udbo

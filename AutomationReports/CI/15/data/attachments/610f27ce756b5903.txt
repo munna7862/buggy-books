@@ -1,0 +1,4 @@
+[2026-09-05 21:44:37] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788610477681-tynk
+[2026-09-05 21:44:37] INFO:  Verifying x-correlation-id header is present in response Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:37] INFO:  Verifying x-correlation-id matches valid UUIDv4 format Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:37] INFO: Cleaned up ephemeral test session: pw-w1-0-1788610477681-tynk

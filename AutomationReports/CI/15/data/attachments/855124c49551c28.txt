@@ -1,0 +1,10 @@
+[2026-09-05 21:45:37] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788610537095-zpe9
+[2026-09-05 21:45:37] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:45:37] INFO: ✅ New context created with saved authentication state from: /home/runner/work/buggy-books/buggy-books/auth-state.json
+[2026-09-05 21:45:37] INFO: Checking if Logout button is visible on Catalog page - Element is visible
+[2026-09-05 21:45:37] INFO:  Verifying if user is logged in using saved session Success !! Actual and Expected Values are:: true
+[2026-09-05 21:45:37] INFO: Clicking on Logout button
+[2026-09-05 21:45:38] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-05 21:45:38] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 21:45:38] INFO: Captured 0 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-UserManagement-Test_002-00237-on-Storage-smoke-regression-chromium/network-log.json
+[2026-09-05 21:45:38] INFO: Cleaned up ephemeral test session: pw-w2-1-1788610537095-zpe9

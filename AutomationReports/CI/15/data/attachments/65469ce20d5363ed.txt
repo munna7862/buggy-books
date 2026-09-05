@@ -1,0 +1,13 @@
+[2026-09-05 21:45:56] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w13-1-1788610556350-0xq4
+[2026-09-05 21:45:56] INFO: Network interception enabled with mode: api-only
+[2026-09-05 21:45:56] INFO: Clicking on Sign Up link
+
+[Failure Hook] Capturing state for failing test: "UI_WIZ_01: Stepper Transition Validation @smoke @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 21:46:12] INFO: Captured 11 network calls. Artifact: /home/runner/work/buggy-books/reports/test-artifacts/ui-Checkout-Test_004_Check-b69a7-Validation-smoke-regression-mobile-chrome-retry1/network-log.json
+[2026-09-05 21:46:12] INFO: Cleaned up ephemeral test session: pw-w13-1-1788610556350-0xq4

@@ -1,0 +1,163 @@
+[2026-09-05 21:44:39] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788610479827-ti5r
+[2026-09-05 21:44:39] INFO:  Response status Success !! Actual and Expected Values are:: 200
+[2026-09-05 21:44:40] INFO:  Books property is an array Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Total count is numeric Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Page is numeric Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Total pages is numeric Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Limit is numeric Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Returned page is 2 Success !! Actual and Expected Values are:: 2
+[2026-09-05 21:44:40] INFO:  Returned limit is 8 Success !! Actual and Expected Values are:: 8
+[2026-09-05 21:44:40] INFO:  Books array contains 7 entries Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  First book payload matches contract Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book id 9 has expected contract Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book id 10 has expected contract Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book id 11 has expected contract Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book id 12 has expected contract Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book id 13 has expected contract Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book id 14 has expected contract Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book id 15 has expected contract Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book entry is an object Success !! Actual and Expected Values are:: object
+[2026-09-05 21:44:40] INFO:  Book entry is not null Success !! Actual and Expected Values are:: true
+[2026-09-05 21:44:40] INFO:  Book id is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book title is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book author is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book price is a number Success !! Actual and Expected Values are:: number
+[2026-09-05 21:44:40] INFO:  Book genre is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book description is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO:  Book image is a string Success !! Actual and Expected Values are:: string
+[2026-09-05 21:44:40] INFO: Cleaned up ephemeral test session: pw-w2-1-1788610479827-ti5r
