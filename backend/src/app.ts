@@ -83,6 +83,7 @@ const isAllowedOrigin = (origin: string): boolean => {
   try {
     const hostname = new URL(origin).hostname;
     return hostname === 'localhost' ||
+           hostname === '127.0.0.1' ||
            hostname === 'buggy-books-fe.onrender.com' ||
            /^([a-z0-9-]+\.)*onrender\.com$/.test(hostname);
   } catch {
