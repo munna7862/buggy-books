@@ -124,6 +124,19 @@ sequenceDiagram
     gh pr create --title "<type>(<scope>): <summary>" --body "<structured description>" --head <branch-name> --base main
     ```
 - **PR Description Maintenance**: If subsequent fixes are pushed after opening a PR, update the PR description using `gh pr edit <pr-number> --body-file <path>`.
+- **Mandatory CI Workflow Verification Before PR Merge (CRITICAL)**:
+  - Before merging any Pull Request into `main`, the agent MUST monitor and ensure that all GitHub Actions CI workflows pass (`gh pr checks <pr-number> --watch` or verifying status via `gh pr checks <pr-number>`).
+  - **If Any CI Workflow Fails**:
+    1. **DO NOT** merge the Pull Request.
+    2. Inspect failing logs immediately with `gh run view <run-id> --log-failed`.
+    3. Reproduce and fix the defect on the feature branch.
+    4. Commit with conventional commits and push to remote (`git push origin <branch-name>`).
+    5. Re-run or monitor CI checks until all workflows pass cleanly (`conclusion: success`).
+  - **Merge Authorization**: Only once all CI workflows are 100% green (`conclusion: success`), merge the Pull Request into `main`:
+    ```bash
+    gh pr merge <pr-number> --squash --delete-branch --admin
+    ```
+  - Always pull latest `origin/main` locally after merging to maintain repository synchronization (`git checkout main && git pull origin main`).
 
 ---
 

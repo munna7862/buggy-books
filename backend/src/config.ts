@@ -23,6 +23,7 @@ export const config = {
     // Configurable list of allowed origins, with sensible defaults
     allowedOrigins: [
       'http://localhost:5173',
+      'http://127.0.0.1:5173',
       'https://buggy-books-fe.onrender.com'
     ],
     // Subdomains/render domains suffix matcher

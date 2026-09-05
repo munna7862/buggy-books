@@ -55,4 +55,6 @@ This skill provides core capabilities for generating Page Objects, writing E2E t
    `gh pr create --title "<type>(<scope>): <summary>" --body "<structured description>" --head <branch-name> --base main`
 4. PR body MUST include **📌 Summary of Changes** and **🧪 Verification** results.
 5. If follow-up changes or fixes are pushed, update the existing PR description using `gh pr edit <pr-number> --body-file <path>`.
+6. **Verify CI Checks Before Merge**: Monitor PR checks (`gh pr checks <pr-number> --watch`). If any CI workflow fails, diagnose via `gh run view --log-failed`, resolve on the branch, and push. Never merge until CI workflows are completely green.
+
 

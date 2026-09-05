@@ -28,7 +28,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     await request.post(RESET_URL);
   });
 
-  test('VIS_REG_01: Baseline Catalog Screenshot @smoke @regression', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_01: Baseline Catalog Screenshot @regression @visual', async ({ commonFunctions, page, request }) => {
     let flag = false;
     await test.step('Ensure visualChaos is disabled', async () => {
       await syncVisualChaos(request, false);

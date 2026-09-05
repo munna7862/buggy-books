@@ -40,6 +40,22 @@ Upon sprint implementation completion and PO authorization (or DoD verification 
    ```bash
    gh pr edit <pr-number> --body-file <path>
    ```
+6. **CI Workflow Verification & Merge Gate (MANDATORY)**:
+   - Monitor the CI status of the pull request:
+     ```bash
+     gh pr checks <pr-number> --watch
+     ```
+   - If any CI workflow fails:
+     1. Stop immediately. Never merge a PR with failing CI checks.
+     2. Inspect the failure with `gh run view <run-id> --log-failed`.
+     3. Fix the defect on the feature branch.
+     4. Commit and push the updates.
+     5. Repeat verification until all CI checks pass.
+   - Once all CI checks are green (`success`), merge the PR:
+     ```bash
+     gh pr merge <pr-number> --squash --delete-branch --admin
+     ```
+   - Sync the local repository: `git checkout main && git pull origin main`.
 
 #### D. Repository & Artifact Cleanup
 - Clean up test artifacts, reports, and temporary test databases before PR finalization (`npm run clean-reports` in `playwright-e2e/`).
