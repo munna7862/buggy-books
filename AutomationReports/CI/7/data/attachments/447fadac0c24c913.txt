@@ -1,0 +1,31 @@
+[2026-09-05 15:57:12] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788589632132-24cx
+[2026-09-05 15:57:12] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 15:57:12] INFO: 📤 Request Payload: {
+  "username": "silent_ref_1788589632134_a8ac3914",
+  "password": "Password123!",
+  "fullName": "Token Refresh Test User"
+}
+[2026-09-05 15:57:13] INFO: ✅ Register user for silent refresh test Success! Status: 201 Created
+[2026-09-05 15:57:13] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "silent_ref_1788589632134_a8ac3914"
+}
+[2026-09-05 15:57:13] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 15:57:13] INFO: 📤 Request Payload: {
+  "username": "silent_ref_1788589632134_a8ac3914",
+  "password": "Password123!"
+}
+[2026-09-05 15:57:14] INFO: ✅ Login user to extract refreshToken cookie Success! Status: 200 OK
+[2026-09-05 15:57:14] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "silent_ref_1788589632134_a8ac3914"
+}
+[2026-09-05 15:57:14] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/auth/refresh
+[2026-09-05 15:57:14] INFO: ✅ Call POST /api/auth/refresh with refreshToken cookie Success! Status: 200 OK
+[2026-09-05 15:57:14] INFO: 📥 Response Payload: {
+  "success": true,
+  "username": "silent_ref_1788589632134_a8ac3914"
+}
+[2026-09-05 15:57:14] INFO:  Verifying POST /api/auth/refresh returns 200 OK Success !! Actual and Expected Values are:: 200
+[2026-09-05 15:57:14] INFO:  Verifying new access token issued in Set-Cookie Success !! Actual and Expected Values are:: true
+[2026-09-05 15:57:14] INFO: Cleaned up ephemeral test session: pw-w3-3-1788589632132-24cx

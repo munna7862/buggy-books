@@ -1,0 +1,24 @@
+[2026-09-05 15:57:07] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788589627742-6stm
+[2026-09-05 15:57:07] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 15:57:07] INFO: 📤 Request Payload: {
+  "username": "johndoe1788589627744e7ff5b16@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 15:57:09] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 15:57:09] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe1788589627744e7ff5b16@"
+}
+[2026-09-05 15:57:09] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 15:57:09] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/login
+[2026-09-05 15:57:09] ERROR: ❌ Attempt login endpoint with unsupported GET method Failed! Status: 404 Not Found | Response: {
+  "error": "Not Found",
+  "message": "The requested route /api/login was not found on this server. Make sure your API URL is correct."
+}
+[2026-09-05 15:57:09] ERROR: ❌ Attempt login endpoint with unsupported GET method Failed! Status: 404 Not Found | Response: {
+  "error": "Not Found",
+  "message": "The requested route /api/login was not found on this server. Make sure your API URL is correct."
+}
+[2026-09-05 15:57:09] INFO:  Unsupported login method status Success !! Actual and Expected Values are:: true
+[2026-09-05 15:57:09] INFO: Cleaned up ephemeral test session: pw-w3-3-1788589627742-6stm

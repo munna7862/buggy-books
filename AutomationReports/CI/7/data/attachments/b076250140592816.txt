@@ -1,0 +1,29 @@
+[2026-09-05 15:57:05] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788589625334-uots
+[2026-09-05 15:57:05] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 15:57:05] INFO: 📤 Request Payload: {
+  "username": "johndoe178858962533588092ae4@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 15:57:06] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 15:57:06] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe178858962533588092ae4@"
+}
+[2026-09-05 15:57:06] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 15:57:06] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 15:57:06] INFO: 📤 Request Payload: {
+  "username": "loginmissingpass1788589620124998cfd23@"
+}
+[2026-09-05 15:57:07] ERROR: ❌ Login with missing password Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "78c09180-b4af-4f06-8595-9bd4a6389bc7"
+}
+[2026-09-05 15:57:07] ERROR: ❌ Login with missing password Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "78c09180-b4af-4f06-8595-9bd4a6389bc7"
+}
+[2026-09-05 15:57:07] INFO:  Status code for missing password Success !! Actual and Expected Values are:: true
+[2026-09-05 15:57:07] INFO: Cleaned up ephemeral test session: pw-w1-1-1788589625334-uots

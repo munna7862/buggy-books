@@ -1,0 +1,26 @@
+[2026-09-05 15:57:26] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-1-1788589646420-4323
+[2026-09-05 15:57:26] INFO: Network interception enabled with mode: api-only
+[2026-09-05 15:57:26] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-09-05 15:57:27] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 15:57:27] INFO: Filling search input with: Mockingbird
+[2026-09-05 15:57:27] INFO: Clicking Search button
+[2026-09-05 15:57:27] ERROR:  Verifying search results books count Failed!! Expected Value:: 1 || Actual Value:: 8
+[2026-09-05 15:57:27] ERROR:  Verifying search results books count Failed!! Expected Value:: 1 || Actual Value:: 8
+[2026-09-05 15:57:28] INFO: Getting catalog result count text
+[2026-09-05 15:57:28] INFO:  Verifying result count text contains search query Success !! Actual and Expected Values are:: true
+[2026-09-05 15:57:28] INFO: Getting first book title in catalog
+[2026-09-05 15:57:28] ERROR:  Verifying search result book title Failed!! Expected Value:: To Kill a Mockingbird Exception || Actual Value:: The Great Buggy Gatsby
+[2026-09-05 15:57:28] ERROR:  Verifying search result book title Failed!! Expected Value:: To Kill a Mockingbird Exception || Actual Value:: The Great Buggy Gatsby
+[2026-09-05 15:57:28] INFO: Clicking Clear search button
+[2026-09-05 15:57:28] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 15:57:28] INFO:  Verifying catalog count after search clear Success !! Actual and Expected Values are:: 8
+
+[Failure Hook] Capturing state for failing test: "UI_CAT_03: Search Filtering @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 15:57:28] INFO: Captured 8 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_002_Se-d6b4f-Search-Filtering-regression-Google-Chrome-retry1/network-log.json
+[2026-09-05 15:57:28] INFO: Cleaned up ephemeral test session: pw-w4-1-1788589646420-4323

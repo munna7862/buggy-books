@@ -1,0 +1,27 @@
+[2026-09-05 15:57:09] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788589629539-utdg
+[2026-09-05 15:57:09] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 15:57:09] INFO: 📤 Request Payload: {
+  "username": "johndoe1788589629542e384c086@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 15:57:10] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 15:57:10] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe1788589629542e384c086@"
+}
+[2026-09-05 15:57:10] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 15:57:10] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 15:57:10] INFO: 📤 Request Payload: "{\"username\":\"logincontent178858963071631ebbe79@\",\"password\":\"johna123@\"}"
+[2026-09-05 15:57:10] ERROR: ❌ Login with unsupported content type Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "7ffc0a3d-9180-403b-b619-e55e28d7292c"
+}
+[2026-09-05 15:57:10] ERROR: ❌ Login with unsupported content type Failed! Status: 400 Bad Request | Response: {
+  "error": "Bad Request: Username and password required",
+  "errorName": "BadRequestError",
+  "correlationId": "7ffc0a3d-9180-403b-b619-e55e28d7292c"
+}
+[2026-09-05 15:57:10] INFO:  Unsupported login content type status Success !! Actual and Expected Values are:: true
+[2026-09-05 15:57:10] INFO: Cleaned up ephemeral test session: pw-w0-0-1788589629539-utdg
