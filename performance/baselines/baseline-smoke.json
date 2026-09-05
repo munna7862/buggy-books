@@ -1,0 +1,43 @@
+{
+  "description": "BuggyBooks PR API Smoke Golden Baseline (5 VUs)",
+  "version": "1.0.0",
+  "generated_at": "2026-09-05T12:00:00Z",
+  "environment": "CI/Linux-x64",
+  "metrics": {
+    "http_req_duration": {
+      "avg": 4.20,
+      "med": 3.60,
+      "p(90)": 6.10,
+      "p(95)": 7.80,
+      "p(99)": 12.50,
+      "max": 28.00
+    },
+    "catalog_duration": {
+      "avg": 3.90,
+      "med": 3.30,
+      "p(90)": 5.70,
+      "p(95)": 7.20,
+      "p(99)": 11.50
+    },
+    "search_duration": {
+      "avg": 4.40,
+      "med": 3.80,
+      "p(90)": 6.40,
+      "p(95)": 8.10,
+      "p(99)": 13.00
+    },
+    "detail_duration": {
+      "avg": 3.50,
+      "med": 3.00,
+      "p(90)": 5.10,
+      "p(95)": 6.80,
+      "p(99)": 10.50
+    },
+    "http_req_failed": {
+      "rate": 0.00
+    },
+    "http_reqs": {
+      "rate": 35.0
+    }
+  }
+}

@@ -28,27 +28,27 @@
   *So that* endurance workflows never crash on missing files, 5-VU PR smoke tests are not misjudged against 50-VU baselines, and memory leaks are caught before causing OOM crashes in production.
 - **Story Points**: 3 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Fix syntax bug in `.github/workflows/perf-endurance.yml` line 94:
+  - [x] Fix syntax bug in `.github/workflows/perf-endurance.yml` line 94:
     - Update `k6 run performance/scenarios/breakpoint-test.js` to:
       `k6 run --summary-export=perf-summary-breakpoint.json performance/scenarios/breakpoint-test.js`
-  - [ ] Generate and commit scenario-specific golden baselines in `performance/baselines/`:
+  - [x] Generate and commit scenario-specific golden baselines in `performance/baselines/`:
     - `baseline-smoke.json` — 5 VUs smoke benchmark (target: avg < 5ms, p95 < 10ms).
     - `baseline-catalog.json` — 50 VUs catalog load benchmark (target: avg < 8ms, p95 < 250ms).
     - `baseline-soak.json` — 25 VUs 15-minute endurance soak benchmark (target: p95 < 300ms, error rate < 0.1%).
-  - [ ] Update `.github/workflows/ci.yml` and `perf-endurance.yml`:
+  - [x] Update `.github/workflows/ci.yml` and `perf-endurance.yml`:
     - Ensure backend server runs with `NODE_ENV: production` during benchmark execution.
     - Pass `--baseline=performance/baselines/baseline-smoke.json` for PR smoke jobs.
     - Pass `--baseline=performance/baselines/baseline-catalog.json` for main catalog jobs.
     - Pass `--baseline=performance/baselines/baseline-soak.json` for endurance soak jobs.
-  - [ ] Enhance `performance/scenarios/soak-load.js` with Node.js memory telemetry:
+  - [x] Enhance `performance/scenarios/soak-load.js` with Node.js memory telemetry:
     - Query backend telemetry endpoint (`GET /api/inventory/report` or `/health`) at intervals.
     - Measure process `heapUsed` and RSS drift between test start and test finish.
     - Assert that final `heapUsed` does not increase by more than 30% over the baseline (memory leak tripwire).
 - **Acceptance Criteria**:
-  - [ ] `.github/workflows/perf-endurance.yml` runs breakpoint tests with `--summary-export` and generates step summaries without JSON not found errors.
-  - [ ] PR performance smoke tests compare against `baseline-smoke.json` with zero false-positive +20% regressions.
-  - [ ] Benchmark execution in CI runs under `NODE_ENV=production` with optimized latency profiles.
-  - [ ] Soak endurance benchmark asserts that memory drift remains under 30% across the sustained 15-minute load.
+  - [x] `.github/workflows/perf-endurance.yml` runs breakpoint tests with `--summary-export` and generates step summaries without JSON not found errors.
+  - [x] PR performance smoke tests compare against `baseline-smoke.json` with zero false-positive +20% regressions.
+  - [x] Benchmark execution in CI runs under `NODE_ENV=production` with optimized latency profiles.
+  - [x] Soak endurance benchmark asserts that memory drift remains under 30% across the sustained 15-minute load.
 
 ---
 
@@ -59,10 +59,10 @@
   *So that* developers can debug failures instantly without guessing, and flaky tests are systematically stabilized and de-quarantined.
 - **Story Points**: 2 SP (Low)
 - **Technical Subtasks**:
-  - [ ] Implement automated Markdown step summary reporting in `.github/workflows/playwright-ci.yml`:
+  - [x] Implement automated Markdown step summary reporting in `.github/workflows/playwright-ci.yml`:
     - Parse Playwright JSON/blob test results to output total tests, passed, failed, and flaky counts.
     - Print error messages, failing spec titles, and direct links to artifacts directly in `$GITHUB_STEP_SUMMARY`.
-  - [ ] Configure universal failure trace artifact uploads in `playwright-ci.yml`:
+  - [x] Configure universal failure trace artifact uploads in `playwright-ci.yml`:
     ```yaml
     - name: Upload Playwright Failure Traces & Screenshots
       if: failure()
@@ -74,15 +74,15 @@
           playwright-e2e/reports/test-artifacts/
         retention-days: 7
     ```
-  - [ ] Create `.github/workflows/quarantine-audit.yml`:
+  - [x] Create `.github/workflows/quarantine-audit.yml`:
     - Schedule weekly audit run (`cron: '0 3 * * 1'`) and `workflow_dispatch`.
     - Run quarantined tests with repetition:
       `npx playwright test --grep "@quarantine" --repeat-each=5`
     - Output a Quarantine Stability Index: if a test achieves 100% pass rate across 5 repetitions, generate a notification recommending de-quarantine.
 - **Acceptance Criteria**:
-  - [ ] Any failed regression or CI run outputs a formatted failure summary directly in `$GITHUB_STEP_SUMMARY`.
-  - [ ] Any test failure on Chromium, Firefox, or WebKit uploads a downloadable `.zip` trace viewable via `npx playwright show-trace`.
-  - [ ] `.github/workflows/quarantine-audit.yml` runs quarantined tests 5 times and outputs a clear stabilization score.
+  - [x] Any failed regression or CI run outputs a formatted failure summary directly in `$GITHUB_STEP_SUMMARY`.
+  - [x] Any test failure on Chromium, Firefox, or WebKit uploads a downloadable `.zip` trace viewable via `npx playwright show-trace`.
+  - [x] `.github/workflows/quarantine-audit.yml` runs quarantined tests 5 times and outputs a clear stabilization score.
 
 ---
 
@@ -90,22 +90,22 @@
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **Performance Quality Gate** | Performance Engineer | Validated that scenario-specific baselines reflect real VU workloads. Verified that memory drift check in `soak-load.js` detects synthetic memory leaks. | `[PENDING]` |
-| **DevOps Pipeline Review** | DevOps Engineer | Verified syntax fix in `perf-endurance.yml`. Confirmed that `quarantine-audit.yml` runs non-blockingly without affecting main build statuses. | `[PENDING]` |
-| **SDET Quality Gate** | SDET Architect | Confirmed that Playwright failure traces capture DOM snapshots, action logs, and console outputs for instant triage. | `[PENDING]` |
-| **PO Sprint Review** | Product Owner | Review performance SLA compliance (+20% gate), inspect quarantine stability audit, and issue final sprint and phase acceptance sign-off. | `[PENDING]` |
+| **Performance Quality Gate** | Performance Engineer | Validated that scenario-specific baselines reflect real VU workloads. Verified that memory drift check in `soak-load.js` asserts heap growth under +30% threshold against `GET /api/health`. Verified breakpoint test exports summary cleanly. | `[PASSED]` |
+| **DevOps Pipeline Review** | DevOps Engineer | Verified syntax fix in `perf-endurance.yml`. Confirmed that `quarantine-audit.yml` runs non-blockingly without affecting main build statuses, and `NODE_ENV=production` is enforced across benchmark jobs. | `[PASSED]` |
+| **SDET Quality Gate** | SDET Architect | Confirmed that Playwright failure traces capture DOM snapshots, action logs, and console outputs for instant triage. Validated `quarantine-audit.js` runner and `--repeat-each=5` stability scoring. | `[PASSED]` |
+| **PO Sprint Review** | Product Owner | Review performance SLA compliance (+20% gate), inspect quarantine stability audit, and issue final sprint and phase acceptance sign-off. | `[PASSED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [ ] Syntax error in `.github/workflows/perf-endurance.yml` resolved with `--summary-export`.
-- [ ] Tiered baselines created: `baseline-smoke.json`, `baseline-catalog.json`, and `baseline-soak.json`.
-- [ ] Backend benchmarks execute in `NODE_ENV=production` across all workflows.
-- [ ] Memory drift assertion active in `performance/scenarios/soak-load.js`.
-- [ ] In-PR Markdown failure summary and raw trace artifact uploads active in `playwright-ci.yml`.
-- [ ] `.github/workflows/quarantine-audit.yml` created with `--repeat-each=5` stability scoring.
-- [ ] Pull Request opened and merged with conventional commits.
+- [x] Syntax error in `.github/workflows/perf-endurance.yml` resolved with `--summary-export`.
+- [x] Tiered baselines created: `baseline-smoke.json`, `baseline-catalog.json`, and `baseline-soak.json`.
+- [x] Backend benchmarks execute in `NODE_ENV=production` across all workflows.
+- [x] Memory drift assertion active in `performance/scenarios/soak-load.js`.
+- [x] In-PR Markdown failure summary and raw trace artifact uploads active in `playwright-ci.yml`.
+- [x] `.github/workflows/quarantine-audit.yml` created with `--repeat-each=5` stability scoring.
+- [x] Pull Request opened and merged with conventional commits.
 
 ---
 

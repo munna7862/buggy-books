@@ -74,7 +74,7 @@ jobs:
           npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-endurance.log && exit 1)
         env:
           PORT: 4000
-          NODE_ENV: development
+          NODE_ENV: production
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Setup k6
@@ -83,7 +83,7 @@ jobs:
       - name: Run Endurance Soak Benchmark
         run: |
           k6 run --summary-export=perf-summary-soak.json performance/scenarios/soak-load.js
-          node performance/report-perf-summary.js perf-summary-soak.json "Endurance Soak Benchmark (${{ github.event.inputs.soak_vus || '25' }} VUs)" --baseline=performance/baselines/baseline-perf.json
+          node performance/report-perf-summary.js perf-summary-soak.json "Endurance Soak Benchmark (${{ github.event.inputs.soak_vus || '25' }} VUs)" --baseline=performance/baselines/baseline-soak.json
         env:
           SOAK_DURATION: ${{ github.event.inputs.soak_duration || '15m' }}
           SOAK_VUS: ${{ github.event.inputs.soak_vus || '25' }}
@@ -91,8 +91,8 @@ jobs:
 
       - name: Run Capacity Breakpoint Saturation Test
         run: |
-          k6 run performance/scenarios/breakpoint-test.js
-          node performance/report-perf-summary.js perf-summary-breakpoint.json "Breakpoint Capacity Saturation Test" --baseline=performance/baselines/baseline-perf.json
+          k6 run --summary-export=perf-summary-breakpoint.json performance/scenarios/breakpoint-test.js
+          node performance/report-perf-summary.js perf-summary-breakpoint.json "Breakpoint Capacity Saturation Test" --baseline=performance/baselines/baseline-catalog.json
         env:
           MAX_VUS: ${{ github.event.inputs.max_breakpoint_vus || '200' }}
           BASE_URL: http://127.0.0.1:4000

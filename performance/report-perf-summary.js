@@ -205,6 +205,41 @@ function generateMarkdown(summaryData, title, baselineData = null, isRegressionS
     }
   }
 
+  // Memory Telemetry Table
+  const heapUsedMetric = metrics['node_heap_used_mb'];
+  const rssMetric = metrics['node_rss_mb'];
+  const driftMetric = metrics['node_heap_drift_percent'];
+  const leakMetric = metrics['memory_leak_detected'];
+
+  if (heapUsedMetric || rssMetric || driftMetric || leakMetric) {
+    md += `\n#### 🧠 Node.js Runtime Memory & Drift Telemetry\n\n`;
+    md += `| Telemetry Metric | Measured Value | Threshold / SLA | Status |\n`;
+    md += `| :--- | :---: | :---: | :---: |\n`;
+    if (heapUsedMetric) {
+      const heapAvg = getMetricValue(heapUsedMetric, 'avg');
+      const heapMax = getMetricValue(heapUsedMetric, 'max');
+      md += `| **Heap Used (Avg / Max)** | \`${formatNumber(heapAvg, 2)} MB / ${formatNumber(heapMax, 2)} MB\` | — | ℹ️ |\n`;
+    }
+    if (rssMetric) {
+      const rssAvg = getMetricValue(rssMetric, 'avg');
+      const rssMax = getMetricValue(rssMetric, 'max');
+      md += `| **Process RSS (Avg / Max)** | \`${formatNumber(rssAvg, 2)} MB / ${formatNumber(rssMax, 2)} MB\` | — | ℹ️ |\n`;
+    }
+    if (driftMetric) {
+      const driftVal = getMetricValue(driftMetric, 'value') !== undefined ? getMetricValue(driftMetric, 'value') : (getMetricValue(driftMetric, 'max') !== undefined ? getMetricValue(driftMetric, 'max') : getMetricValue(driftMetric, 'avg'));
+      const sign = driftVal > 0 ? '+' : '';
+      const driftStatus = (driftVal !== undefined && driftVal <= 30.0) ? '✅ PASS' : '🔴 LEAK DETECTED';
+      md += `| **Heap Used Drift** | \`${sign}${formatNumber(driftVal, 2)}%\` | \`≤ +30.00%\` | ${driftStatus} |\n`;
+    }
+    if (leakMetric) {
+      const leakRate = getMetricValue(leakMetric, 'rate') !== undefined ? getMetricValue(leakMetric, 'rate') : getMetricValue(leakMetric, 'value');
+      const isBreached = leakRate !== undefined && leakRate > 0;
+      const leakStatus = !isBreached ? '✅ NONE' : '🔴 BREACH';
+      md += `| **Memory Leak Tripwire** | \`${leakStatus}\` | \`0.00%\` | ${!isBreached ? '✅' : '❌'} |\n`;
+    }
+    md += `\n`;
+  }
+
   // Thresholds table
   if (thresholdRows.length > 0) {
     md += `\n#### Threshold Evaluations\n\n`;

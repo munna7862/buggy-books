@@ -7,6 +7,7 @@
     "test": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts",
     "test:smoke": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@smoke\" --grep-invert \"@quarantine\"",
     "test:quarantine": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@quarantine\" --grep-invert \"\"",
+    "test:quarantine:audit": "node scripts/quarantine-audit.js",
     "test:e2e:local": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@smoke\" --project=chromium",
     "test:e2e:chromium": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --project=chromium",
     "test:e2e:firefox": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --project=firefox",
