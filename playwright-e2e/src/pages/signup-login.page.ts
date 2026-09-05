@@ -49,6 +49,7 @@ export class SignUpPage extends BasePage {
   }
 
   public async clickSignUp() {
+    await this.ensureNavElementVisible(this.lblSignUpPage);
     await this.doClick(this.lblSignUpPage, "Clicking on Sign Up link");
   }
 

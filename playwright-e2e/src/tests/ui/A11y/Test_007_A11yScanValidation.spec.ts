@@ -97,10 +97,9 @@ test.describe('Accessibility (a11y) Scans Suite', () => {
         await enableA11yChaos(request);
       });
 
-      await test.step('Navigate to home, wait for a11y chaos state, then open login page', async () => {
-        await page.goto(envConfig.baseUrl);
+      await test.step('Navigate directly to login page and wait for a11y chaos state', async () => {
+        await page.goto(`${envConfig.baseUrl}/login`);
         await page.waitForSelector('body.a11y-violations-active', { timeout: 10000 });
-        await page.click("a[href*='/login'], a:has-text('Login')");
         await page.waitForSelector('.auth-card');
       });
 

@@ -107,6 +107,7 @@ jobs:
           node-version: "20"
           cache: "npm"
           cache-dependency-path: |
+            frontend/package-lock.json
             backend/package-lock.json
             playwright-e2e/package-lock.json
 
@@ -116,10 +117,21 @@ jobs:
           name: backend-dist
           path: backend/dist
 
+      - name: Download Frontend Dist Artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
       - name: Install Backend Production Dependencies
         run: |
           cd backend
           npm ci --omit=dev
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm ci
 
       - name: Install Playwright Dependencies
         working-directory: playwright-e2e
@@ -157,6 +169,12 @@ jobs:
           NODE_ENV: production
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
+      - name: Start Ephemeral Frontend Preview Server
+        run: |
+          cd frontend
+          nohup npx vite preview --port 5173 --host 0.0.0.0 > ../frontend-preview.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:5173 || (cat ../frontend-preview.log && exit 1)
+
       - name: Run API Automation Tests
         working-directory: playwright-e2e
         env:
@@ -190,7 +208,9 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: ephemeral-server-logs-api
-          path: backend-server.log
+          path: |
+            backend-server.log
+            frontend-preview.log
           retention-days: 7
 
       - name: Upload Blob Report
@@ -209,9 +229,11 @@ jobs:
           path: playwright-e2e/reports/allure-results
           retention-days: 7
 
-      - name: Stop Ephemeral Backend Server
+      - name: Stop Ephemeral Servers
         if: always()
-        run: pkill -f "node dist/server.js" || true
+        run: |
+          pkill -f "node dist/server.js" || true
+          pkill -f "vite preview" || true
 
   # STAGE 2B: Run UI Tests across Cross-Browser and Mobile Matrix
   ui-tests:
@@ -286,16 +308,16 @@ jobs:
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-${{ matrix.project }}-v2
+          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-${{ matrix.project }}-v3
 
       - name: Install Playwright Browsers & OS Dependencies (Cache Miss)
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         working-directory: playwright-e2e
         run: |
           if [ "${{ matrix.project }}" = "firefox" ]; then
-            npx playwright install --with-deps firefox
+            npx playwright install --with-deps chromium firefox
           elif [ "${{ matrix.project }}" = "webkit" ] || [ "${{ matrix.project }}" = "mobile-safari" ]; then
-            npx playwright install --with-deps webkit
+            npx playwright install --with-deps chromium webkit
           else
             npx playwright install --with-deps chromium
           fi
@@ -305,9 +327,9 @@ jobs:
         working-directory: playwright-e2e
         run: |
           if [ "${{ matrix.project }}" = "firefox" ]; then
-            npx playwright install-deps firefox
+            npx playwright install-deps chromium firefox
           elif [ "${{ matrix.project }}" = "webkit" ] || [ "${{ matrix.project }}" = "mobile-safari" ]; then
-            npx playwright install-deps webkit
+            npx playwright install-deps chromium webkit
           else
             npx playwright install-deps chromium
           fi
