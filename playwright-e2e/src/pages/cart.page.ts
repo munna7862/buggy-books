@@ -41,6 +41,7 @@ export class CartPage extends BasePage {
 
   // Actions and Interaction Methods
   public async clickCartLink(): Promise<void> {
+    await this.ensureNavElementVisible(this.cartLink);
     await this.doClick(this.cartLink, "Clicking on Cart link");
   }
 

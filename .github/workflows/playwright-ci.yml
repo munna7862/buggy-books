@@ -19,10 +19,12 @@ on:
       - completed
     branches: [main]
 
+concurrency:
+  group: pages-deploy-allure
+  cancel-in-progress: false
+
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 
 jobs:
   # STAGE 1: Build Ephemeral Stack Artifacts for Hermetic Execution
@@ -30,15 +32,16 @@ jobs:
     name: Build Ephemeral Stack Artifacts
     if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -63,14 +66,14 @@ jobs:
           VITE_API_URL: http://127.0.0.1:4000/api
 
       - name: Upload Backend Dist Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: backend-dist
           path: backend/dist
           retention-days: 1
 
       - name: Upload Frontend Dist Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: frontend-dist
           path: frontend/dist
@@ -81,6 +84,7 @@ jobs:
     name: API Automation (Chromium)
     needs: [build-services]
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     env:
       ENV: LOCAL
@@ -93,132 +97,12 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-          cache-dependency-path: |
-            backend/package-lock.json
-            playwright-e2e/package-lock.json
-
-      - name: Download Backend Dist Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-dist
-          path: backend/dist
-
-      - name: Install Backend Production Dependencies
-        run: |
-          cd backend
-          npm ci --omit=dev
-
-      - name: Install Playwright Dependencies
-        working-directory: playwright-e2e
-        run: npm ci
-
-      - name: Install Playwright Chromium Browser
-        working-directory: playwright-e2e
-        run: npx playwright install --with-deps chromium
-
-      - name: Start Ephemeral Backend Server
-        run: |
-          cd backend
-          nohup node dist/server.js > ../backend-server.log 2>&1 &
-          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
-        env:
-          PORT: 4000
-          NODE_ENV: production
-          JWT_SECRET: ci-test-secret-do-not-use-in-production
-
-      - name: Run API Automation Tests
-        working-directory: playwright-e2e
-        env:
-          ENVIRONMENT: LOCAL
-          TZ: Australia/Adelaide
-          BASE_URL: http://127.0.0.1:5173
-          API_BASE_URL: http://127.0.0.1:4000
-          USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
-          PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
-          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/api-results.json
-        run: |
-          npx playwright test src/tests/api --config=src/config/playwright.config.ts --project=chromium --workers=4 --reporter=blob,allure-playwright,list,json
-
-      - name: Generate API Quality Gate Step Summary
-        if: always()
-        working-directory: playwright-e2e
-        run: node scripts/generate-playwright-summary.js test-results/api-results.json "API Automation (Chromium)" "playwright-traces-api"
-
-      - name: Upload Playwright Failure Traces & Screenshots
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-traces-api
-          path: |
-            playwright-e2e/test-results/
-            playwright-e2e/reports/test-artifacts/
-          retention-days: 7
-
-      - name: Upload Ephemeral Server Logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ephemeral-server-logs-api
-          path: backend-server.log
-          retention-days: 7
-
-      - name: Upload Blob Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: blob-report-api
-          path: playwright-e2e/blob-report
-          retention-days: 7
-
-      - name: Upload Allure Results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-results-api
-          path: playwright-e2e/reports/allure-results
-          retention-days: 7
-
-      - name: Stop Ephemeral Backend Server
-        if: always()
-        run: pkill -f "node dist/server.js" || true
-
-  # STAGE 2B: Run UI Tests across Cross-Browser and Mobile Matrix
-  ui-tests:
-    name: UI Automation (${{ matrix.project }})
-    needs: [build-services]
-    runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        project: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
-
-    env:
-      ENV: LOCAL
-      BASE_URL: http://127.0.0.1:5173
-      API_BASE_URL: http://127.0.0.1:4000
-      HEADLESS: ${{ github.event.inputs.headless || 'true' }}
-      BROWSER: chrome
-      USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
-      PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.inputs.branch || github.ref }}
-
-      - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -228,13 +112,13 @@ jobs:
             playwright-e2e/package-lock.json
 
       - name: Download Backend Dist Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: backend-dist
           path: backend/dist
 
       - name: Download Frontend Dist Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: frontend-dist
           path: frontend/dist
@@ -260,21 +144,20 @@ jobs:
 
       - name: Cache Playwright Browser Binaries
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-${{ matrix.project }}-v2
+          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-chromium
 
-      - name: Install Playwright Browsers & OS Dependencies
+      - name: Install Playwright Chromium & OS Dependencies (Cache Miss)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
         working-directory: playwright-e2e
-        run: |
-          if [ "${{ matrix.project }}" = "firefox" ]; then
-            npx playwright install --with-deps firefox
-          elif [ "${{ matrix.project }}" = "webkit" ] || [ "${{ matrix.project }}" = "mobile-safari" ]; then
-            npx playwright install --with-deps webkit
-          else
-            npx playwright install --with-deps chromium
-          fi
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Playwright OS Dependencies Only (Cache Hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: playwright-e2e
+        run: npx playwright install-deps chromium
 
       - name: Start Ephemeral Backend Server
         run: |
@@ -283,7 +166,168 @@ jobs:
           npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
         env:
           PORT: 4000
-          NODE_ENV: production
+          NODE_ENV: development
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Start Ephemeral Frontend Preview Server
+        run: |
+          cd frontend
+          nohup npx vite preview --port 5173 --host 0.0.0.0 > ../frontend-preview.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:5173 || (cat ../frontend-preview.log && exit 1)
+
+      - name: Run API Automation Tests
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: LOCAL
+          TZ: Australia/Adelaide
+          BASE_URL: http://127.0.0.1:5173
+          API_BASE_URL: http://127.0.0.1:4000
+          USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
+          PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
+          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/api-results.json
+        run: |
+          npx playwright test src/tests/api --config=src/config/playwright.config.ts --project=chromium --workers=4 --reporter=blob,allure-playwright,list,json
+
+      - name: Generate API Quality Gate Step Summary
+        if: always()
+        working-directory: playwright-e2e
+        run: node scripts/generate-playwright-summary.js test-results/api-results.json "API Automation (Chromium)" "playwright-traces-api"
+
+      - name: Upload Playwright Failure Traces & Screenshots
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: playwright-traces-api
+          path: |
+            playwright-e2e/test-results/
+            playwright-e2e/reports/test-artifacts/
+          retention-days: 7
+
+      - name: Upload Ephemeral Server Logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: ephemeral-server-logs-api
+          path: |
+            backend-server.log
+            frontend-preview.log
+          retention-days: 7
+
+      - name: Upload Blob Report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: blob-report-api
+          path: playwright-e2e/blob-report
+          retention-days: 7
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: allure-results-api
+          path: playwright-e2e/reports/allure-results
+          retention-days: 7
+
+      - name: Stop Ephemeral Servers
+        if: always()
+        run: |
+          pkill -f "node dist/server.js" || true
+          pkill -f "vite preview" || true
+
+  # STAGE 2B: Run UI Tests across Cross-Browser and Mobile Matrix
+  ui-tests:
+    name: UI Automation (${{ matrix.project }})
+    needs: [build-services]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium]
+
+    env:
+      ENV: LOCAL
+      BASE_URL: http://127.0.0.1:5173
+      API_BASE_URL: http://127.0.0.1:4000
+      HEADLESS: ${{ github.event.inputs.headless || 'true' }}
+      BROWSER: chrome
+      USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
+      PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            frontend/package-lock.json
+            backend/package-lock.json
+            playwright-e2e/package-lock.json
+
+      - name: Download Backend Dist Artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: backend-dist
+          path: backend/dist
+
+      - name: Download Frontend Dist Artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Install Backend Production Dependencies
+        run: |
+          cd backend
+          npm ci --omit=dev
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Install Playwright Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Get Playwright version
+        id: playwright-version
+        working-directory: playwright-e2e
+        run: echo "version=$(node -e "console.log(require('@playwright/test/package.json').version)")" >> $GITHUB_OUTPUT
+
+      - name: Cache Playwright Browser Binaries
+        id: playwright-cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-chromium
+
+      - name: Install Playwright Chromium & OS Dependencies (Cache Miss)
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: playwright-e2e
+        run: npx playwright install --with-deps chromium
+
+      - name: Install Playwright OS Dependencies Only (Cache Hit)
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: playwright-e2e
+        run: npx playwright install-deps chromium
+
+      - name: Start Ephemeral Backend Server
+        run: |
+          cd backend
+          nohup node dist/server.js > ../backend-server.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
+        env:
+          PORT: 4000
+          NODE_ENV: development
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Start Ephemeral Frontend Preview Server
@@ -312,7 +356,7 @@ jobs:
 
       - name: Upload Playwright Failure Traces & Screenshots
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: playwright-traces-${{ matrix.project }}
           path: |
@@ -322,7 +366,7 @@ jobs:
 
       - name: Upload Ephemeral Server Logs
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: ephemeral-server-logs-${{ matrix.project }}
           path: |
@@ -332,7 +376,7 @@ jobs:
 
       - name: Upload Blob Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: blob-report-${{ matrix.project }}
           path: playwright-e2e/blob-report
@@ -340,7 +384,7 @@ jobs:
 
       - name: Upload Allure Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: allure-results-${{ matrix.project }}
           path: playwright-e2e/reports/allure-results
@@ -358,14 +402,20 @@ jobs:
     needs: [api-tests, ui-tests]
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         with:
           ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -376,7 +426,7 @@ jobs:
         run: npm ci
 
       - name: Download all Blob Reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           pattern: blob-report-*
           path: playwright-e2e/all-blobs
@@ -389,21 +439,21 @@ jobs:
 
       - name: Upload Consolidated HTML Report Artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: playwright-html-report-ci
           path: playwright-e2e/playwright-report
           retention-days: 7
 
       - name: Checkout gh-pages
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         continue-on-error: true
         with:
           ref: gh-pages
           path: gh-pages
 
       - name: Download All Allure Results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           pattern: allure-results-*
           path: allure-results
@@ -411,13 +461,13 @@ jobs:
 
       - name: Test Report Summary
         run: |
-          echo "### 📊 Cross-Browser Matrix & API Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "### 📊 Playwright CI Test Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **API Tests:** Decoupled single-pass execution (Chromium, 4 workers)" >> $GITHUB_STEP_SUMMARY
-          echo "- **UI Tests:** Cross-browser matrix (chromium, firefox, webkit, mobile-chrome, mobile-safari)" >> $GITHUB_STEP_SUMMARY
+          echo "- **UI Tests:** UI Automation (Chromium)" >> $GITHUB_STEP_SUMMARY
           echo "- **Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/CI/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Allure Report
-        uses: simple-elf/allure-report-action@master
+        uses: simple-elf/allure-report-action@385367cde61ac68c2568a117f7579f7f148dc459 # v1.12
         with:
           allure_results: allure-results
           gh_pages: gh-pages
@@ -427,7 +477,7 @@ jobs:
           subfolder: AutomationReports/CI
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages

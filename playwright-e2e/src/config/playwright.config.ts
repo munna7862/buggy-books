@@ -38,7 +38,7 @@ export default defineConfig({
     }]
   ],
 
-  webServer: [
+  webServer: (envConfig.baseUrl.includes('127.0.0.1') || envConfig.baseUrl.includes('localhost')) ? [
     {
       command: 'node dist/server.js',
       cwd: backendDir,
@@ -62,7 +62,7 @@ export default defineConfig({
       stdout: 'pipe',
       stderr: 'pipe'
     }
-  ],
+  ] : undefined,
 
   use: {
     baseURL: envConfig.baseUrl,

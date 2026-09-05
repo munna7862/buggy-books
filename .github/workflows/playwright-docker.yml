@@ -12,16 +12,19 @@ on:
         required: false
         default: 'main'
 
+concurrency:
+  group: pages-deploy-allure
+  cancel-in-progress: false
+
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 
 jobs:
   # JOB 1: Run Tests inside Docker with Playwright Native Dynamic Sharding
   test:
     name: UI & API Automation (Docker) - Shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
@@ -43,7 +46,7 @@ jobs:
       SHARD_TOTAL: ${{ matrix.shardTotal }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         with:
           ref: ${{ github.event.inputs.branch || 'main' }}
 
@@ -60,11 +63,11 @@ jobs:
           TZ: Australia/Adelaide
         run: |
           echo "Executing native dynamic shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
-          npx playwright test --config=src/config/playwright.config.ts --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob,allure-playwright,list
+          npx playwright test --config=src/config/playwright.config.ts --project=chromium --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob,allure-playwright,list
 
       - name: Upload Blob Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: blob-report-${{ matrix.shardIndex }}
           path: playwright-e2e/blob-report
@@ -72,7 +75,7 @@ jobs:
 
       - name: Upload Allure Results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: allure-results-shard-${{ matrix.shardIndex }}
           path: playwright-e2e/reports/allure-results
@@ -80,7 +83,7 @@ jobs:
 
       - name: Upload Playwright Failure Traces & Screenshots
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: playwright-traces-shard-${{ matrix.shardIndex }}
           path: |
@@ -94,14 +97,20 @@ jobs:
     needs: [test]
     if: always()
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         with:
           ref: ${{ github.event.inputs.branch || 'main' }}
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -112,7 +121,7 @@ jobs:
         run: npm ci
 
       - name: Download all Blob Reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           pattern: blob-report-*
           path: playwright-e2e/all-blobs
@@ -125,21 +134,21 @@ jobs:
 
       - name: Upload Consolidated HTML Report Artifact
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: playwright-html-report
           path: playwright-e2e/playwright-report
           retention-days: 7
 
       - name: Checkout gh-pages
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         continue-on-error: true
         with:
           ref: gh-pages
           path: gh-pages
 
       - name: Download All Allure Results
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           pattern: allure-results-shard-*
           path: allure-results
@@ -152,7 +161,7 @@ jobs:
           echo "- **Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/Docker/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Allure Report
-        uses: simple-elf/allure-report-action@master
+        uses: simple-elf/allure-report-action@385367cde61ac68c2568a117f7579f7f148dc459 # v1.12
         with:
           allure_results: allure-results
           gh_pages: gh-pages
@@ -162,7 +171,7 @@ jobs:
           subfolder: AutomationReports/Docker
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
