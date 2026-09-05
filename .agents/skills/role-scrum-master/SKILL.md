@@ -49,6 +49,22 @@ Once all User Stories are implemented, DoD checklist items are checked `[x]`, an
    gh pr create --title "<type>(<scope>): <Sprint Title> (#US-...)" --body "<structured summary & verification>" --head <branch-name> --base main
    ```
 6. Report the created PR URL and sprint sign-off summary to the user.
+7. **Mandatory CI Workflow Verification & Safe PR Merging**:
+   - Immediately after opening the PR, monitor the CI workflow execution:
+     ```bash
+     gh pr checks <pr-number> --watch
+     ```
+   - **Zero-Tolerance Quality Gate**: If ANY CI workflow or check fails:
+     1. DO NOT merge the Pull Request.
+     2. Inspect failing job logs using `gh run view <run-id> --log-failed`.
+     3. Implement the necessary fixes on the feature branch.
+     4. Commit with conventional commits and push to remote (`git push origin <branch-name>`).
+     5. Re-monitor CI checks until all jobs pass cleanly with `success`.
+   - **Automated PR Merge**: Once and ONLY ONCE all CI workflows are 100% green (`conclusion: success`), merge the Pull Request into `main`:
+     ```bash
+     gh pr merge <pr-number> --squash --delete-branch --admin
+     ```
+   - Pull latest `origin/main` locally to maintain synchronization (`git checkout main && git pull origin main`).
 
 ---
 
