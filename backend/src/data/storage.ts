@@ -148,7 +148,7 @@ class Storage {
     return {
       users: this.data.users ? JSON.parse(JSON.stringify(this.data.users)) : null,
       dataStore: this.data.dataStore ? JSON.parse(JSON.stringify(this.data.dataStore)) : null,
-      chaosStore: null,
+      chaosStore: this.data.chaosStore ? JSON.parse(JSON.stringify(this.data.chaosStore)) : null,
     };
   }
 

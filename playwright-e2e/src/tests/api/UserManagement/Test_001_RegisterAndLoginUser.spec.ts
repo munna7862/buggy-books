@@ -1,13 +1,11 @@
 import { test, expect } from '../../../core/base/base.fixture';
-import { AxiosResponse } from 'axios';
+import type { APIRequestContext } from '@playwright/test';
 import { envConfig } from '../../../config/env.config';
-import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
 import testData from '../../../test-data/api/UserManagement/Test_001_RegisterAndLoginUser.json';
+import { randomBytes } from 'crypto';
 
 const commonUtil = new CommonFunctions();
-const REGISTER_URL = `${envConfig.apiBaseUrl}/api/register`;
-const LOGIN_URL = `${envConfig.apiBaseUrl}/api/login`;
 
 type RegisterPayload = {
   username?: string;
@@ -19,8 +17,6 @@ type LoginPayload = {
   username?: string;
   password?: string;
 };
-
-import { randomBytes } from 'crypto';
 
 function uniqueUsername(prefix: string = 'johndoe'): string {
   return `${prefix}${Date.now()}${randomBytes(4).toString('hex')}@`;
@@ -80,31 +76,27 @@ function buildLoginSecurityPayload(template: any): LoginPayload {
   };
 }
 
-async function registerUser(payload: RegisterPayload, logMessage: string): Promise<AxiosResponse<any>> {
-  return apiUtil.makeRequest<AxiosResponse<any>>({
-    method: 'POST',
-    url: REGISTER_URL,
+async function registerUser(request: APIRequestContext, payload: RegisterPayload, logMessage: string) {
+  const response = await request.post('/api/register', {
     data: payload,
     headers: { 'Content-Type': 'application/json' },
-    logMessage,
-    responseType: 'full',
   });
+  const data = await response.json().catch(() => null);
+  return { status: response.status(), data };
 }
 
-async function loginUser(payload: LoginPayload, logMessage: string): Promise<AxiosResponse<any>> {
-  return apiUtil.makeRequest<AxiosResponse<any>>({
-    method: 'POST',
-    url: LOGIN_URL,
+async function loginUser(request: APIRequestContext, payload: LoginPayload, logMessage: string) {
+  const response = await request.post('/api/login', {
     data: payload,
     headers: { 'Content-Type': 'application/json' },
-    logMessage,
-    responseType: 'full',
   });
+  const data = await response.json().catch(() => null);
+  return { status: response.status(), data };
 }
 
-async function createRegisteredUser(overrides: RegisterPayload = {}): Promise<RegisterPayload> {
+async function createRegisteredUser(request: APIRequestContext, overrides: RegisterPayload = {}): Promise<RegisterPayload> {
   const payload = buildValidPayload(overrides);
-  const response = await registerUser(payload, 'Register test user setup');
+  const response = await registerUser(request, payload, 'Register test user setup');
 
   await commonUtil.compareTwoValues(response.status, 201, 'Registration setup status');
   expect(response.status).toBe(201);
@@ -161,9 +153,9 @@ async function validateSuccessfulLoginContract(responseData: any, expectedUserna
 }
 
 test.describe('Register User API - Positive, Negative, Contract and Security', () => {
-  test('Testcase 1: Positive and Contract: POST /api/register should register a user and allow login @smoke @regression', async () => {
+  test('Testcase 1: Positive and Contract: POST /api/register should register a user and allow login @smoke @regression', async ({ request }) => {
     const payload = buildValidPayload();
-    const response = await registerUser(payload, 'Register a new valid user');
+    const response = await registerUser(request, payload, 'Register a new valid user');
 
     await commonUtil.compareTwoValues(response.status, 201, 'Response status');
     expect(response.status).toBe(201);
@@ -171,6 +163,7 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
     await validateSuccessfulRegisterContract(response.data, payload.username as string);
 
     const loginResponse = await loginUser(
+      request,
       { username: payload.username, password: payload.password },
       'Login with newly registered user'
     );
@@ -189,8 +182,8 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
   }));
 
   for (const scenario of missingFieldScenarios) {
-    test(`Testcase 2: Negative: POST /api/register should reject ${scenario.description} @regression`, async () => {
-      const response = await registerUser(scenario.payload, `Register user with ${scenario.description}`);
+    test(`Testcase 2: Negative: POST /api/register should reject ${scenario.description} @regression`, async ({ request }) => {
+      const response = await registerUser(request, scenario.payload, `Register user with ${scenario.description}`);
 
       await validateStatusIn(response.status, testData.negativeRegisterStatus, `Status code for ${scenario.description}`);
       expect(response.data).toBeTruthy();
@@ -198,10 +191,10 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
     });
   }
 
-  test('Testcase 3: Negative: POST /api/register should reject duplicate usernames @smoke @regression', async () => {
+  test('Testcase 3: Negative: POST /api/register should reject duplicate usernames @smoke @regression', async ({ request }) => {
     const payload = buildValidPayload();
-    const firstResponse = await registerUser(payload, 'Register original user for duplicate validation');
-    const duplicateResponse = await registerUser(payload, 'Register duplicate username');
+    const firstResponse = await registerUser(request, payload, 'Register original user for duplicate validation');
+    const duplicateResponse = await registerUser(request, payload, 'Register duplicate username');
 
     await commonUtil.compareTwoValues(firstResponse.status, 201, 'Initial registration response status');
     await validateStatusIn(duplicateResponse.status, testData.duplicateRegisterStatus, 'Duplicate registration status');
@@ -209,16 +202,9 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
     validateNoSensitiveLeakage(duplicateResponse.data);
   });
 
-  test('Testcase 4: Negative: GET /api/register should not be allowed for user registration @regression', async () => {
-    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'GET',
-      url: REGISTER_URL,
-      headers: { 'Content-Type': 'application/json' },
-      logMessage: 'Attempt register endpoint with unsupported GET method',
-      responseType: 'full',
-    });
-
-    await validateStatusIn(response.status, testData.unsupportedMethodStatus, 'Unsupported method status');
+  test('Testcase 4: Negative: GET /api/register should not be allowed for user registration @regression', async ({ request }) => {
+    const response = await request.get('/api/register');
+    await validateStatusIn(response.status(), testData.unsupportedMethodStatus, 'Unsupported method status');
   });
 
   const securityPayloads = testData.registerSecurityScenarios.map((scenario) => ({
@@ -227,8 +213,8 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
   }));
 
   for (const scenario of securityPayloads) {
-    test(`Testcase 5: Security: POST /api/register should handle ${scenario.description} without server error or sensitive leakage @regression`, async () => {
-      const response = await registerUser(scenario.payload, `Security validation for ${scenario.description}`);
+    test(`Testcase 5: Security: POST /api/register should handle ${scenario.description} without server error or sensitive leakage @regression`, async ({ request }) => {
+      const response = await registerUser(request, scenario.payload, `Security validation for ${scenario.description}`);
 
       await commonUtil.compareTwoValues(response.status < 500, true, `Security status for ${scenario.description}`);
       expect(response.status).toBeLessThan(500);
@@ -236,29 +222,26 @@ test.describe('Register User API - Positive, Negative, Contract and Security', (
     });
   }
 
-  test('Testcase 6: Security: POST /api/register should reject unsupported content type @regression', async () => {
-    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: REGISTER_URL,
+  test('Testcase 6: Security: POST /api/register should reject unsupported content type @regression', async ({ request }) => {
+    const response = await request.post('/api/register', {
       data: JSON.stringify(buildValidPayload()),
       headers: { 'Content-Type': 'text/plain' },
-      logMessage: 'Register user with unsupported content type',
-      responseType: 'full',
     });
 
-    await validateStatusIn(response.status, testData.unsupportedContentTypeStatus, 'Unsupported content type status');
+    await validateStatusIn(response.status(), testData.unsupportedContentTypeStatus, 'Unsupported content type status');
   });
 });
 
 test.describe('Login API - Positive, Negative and Security', () => {
   let registeredUser: RegisterPayload;
 
-  test.beforeEach(async () => {
-    registeredUser = await createRegisteredUser();
+  test.beforeEach(async ({ request }) => {
+    registeredUser = await createRegisteredUser(request);
   });
 
-  test('Testcase 7: Positive and Contract: POST /api/login should login a registered user successfully @smoke @regression', async () => {
+  test('Testcase 7: Positive and Contract: POST /api/login should login a registered user successfully @smoke @regression', async ({ request }) => {
     const loginResponse = await loginUser(
+      request,
       { username: registeredUser.username, password: registeredUser.password },
       'Login registered user'
     );
@@ -268,8 +251,9 @@ test.describe('Login API - Positive, Negative and Security', () => {
     await validateSuccessfulLoginContract(loginResponse.data, registeredUser.username as string);
   });
 
-  test('Testcase 8: Negative: POST /api/login should reject incorrect password @regression', async () => {
+  test('Testcase 8: Negative: POST /api/login should reject incorrect password @regression', async ({ request }) => {
     const loginResponse = await loginUser(
+      request,
       { username: registeredUser.username, password: 'wrongPassword123@' },
       'Login with incorrect password'
     );
@@ -287,24 +271,17 @@ test.describe('Login API - Positive, Negative and Security', () => {
   }));
 
   for (const scenario of invalidLoginScenarios) {
-    test(`Testcase 9: Negative: POST /api/login should reject ${scenario.description} @regression`, async () => {
-      const response = await loginUser(scenario.payload, `Login with ${scenario.description}`);
+    test(`Testcase 9: Negative: POST /api/login should reject ${scenario.description} @regression`, async ({ request }) => {
+      const response = await loginUser(request, scenario.payload, `Login with ${scenario.description}`);
 
       await validateStatusIn(response.status, testData.invalidLoginStatus, `Status code for ${scenario.description}`);
       validateNoSensitiveLeakage(response.data);
     });
   }
 
-  test('Testcase 10: Negative: GET /api/login should not be allowed for login @regression', async () => {
-    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'GET',
-      url: LOGIN_URL,
-      headers: { 'Content-Type': 'application/json' },
-      logMessage: 'Attempt login endpoint with unsupported GET method',
-      responseType: 'full',
-    });
-
-    await validateStatusIn(response.status, testData.unsupportedMethodStatus, 'Unsupported login method status');
+  test('Testcase 10: Negative: GET /api/login should not be allowed for login @regression', async ({ request }) => {
+    const response = await request.get('/api/login');
+    await validateStatusIn(response.status(), testData.unsupportedMethodStatus, 'Unsupported login method status');
   });
 
   const loginSecurityScenarios = testData.loginSecurityScenarios.map((scenario) => ({
@@ -313,8 +290,8 @@ test.describe('Login API - Positive, Negative and Security', () => {
   }));
 
   for (const scenario of loginSecurityScenarios) {
-    test(`Testcase 11: Security: POST /api/login should handle ${scenario.description} without server error or sensitive leakage @regression`, async () => {
-      const response = await loginUser(scenario.payload, `Login security validation for ${scenario.description}`);
+    test(`Testcase 11: Security: POST /api/login should handle ${scenario.description} without server error or sensitive leakage @regression`, async ({ request }) => {
+      const response = await loginUser(request, scenario.payload, `Login security validation for ${scenario.description}`);
 
       await commonUtil.compareTwoValues(response.status < 500, true, `Security status for ${scenario.description}`);
       expect(response.status).toBeLessThan(500);
@@ -322,31 +299,28 @@ test.describe('Login API - Positive, Negative and Security', () => {
     });
   }
 
-  test('Testcase 12: Security: POST /api/login should reject unsupported content type @regression', async () => {
-    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: LOGIN_URL,
+  test('Testcase 12: Security: POST /api/login should reject unsupported content type @regression', async ({ request }) => {
+    const response = await request.post('/api/login', {
       data: JSON.stringify({ username: uniqueUsername('logincontent'), password: testData.defaultPassword }),
       headers: { 'Content-Type': 'text/plain' },
-      logMessage: 'Login with unsupported content type',
-      responseType: 'full',
     });
 
-    await validateStatusIn(response.status, testData.unsupportedContentTypeStatus, 'Unsupported login content type status');
+    await validateStatusIn(response.status(), testData.unsupportedContentTypeStatus, 'Unsupported login content type status');
   });
 
-  test('Testcase 13: Security: GET /api/cart without auth cookies should return 401 Unauthorized @smoke @regression', async () => {
-    const response = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'GET',
-      url: `${envConfig.apiBaseUrl}/api/cart`,
-      headers: {}, // No credentials/cookies
-      responseType: 'full',
-      logMessage: 'Request /api/cart without authentication'
+  test('Testcase 13: Security: GET /api/cart without auth cookies should return 401 Unauthorized @smoke @regression', async ({ playwright }) => {
+    const unauthContext = await playwright.request.newContext({
+      baseURL: envConfig.apiBaseUrl,
+      storageState: { cookies: [], origins: [] },
     });
+    const response = await unauthContext.get('/api/cart');
+    const status = response.status();
+    const data = await response.json().catch(() => ({}));
+    await unauthContext.dispose();
 
-    await commonUtil.compareTwoValues(response.status, 401, 'Response status code should be 401');
-    expect(response.status).toBe(401);
-    await commonUtil.compareTwoValues(response.data?.error, 'Unauthorized: Token required', 'Error message for missing token');
-    expect(response.data?.error).toBe('Unauthorized: Token required');
+    await commonUtil.compareTwoValues(status, 401, 'Response status code should be 401');
+    expect(status).toBe(401);
+    await commonUtil.compareTwoValues(data?.error, 'Unauthorized: Token required', 'Error message for missing token');
+    expect(data?.error).toBe('Unauthorized: Token required');
   });
 });

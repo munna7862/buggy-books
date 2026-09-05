@@ -1,19 +1,9 @@
 import { test, expect } from '../../../core/base/base.fixture';
-import { AxiosResponse } from 'axios';
-import { envConfig } from '../../../config/env.config';
-import apiUtil from '../../../utils/api.util';
 import { CommonFunctions } from '../../../utils/common.util';
 import TestData from '../../../test-data/api/Logging/Test_001_LoggingAndCorrelationApi.json';
+import { randomBytes } from 'crypto';
 
 const commonUtil = new CommonFunctions();
-const BOOKS_URL = `${envConfig.apiBaseUrl}/api/books`;
-const REGISTER_URL = `${envConfig.apiBaseUrl}/api/register`;
-const LOGIN_URL = `${envConfig.apiBaseUrl}/api/login`;
-const CART_URL = `${envConfig.apiBaseUrl}/api/cart`;
-const CHECKOUT_URL = `${envConfig.apiBaseUrl}/api/checkout/process`;
-const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
-
-import { randomBytes } from 'crypto';
 
 function uniqueUsername(prefix: string = 'loguser'): string {
   return `${prefix}_${Date.now()}_${randomBytes(4).toString('hex')}`;
@@ -21,20 +11,15 @@ function uniqueUsername(prefix: string = 'loguser'): string {
 
 test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
 
-  test('API_LOG_01: Correlation ID Header Generation @smoke @regression', async () => {
+  test('API_LOG_01: Correlation ID Header Generation @smoke @regression', async ({ request }) => {
     let hasCorrelationIdHeader = false;
     let isValidUuid = false;
 
-    const res = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'GET',
-      url: BOOKS_URL,
-      logMessage: 'GET /api/books to check correlation ID generation',
-      responseType: 'full'
-    });
+    const res = await request.get('/api/books');
 
-    expect(res.status).toBe(200);
+    expect(res.status()).toBe(200);
 
-    const correlationId = res.headers['x-correlation-id'];
+    const correlationId = res.headers()['x-correlation-id'];
     hasCorrelationIdHeader = await commonUtil.compareTwoValues(Boolean(correlationId), true, "Verifying x-correlation-id header is present in response");
 
     const uuidRegex = new RegExp(TestData.UUIDV4_REGEX, 'i');
@@ -43,49 +28,42 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     expect(hasCorrelationIdHeader && isValidUuid).toBeTruthy();
   });
 
-  test('API_LOG_02: Correlation ID Header Preservation @regression', async () => {
+  test('API_LOG_02: Correlation ID Header Preservation @regression', async ({ request }) => {
     let isCorrelationIdPreserved = false;
     const customCorrelationId = TestData.CUSTOM_CORRELATION_ID;
 
-    const res = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'GET',
-      url: BOOKS_URL,
-      headers: { 'x-correlation-id': customCorrelationId },
-      logMessage: 'GET /api/books with custom x-correlation-id header',
-      responseType: 'full'
+    const res = await request.get('/api/books', {
+      headers: { 'x-correlation-id': customCorrelationId }
     });
 
-    expect(res.status).toBe(200);
+    expect(res.status()).toBe(200);
 
-    const returnedCorrelationId = res.headers['x-correlation-id'];
+    const returnedCorrelationId = res.headers()['x-correlation-id'];
     isCorrelationIdPreserved = await commonUtil.compareTwoValues(returnedCorrelationId, customCorrelationId, "Verifying API preserves custom x-correlation-id header");
 
     expect(isCorrelationIdPreserved).toBeTruthy();
   });
 
-  test('API_LOG_03: Error Body Correlation ID Mapping @regression', async () => {
+  test('API_LOG_03: Error Body Correlation ID Mapping @regression', async ({ request }) => {
     let isErrorStatus400 = false;
     let isBodyCorrelationIdMatching = false;
     const customCorrelationId = TestData.CUSTOM_CORRELATION_ID + '_err';
 
-    const res = await apiUtil.makeRequest<AxiosResponse<{ correlationId?: string }>>({
-      method: 'POST',
-      url: CONFIG_URL,
+    const res = await request.post('/api/test/config', {
       data: { visualChaos: "invalid_string_type" },
-      headers: { 'x-correlation-id': customCorrelationId },
-      logMessage: 'Trigger 400 validation error with custom x-correlation-id',
-      responseType: 'full'
+      headers: { 'x-correlation-id': customCorrelationId }
     });
 
-    isErrorStatus400 = await commonUtil.compareTwoValues(res.status, 400, "Verifying status code is 400 Bad Request");
+    isErrorStatus400 = await commonUtil.compareTwoValues(res.status(), 400, "Verifying status code is 400 Bad Request");
 
-    const bodyCorrelationId = res.data?.correlationId;
+    const body = await res.json() as { correlationId?: string };
+    const bodyCorrelationId = body?.correlationId;
     isBodyCorrelationIdMatching = await commonUtil.compareTwoValues(bodyCorrelationId, customCorrelationId, "Verifying error response body contains exact same correlationId");
 
     expect(isErrorStatus400 && isBodyCorrelationIdMatching).toBeTruthy();
   });
 
-  test('API_LOG_04: User Context Log Association @regression', async () => {
+  test('API_LOG_04: User Context Log Association @regression', async ({ request }) => {
     const username = uniqueUsername('user_log');
     const password = TestData.PASSWORD;
     const fullName = TestData.FULL_NAME;
@@ -97,50 +75,31 @@ test.describe('Structured JSON Logging & Correlation ID API Suite', () => {
     let isCheckoutOk = false;
     let isCorrelationPreserved = false;
 
-    const registerRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: REGISTER_URL,
+    const registerRes = await request.post('/api/register', {
       data: { username, password, fullName },
-      headers: { 'x-correlation-id': customCorrelationId },
-      logMessage: 'Register user with custom correlation ID',
-      responseType: 'full'
+      headers: { 'x-correlation-id': customCorrelationId }
     });
-    isRegisterOk = await commonUtil.compareTwoValues(registerRes.status, 201, "Verifying user registration status is 201");
+    isRegisterOk = await commonUtil.compareTwoValues(registerRes.status(), 201, "Verifying user registration status is 201");
 
-    const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: LOGIN_URL,
+    const loginRes = await request.post('/api/login', {
       data: { username, password },
-      headers: { 'x-correlation-id': customCorrelationId },
-      logMessage: 'Login user with custom correlation ID',
-      responseType: 'full'
+      headers: { 'x-correlation-id': customCorrelationId }
     });
-    isLoginOk = await commonUtil.compareTwoValues(loginRes.status, 200, "Verifying user login status is 200");
+    isLoginOk = await commonUtil.compareTwoValues(loginRes.status(), 200, "Verifying user login status is 200");
 
-    const setCookieHeader: string[] = loginRes.headers['set-cookie'] || [];
-    const cookieHeader = setCookieHeader.map(c => c.split(';')[0]).join('; ');
-
-    const cartRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: CART_URL,
+    const cartRes = await request.post('/api/cart', {
       data: { bookId: '1' },
-      headers: { 'Cookie': cookieHeader, 'x-correlation-id': customCorrelationId },
-      logMessage: 'Add book 1 to cart with custom correlation ID',
-      responseType: 'full'
+      headers: { 'x-correlation-id': customCorrelationId }
     });
-    isCartOk = await commonUtil.compareTwoValues(cartRes.status, 200, "Verifying add to cart status is 200");
+    isCartOk = await commonUtil.compareTwoValues(cartRes.status(), 200, "Verifying add to cart status is 200");
 
-    const checkoutRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: CHECKOUT_URL,
+    const checkoutRes = await request.post('/api/checkout/process', {
       data: { firstName: 'LogUser', lastName: 'Test', creditCard: '4111222233334444' },
-      headers: { 'Cookie': cookieHeader, 'x-correlation-id': customCorrelationId },
-      logMessage: 'Process checkout with custom correlation ID',
-      responseType: 'full'
+      headers: { 'x-correlation-id': customCorrelationId }
     });
-    isCheckoutOk = await commonUtil.compareTwoValues(checkoutRes.status, 200, "Verifying process checkout status is 200");
+    isCheckoutOk = await commonUtil.compareTwoValues(checkoutRes.status(), 200, "Verifying process checkout status is 200");
 
-    const returnedCorrelationId = checkoutRes.headers['x-correlation-id'];
+    const returnedCorrelationId = checkoutRes.headers()['x-correlation-id'];
     isCorrelationPreserved = await commonUtil.compareTwoValues(returnedCorrelationId, customCorrelationId, "Verifying correlation ID preserved in checkout response");
 
     expect(isRegisterOk && isLoginOk && isCartOk && isCheckoutOk && isCorrelationPreserved).toBeTruthy();

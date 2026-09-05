@@ -5,10 +5,11 @@ import * as path from 'path';
 const rootDir = path.resolve(__dirname, '../../..');
 const backendDir = path.resolve(rootDir, 'backend');
 const frontendDir = path.resolve(rootDir, 'frontend');
+const authFile = path.resolve(__dirname, '../../.auth/user.json');
 
 export default defineConfig({
   testDir: path.resolve(__dirname, '../tests'),
-  testMatch: ['**/*.spec.ts'],
+  testMatch: ['**/*.spec.ts', '**/*.setup.ts'],
   fullyParallel: true,
   timeout: 300 * 1000,
   retries: 1,
@@ -67,36 +68,55 @@ export default defineConfig({
 
   projects: [
     {
+      name: 'setup',
+      testMatch: /.*auth\.setup\.ts/,
+    },
+    {
       name: 'chromium',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1280, height: 720 },
+        storageState: authFile,
       },
     },
     {
       name: 'firefox',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['Desktop Firefox'],
         viewport: { width: 1280, height: 720 },
+        storageState: authFile,
       },
     },
     {
       name: 'webkit',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['Desktop Safari'],
         viewport: { width: 1280, height: 720 },
+        storageState: authFile,
       },
     },
     {
       name: 'mobile-chrome',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['Pixel 5'],
+        storageState: authFile,
       },
     },
     {
       name: 'mobile-safari',
+      dependencies: ['setup'],
+      testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['iPhone 13'],
+        storageState: authFile,
       },
     },
   ],

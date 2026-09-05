@@ -1,18 +1,8 @@
 import { test, expect } from '../../../core/base/base.fixture';
-import { AxiosResponse } from 'axios';
-import { envConfig } from '../../../config/env.config';
 import { CommonFunctions } from '../../../utils/common.util';
+import { randomBytes } from 'crypto';
 
 const commonUtil = new CommonFunctions();
-const REGISTER_URL = `${envConfig.apiBaseUrl}/api/register`;
-const LOGIN_URL = `${envConfig.apiBaseUrl}/api/login`;
-const CART_URL = `${envConfig.apiBaseUrl}/api/cart`;
-const CHECKOUT_URL = `${envConfig.apiBaseUrl}/api/checkout/process`;
-const INVENTORY_URL = `${envConfig.apiBaseUrl}/api/inventory/report`;
-const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
-const RESET_URL = `${envConfig.apiBaseUrl}/api/test/reset`;
-
-import { randomBytes } from 'crypto';
 
 function uniqueUsername(prefix: string = 'chaosuser'): string {
   return `${prefix}${Date.now()}${randomBytes(4).toString('hex')}@`;
@@ -20,197 +10,113 @@ function uniqueUsername(prefix: string = 'chaosuser'): string {
 
 test.describe('Chaos and Testing Utilities API', () => {
 
-  test.beforeEach(async ({ apiUtil }) => {
+  test.beforeEach(async ({ request }) => {
     // Clean up state before each test in the isolated session
-    const resetRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: RESET_URL,
-      logMessage: 'Reset state before test',
-      responseType: 'full'
-    });
-    expect(resetRes.status).toBe(200);
+    const resetRes = await request.post('/api/test/reset');
+    expect(resetRes.status()).toBe(200);
   });
 
-  test('API_TEST_01: Global reset clears all non-default users and carts @smoke @regression', async ({ apiUtil }) => {
+  test('API_TEST_01: Global reset clears all non-default users and carts @smoke @regression', async ({ request }) => {
     const username = uniqueUsername();
     const password = 'Password123!';
     const fullName = 'Chaos Test User';
 
     // 1. Register a new user
-    const registerRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: REGISTER_URL,
-      data: { username, password, fullName },
-      logMessage: 'Register user for reset test',
-      responseType: 'full'
+    const registerRes = await request.post('/api/register', {
+      data: { username, password, fullName }
     });
-    expect(registerRes.status).toBe(201);
+    expect(registerRes.status()).toBe(201);
 
     // 2. Login to get cookies
-    const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: LOGIN_URL,
-      data: { username, password },
-      logMessage: 'Login user for reset test',
-      responseType: 'full'
+    const loginRes = await request.post('/api/login', {
+      data: { username, password }
     });
-    expect(loginRes.status).toBe(200);
-
-    const setCookieHeader = loginRes.headers['set-cookie'];
-    let cookieHeader = '';
-    if (setCookieHeader) {
-      cookieHeader = setCookieHeader.map(cookie => cookie.split(';')[0]).join('; ');
-    }
+    expect(loginRes.status()).toBe(200);
 
     // 3. Add book 3 to cart
-    const addRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: CART_URL,
-      data: { bookId: '3' },
-      headers: { 'Cookie': cookieHeader },
-      logMessage: 'Add book 3 to cart',
-      responseType: 'full'
+    const addRes = await request.post('/api/cart', {
+      data: { bookId: '3' }
     });
-    expect(addRes.status).toBe(200);
+    expect(addRes.status()).toBe(200);
 
-    // 4. Perform Global Reset
-    const resetRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: RESET_URL,
-      logMessage: 'Call Global Reset',
-      responseType: 'full'
-    });
-    expect(resetRes.status).toBe(200);
+    // 4. Perform Session Reset
+    const resetRes = await request.post('/api/test/reset');
+    expect(resetRes.status()).toBe(200);
 
     // 5. Verify the registered user is cleared (Login should fail)
-    const loginPostReset = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: LOGIN_URL,
-      data: { username, password },
-      logMessage: 'Attempt login with deleted user',
-      responseType: 'full'
+    const loginPostReset = await request.post('/api/login', {
+      data: { username, password }
     });
-    expect(loginPostReset.status).toBe(401);
+    expect(loginPostReset.status()).toBe(401);
 
     // 6. Verify cart is cleared (Get Cart with default user should be empty)
     // Default user is testuser/buggybooks
-    const defaultLoginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: LOGIN_URL,
-      data: { username: 'testuser', password: 'buggybooks' },
-      logMessage: 'Login default testuser',
-      responseType: 'full'
+    const defaultLoginRes = await request.post('/api/login', {
+      data: { username: 'testuser', password: 'buggybooks' }
     });
-    expect(defaultLoginRes.status).toBe(200);
+    expect(defaultLoginRes.status()).toBe(200);
 
-    const defaultSetCookie = defaultLoginRes.headers['set-cookie'];
-    let defaultCookieHeader = '';
-    if (defaultSetCookie) {
-      defaultCookieHeader = defaultSetCookie.map(cookie => cookie.split(';')[0]).join('; ');
-    }
-
-    const getCartRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'GET',
-      url: CART_URL,
-      headers: { 'Cookie': defaultCookieHeader },
-      logMessage: 'Get default testuser cart post-reset',
-      responseType: 'full'
-    });
-    expect(getCartRes.status).toBe(200);
-    expect(getCartRes.data).toEqual([]);
+    const getCartRes = await request.get('/api/cart');
+    expect(getCartRes.status()).toBe(200);
+    const cartData = await getCartRes.json();
+    expect(cartData).toEqual([]);
   });
 
-  test('API_CHAOS_01: Inject checkout failures @smoke @regression @chaos', async ({ apiUtil }) => {
+  test('API_CHAOS_01: Inject checkout failures @smoke @regression @chaos', async ({ request }) => {
     const username = uniqueUsername();
     const password = 'Password123!';
     const fullName = 'Chaos Checkout User';
 
     // 1. Register & Login
-    const registerRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: REGISTER_URL,
-      data: { username, password, fullName },
-      logMessage: 'Register user for chaos checkout',
-      responseType: 'full'
+    const registerRes = await request.post('/api/register', {
+      data: { username, password, fullName }
     });
-    expect(registerRes.status).toBe(201);
+    expect(registerRes.status()).toBe(201);
 
-    const loginRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: LOGIN_URL,
-      data: { username, password },
-      logMessage: 'Login user for chaos checkout',
-      responseType: 'full'
+    const loginRes = await request.post('/api/login', {
+      data: { username, password }
     });
-    expect(loginRes.status).toBe(200);
-
-    const setCookieHeader = loginRes.headers['set-cookie'];
-    let cookieHeader = '';
-    if (setCookieHeader) {
-      cookieHeader = setCookieHeader.map(cookie => cookie.split(';')[0]).join('; ');
-    }
+    expect(loginRes.status()).toBe(200);
 
     // 2. Add book to cart
-    const addRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: CART_URL,
-      data: { bookId: '1' },
-      headers: { 'Cookie': cookieHeader },
-      logMessage: 'Add book to cart',
-      responseType: 'full'
+    const addRes = await request.post('/api/cart', {
+      data: { bookId: '1' }
     });
-    expect(addRes.status).toBe(200);
+    expect(addRes.status()).toBe(200);
 
     // 3. Set checkout failure rate to 1.0 (always fail)
-    const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: CONFIG_URL,
-      data: { checkoutFailureRate: 1.0 },
-      logMessage: 'Configure checkout failure rate to 1.0',
-      responseType: 'full'
+    const configRes = await request.post('/api/test/config', {
+      data: { checkoutFailureRate: 1.0 }
     });
-    expect(configRes.status).toBe(200);
+    expect(configRes.status()).toBe(200);
 
     // 4. Try checkout and verify it returns 500
-    const checkoutRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: CHECKOUT_URL,
+    const checkoutRes = await request.post('/api/checkout/process', {
       data: {
         firstName: 'John',
         lastName: 'Doe',
         creditCard: '1234567890123456'
-      },
-      headers: { 'Cookie': cookieHeader },
-      logMessage: 'Perform checkout under chaos injection',
-      responseType: 'full'
+      }
     });
-    expect(checkoutRes.status).toBe(500);
-    expect(checkoutRes.data.error).toContain('Internal Server Error: Payment Gateway Timeout');
+    expect(checkoutRes.status()).toBe(500);
+    const errData = await checkoutRes.json();
+    expect(errData.error).toContain('Internal Server Error: Payment Gateway Timeout');
   });
 
-  test('API_CHAOS_02: Inject API latency @smoke @regression @chaos', async ({ apiUtil }) => {
+  test('API_CHAOS_02: Inject API latency @smoke @regression @chaos', async ({ request }) => {
     // 1. Set inventory latency to 3000 ms
-    const configRes = await apiUtil.makeRequest<AxiosResponse<any>>({
-      method: 'POST',
-      url: CONFIG_URL,
-      data: { inventoryDelayMs: 3000 },
-      logMessage: 'Configure inventory report latency to 3000ms',
-      responseType: 'full'
+    const configRes = await request.post('/api/test/config', {
+      data: { inventoryDelayMs: 3000 }
     });
-    expect(configRes.status).toBe(200);
+    expect(configRes.status()).toBe(200);
 
     // 2. Query inventory report and measure latency
     const startTime = Date.now();
-    const response = await apiUtil.makeRequest<AxiosResponse<{ totalBooks: number; totalValue: number; timestamp: string }>>({
-      method: 'GET',
-      url: INVENTORY_URL,
-      logMessage: 'Get inventory report under latency injection',
-      responseType: 'full'
-    });
+    const response = await request.get('/api/inventory/report');
     const endTime = Date.now();
     const elapsedMs = endTime - startTime;
 
-    expect(response.status).toBe(200);
+    expect(response.status()).toBe(200);
     await commonUtil.logMessage('INFO', `Inventory report request took: ${elapsedMs} ms`);
     
     // We expect at least 3000ms delay, allowing a 100ms grace threshold

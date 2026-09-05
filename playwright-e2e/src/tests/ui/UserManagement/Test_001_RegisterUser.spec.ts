@@ -3,6 +3,8 @@ import { test } from '../../../core/base/base.fixture';
 import { envConfig } from '../../../config/env.config';
 import TestData from '../../../test-data/ui/UserManagement/Test_001_RegisterUser.json';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Register New User', () => {
   let username: string, fullName: string;
   test('Testcase 1: Register New User @smoke @regression', async ({ signUpPage, commonFunctions, page, networkInterceptor }) => {

@@ -37,3 +37,8 @@ test-results.json
 # Performance test summaries
 perf-summary*.json
 performance/k6-summary*.md
+
+# Playwright auth state & reports
+.auth/
+**/playwright-report/
+**/test-results/

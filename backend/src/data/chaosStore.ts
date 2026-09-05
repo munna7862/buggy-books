@@ -15,25 +15,32 @@ class ChaosStore {
     inventoryLockingRate: 0.0
   };
 
-  public getConfig(): ChaosConfig {
-    const saved = storage.get('chaosStore');
+  public getConfig(sessionId?: string): ChaosConfig {
+    const saved = storage.get('chaosStore', sessionId);
     if (saved) return { ...this.defaultConfig, ...saved };
+    
+    // If a session has no custom chaos yet, check global config fallback
+    if (sessionId) {
+      const globalSaved = storage.get('chaosStore');
+      if (globalSaved) return { ...this.defaultConfig, ...globalSaved };
+    }
+
     const initial = { ...this.defaultConfig };
-    storage.set('chaosStore', initial);
+    storage.set('chaosStore', initial, sessionId);
     return initial;
   }
 
-  public updateConfig(newConfig: Partial<ChaosConfig>): void {
-    const current = this.getConfig();
+  public updateConfig(newConfig: Partial<ChaosConfig>, sessionId?: string): void {
+    const current = this.getConfig(sessionId);
     const updated = {
       ...current,
       ...newConfig
     };
-    storage.set('chaosStore', updated);
+    storage.set('chaosStore', updated, sessionId);
   }
 
-  public resetConfig(): void {
-    storage.set('chaosStore', { ...this.defaultConfig });
+  public resetConfig(sessionId?: string): void {
+    storage.set('chaosStore', { ...this.defaultConfig }, sessionId);
   }
 }
 

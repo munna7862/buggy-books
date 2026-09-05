@@ -4,6 +4,8 @@ import { envConfig, getLoginCredentials } from '../../../config/env.config';
 import { CatalogPage } from '../../../pages/catalog.page';
 import { AuthUtility } from '../../../utils/auth.util';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe.serial('Login With Existing User', () => {
 
   test('Testcase 1: Login With Existing User @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, context, networkInterceptor }) => {
