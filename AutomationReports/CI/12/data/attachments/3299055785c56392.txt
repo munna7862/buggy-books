@@ -1,0 +1,14 @@
+[2026-09-05 19:47:49] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788603469304-a9tf
+[2026-09-05 19:47:49] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/books?page=9999&limit=10
+[2026-09-05 19:47:49] INFO: ✅ Get paged books list for Exceeding total pages Success! Status: 200 OK
+[2026-09-05 19:47:49] INFO: 📥 Response Payload: {
+  "books": [],
+  "total": 15,
+  "page": 9999,
+  "totalPages": 2,
+  "limit": 10
+}
+[2026-09-05 19:47:49] INFO:  Status code should be 200 for Exceeding total pages Success !! Actual and Expected Values are:: 200
+[2026-09-05 19:47:49] INFO:  Response page should be 9999 for Exceeding total pages Success !! Actual and Expected Values are:: 9999
+[2026-09-05 19:47:49] INFO:  Books array should be empty for out-of-bounds page 9999 Success !! Actual and Expected Values are:: 0
+[2026-09-05 19:47:49] INFO: Cleaned up ephemeral test session: pw-w1-1-1788603469304-a9tf

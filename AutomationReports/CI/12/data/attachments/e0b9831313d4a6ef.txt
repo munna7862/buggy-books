@@ -1,0 +1,25 @@
+[2026-09-05 19:49:04] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-1-1788603544716-48fx
+[2026-09-05 19:49:04] INFO: Network interception enabled with mode: api-only
+[2026-09-05 19:49:05] INFO: Clicking on Sign Up link
+[2026-09-05 19:49:05] INFO: Entering full name: autoTestUser1ES1L
+[2026-09-05 19:49:05] INFO: Entering username: autoTestUserRuYA9
+[2026-09-05 19:49:05] INFO: Entering password: AutoTest@123
+[2026-09-05 19:49:05] INFO: Entering confirming password: AutoTest@123
+[2026-09-05 19:49:05] INFO: Clicking on Create Account button
+[2026-09-05 19:49:06] INFO: Verifying landing on Checkout Page
+[2026-09-05 19:49:06] INFO: Checking if Checkout label is visible
+[2026-09-05 19:49:07] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 19:49:07] INFO: Clicking on Logout button
+[2026-09-05 19:49:07] INFO: Clicking on Login link
+[2026-09-05 19:49:07] INFO: Entering username: autoTestUserRuYA9
+[2026-09-05 19:49:07] INFO: Entering password: AutoTest@123
+[2026-09-05 19:49:08] INFO: Clicking on Sign In button
+[2026-09-05 19:49:08] INFO: Verifying landing on Checkout Page
+[2026-09-05 19:49:08] INFO: Checking if Checkout label is visible
+[2026-09-05 19:49:09] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 19:49:09] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 19:49:09] INFO: Clicking on Logout button
+[2026-09-05 19:49:09] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-05 19:49:09] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 19:49:09] INFO: Captured 15 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-59107-and-Logout-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 19:49:09] INFO: Cleaned up ephemeral test session: pw-w7-1-1788603544716-48fx

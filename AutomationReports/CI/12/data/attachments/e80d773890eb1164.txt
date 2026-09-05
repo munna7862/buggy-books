@@ -1,0 +1,15 @@
+[2026-09-05 19:48:56] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w8-3-1788603536887-sw19
+[2026-09-05 19:48:57] INFO: Clicking on Sign Up link
+[2026-09-05 19:48:57] INFO: Entering full name: Full refresh_ui_user_11Qdr
+[2026-09-05 19:48:57] INFO: Entering username: refresh_ui_user_11Qdr
+[2026-09-05 19:48:57] INFO: Entering password: Password123!
+[2026-09-05 19:48:58] INFO: Entering confirming password: Password123!
+[2026-09-05 19:48:58] INFO: Clicking on Create Account button
+[2026-09-05 19:48:58] INFO: Verifying landing on Checkout Page
+[2026-09-05 19:48:58] INFO: Checking if Checkout label is visible
+[2026-09-05 19:48:59] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 19:49:02] INFO: Clicking on Profile navbar link
+[2026-09-05 19:49:02] INFO: Getting profile avatar preview image src
+[2026-09-05 19:49:07] INFO:  Verifying profile page opened successfully post silent token refresh Success !! Actual and Expected Values are:: true
+[2026-09-05 19:49:07] INFO:  Verifying user is retained on profile page without logout Success !! Actual and Expected Values are:: true
+[2026-09-05 19:49:07] INFO: Cleaned up ephemeral test session: pw-w8-3-1788603536887-sw19

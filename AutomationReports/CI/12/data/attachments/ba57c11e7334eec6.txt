@@ -1,0 +1,13 @@
+[2026-09-05 19:48:57] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-1-1788603537000-iy15
+[2026-09-05 19:48:57] INFO: Clicking on Sign Up link
+[2026-09-05 19:48:57] INFO: Entering full name: Full refresh_ui_user_HqLEE
+[2026-09-05 19:48:57] INFO: Entering username: refresh_ui_user_HqLEE
+[2026-09-05 19:48:58] INFO: Entering password: Password123!
+[2026-09-05 19:48:58] INFO: Entering confirming password: Password123!
+[2026-09-05 19:48:58] INFO: Clicking on Create Account button
+[2026-09-05 19:48:58] INFO: Verifying landing on Checkout Page
+[2026-09-05 19:48:58] INFO: Checking if Checkout label is visible
+[2026-09-05 19:48:59] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 19:48:59] INFO: Clicking on Profile navbar link
+[2026-09-05 19:49:00] INFO:  Verifying unauthenticated access redirects user to /login page Success !! Actual and Expected Values are:: true
+[2026-09-05 19:49:00] INFO: Cleaned up ephemeral test session: pw-w7-1-1788603537000-iy15

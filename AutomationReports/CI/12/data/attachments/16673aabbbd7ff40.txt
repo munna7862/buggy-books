@@ -1,0 +1,30 @@
+[2026-09-05 19:48:33] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w8-3-1788603513518-wufo
+[2026-09-05 19:48:33] INFO: Network interception enabled with mode: api-only
+[2026-09-05 19:48:34] INFO: Clicking on Sign Up link
+[2026-09-05 19:48:34] INFO: Entering full name: Full wiz_user_fveBN
+[2026-09-05 19:48:34] INFO: Entering username: wiz_user_fveBN
+[2026-09-05 19:48:34] INFO: Entering password: Password123!
+[2026-09-05 19:48:34] INFO: Entering confirming password: Password123!
+[2026-09-05 19:48:34] INFO: Clicking on Create Account button
+[2026-09-05 19:48:35] INFO: Verifying landing on Checkout Page
+[2026-09-05 19:48:35] INFO: Checking if Checkout label is visible
+[2026-09-05 19:48:36] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 19:48:36] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-09-05 19:48:36] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 19:48:36] INFO: Clicking on Add to Cart button for book id: 1
+[2026-09-05 19:48:37] INFO: Waiting for cart status message: added to cart
+[2026-09-05 19:48:38] INFO: Cart status message "added to cart" is visible
+[2026-09-05 19:48:38] INFO: Clicking on Cart link
+[2026-09-05 19:48:38] INFO: Clicking on Proceed to Checkout button
+[2026-09-05 19:48:38] INFO:  Verifying Step 1 indicator is active Success !! Actual and Expected Values are:: true
+[2026-09-05 19:48:38] INFO:  Verifying Shipping step content is visible Success !! Actual and Expected Values are:: true
+[2026-09-05 19:48:38] INFO: Entering first name: John
+[2026-09-05 19:48:38] INFO: Entering last name: Doe
+[2026-09-05 19:48:39] INFO: Entering shipping address: 123 Buggy Lane
+[2026-09-05 19:48:39] INFO: Entering city: Stack City
+[2026-09-05 19:48:39] INFO: Clicking on Next Step button to trigger validation
+[2026-09-05 19:48:39] INFO:  Verifying Step 2 indicator is active Success !! Actual and Expected Values are:: true
+[2026-09-05 19:48:39] INFO:  Verifying Shipping step content is hidden Success !! Actual and Expected Values are:: false
+[2026-09-05 19:48:39] INFO:  Verifying Payment step content is visible Success !! Actual and Expected Values are:: true
+[2026-09-05 19:48:39] INFO: Captured 22 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_004_Check-b69a7-Validation-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 19:48:39] INFO: Cleaned up ephemeral test session: pw-w8-3-1788603513518-wufo

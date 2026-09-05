@@ -1,0 +1,119 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e3]:
+  - banner [ref=e4]:
+    - link "BuggyBooks" [ref=e5] [cursor=pointer]:
+      - /url: /
+      - heading "BuggyBooks" [level=2] [ref=e6]
+    - navigation [ref=e7]:
+      - link "Catalog" [ref=e8] [cursor=pointer]:
+        - /url: /
+      - link "Chaos Control" [ref=e9] [cursor=pointer]:
+        - /url: /admin/chaos
+      - link "Login" [ref=e10] [cursor=pointer]:
+        - /url: /login
+      - link "Sign Up" [ref=e11] [cursor=pointer]:
+        - /url: /register
+      - button "Toggle notifications" [ref=e13] [cursor=pointer]:
+        - text: 🔔
+        - 'generic "Live Feed: Connected" [ref=e14]'
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - heading "Book Catalog" [level=1] [ref=e17]
+      - generic [ref=e18]:
+        - textbox "Search books" [ref=e19]:
+          - /placeholder: Search by title, author, or genre...
+        - button "Search" [ref=e20] [cursor=pointer]
+      - paragraph [ref=e21]: 15 books available
+      - generic [ref=e22]:
+        - generic [ref=e23]:
+          - link "War and Parse" [ref=e25] [cursor=pointer]:
+            - /url: /books/9
+            - img "War and Parse" [ref=e26]
+          - generic [ref=e27]:
+            - generic [ref=e28]: Classic
+            - heading "War and Parse" [level=3] [ref=e29]:
+              - link "War and Parse" [ref=e30] [cursor=pointer]:
+                - /url: /books/9
+            - paragraph [ref=e31]: Leo Tolstoy
+            - paragraph [ref=e32]: $17.99
+            - button "Add to Cart" [ref=e33] [cursor=pointer]
+        - generic [ref=e34]:
+          - link "Crime and Refactoring" [ref=e36] [cursor=pointer]:
+            - /url: /books/10
+            - img "Crime and Refactoring" [ref=e37]
+          - generic [ref=e38]:
+            - generic [ref=e39]: Thriller
+            - heading "Crime and Refactoring" [level=3] [ref=e40]:
+              - link "Crime and Refactoring" [ref=e41] [cursor=pointer]:
+                - /url: /books/10
+            - paragraph [ref=e42]: Fyodor Dostoevsky
+            - paragraph [ref=e43]: $14.50
+            - button "Add to Cart" [ref=e44] [cursor=pointer]
+        - generic [ref=e45]:
+          - link "Brave New Debug World" [ref=e47] [cursor=pointer]:
+            - /url: /books/11
+            - img "Brave New Debug World" [ref=e48]
+          - generic [ref=e49]:
+            - generic [ref=e50]: Dystopian
+            - heading "Brave New Debug World" [level=3] [ref=e51]:
+              - link "Brave New Debug World" [ref=e52] [cursor=pointer]:
+                - /url: /books/11
+            - paragraph [ref=e53]: Aldous Huxley
+            - paragraph [ref=e54]: $11.99
+            - button "Add to Cart" [ref=e55] [cursor=pointer]
+        - generic [ref=e56]:
+          - link "Of Memory and Men" [ref=e58] [cursor=pointer]:
+            - /url: /books/12
+            - img "Of Memory and Men" [ref=e59]
+          - generic [ref=e60]:
+            - generic [ref=e61]: Classic
+            - heading "Of Memory and Men" [level=3] [ref=e62]:
+              - link "Of Memory and Men" [ref=e63] [cursor=pointer]:
+                - /url: /books/12
+            - paragraph [ref=e64]: John Steinbeck
+            - paragraph [ref=e65]: $9.50
+            - button "Add to Cart" [ref=e66] [cursor=pointer]
+        - generic [ref=e67]:
+          - 'link "Fahrenheit 500: Internal Server Error" [ref=e69] [cursor=pointer]':
+            - /url: /books/13
+            - 'img "Fahrenheit 500: Internal Server Error" [ref=e70]'
+          - generic [ref=e71]:
+            - generic [ref=e72]: Dystopian
+            - 'heading "Fahrenheit 500: Internal Server Error" [level=3] [ref=e73]':
+              - 'link "Fahrenheit 500: Internal Server Error" [ref=e74] [cursor=pointer]':
+                - /url: /books/13
+            - paragraph [ref=e75]: Ray Bradbury
+            - paragraph [ref=e76]: $12.99
+            - button "Add to Cart" [ref=e77] [cursor=pointer]
+        - generic [ref=e78]:
+          - link "The Catcher in the Deploy" [ref=e80] [cursor=pointer]:
+            - /url: /books/14
+            - img "The Catcher in the Deploy" [ref=e81]
+          - generic [ref=e82]:
+            - generic [ref=e83]: Classic
+            - heading "The Catcher in the Deploy" [level=3] [ref=e84]:
+              - link "The Catcher in the Deploy" [ref=e85] [cursor=pointer]:
+                - /url: /books/14
+            - paragraph [ref=e86]: J.D. Salinger
+            - paragraph [ref=e87]: $10.00
+            - button "Add to Cart" [ref=e88] [cursor=pointer]
+        - generic [ref=e89]:
+          - link "Don Quixote de la Repository" [ref=e91] [cursor=pointer]:
+            - /url: /books/15
+            - img "Don Quixote de la Repository" [ref=e92]
+          - generic [ref=e93]:
+            - generic [ref=e94]: Classic
+            - heading "Don Quixote de la Repository" [level=3] [ref=e95]:
+              - link "Don Quixote de la Repository" [ref=e96] [cursor=pointer]:
+                - /url: /books/15
+            - paragraph [ref=e97]: Miguel de Cervantes
+            - paragraph [ref=e98]: $16.99
+            - button "Add to Cart" [ref=e99] [cursor=pointer]
+      - generic [ref=e100]:
+        - button "← Prev" [ref=e101] [cursor=pointer]
+        - button "1" [ref=e102] [cursor=pointer]
+        - button "2" [active] [ref=e103] [cursor=pointer]
+        - button "Next →" [disabled] [ref=e104]
+```

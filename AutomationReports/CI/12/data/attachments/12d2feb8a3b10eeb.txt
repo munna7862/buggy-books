@@ -1,0 +1,3 @@
+[2026-09-05 19:49:18] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-1-1788603558513-fk02
+[2026-09-05 19:49:19] INFO:  Asserting search form has translateX(-18px) transform, actual: matrix(1, 0, 0, 1, -18, 0) Success !! Actual and Expected Values are:: true
+[2026-09-05 19:49:19] INFO: Cleaned up ephemeral test session: pw-w7-1-1788603558513-fk02

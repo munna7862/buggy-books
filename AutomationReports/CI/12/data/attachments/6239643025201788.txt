@@ -1,0 +1,2 @@
+[2026-09-05 19:49:23] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-1-1788603563482-gfbx
+[2026-09-05 19:49:28] INFO: Cleaned up ephemeral test session: pw-w7-1-1788603563482-gfbx

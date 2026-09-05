@@ -1,0 +1,22 @@
+[2026-09-05 19:47:53] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788603473564-sud6
+[2026-09-05 19:47:53] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/reset
+[2026-09-05 19:47:53] INFO: ✅ Call POST /api/test/reset Success! Status: 200 OK
+[2026-09-05 19:47:53] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Test state reset successfully"
+}
+[2026-09-05 19:47:53] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/test/config
+[2026-09-05 19:47:53] INFO: ✅ Get chaos config post-reset Success! Status: 200 OK
+[2026-09-05 19:47:53] INFO: 📥 Response Payload: {
+  "checkoutFailureRate": 0,
+  "inventoryDelayMs": 0,
+  "jwtExpirySeconds": 900,
+  "websocketDropRate": 0,
+  "uploadFailureRate": 0,
+  "injectA11yViolations": false,
+  "visualChaos": false,
+  "inventoryLockingRate": 0
+}
+[2026-09-05 19:47:53] INFO:  Verifying GET /api/test/config status is 200 Success !! Actual and Expected Values are:: 200
+[2026-09-05 19:47:53] INFO:  Verifying visualChaos default value is false Success !! Actual and Expected Values are:: false
+[2026-09-05 19:47:53] INFO: Cleaned up ephemeral test session: pw-w3-3-1788603473564-sud6

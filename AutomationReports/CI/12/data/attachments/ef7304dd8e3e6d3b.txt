@@ -1,0 +1,10 @@
+[2026-09-05 19:49:16] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w9-2-1788603556296-dehd
+
+[Failure Hook] Capturing state for failing test: "VIS_REG_01: Baseline Catalog Screenshot @regression @visual"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-05 19:49:19] INFO: Cleaned up ephemeral test session: pw-w9-2-1788603556296-dehd
