@@ -45,7 +45,11 @@ export function setup() {
       'Accept': 'application/json',
       'x-bypass-rate-limit': 'true',
     },
-  };
+  // Prime endpoints so initial module caches and catalog data are initialized
+  http.get(`${BASE_URL}/api/books`, params);
+  http.get(`${BASE_URL}/api/books?q=gatsby`, params);
+  http.get(`${BASE_URL}/api/books/1`, params);
+
   const res = http.get(`${BASE_URL}/api/health`, params);
   let initialMemory = { heapUsed: 0, heapTotal: 0, rss: 0 };
   if (res.status === 200) {
