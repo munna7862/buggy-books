@@ -3,6 +3,8 @@ import { test } from '../../../core/base/base.fixture';
 import { envConfig } from '../../../config/env.config';
 import TestData from '../../../test-data/ui/Refresh/Test_006_JwtRefreshValidation.json';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('JWT Expiration & Silent Refresh UI Suite', () => {
 
   test('UI_REF_01: Transparent Client Request Retry @regression', async ({ signUpPage, profilePage, commonFunctions, page, request }) => {

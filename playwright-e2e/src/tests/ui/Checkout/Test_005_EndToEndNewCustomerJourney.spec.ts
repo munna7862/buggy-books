@@ -36,6 +36,8 @@ function uniqueUsername(prefix: string = 'e2e_customer'): string {
   return `${prefix}_${timestamp}_${randomSuffix}`;
 }
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('End-to-End User Journey', () => {
 
   test('Testcase 1: Complete New Customer E2E Journey from Registration to Checkout @smoke @regression', async ({ signUpPage, catalogPage, bookDetailPage, commonFunctions, page, networkInterceptor }) => {

@@ -5,6 +5,8 @@ import TestData from '../../../test-data/ui/WebSockets/Test_008_WebSocketResilie
 
 const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('WebSockets Event & Resilience Suite', () => {
 
   test('WS_CONN_01: WebSocket State Indicator @smoke @regression', async ({ notificationCenter, commonFunctions, page }) => {

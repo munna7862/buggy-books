@@ -37,11 +37,8 @@ test.describe('Complete Book Purchase', () => {
       await catalogPage.navigateToCatalog(envConfig.baseUrl);
     });
 
-    await test.step('Login with Existing User', async () => {
-      await catalogPage.clickNavigateLink("Login");
-      const { userName, password } = getLoginCredentials();
-      const isLogin = await signUpPage.login(userName, password);
-      const isNavigated = await commonFunctions.compareTwoValues(isLogin, true, "Verifying if user logged in successfully");
+    await test.step('Verify Pre-Authenticated Session', async () => {
+      const isNavigated = await commonFunctions.compareTwoValues(await catalogPage.isLogoutVisible(), true, "Verifying user is pre-authenticated via storageState");
       expect(isNavigated).toBeTruthy();
     });
 

@@ -16,6 +16,8 @@ type ProtectedRouteGuardTestData = {
 const testDataPath = path.join(__dirname, '../../../test-data/ui/UserManagement/Test_003_ProtectedRouteGuard.json');
 const TestData = require(testDataPath) as ProtectedRouteGuardTestData;
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Protected Route Access Guard', () => {
 
   test('UI_AUTH_06: Direct unauthenticated navigation to protected routes redirects to Login @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {

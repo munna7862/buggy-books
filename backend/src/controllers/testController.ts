@@ -20,13 +20,32 @@ const bookStockSchema = z.object({
   stock: z.number().int().min(0)
 });
 
+const getSessionId = (req: Request): string | undefined => {
+  const raw = req.headers['x-test-session-id'];
+  if (typeof raw === 'string' && raw.trim().length > 0) {
+    return raw.trim();
+  }
+  return req.sessionId;
+};
+
 export const updateConfig = (req: Request, res: Response) => {
   const validConfig = chaosConfigSchema.parse(req.body);
-  chaosStore.updateConfig(validConfig);
-  res.json({ success: true, config: chaosStore.getConfig() });
+  const sessionId = getSessionId(req);
+  chaosStore.updateConfig(validConfig, sessionId);
+  res.json({ success: true, config: chaosStore.getConfig(sessionId), sessionId });
 };
 
 export const resetData = (req: Request, res: Response) => {
+  const sessionId = getSessionId(req);
+
+  if (sessionId) {
+    storage.deleteSession(sessionId);
+    chaosStore.resetConfig(sessionId);
+    dataStore.resetData();
+    authService.resetUsers();
+    return res.json({ success: true, message: `Session ${sessionId} test state reset successfully`, sessionId });
+  }
+
   dataStore.resetData();
   chaosStore.resetConfig();
   authService.resetUsers();
@@ -34,7 +53,8 @@ export const resetData = (req: Request, res: Response) => {
 };
 
 export const getConfig = (req: Request, res: Response) => {
-  res.json(chaosStore.getConfig());
+  const sessionId = getSessionId(req);
+  res.json(chaosStore.getConfig(sessionId));
 };
 
 export const setBookStock = (req: Request, res: Response) => {

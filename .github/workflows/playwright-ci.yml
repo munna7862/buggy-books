@@ -25,25 +25,11 @@ permissions:
   id-token: write
 
 jobs:
-  # JOB 1: Run Automation Tests across Cross-Browser and Mobile Matrix
-  test:
-    name: UI & API Automation (${{ matrix.project }})
+  # STAGE 1: Build Ephemeral Stack Artifacts for Hermetic Execution
+  build-services:
+    name: Build Ephemeral Stack Artifacts
     if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     runs-on: ubuntu-latest
-
-    strategy:
-      fail-fast: false
-      matrix:
-        project: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
-    
-    env:
-      ENV: INTEROP
-      BASE_URL: https://buggy-books-fe.onrender.com/
-      API_BASE_URL: https://buggy-books.onrender.com
-      HEADLESS: ${{ github.event.inputs.headless || 'true' }}
-      BROWSER: chrome
-      USER_NAME: ${{ secrets.E2E_USER_NAME }}
-      PASSWORD: ${{ secrets.E2E_PASSWORD }}
 
     steps:
       - name: Checkout repository
@@ -56,9 +42,99 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: playwright-e2e/package-lock.json
-      
-      - name: Install dependencies
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Install & Build Backend
+        run: |
+          cd backend
+          npm ci
+          npm run build
+        env:
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Install & Build Frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+        env:
+          VITE_API_URL: http://127.0.0.1:4000/api
+
+      - name: Upload Backend Dist Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-dist
+          path: backend/dist
+          retention-days: 1
+
+      - name: Upload Frontend Dist Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 1
+
+  # STAGE 2: Run Automation Tests across Cross-Browser and Mobile Matrix
+  test:
+    name: UI & API Automation (${{ matrix.project }})
+    needs: [build-services]
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
+    
+    env:
+      ENV: LOCAL
+      BASE_URL: http://127.0.0.1:5173
+      API_BASE_URL: http://127.0.0.1:4000
+      HEADLESS: ${{ github.event.inputs.headless || 'true' }}
+      BROWSER: chrome
+      USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
+      PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            frontend/package-lock.json
+            backend/package-lock.json
+            playwright-e2e/package-lock.json
+
+      - name: Download Backend Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-dist
+          path: backend/dist
+
+      - name: Download Frontend Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+
+      - name: Install Backend Production Dependencies
+        run: |
+          cd backend
+          npm ci --omit=dev
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Install Playwright Dependencies
         working-directory: playwright-e2e
         run: npm ci
 
@@ -85,17 +161,44 @@ jobs:
             npx playwright install --with-deps chromium
           fi
 
+      - name: Start Ephemeral Backend Server
+        run: |
+          cd backend
+          nohup node dist/server.js > ../backend-server.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
+        env:
+          PORT: 4000
+          NODE_ENV: development
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Start Ephemeral Frontend Preview Server
+        run: |
+          cd frontend
+          nohup npx vite preview --port 5173 --host 0.0.0.0 > ../frontend-preview.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:5173 || (cat ../frontend-preview.log && exit 1)
+
       - name: Run Playwright Tests
         working-directory: playwright-e2e
         env:
-          ENVIRONMENT: INTEROP
+          ENVIRONMENT: LOCAL
           TZ: Australia/Adelaide
-          USER_NAME: ${{ secrets.E2E_USER_NAME }}
-          PASSWORD: ${{ secrets.E2E_PASSWORD }}
+          BASE_URL: http://127.0.0.1:5173
+          API_BASE_URL: http://127.0.0.1:4000
+          USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
+          PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
         run: |
           npx playwright test --project=${{ matrix.project }}
 
-      # Explicitly upload the allure-results folder for this matrix job
+      - name: Upload Ephemeral Server Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ephemeral-server-logs-${{ matrix.project }}
+          path: |
+            backend-server.log
+            frontend-preview.log
+          retention-days: 7
+
       - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -104,14 +207,19 @@ jobs:
           path: playwright-e2e/reports/allure-results
           retention-days: 7
 
-  # JOB 2: Merge and Deploy Allure Report
+      - name: Stop Ephemeral Servers
+        if: always()
+        run: |
+          pkill -f "node dist/server.js" || true
+          pkill -f "vite preview" || true
+
+  # STAGE 3: Merge and Deploy Allure Report
   deploy-report:
     name: Deploy Allure Report
     needs: [test]
     if: always()
     runs-on: ubuntu-latest
     steps:
-      # 1. Get history for trends
       - name: Checkout gh-pages
         uses: actions/checkout@v4
         continue-on-error: true
@@ -119,7 +227,6 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      # 2. Download all matrix artifacts merged into allure-results
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
@@ -131,7 +238,6 @@ jobs:
         run: |
           echo "- **Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/CI/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
 
-      # 3. Generate consolidated Allure report
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master
         with:
@@ -142,7 +248,6 @@ jobs:
           keep_reports: 7
           subfolder: AutomationReports/CI
 
-      # 4. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -151,7 +256,6 @@ jobs:
           publish_dir: allure-history
           keep_files: true
 
-      # 5. Print GitHub Pages URL
       - name: Print Report URL
         run: |
           REPO_NAME="${{ github.event.repository.name }}"
