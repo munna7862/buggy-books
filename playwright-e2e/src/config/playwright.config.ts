@@ -37,7 +37,7 @@ export default defineConfig({
       cwd: backendDir,
       port: 4000,
       timeout: 120 * 1000,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: true,
       stdout: 'pipe',
       stderr: 'pipe',
       env: {
@@ -51,7 +51,7 @@ export default defineConfig({
       cwd: frontendDir,
       port: 5173,
       timeout: 120 * 1000,
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: true,
       stdout: 'pipe',
       stderr: 'pipe'
     }
