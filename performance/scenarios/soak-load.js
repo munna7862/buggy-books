@@ -45,6 +45,8 @@ export function setup() {
       'Accept': 'application/json',
       'x-bypass-rate-limit': 'true',
     },
+  };
+
   // Prime endpoints so initial module caches and catalog data are initialized
   http.get(`${BASE_URL}/api/books`, params);
   http.get(`${BASE_URL}/api/books?q=gatsby`, params);
