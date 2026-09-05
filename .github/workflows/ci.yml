@@ -82,7 +82,7 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Run ESLint
         run: npm run lint
@@ -123,6 +123,13 @@ jobs:
         env:
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
+      - name: Upload Backend Dist Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-dist
+          path: backend/dist
+          retention-days: 1
+
   # -----------------------------------------------------------
   # Stage 2B: Frontend Vite & TypeScript Build Verification
   # -----------------------------------------------------------
@@ -147,10 +154,17 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Frontend
         run: npm run build
+
+      - name: Upload Frontend Dist Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 1
 
   # -----------------------------------------------------------
   # Stage 3A: Downstream E2E Quality Gate & Typecheck
@@ -178,9 +192,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Typecheck Playwright Suite
-        run: npx tsc --noEmit
-
       - name: Validate Page Object Encapsulation & Static Rules
         run: npm run finalize-spec -- --all-poms
 
@@ -204,14 +215,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: frontend/package-lock.json
 
-      - name: Install Frontend Dependencies & Build
-        run: |
-          cd frontend
-          npm install
-          npm run build
+      - name: Download Frontend Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
 
       - name: Run Lighthouse CI Audit
         run: npx @lhci/cli autorun
@@ -249,11 +258,16 @@ jobs:
           cache: "npm"
           cache-dependency-path: backend/package-lock.json
 
-      - name: Install Backend & Build
+      - name: Download Backend Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-dist
+          path: backend/dist
+
+      - name: Install Backend Production Dependencies
         run: |
           cd backend
-          npm ci
-          npm run build
+          npm ci --omit=dev
 
       - name: Start Backend Server
         run: |

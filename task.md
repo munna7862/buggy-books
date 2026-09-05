@@ -1,9 +1,9 @@
-# Sprint 3.3: Automated API Performance Testing & Lighthouse CI Quality Gates
+# Sprint 4.1: Pipeline Deduplication & Build Artifact Sharing
 
-**Sprint Identifier**: `SPRINT-3.3-PERF-AND-LIGHTHOUSE`  
-**Phase**: Phase 3 (Multi-User Sandboxing, Chaos Engineering & Performance Resilience)  
+**Sprint Identifier**: `SPRINT-4.1-DEDUPLICATION-AND-ARTIFACTS`  
+**Phase**: Phase 4 (CI/CD Pipeline Optimization, Artifact Caching & Fast-Feedback Gates)  
 **Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Establish automated API performance benchmarking with k6 scripts, integrate Lighthouse CI audits in GitHub Actions workflows with Core Web Vitals thresholds, and close out Phase 3.
+**Sprint Goal**: Eliminate redundant build and installation cycles in `.github/workflows/ci.yml` by introducing artifact caching between build and test jobs, standardizing on deterministic `npm ci`, and removing duplicate TypeScript compilation from the E2E quality gate.
 
 ---
 
@@ -11,29 +11,35 @@
 
 | Persona | Assigned Member | Responsibilities for this Sprint |
 | :--- | :--- | :--- |
-| **Scrum Master** | AI Agent / SM | Sprint kickoff, user story deconstruction, live `task.md` tracking, and Phase 3 closure. |
-| **SDET Architect** | AI Agent / SDET | Authoring k6 performance test suites for catalog search and delayed inventory reporting, `specs/test_cases_catalog.md` updates. |
-| **Dev Architect** | AI Agent / Dev | Frontend SEO and accessibility optimization in `frontend/index.html` to guarantee Lighthouse quality gate compliance. |
-| **DevOps Engineer** | AI Agent / DevOps | Adding `.lighthouserc.json`, `.github/workflows/ci.yml` Lighthouse CI job, k6 runner script, and GitHub CLI PR creation. |
-| **Product Owner** | AI Agent / PO | Reviewing performance metrics, Lighthouse audit reports, and issuing Phase 3 final acceptance sign-off. |
+| **Scrum Master** | AI Agent / SM | Sprint kickoff, user story deconstruction, live `task.md` burndown tracking, handoff orchestration. |
+| **DevOps Engineer** | AI Agent / DevOps | Refactoring `.github/workflows/ci.yml` to upload and download `dist` artifacts, updating package installation commands to `npm ci`, eliminating redundant build steps. |
+| **SDET Architect** | AI Agent / SDET | Verifying downstream consumption of pre-built artifacts by Lighthouse CI and k6 benchmarks, validating `finalize-spec.ts` single-invocation typechecking, updating `specs/test_cases_catalog.md`. |
+| **Dev Architect** | AI Agent / Dev | Validating frontend and backend production build outputs (`dist/`) compatibility across jobs. |
+| **Security Officer** | AI Agent / Security | Reviewing artifact retention, permissions, and ensuring zero secret leaks or elevated privileges in workflow steps. |
+| **Product Owner** | AI Agent / PO | Acceptance review and sprint milestone sign-off. |
 
 ---
 
 ## 2. Sprint Backlog & Subtask Tracking
 
-### User Story US-PERF-301: k6 API Load & Latency Benchmarking
-*As an SDET / Performance Engineer, I want automated load test scenarios targeting catalog searching, inventory reporting, and checkout, so that response latency regressions (p95/p99) are measured and flagged automatically.*
-- [x] **US-PERF-301.1** (`SDET Architect`): Create `performance/k6/catalog-load.js` with virtual user ramp (0 to 50 VUs), searching, detail view, session isolation header, and strict p95 < 250ms threshold.
-- [x] **US-PERF-301.2** (`SDET Architect`): Create `performance/k6/inventory-stress.js` benchmarking delayed endpoint throughput targeting `/api/inventory/report`.
-- [x] **US-PERF-301.3** (`DevOps Engineer`): Create cross-platform portable runner `performance/run-k6.js` and add root scripts `"test:perf"` and `"test:perf:stress"` in `package.json`.
-- [x] **US-PERF-301.4** (`SDET Architect`): Update `specs/test_cases_catalog.md` with Section 7 performance test cases (`TC-PERF-001`, `TC-PERF-002`).
+### User Story US-OPS-401: Build Artifact Sharing Across Pipeline Jobs
+*As a DevOps Engineer, I want `frontend-build` and `backend-build` to upload their compiled `dist` directories as GitHub Actions artifacts, so that downstream jobs (`lighthouse-ci` and `perf-benchmarks`) do not need to re-install dependencies or re-compile the source code.*
+- [x] **US-OPS-401.1** (`DevOps Engineer`): Add `actions/upload-artifact@v4` step to `backend-build` uploading `backend/dist` with `name: backend-dist` and `retention-days: 1`.
+- [x] **US-OPS-401.2** (`DevOps Engineer`): Add `actions/upload-artifact@v4` step to `frontend-build` uploading `frontend/dist` with `name: frontend-dist` and `retention-days: 1`.
+- [x] **US-OPS-401.3** (`DevOps Engineer`): Refactor `lighthouse-ci` job:
+  - Add `actions/download-artifact@v4` step downloading `frontend-dist` into `frontend/dist`.
+  - Remove redundant `npm install` and `npm run build` steps.
+  - Execute `npx @lhci/cli autorun` directly against the downloaded `frontend/dist`.
+- [x] **US-OPS-401.4** (`DevOps Engineer`): Refactor `perf-benchmarks` job:
+  - Add `actions/download-artifact@v4` step downloading `backend-dist` into `backend/dist`.
+  - Replace `npm ci && npm run build` with `npm ci --omit=dev` (production runtime dependencies only).
+  - Boot `dist/server.js` directly from the downloaded artifact.
 
-### User Story US-OPS-301: Lighthouse CI Quality Gates in GitHub Actions
-*As a DevOps engineer, I want Lighthouse CI to audit frontend pages on every pull request, so that regressions in Performance, Accessibility, Best Practices, and SEO are blocked.*
-- [x] **US-OPS-301.1** (`Dev Architect`): Enhance `frontend/index.html` with descriptive title, meta description, and theme color tags to ensure high Lighthouse scores.
-- [x] **US-OPS-301.2** (`DevOps Engineer`): Create `.lighthouserc.json` with assertions (`performance: 0.90`, `accessibility: 0.95`, `seo: 0.90`) targeting `./frontend/dist`.
-- [x] **US-OPS-301.3** (`DevOps Engineer`): Add `lighthouse-ci` job in `.github/workflows/ci.yml` uploading HTML/JSON audit reports as workflow artifacts.
-- [x] **US-OPS-301.4** (`SDET Architect`): Document Lighthouse CI quality gates in `specs/test_cases_catalog.md` (`TC-LHCI-001`, `TC-LHCI-002`).
+### User Story US-OPS-402: Deterministic Dependency Installation & Linter Deduplication
+*As an SDET & DevOps Engineer, I want all jobs to install dependencies via `npm ci` and remove duplicate compiler checks in `e2e-quality-gate`, so that dependency resolution is deterministic and compiler executions are not duplicated.*
+- [x] **US-OPS-402.1** (`DevOps Engineer`): Replace all occurrences of `npm install` with `npm ci` across `frontend-tests` and `frontend-build` in `.github/workflows/ci.yml`.
+- [x] **US-OPS-402.2** (`DevOps Engineer`): Remove redundant `run: npx tsc --noEmit` step from `e2e-quality-gate` in `.github/workflows/ci.yml`.
+- [x] **US-OPS-402.3** (`SDET Architect`): Verify that `npm run finalize-spec -- --all-poms` executes `runTypeScriptCheck()` internally without losing typecheck coverage and document in `specs/test_cases_catalog.md` (Section 8).
 
 ---
 
@@ -41,21 +47,26 @@
 
 | Reviewer Role | Target Role | Feedback / Action Item | Status |
 | :--- | :--- | :--- | :--- |
-| **DevOps Code Review** | DevOps Engineer | Verified `.lighthouserc.json` assertion thresholds and GitHub Actions CI workflow integration. Portable runner `performance/run-k6.js` provides frictionless local DX without administrative rights. | `[APPROVED]` |
-| **SDET Quality Gate** | SDET Architect | Executed `npm run test:perf` (7,626 requests, p95 = 2.33ms << 250ms threshold, 0 errors) and `npm run test:perf:stress` (4,061 inventory reports under 30 VUs, p95 = 15.76ms). Full monorepo suites pass 100% green. | `[APPROVED]` |
-| **PO Phase 3 Review** | Product Owner | Verified completion of Phase 3 deliverables: Multi-user sandboxing (Sprint 3.1), Chaos Dashboard & race conditions (Sprint 3.2), and Automated Performance Benchmarking & Lighthouse Quality Gates (Sprint 3.3). Milestone closed. | `[APPROVED]` |
+| **DevOps Code Review** | DevOps Engineer | Validated `actions/upload-artifact@v4` and `actions/download-artifact@v4` implementation in `.github/workflows/ci.yml`. 1-day retention set to prevent disk quota bloat, explicit artifact path mapping configured, and zero `npm install` occurrences verified. | `[APPROVED]` |
+| **SDET Quality Gate** | SDET Architect | Validated that pre-built `dist` maintains full integrity. Ran `finalize-spec -- --all-poms` verifying 33/33 checks with single-invocation TypeScript compilation. Ran k6 API load benchmarks (7,662 requests, p95 = 1.53ms, 0 errors) executing directly against pre-built `dist/server.js`. | `[APPROVED]` |
+| **Security Officer** | DevOps Engineer | Validated permissions and token scopes; verified artifacts contain only built outputs without exposing `.env` files or tokens. | `[APPROVED]` |
+| **PO Sprint Review** | Product Owner | Verified elimination of duplicate compilation cycles across `ci.yml`, deterministic `npm ci` adoption, and zero regression across backend/frontend test suites. Sprint 4.1 accepted. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] k6 performance test suites created and executable via `npm run test:perf`.
-- [x] Catalog endpoint maintains p95 < 250ms under 50 concurrent VUs (verified: p95 = 2.33ms).
-- [x] Lighthouse CI configured with score assertions in `.lighthouserc.json` and GitHub Actions.
-- [x] All unit, component, Playwright E2E, and performance tests passing 100% green.
-- [x] `specs/test_cases_catalog.md` updated with Section 7 performance and audit cases.
-- [x] Phase 3 criteria fully satisfied in `planning/Phases/phase_3_sandboxing_chaos_and_performance.md`.
-- [x] Upstream changes pulled from `origin/main` and all merge conflicts resolved cleanly.
-- [x] Changes committed with conventional commits on branch `feature/sprint-3.3-perf-and-lighthouse`.
-- [x] Remote Pull Request created via GitHub CLI (`gh pr create`).
-- [x] Phase 3 sign-off issued by Product Owner.
+- [x] `.github/workflows/ci.yml` updated with `actions/upload-artifact@v4` and `actions/download-artifact@v4`.
+- [x] All instances of `npm install` replaced with `npm ci`.
+- [x] Redundant `npx tsc --noEmit` removed from `e2e-quality-gate`.
+- [x] `lighthouse-ci` configured to run directly against downloaded `frontend/dist`.
+- [x] `perf-benchmarks` configured to boot `dist/server.js` using downloaded `backend/dist` with `npm ci --omit=dev`.
+- [x] Local build, typecheck, unit, component, and POM quality gates pass 100% green.
+- [x] `specs/test_cases_catalog.md` updated with Section 8 CI/CD pipeline verification test cases.
+- [x] Sprint 4.1 documentation synchronized in `planning/Sprints/sprint_4_1_pipeline_deduplication_and_artifact_sharing.md`.
+- [x] Upstream changes pulled/merged from `origin/main` with zero conflicts.
+- [x] Conventional commit created on branch `feature/sprint-4.1-deduplication-and-artifacts`.
+- [x] Remote branch pushed and Pull Request opened via `gh pr create`.
+- [x] Sprint 4.1 milestone sign-off issued by Product Owner.
+
+

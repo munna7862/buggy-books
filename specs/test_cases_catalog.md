@@ -267,4 +267,19 @@ These test cases validate automated API performance benchmarking with k6 and fro
 | **TC-LHCI-001** | Lighthouse CI Core Web Vitals & Performance Gate | Audit frontend SPA distribution bundle in headless Chrome. Assert Lighthouse Performance category score is at least 0.90 (90%). Block pull requests on regression. | Critical | CI Quality Gate (Lighthouse CI) | `@smoke` `@regression` `@perf` | **Yes**<br>- Config: `.lighthouserc.json` (`categories:performance >= 0.90`)<br>- Workflow: `.github/workflows/ci.yml` (`lighthouse-ci` job)<br>- Artifacts: Saved in `.lighthouseci/` |
 | **TC-LHCI-002** | Lighthouse CI Accessibility & SEO Quality Gate | Audit frontend SPA pages for WCAG accessibility compliance and SEO metadata. Assert Accessibility score is at least 0.95 (95%) and SEO score is at least 0.90 (90%). | High | CI Quality Gate (Lighthouse CI) | `@regression` `@a11y` | **Yes**<br>- Config: `.lighthouserc.json` (`categories:accessibility >= 0.95`, `categories:seo >= 0.90`)<br>- Optimization: `frontend/index.html` (semantic metadata, theme-color, title) |
 
+---
+
+## 8. CI/CD Pipeline Deduplication & Build Artifact Sharing
+
+*Sprint Source: [Sprint 4.1: Pipeline Deduplication & Build Artifact Sharing](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_4_1_pipeline_deduplication_and_artifact_sharing.md)*
+
+These test cases validate CI/CD pipeline deduplication, GitHub Actions artifact upload/download sharing between build and downstream test jobs, deterministic `npm ci` execution, and single-invocation typechecking.
+
+### **Suite: CI/CD Pipeline Optimization & Fast Feedback**
+| ID | Title | Description | Priority | Target Coverage | Tags | Covered |
+|:---|:---|:---|:---|:---|:---|:---|
+| **TC-CI-001** | Pipeline Build Artifact Sharing & Zero-Rebuild Downstream Consumption | Verify that `backend-build` and `frontend-build` upload `dist` directories as GitHub Actions artifacts (`actions/upload-artifact@v4`) and downstream jobs (`lighthouse-ci`, `perf-benchmarks`) download them (`actions/download-artifact@v4`) to execute audits and benchmarks with zero rebuilds and reduced runner time. | Critical | GitHub Actions CI (`ci.yml`) | `@smoke` `@regression` `@perf` | **Yes**<br>- Workflow: `.github/workflows/ci.yml`<br>- Jobs: `backend-build`, `frontend-build`, `lighthouse-ci`, `perf-benchmarks`<br>- Artifacts: `backend-dist`, `frontend-dist` (retention: 1 day) |
+| **TC-CI-002** | Deterministic Dependency Resolution & Compiler Deduplication | Verify that all jobs in `ci.yml` strictly use `npm ci` for deterministic dependency resolution and that `e2e-quality-gate` removes redundant `npx tsc --noEmit`, relying exclusively on internal `runTypeScriptCheck()` inside `finalize-spec.ts`. | High | CI Quality Gate & POM Validator | `@regression` | **Yes**<br>- Workflow: `.github/workflows/ci.yml`<br>- Script: `playwright-e2e/scripts/finalize-spec.ts`<br>- Coverage: 0 `npm install` instances, single-invocation typechecking |
+
+
 
