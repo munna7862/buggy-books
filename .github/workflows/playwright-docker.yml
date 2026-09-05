@@ -11,15 +11,6 @@ on:
         description: 'Git branch to checkout for this run'
         required: false
         default: 'main'
-      test_selection:
-        description: 'Select test suites to run'
-        required: false
-        type: choice
-        options:
-          - ALL
-          - UI
-          - API
-        default: 'ALL'
 
 permissions:
   contents: write
@@ -27,49 +18,15 @@ permissions:
   id-token: write
 
 jobs:
-  # Setup: Determine which shards to run based on test selection
-  setup:
-    name: Setup Test Matrix
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-      workers: ${{ steps.set-workers.outputs.workers }}
-    steps:
-      - name: Generate test matrix
-        id: set-matrix
-        run: |
-          test_selection="${{ github.event.inputs.test_selection || 'ALL' }}"
-          if [ "$test_selection" = "ALL" ]; then
-            # ALL: 10 shards - 1 for API, 9 for UI folders (BookCatalog, Checkout, UserManagement, Profile, Refresh, A11y, WebSockets, Styling, VisualRegression)
-            matrix='{"shard":[{"index":1,"total":10,"folder":"api","workers":2},{"index":2,"total":10,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":10,"folder":"ui/Checkout","workers":1},{"index":4,"total":10,"folder":"ui/UserManagement","workers":1},{"index":5,"total":10,"folder":"ui/Profile","workers":1},{"index":6,"total":10,"folder":"ui/Refresh","workers":1},{"index":7,"total":10,"folder":"ui/A11y","workers":1},{"index":8,"total":10,"folder":"ui/WebSockets","workers":1},{"index":9,"total":10,"folder":"ui/Styling","workers":1},{"index":10,"total":10,"folder":"ui/VisualRegression","workers":1}]}'
-          elif [ "$test_selection" = "UI" ]; then
-            # UI: 9 shards - one per UI folder (BookCatalog, Checkout, UserManagement, Profile, Refresh, A11y, WebSockets, Styling, VisualRegression)
-            matrix='{"shard":[{"index":1,"total":9,"folder":"ui/BookCatalog","workers":1},{"index":2,"total":9,"folder":"ui/Checkout","workers":1},{"index":3,"total":9,"folder":"ui/UserManagement","workers":1},{"index":4,"total":9,"folder":"ui/Profile","workers":1},{"index":5,"total":9,"folder":"ui/Refresh","workers":1},{"index":6,"total":9,"folder":"ui/A11y","workers":1},{"index":7,"total":9,"folder":"ui/WebSockets","workers":1},{"index":8,"total":9,"folder":"ui/Styling","workers":1},{"index":9,"total":9,"folder":"ui/VisualRegression","workers":1}]}'
-          elif [ "$test_selection" = "API" ]; then
-            # API: 1 shard with 2 workers
-            matrix='{"shard":[{"index":1,"total":1,"folder":"api","workers":2}]}'
-          else
-            # Default to ALL
-            matrix='{"shard":[{"index":1,"total":10,"folder":"api","workers":2},{"index":2,"total":10,"folder":"ui/BookCatalog","workers":1},{"index":3,"total":10,"folder":"ui/Checkout","workers":1},{"index":4,"total":10,"folder":"ui/UserManagement","workers":1},{"index":5,"total":10,"folder":"ui/Profile","workers":1},{"index":6,"total":10,"folder":"ui/Refresh","workers":1},{"index":7,"total":10,"folder":"ui/A11y","workers":1},{"index":8,"total":10,"folder":"ui/WebSockets","workers":1},{"index":9,"total":10,"folder":"ui/Styling","workers":1},{"index":10,"total":10,"folder":"ui/VisualRegression","workers":1}]}'
-          fi
-          echo "matrix=$matrix" >> $GITHUB_OUTPUT
-
-
-
-      
-      - name: Set workers output
-        id: set-workers
-        run: |
-          echo "workers=${{ github.event.inputs.test_selection || 'ALL' }}" >> $GITHUB_OUTPUT
-
-  # JOB 1: Run Tests inside Docker
+  # JOB 1: Run Tests inside Docker with Playwright Native Dynamic Sharding
   test:
-    name: UI & API Automation (Docker) - Shard ${{ matrix.shard.index }}/${{ matrix.shard.total }}
-    needs: setup
+    name: UI & API Automation (Docker) - Shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix: ${{ fromJson(needs.setup.outputs.matrix) }}
+      matrix:
+        shardIndex: [1, 2, 3, 4, 5, 6, 7, 8]
+        shardTotal: [8]
 
     container:
       image: mcr.microsoft.com/playwright:v1.58.0-jammy
@@ -78,20 +35,17 @@ jobs:
       ENV: INTEROP
       BASE_URL: https://buggy-books-fe.onrender.com/
       API_BASE_URL: https://buggy-books.onrender.com
-      HEADLESS: ${{ github.event.inputs.headless }}
+      HEADLESS: ${{ github.event.inputs.headless || 'true' }}
       BROWSER: chrome
       USER_NAME: ${{ secrets.E2E_USER_NAME }}
       PASSWORD: ${{ secrets.E2E_PASSWORD }}
-      TEST_SELECTION: ${{ github.event.inputs.test_selection || 'ALL' }}
-      SHARD_INDEX: ${{ matrix.shard.index }}
-      SHARD_TOTAL: ${{ matrix.shard.total }}
-      TEST_FOLDER: ${{ matrix.shard.folder }}
-      TEST_WORKERS: ${{ matrix.shard.workers }}
+      SHARD_INDEX: ${{ matrix.shardIndex }}
+      SHARD_TOTAL: ${{ matrix.shardTotal }}
 
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ github.event.inputs.branch || 'main' }}
 
       - name: Install dependencies
         working-directory: playwright-e2e
@@ -99,32 +53,74 @@ jobs:
           npm ci
           npx playwright install --with-deps chrome
 
-      - name: Run tests - Shard ${{ matrix.shard.index }}/${{ matrix.shard.total }}
+      - name: Run tests - Shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         working-directory: playwright-e2e
         env:
           ENVIRONMENT: INTEROP
           TZ: Australia/Adelaide
-          TEST_FOLDER: ${{ matrix.shard.folder }}
         run: |
-          echo "Running tests for: ${{ matrix.shard.folder }}"
-          echo "Shard: ${{ matrix.shard.index }}/${{ matrix.shard.total }}"
-          echo "Workers: ${{ matrix.shard.workers }}"
-          npx playwright test src/tests/${{ matrix.shard.folder }} --config=src/config/playwright.config.ts --workers=${{ matrix.shard.workers }}
+          echo "Executing native dynamic shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
+          npx playwright test --config=src/config/playwright.config.ts --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob,allure-playwright,list
+
+      - name: Upload Blob Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.shardIndex }}
+          path: playwright-e2e/blob-report
+          retention-days: 7
 
       - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results-shard-${{ matrix.shard.index }}
+          name: allure-results-shard-${{ matrix.shardIndex }}
           path: playwright-e2e/reports/allure-results
+          retention-days: 7
 
-  # JOB 2: Merge and Deploy
-  deploy-report:
-    name: Deploy Allure Report
+  # JOB 2: Merge Blob Reports, Build Allure Dashboard & Deploy
+  merge-reports:
+    name: Merge Reports & Deploy
     needs: [test]
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || 'main' }}
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: playwright-e2e/package-lock.json
+
+      - name: Install Playwright Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Download all Blob Reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: blob-report-*
+          path: playwright-e2e/all-blobs
+          merge-multiple: true
+
+      - name: Merge Playwright Blob Reports into HTML Report
+        working-directory: playwright-e2e
+        run: |
+          npx playwright merge-reports --reporter=html all-blobs
+
+      - name: Upload Consolidated HTML Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report
+          path: playwright-e2e/playwright-report
+          retention-days: 7
+
       - name: Checkout gh-pages
         uses: actions/checkout@v4
         continue-on-error: true
@@ -135,22 +131,15 @@ jobs:
       - name: Download All Allure Results
         uses: actions/download-artifact@v4
         with:
-          path: allure-results-temp
           pattern: allure-results-shard-*
+          path: allure-results
+          merge-multiple: true
 
-      - name: Merge Allure Results
+      - name: Test Report Summary
         run: |
-          mkdir -p allure-results
-          for dir in allure-results-temp/*/; do
-            cp -r "$dir"* allure-results/ 2>/dev/null || true
-          done
-          echo "Merged allure results from all shards"
-          ls -la allure-results/ | head -20
-
-      - name: Test Report
-        run: |
+          echo "### 📊 Sharded Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Execution Strategy:** Playwright Native Dynamic Sharding (8 Shards)" >> $GITHUB_STEP_SUMMARY
           echo "- **Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/Docker/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Test Selection:** ${{ github.event.inputs.test_selection || 'ALL' }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@master

@@ -12,6 +12,7 @@
     "test:e2e:firefox": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --project=firefox",
     "test:e2e:webkit": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --project=webkit",
     "test:e2e:mobile": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --project=mobile-chrome --project=mobile-safari",
+    "test:e2e:visual": "cross-env TZ=Australia/Adelaide npx playwright test src/tests/ui/VisualRegression --config=src/config/playwright.config.ts --project=chromium",
     "test:e2e:all": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts",
     "generate-allure": "allure generate --clean reports/allure-results -o reports/allure-report",
     "open-allure": "allure open reports/allure-report",

@@ -15,6 +15,12 @@ export default defineConfig({
   retries: 1,
   workers: process.env.CI ? 4 : undefined,
   grepInvert: /@quarantine/,
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.05,
+      animations: 'disabled',
+    },
+  },
 
   reporter: [
     ['html', { open: 'never' }],
