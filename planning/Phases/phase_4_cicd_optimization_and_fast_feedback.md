@@ -41,7 +41,7 @@ graph LR
 1. **[Sprint 4.1: Pipeline Deduplication & Artifact Sharing](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_4_1_pipeline_deduplication_and_artifact_sharing.md)**
    - *Estimated Effort*: 5 Story Points
    - *Key Deliverable*: Elimination of duplicate builds in `lighthouse-ci` and `perf-benchmarks` via `actions/upload-artifact` & `download-artifact`, standardization on `npm ci`, removal of duplicate `tsc` in `e2e-quality-gate`.
-   - *Status*: `[PLANNED]`
+   - *Status*: `[COMPLETED]`
 
 2. **[Sprint 4.2: Fast-Feedback Parallelization & Concurrency Control](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_4_2_fast_feedback_parallelization_and_concurrency.md)**
    - *Estimated Effort*: 5 Story Points
@@ -57,9 +57,9 @@ graph LR
 
 ## 4. Phase 4 Acceptance Criteria & Quality Gates
 
-- [ ] Zero duplicate compilation steps: `backend` and `frontend` are built exactly once per workflow run.
-- [ ] `lighthouse-ci` and `perf-benchmarks` consume pre-built artifacts without running `npm run build` or dev-dependency installs.
-- [ ] All jobs in `.github/workflows/ci.yml` use `npm ci` for dependency installation.
+- [x] Zero duplicate compilation steps: `backend` and `frontend` are built exactly once per workflow run.
+- [x] `lighthouse-ci` and `perf-benchmarks` consume pre-built artifacts without running `npm run build` or dev-dependency installs.
+- [x] All jobs in `.github/workflows/ci.yml` use `npm ci` for dependency installation.
 - [ ] `e2e-quality-gate` runs concurrently in Stage 1 with unit tests, executing static POM verification and typing checks with zero redundant compiler calls.
 - [ ] Concurrency control terminates obsolete workflow runs when new commits are pushed to the same pull request or branch.
 - [ ] Commits modifying exclusively markdown documentation or editor configs bypass CI execution cleanly.
