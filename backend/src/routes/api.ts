@@ -74,6 +74,13 @@ router.get('/orders', authenticateToken, asyncHandler(checkoutController.getOrde
 router.get('/inventory/report', asyncHandler(bookController.getInventoryReport));
 
 router.get('/health', (req: Request, res: Response) => {
+  if (typeof (global as any).gc === 'function') {
+    try {
+      (global as any).gc();
+    } catch {
+      // ignore
+    }
+  }
   const mem = process.memoryUsage();
   res.json({
     status: 'ok',

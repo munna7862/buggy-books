@@ -66,7 +66,7 @@ jobs:
       - name: Start Backend Server
         run: |
           cd backend
-          nohup node dist/server.js > ../backend-endurance.log 2>&1 &
+          nohup node --expose-gc dist/server.js > ../backend-endurance.log 2>&1 &
           npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-endurance.log && exit 1)
         env:
           PORT: 4000
