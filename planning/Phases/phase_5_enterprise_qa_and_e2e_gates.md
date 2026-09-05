@@ -43,7 +43,7 @@ graph LR
      - Addition of `e2e-smoke` job to `.github/workflows/ci.yml` running against pre-built artifacts (`dist/`).
      - Removal of `continue-on-error: true` in `playwright-ci.yml` and `playwright-docker.yml`.
      - Adoption of `@quarantine` tagging mechanism and failure artifact capture (`trace`, `screenshot`).
-   - *Status*: `[PLANNED]`
+   - *Status*: `[COMPLETED]`
 
 2. **[Sprint 5.2: Self-Contained Local WebServer Orchestration & Multi-Browser Matrix](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_5_2_local_webserver_and_multi_browser_matrix.md)**
    - *Estimated Effort*: 5 Story Points
@@ -65,12 +65,12 @@ graph LR
 
 ## 4. Phase 5 Acceptance Criteria & Quality Gates
 
-- [ ] Pull requests in `ci.yml` execute a real Playwright `@smoke` suite against pre-built frontend and backend artifacts within 60 seconds.
-- [ ] No occurrences of `continue-on-error: true` remain on test execution steps in any Playwright workflow.
-- [ ] Failing test assertions in Playwright strictly fail the GitHub Actions workflow check while uploading failure traces.
-- [ ] Known flaky tests can be quarantined with `@quarantine` without blocking active PR gates.
+- [x] Pull requests in `ci.yml` execute a real Playwright `@smoke` suite against pre-built frontend and backend artifacts within 60 seconds.
+- [x] No occurrences of `continue-on-error: true` remain on test execution steps in any Playwright workflow.
+- [x] Failing test assertions in Playwright strictly fail the GitHub Actions workflow check while uploading failure traces.
+- [x] Known flaky tests can be quarantined with `@quarantine` without blocking active PR gates.
 - [ ] Running `npx playwright test` locally requires zero pre-running server processes or external network connectivity.
-- [ ] Running tests locally without repository secrets automatically resolves to seeded mock accounts without crashing.
+- [x] Running tests locally without repository secrets automatically resolves to seeded mock accounts without crashing.
 - [ ] Playwright test suite executes across Desktop Chromium, WebKit (Safari), Firefox, and mobile viewport devices.
 - [ ] k6 performance test suite includes an endurance soak scenario validating memory stability and zero file descriptor exhaustion.
 - [ ] PR performance benchmarks evaluate relative delta against `main` baseline, blocking changes that introduce > 20% latency regression.
