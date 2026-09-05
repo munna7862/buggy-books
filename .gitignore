@@ -24,4 +24,16 @@ performance/bin/
 .lighthouseci/
 lhci-reports/
 
+# Test coverage & result reports
+coverage/
+**/coverage/
+test-results.json
+**/test-results.json
 
+# Server logs
+*.log
+**/server.log
+
+# Performance test summaries
+perf-summary*.json
+performance/k6-summary*.md
