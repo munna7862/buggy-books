@@ -76,9 +76,108 @@ jobs:
           path: frontend/dist
           retention-days: 1
 
-  # STAGE 2: Run Automation Tests across Cross-Browser and Mobile Matrix
-  test:
-    name: UI & API Automation (${{ matrix.project }})
+  # STAGE 2A: Dedicated Single-Pass API Test Execution
+  api-tests:
+    name: API Automation (Chromium)
+    needs: [build-services]
+    runs-on: ubuntu-latest
+
+    env:
+      ENV: LOCAL
+      BASE_URL: http://127.0.0.1:5173
+      API_BASE_URL: http://127.0.0.1:4000
+      HEADLESS: 'true'
+      BROWSER: chrome
+      USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
+      PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            backend/package-lock.json
+            playwright-e2e/package-lock.json
+
+      - name: Download Backend Dist Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-dist
+          path: backend/dist
+
+      - name: Install Backend Production Dependencies
+        run: |
+          cd backend
+          npm ci --omit=dev
+
+      - name: Install Playwright Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Install Playwright Chromium Browser
+        working-directory: playwright-e2e
+        run: npx playwright install --with-deps chromium
+
+      - name: Start Ephemeral Backend Server
+        run: |
+          cd backend
+          nohup node dist/server.js > ../backend-server.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
+        env:
+          PORT: 4000
+          NODE_ENV: development
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Run API Automation Tests
+        working-directory: playwright-e2e
+        env:
+          ENVIRONMENT: LOCAL
+          TZ: Australia/Adelaide
+          BASE_URL: http://127.0.0.1:5173
+          API_BASE_URL: http://127.0.0.1:4000
+          USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
+          PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
+        run: |
+          npx playwright test src/tests/api --config=src/config/playwright.config.ts --project=chromium --workers=4 --reporter=blob,allure-playwright,list
+
+      - name: Upload Ephemeral Server Logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ephemeral-server-logs-api
+          path: backend-server.log
+          retention-days: 7
+
+      - name: Upload Blob Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-api
+          path: playwright-e2e/blob-report
+          retention-days: 7
+
+      - name: Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-api
+          path: playwright-e2e/reports/allure-results
+          retention-days: 7
+
+      - name: Stop Ephemeral Backend Server
+        if: always()
+        run: pkill -f "node dist/server.js" || true
+
+  # STAGE 2B: Run UI Tests across Cross-Browser and Mobile Matrix
+  ui-tests:
+    name: UI Automation (${{ matrix.project }})
     needs: [build-services]
     runs-on: ubuntu-latest
 
@@ -86,7 +185,7 @@ jobs:
       fail-fast: false
       matrix:
         project: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
-    
+
     env:
       ENV: LOCAL
       BASE_URL: http://127.0.0.1:5173
@@ -177,7 +276,7 @@ jobs:
           nohup npx vite preview --port 5173 --host 0.0.0.0 > ../frontend-preview.log 2>&1 &
           npx wait-on -t 30000 http://127.0.0.1:5173 || (cat ../frontend-preview.log && exit 1)
 
-      - name: Run Playwright Tests
+      - name: Run Playwright UI Tests
         working-directory: playwright-e2e
         env:
           ENVIRONMENT: LOCAL
@@ -187,7 +286,7 @@ jobs:
           USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
           PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
         run: |
-          npx playwright test --project=${{ matrix.project }}
+          npx playwright test src/tests/ui --config=src/config/playwright.config.ts --project=${{ matrix.project }} --reporter=blob,allure-playwright,list
 
       - name: Upload Ephemeral Server Logs
         if: always()
@@ -197,6 +296,14 @@ jobs:
           path: |
             backend-server.log
             frontend-preview.log
+          retention-days: 7
+
+      - name: Upload Blob Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blob-report-${{ matrix.project }}
+          path: playwright-e2e/blob-report
           retention-days: 7
 
       - name: Upload Allure Results
@@ -213,13 +320,49 @@ jobs:
           pkill -f "node dist/server.js" || true
           pkill -f "vite preview" || true
 
-  # STAGE 3: Merge and Deploy Allure Report
+  # STAGE 3: Merge Blob Reports, Build Allure Dashboard & Deploy
   deploy-report:
-    name: Deploy Allure Report
-    needs: [test]
+    name: Merge Reports & Deploy Allure
+    needs: [api-tests, ui-tests]
     if: always()
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: playwright-e2e/package-lock.json
+
+      - name: Install Playwright Dependencies
+        working-directory: playwright-e2e
+        run: npm ci
+
+      - name: Download all Blob Reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: blob-report-*
+          path: playwright-e2e/all-blobs
+          merge-multiple: true
+
+      - name: Merge Playwright Blob Reports into HTML Report
+        working-directory: playwright-e2e
+        run: |
+          npx playwright merge-reports --reporter=html all-blobs
+
+      - name: Upload Consolidated HTML Report Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-html-report-ci
+          path: playwright-e2e/playwright-report
+          retention-days: 7
+
       - name: Checkout gh-pages
         uses: actions/checkout@v4
         continue-on-error: true
@@ -227,7 +370,7 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      - name: Download Allure Results
+      - name: Download All Allure Results
         uses: actions/download-artifact@v4
         with:
           pattern: allure-results-*
@@ -236,6 +379,9 @@ jobs:
 
       - name: Test Report Summary
         run: |
+          echo "### 📊 Cross-Browser Matrix & API Test Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **API Tests:** Decoupled single-pass execution (Chromium, 4 workers)" >> $GITHUB_STEP_SUMMARY
+          echo "- **UI Tests:** Cross-browser matrix (chromium, firefox, webkit, mobile-chrome, mobile-safari)" >> $GITHUB_STEP_SUMMARY
           echo "- **Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/CI/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Allure Report

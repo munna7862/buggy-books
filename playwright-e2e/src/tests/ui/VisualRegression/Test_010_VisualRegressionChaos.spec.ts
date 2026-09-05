@@ -22,6 +22,9 @@ async function syncVisualChaos(request: any, state: boolean) {
 }
 
 test.describe('Visual Regression & Layout Chaos Suite', () => {
+  // Visual baseline comparison currently calibrated for Desktop Chromium
+  test.skip(({ browserName, isMobile }) => browserName !== 'chromium' || isMobile, 'Visual baseline comparison currently calibrated for Desktop Chromium');
+
   // Use clean unauthenticated storage state for visual baseline & explicit login test
   test.use({ storageState: { cookies: [], origins: [] } });
 
