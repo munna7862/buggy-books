@@ -1,0 +1,113 @@
+# =============================================================
+# BuggyBooks – Performance Endurance, Soak & Breakpoint Testing
+#
+# Dedicated endurance workflow running sustained soak loads and
+# capacity breakpoint saturation tests to detect memory leaks,
+# event loop degradation, and connection pool exhaustion.
+# =============================================================
+
+name: Performance Endurance & Breakpoint Saturation
+
+on:
+  schedule:
+    # Run every Sunday at 02:00 UTC
+    - cron: '0 2 * * 0'
+  workflow_dispatch:
+    inputs:
+      soak_duration:
+        description: 'Soak Test Sustained Duration (e.g., 5m, 15m, 30m)'
+        required: false
+        default: '15m'
+      soak_vus:
+        description: 'Soak Virtual Users (VUs)'
+        required: false
+        default: '25'
+      max_breakpoint_vus:
+        description: 'Maximum Breakpoint Ramping VUs'
+        required: false
+        default: '200'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  perf-endurance:
+    name: k6 Endurance Soak & Breakpoint Benchmarks
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install and Build Backend
+        run: |
+          cd backend
+          npm ci
+          npm run build
+        env:
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Install Backend Production Dependencies
+        run: |
+          cd backend
+          npm ci --omit=dev
+
+      - name: Start Backend Server
+        run: |
+          cd backend
+          nohup node dist/server.js > ../backend-endurance.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-endurance.log && exit 1)
+        env:
+          PORT: 4000
+          NODE_ENV: development
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@v1
+
+      - name: Run Endurance Soak Benchmark
+        run: |
+          k6 run --summary-export=perf-summary-soak.json performance/scenarios/soak-load.js
+          node performance/report-perf-summary.js perf-summary-soak.json "Endurance Soak Benchmark (${{ github.event.inputs.soak_vus || '25' }} VUs)" --baseline=performance/baselines/baseline-perf.json
+        env:
+          SOAK_DURATION: ${{ github.event.inputs.soak_duration || '15m' }}
+          SOAK_VUS: ${{ github.event.inputs.soak_vus || '25' }}
+          BASE_URL: http://127.0.0.1:4000
+
+      - name: Run Capacity Breakpoint Saturation Test
+        run: |
+          k6 run performance/scenarios/breakpoint-test.js
+          node performance/report-perf-summary.js perf-summary-breakpoint.json "Breakpoint Capacity Saturation Test" --baseline=performance/baselines/baseline-perf.json
+        env:
+          MAX_VUS: ${{ github.event.inputs.max_breakpoint_vus || '200' }}
+          BASE_URL: http://127.0.0.1:4000
+
+      - name: Upload Endurance Performance Artifacts & Telemetry
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: perf-endurance-artifacts
+          path: |
+            perf-summary*.json
+            performance/k6-summary*.md
+            backend-endurance.log
+          retention-days: 14
+
+      - name: Stop Backend Server
+        if: always()
+        run: pkill -f "node dist/server.js" || true

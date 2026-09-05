@@ -1,9 +1,9 @@
-# Sprint 5.2: Self-Contained Local WebServer Orchestration & Multi-Browser Matrix
+# Sprint 5.3: Performance Endurance, Soak Testing & Automated Baseline Regression Detection
 
-**Sprint Identifier**: `SPRINT-5.2-LOCAL-WEBSERVER-AND-MULTI-BROWSER-MATRIX`  
+**Sprint Identifier**: `SPRINT-5.3-PERFORMANCE-ENDURANCE-AND-BASELINE-REGRESSION`  
 **Phase**: Phase 5 (Enterprise Quality Assurance, Ephemeral E2E Gates & Performance Baseline Regression)  
 **Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Eliminate local developer setup friction, external staging coupling, and cross-browser blind spots by implementing native Playwright `webServer` lifecycle orchestration, fallback mock seed credentials in `env.config.ts`, and a comprehensive cross-browser and mobile device emulation matrix (Chromium, WebKit/Safari, Firefox, Pixel 5, iPhone 13).
+**Sprint Goal**: Establish proactive detection of long-term system degradation and silent latency regressions by introducing k6 soak/endurance and capacity saturation breakpoint scenarios, augmenting `performance/report-perf-summary.js` with relative delta regression checks against git baselines (blocking PRs with > +20% degradation), and configuring a dedicated endurance workflow.
 
 ---
 
@@ -12,38 +12,34 @@
 | Persona | Assigned Member | Responsibilities for this Sprint |
 | :--- | :--- | :--- |
 | **Scrum Master** | AI Agent / SM | Sprint backlog initialization, live burndown tracking in `task.md`, review facilitation, and DoD audit. |
-| **SDET Architect** | AI Agent / SDET | Test strategy, documenting `TC-QA-009` and `TC-QA-010` in `specs/test_cases_catalog.md`, designing fallback credential validation and mobile emulation scenarios. |
-| **Dev Architect / Senior SDE** | AI Agent / SDE | Playwright `webServer` orchestration, multi-browser project configurations, `env.config.ts` fallback credentials, auth fixture enhancement, mobile drawer navigation, and npm scripts. |
-| **Security Officer** | AI Agent / SEC | Auditing fallback credentials for credential leakage prevention and verifying test network boundaries. |
-| **Playwright QA Specialist** | AI Agent / QA | Zero-dependency local verification, cross-browser execution (Chromium, Firefox, WebKit), mobile viewport validation (Pixel 5, iPhone 13), 100% green test execution. |
-| **Product Owner** | AI Agent / PO | Acceptance review of local developer experience, cross-browser fidelity, mobile touch UX, and release authorization. |
-| **DevOps Engineer** | AI Agent / DevOps | Updating `.github/workflows/ci.yml` and `.github/workflows/playwright-ci.yml`, Git sync, PR creation, CI monitoring, and merge closeout. |
+| **SDET Architect** | AI Agent / SDET | Test strategy, documenting `TC-PERF-004` and `TC-PERF-005` in `specs/test_cases_catalog.md`, designing soak load profiles, memory drift assertions, and breakpoint saturation metrics. |
+| **Dev Architect / Senior SDE** | AI Agent / SDE | Authoring k6 soak load (`soak-load.js`) and breakpoint capacity scenarios (`breakpoint-test.js`), implementing memory drift and latency thresholds, and baseline comparison in `report-perf-summary.js`. |
+| **Security Officer** | AI Agent / SEC | Auditing load test traffic boundaries, rate limit bypass headers (`x-bypass-rate-limit`), session sandboxing headers (`x-test-session-id`), and telemetry security. |
+| **Performance & QA Specialist** | AI Agent / QA | Local verification of soak scenarios, breakpoint detection, simulated regression gate enforcement (+20% delta check), and project test suite validation. |
+| **Product Owner** | AI Agent / PO | Acceptance review of endurance benchmark metrics, capacity saturation boundaries, baseline SLA gate (+20%), and release authorization. |
+| **DevOps Engineer** | AI Agent / DevOps | Integrating baseline checks into `.github/workflows/ci.yml`, creating `.github/workflows/perf-endurance.yml`, Git sync, PR creation, CI monitoring, and merge closeout. |
 
 ---
 
 ## 2. Sprint Backlog & Subtask Tracking
 
-### User Story US-QA-503: Self-Contained Local WebServer Orchestration & Seed Fallbacks
-*As an SDET & Full-Stack Developer, I want running `npx playwright test` locally to automatically boot the backend API and frontend preview servers and fall back to local seed credentials if staging secrets are missing, so that developers and fork contributors can execute end-to-end tests instantly with zero manual server management or external staging network dependencies.*
-- [x] **US-QA-503.1** (`Dev Architect / Senior SDE`): Configure `webServer` array in `playwright-e2e/src/config/playwright.config.ts` (and root `playwright-e2e/playwright.config.ts` alias) to automatically boot backend (`node dist/server.js`, port 4000) and frontend preview (`npx vite preview --port 5173 --host 127.0.0.1`, port 5173) with `reuseExistingServer: !process.env.CI`.
-- [x] **US-QA-503.2** (`Dev Architect / Senior SDE`): Configure health check timeouts (`timeout: 120 * 1000`) and stdout/stderr pipe forwarding for both servers.
-- [x] **US-QA-503.3** (`Dev Architect / Senior SDE`): Enhance `playwright-e2e/src/config/env.config.ts` with local fallback credentials: default `baseUrl` to `http://127.0.0.1:5173` and `apiBaseUrl` to `http://127.0.0.1:4000` when unset.
-- [x] **US-QA-503.4** (`Dev Architect / Senior SDE`): Supply default fallback seed credentials (`admin` / `password123`) in `getLoginCredentials()` and eliminate missing-secret exceptions.
-- [x] **US-QA-503.5** (`Dev Architect / Senior SDE`): Add `playwright-e2e/src/core/base/auth.fixture.ts` and update `SignUpPage` to handle seed user authentication seamlessly.
-- [x] **US-QA-503.6** (`Dev Architect / Senior SDE`): Add `test:e2e:local` convenience command to root `package.json` and `playwright-e2e/package.json`.
-- [x] **US-QA-503.7** (`SDET Architect`): Document test case `TC-QA-009` (Native WebServer Local Orchestration) in `specs/test_cases_catalog.md`.
-- [x] **US-QA-503.8** (`Playwright QA Specialist`): Verify zero-dependency local execution from a clean shell without running dev servers.
+### User Story US-PERF-501: k6 Endurance Soak & Capacity Breakpoint Testing
+*As a Performance Engineer & SRE, I want long-duration soak tests (15–30 minutes) and ramping capacity breakpoint tests against the BuggyBooks backend, so that memory leaks, event loop delays, and connection pool exhaustion are identified before releasing changes to production.*
+- [x] **US-PERF-501.1** (`SDET Architect`): Document test case `TC-PERF-004` (Endurance Soak Benchmark) and define thresholds in `specs/test_cases_catalog.md`.
+- [x] **US-PERF-501.2** (`Dev Architect / Senior SDE`): Create `performance/scenarios/soak-load.js` simulating sustained 20–30 VUs with memory/latency stability thresholds and configurable duration via ENV.
+- [x] **US-PERF-501.3** (`Dev Architect / Senior SDE`): Create `performance/scenarios/breakpoint-test.js` continuously ramping VUs from 1 to 200+ with automatic breaking point threshold detection and bottleneck diagnostics.
+- [x] **US-PERF-501.4** (`Dev Architect / Senior SDE`): Create `performance/package.json` and update root `package.json` with convenience scripts (`test:perf:soak`, `test:perf:breakpoint`).
+- [x] **US-PERF-501.5** (`DevOps Engineer`): Create `.github/workflows/perf-endurance.yml` scheduled weekly/nightly with manual `workflow_dispatch` trigger, running soak and breakpoint tests and uploading performance artifacts.
+- [x] **US-PERF-501.6** (`Performance & QA Specialist`): Run local verification of short soak test and breakpoint test, validating stable VU pacing and saturation diagnostics.
 
-### User Story US-QA-504: Multi-Browser & Mobile Viewport Compatibility Matrix
-*As a QA Lead, I want the Playwright suite to execute across Desktop Chromium, Firefox, WebKit (Desktop Safari), and mobile viewports (Pixel 5 & iPhone 13), so that layout shifts, touch interaction bugs, and browser engine rendering discrepancies are identified before reaching users.*
-- [x] **US-QA-504.1** (`Dev Architect / Senior SDE`): Configure multi-browser and device `projects` in `playwright-e2e/src/config/playwright.config.ts`: `chromium`, `firefox`, `webkit`, `mobile-chrome` (`devices['Pixel 5']`), and `mobile-safari` (`devices['iPhone 13']`).
-- [x] **US-QA-504.2** (`Dev Architect / Senior SDE`): Add granular npm execution scripts in `playwright-e2e/package.json` (`test:e2e:chromium`, `test:e2e:firefox`, `test:e2e:webkit`, `test:e2e:mobile`, `test:e2e:all`).
-- [x] **US-QA-504.3** (`Dev Architect / Senior SDE`): Implement responsive hamburger drawer navigation in `frontend/src/App.tsx` and `frontend/src/styles/_layout.css`.
-- [x] **US-QA-504.4** (`Dev Architect / Senior SDE`): Update `CatalogPage` navigation methods to handle mobile drawer menus and touch viewports.
-- [x] **US-QA-504.5** (`SDET Architect`): Document test case `TC-QA-010` (Cross-Browser & Mobile Matrix) in `specs/test_cases_catalog.md`.
-- [x] **US-QA-504.6** (`DevOps Engineer`): Scope PR smoke gate in `.github/workflows/ci.yml` specifically to `--project=chromium` to keep PR checks fast.
-- [x] **US-QA-504.7** (`DevOps Engineer`): Update `.github/workflows/playwright-ci.yml` with multi-browser matrix strategy and browser caching.
-- [x] **US-QA-504.8** (`Playwright QA Specialist`): Execute and validate smoke journeys across Chromium, Firefox, WebKit, and mobile emulators.
+### User Story US-PERF-502: Automated Relative Baseline Regression Gate in CI
+*As a DevOps Engineer & Release Gatekeeper, I want the CI performance benchmark job to compare pull request metrics against a baseline (`main` branch or committed benchmark reference) and fail if p95 latency degrades by more than 20%, so that gradual performance erosion and inefficient database queries are blocked before merging.*
+- [x] **US-PERF-502.1** (`SDET Architect`): Document test case `TC-PERF-005` (Automated Baseline Regression Gate) in `specs/test_cases_catalog.md`.
+- [x] **US-PERF-502.2** (`Dev Architect / Senior SDE`): Commit golden performance baseline reference in `performance/baselines/baseline-perf.json`.
+- [x] **US-PERF-502.3** (`Dev Architect / Senior SDE`): Enhance `performance/report-perf-summary.js` to accept `--baseline=<path>`, calculate percentage delta: `((current - baseline) / baseline) * 100`, format rich Step Summary table, and exit with code 1 when regression > 20%.
+- [x] **US-PERF-502.4** (`Dev Architect / Senior SDE`): Add `--regression-test` flag to `report-perf-summary.js` to simulate a +25% latency regression for automated verification.
+- [x] **US-PERF-502.5** (`DevOps Engineer`): Update `perf-benchmarks` job in `.github/workflows/ci.yml` to pass `--baseline=performance/baselines/baseline-perf.json`.
+- [x] **US-PERF-502.6** (`Performance & QA Specialist`): Validate baseline comparison with synthetic passing run and intentional regression failing run (exit code 1).
 
 ---
 
@@ -51,22 +47,24 @@
 
 | Reviewer Role | Target Role | Feedback / Action Item | Status |
 | :--- | :--- | :--- | :--- |
-| **SDET Quality Gate** | SDET Architect | Verified that `webServer` correctly boots backend and frontend preview servers without port conflicts and automatically releases ports on completion. Confirmed fallback seed credentials match seeded user records (`admin` / `password123`) and operate with zero-env friction. Validated catalog entries `TC-QA-009` and `TC-QA-010`. | `[APPROVED]` |
-| **Dev Code Acceptance** | Dev Architect | Audited TypeScript code for strict typing: 0 `any` violations, clean TypeScript compilation across backend and playwright-e2e (`tsc --noEmit`), 80/80 backend unit tests passing, 32/32 frontend component tests passing, and Vite production bundle generated without warnings. | `[APPROVED]` |
-| **Security Audit** | Security Officer | Verified fallback credentials are only utilized when environment secrets are omitted, point strictly to local seeded mock data (`admin`), and never log plain credentials or tokens. Test session storage isolation and CSRF protections confirmed functional. | `[APPROVED]` |
-| **DevOps Code Review** | DevOps Engineer | Verified PR smoke checks in `.github/workflows/ci.yml` target `--project=chromium` for sub-4-minute PR gating. Confirmed `.github/workflows/playwright-ci.yml` matrix installs target browser engines selectively, and verified workflow YAML syntax via `js-yaml`. | `[APPROVED]` |
-| **PO Sprint Review** | Product Owner | Verified that running `npm run test:e2e:local` provides immediate out-of-the-box local execution. Validated responsive drawer on mobile viewports (Pixel 5 & iPhone 13) and verified seamless cross-browser parity across Chromium, Firefox, and WebKit. Accepted all sprint deliverables. | `[APPROVED]` |
+| **SDET Quality Gate** | SDET Architect | Verified test catalog entries `TC-PERF-004` and `TC-PERF-005` in `specs/test_cases_catalog.md`. Confirmed `soak-load.js` maintains realistic VU pacing (0.15s–0.2s sleep) without client-side port/socket exhaustion, and validated memory drift and latency thresholds. Confirmed `breakpoint-test.js` identifies saturation points and produces actionable bottleneck diagnostics. | `[APPROVED]` |
+| **Dev Code Acceptance** | Dev Architect | Audited k6 scenarios and `report-perf-summary.js` implementation. Verified strict percentage delta calculations against golden baseline, verified that `--regression-test` flags regressions and exits with code 1, verified clean TypeScript builds (`npm run typecheck`), 80/80 backend tests, and 32/32 frontend tests. | `[APPROVED]` |
+| **Security Audit** | Security Officer | Verified load test traffic respects session sandboxing (`x-test-session-id`), rate-limit bypass headers are restricted to test environments, and no sensitive telemetry, tokens, or credentials are exposed in baseline JSON or summary markdown. Verified GitHub Actions workflow permissions are scoped to `contents: read`. | `[APPROVED]` |
+| **DevOps Code Review** | DevOps Engineer | Validated YAML syntax of `.github/workflows/perf-endurance.yml` and `.github/workflows/ci.yml` via `js-yaml`. Confirmed `perf-benchmarks` passes `--baseline=performance/baselines/baseline-perf.json` and artifact uploads maintain appropriate retention periods. | `[APPROVED]` |
+| **PO Sprint Review** | Product Owner | Reviewed soak test stability, capacity breakpoint saturation reports, and verified that any PR with > +20% latency regression is strictly blocked by CI gates. Formally accepted all Sprint 5.3 deliverables. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] `webServer` configuration active in `playwright.config.ts` supporting backend and frontend lifecycle.
-- [x] Fallback mock seed credentials implemented in `env.config.ts` with zero missing-secret exceptions.
-- [x] Multi-project configuration active with Desktop Chrome, Firefox, WebKit, Pixel 5, and iPhone 13.
-- [x] Mobile responsive navigation interactions validated on mobile viewports.
-- [x] Target-specific npm scripts added to `playwright-e2e/package.json` and root `package.json`.
-- [x] Test cases catalog updated with `TC-QA-009` and `TC-QA-010`.
-- [x] Local zero-dependency execution verified from a clean shell without running dev servers.
-- [x] Cross-browser and mobile smoke journeys pass 100% across all engines.
-- [x] Pull Request opened and merged with conventional commits after CI green check.
+- [x] `specs/test_cases_catalog.md` updated with `TC-PERF-004` and `TC-PERF-005` (Pre-Flight Lock).
+- [x] `soak-load.js` and `breakpoint-test.js` created in `performance/scenarios/`.
+- [x] Golden baseline reference committed in `performance/baselines/baseline-perf.json`.
+- [x] `report-perf-summary.js` enhanced with baseline delta comparison, > 20% regression threshold failure (exit 1), and `--regression-test` simulation.
+- [x] Step summary markdown table formatted with Baseline, Current, Delta %, and visual status indicators (`🟢 PASS`, `🟡 WARNING`, `🔴 REGRESSION`).
+- [x] Dedicated endurance workflow `.github/workflows/perf-endurance.yml` configured.
+- [x] CI workflow `.github/workflows/ci.yml` updated with `--baseline` flag for performance benchmarking.
+- [x] Local verification of soak scenario, breakpoint test, and baseline regression failure completed.
+- [x] TypeScript build clean (`npm run typecheck`), backend unit tests (80/80) and frontend component tests (32/32) passing.
+- [x] Pull Request automatically opened via `gh pr create` with structured summary and test evidence.
+- [x] CI workflows verified 100% green before squash merging into `main`.

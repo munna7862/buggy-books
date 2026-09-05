@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 
 /**
- * BuggyBooks k6 Performance Summary Reporter
+ * BuggyBooks k6 Performance Summary Reporter & Relative Baseline Regression Gate
  *
- * Parses k6 summary export JSON and generates formatted GitHub Step Summaries ($GITHUB_STEP_SUMMARY)
- * and downloadable markdown report artifacts.
+ * Parses k6 summary export JSON, calculates relative deltas against git golden baselines,
+ * enforces > +20% latency regression failure exit codes, and generates formatted GitHub Step Summaries ($GITHUB_STEP_SUMMARY).
  */
 
 const fs = require('fs');
 const path = require('path');
+
+const REGRESSION_THRESHOLD_PERCENT = 20.0;
+const WARNING_THRESHOLD_PERCENT = 10.0;
 
 function formatNumber(val, decimals = 2) {
   if (val === undefined || val === null || isNaN(val)) return 'N/A';
@@ -22,7 +25,34 @@ function getMetricValue(metric, key) {
   return undefined;
 }
 
-function generateMarkdown(summaryData, title) {
+function calculateDelta(current, baseline) {
+  if (current === undefined || baseline === undefined || isNaN(current) || isNaN(baseline) || baseline === 0) {
+    return null;
+  }
+  return ((current - baseline) / baseline) * 100;
+}
+
+function formatDelta(delta) {
+  if (delta === null || delta === undefined || isNaN(delta)) return 'N/A';
+  const sign = delta > 0 ? '+' : '';
+  return `${sign}${delta.toFixed(2)}%`;
+}
+
+function getDeltaStatus(delta) {
+  if (delta === null || delta === undefined || isNaN(delta)) return { text: 'ℹ️ N/A', isRegression: false };
+  if (delta > REGRESSION_THRESHOLD_PERCENT) {
+    return { text: `🔴 REGRESSION (${formatDelta(delta)})`, isRegression: true };
+  }
+  if (delta > WARNING_THRESHOLD_PERCENT) {
+    return { text: `🟡 WARNING (${formatDelta(delta)})`, isRegression: false };
+  }
+  if (delta <= 0) {
+    return { text: `🟢 IMPROVED (${formatDelta(delta)})`, isRegression: false };
+  }
+  return { text: `🟢 PASS (${formatDelta(delta)})`, isRegression: false };
+}
+
+function generateMarkdown(summaryData, title, baselineData = null, isRegressionSimulated = false) {
   const metrics = summaryData.metrics || {};
   const rootGroup = summaryData.root_group || {};
 
@@ -36,20 +66,21 @@ function generateMarkdown(summaryData, title) {
   const avgDuration = getMetricValue(httpDuration, 'avg');
   const medDuration = getMetricValue(httpDuration, 'med');
   const p90Duration = getMetricValue(httpDuration, 'p(90)');
-  const p95Duration = getMetricValue(httpDuration, 'p(95)');
+  let p95Duration = getMetricValue(httpDuration, 'p(95)');
   const p99Duration = getMetricValue(httpDuration, 'p(99)');
   const maxDuration = getMetricValue(httpDuration, 'max');
+
+  // If regression simulation is active, inflate p95 by +25%
+  if (isRegressionSimulated && p95Duration !== undefined) {
+    p95Duration = p95Duration * 1.25;
+  }
 
   const totalReqs = getMetricValue(httpReqs, 'count');
   const rps = getMetricValue(httpReqs, 'rate');
   const failRate = getMetricValue(httpFailed, 'rate') !== undefined ? getMetricValue(httpFailed, 'rate') * 100 : (getMetricValue(httpFailed, 'value') !== undefined ? getMetricValue(httpFailed, 'value') * 100 : 0);
   const maxVus = getMetricValue(vusMax, 'max') || getMetricValue(vusMax, 'value');
-  const totalIters = getMetricValue(iterations, 'count');
 
   // Check thresholds for pass/fail
-  // In k6 summary JSON:
-  // - If boolean: `false` means not breached (PASSED), `true` means breached (FAILED).
-  // - If object: `ok: true` (PASSED) or `ok: false` (FAILED).
   let hasThresholdFailures = false;
   const thresholdRows = [];
 
@@ -74,10 +105,54 @@ function generateMarkdown(summaryData, title) {
     }
   }
 
-  const overallStatus = hasThresholdFailures ? '🔴 FAILED' : '🟢 PASSED';
+  // Baseline comparison
+  let hasRegression = false;
+  const baselineRows = [];
+
+  if (baselineData) {
+    const baseMetrics = baselineData.metrics || baselineData;
+
+    const metricsToCompare = [
+      { key: 'http_req_duration', subKey: 'avg', label: 'http_req_duration (avg)', currentVal: avgDuration },
+      { key: 'http_req_duration', subKey: 'p(90)', label: 'http_req_duration (p90)', currentVal: p90Duration },
+      { key: 'http_req_duration', subKey: 'p(95)', label: 'http_req_duration (p95)', currentVal: p95Duration },
+      { key: 'catalog_duration', subKey: 'p(95)', label: 'catalog_duration (p95)', currentVal: getMetricValue(metrics['catalog_duration'], 'p(95)') },
+      { key: 'search_duration', subKey: 'p(95)', label: 'search_duration (p95)', currentVal: getMetricValue(metrics['search_duration'], 'p(95)') },
+      { key: 'detail_duration', subKey: 'p(95)', label: 'detail_duration (p95)', currentVal: getMetricValue(metrics['detail_duration'], 'p(95)') },
+    ];
+
+    for (const item of metricsToCompare) {
+      const baseMetricObj = baseMetrics[item.key];
+      const baseVal = getMetricValue(baseMetricObj, item.subKey);
+
+      let currentVal = item.currentVal;
+      if (isRegressionSimulated && item.subKey === 'p(95)' && baseVal !== undefined) {
+        // Intentionally simulate +25% degradation above baseline
+        currentVal = baseVal * 1.25;
+      }
+
+      if (baseVal !== undefined && currentVal !== undefined) {
+        const delta = calculateDelta(currentVal, baseVal);
+        const status = getDeltaStatus(delta);
+        if (status.isRegression) {
+          hasRegression = true;
+        }
+        baselineRows.push({
+          label: item.label,
+          baseline: formatNumber(baseVal, 2) + ' ms',
+          current: formatNumber(currentVal, 2) + ' ms',
+          delta: formatDelta(delta),
+          status: status.text,
+        });
+      }
+    }
+  }
+
+  const overallPassed = !hasThresholdFailures && !hasRegression;
+  const overallStatus = overallPassed ? '🟢 PASSED' : '🔴 FAILED';
 
   let md = `\n### ⚡ Performance Benchmark: ${title}\n\n`;
-  md += `**Overall Status**: ${overallStatus}\n\n`;
+  md += `**Overall Status**: ${overallStatus}${hasRegression ? ' (Regression Gate Breached)' : ''}\n\n`;
   md += `| Benchmark Metric | Measured Result | Target Threshold | Gate Status |\n`;
   md += `| :--- | :--- | :--- | :---: |\n`;
   md += `| **Peak Virtual Users (VUs)** | \`${maxVus ?? 'N/A'}\` VUs | — | ℹ️ |\n`;
@@ -92,6 +167,20 @@ function generateMarkdown(summaryData, title) {
     md += `| **Max Latency** | \`${formatNumber(maxDuration, 2)}\` ms | \`< 600ms\` | ${maxDuration < 600 ? '✅' : '⚠️'} |\n`;
   }
   md += `| **HTTP Error Rate** | \`${formatNumber(failRate, 2)}%\` | \`< 2.00%\` | ${failRate <= 2.0 ? '✅' : '❌'} |\n`;
+
+  // Baseline Comparison Table
+  if (baselineRows.length > 0) {
+    md += `\n#### 📊 Relative Baseline Regression Analysis (Gate Threshold: +${REGRESSION_THRESHOLD_PERCENT.toFixed(1)}%)\n\n`;
+    if (isRegressionSimulated) {
+      md += `> ⚠️ **Simulated Regression Mode Active**: Artificially injected +25% latency delta for gate verification.\n\n`;
+    }
+    md += `| Metric / Endpoint | Golden Baseline | Current Result | Delta (%) | Gate Status |\n`;
+    md += `| :--- | :---: | :---: | :---: | :---: |\n`;
+    for (const row of baselineRows) {
+      md += `| \`${row.label}\` | \`${row.baseline}\` | \`${row.current}\` | \`${row.delta}\` | ${row.status} |\n`;
+    }
+    md += `\n`;
+  }
 
   // Checks table
   let rawChecks = rootGroup.checks;
@@ -127,34 +216,74 @@ function generateMarkdown(summaryData, title) {
   }
 
   md += `\n---\n`;
-  return { md, hasThresholdFailures };
+  return { md, hasThresholdFailures, hasRegression };
+}
+
+function parseCommandLineArgs() {
+  const args = process.argv.slice(2);
+  let summaryJsonPath = null;
+  let title = 'API Performance Benchmark';
+  let baselinePath = null;
+  let isRegressionSimulated = false;
+
+  for (let i = 0; i < args.length; i++) {
+    const arg = args[i];
+    if (arg.startsWith('--baseline=')) {
+      baselinePath = path.resolve(arg.split('=')[1]);
+    } else if (arg === '--baseline' && i + 1 < args.length) {
+      baselinePath = path.resolve(args[++i]);
+    } else if (arg === '--regression-test' || arg === '--simulate-regression') {
+      isRegressionSimulated = true;
+    } else if (!arg.startsWith('--')) {
+      if (!summaryJsonPath) {
+        summaryJsonPath = path.resolve(arg);
+      } else {
+        title = arg;
+      }
+    }
+  }
+
+  return { summaryJsonPath, title, baselinePath, isRegressionSimulated };
 }
 
 function main() {
-  const args = process.argv.slice(2);
-  if (args.length === 0) {
-    console.error('Usage: node report-perf-summary.js <summary-json-path> [benchmark-title]');
+  const { summaryJsonPath, title, baselinePath, isRegressionSimulated } = parseCommandLineArgs();
+
+  if (!summaryJsonPath) {
+    console.error('Usage: node report-perf-summary.js <summary-json-path> [benchmark-title] [--baseline=<path>] [--regression-test]');
     process.exit(1);
   }
 
-  const jsonPath = path.resolve(args[0]);
-  const title = args[1] || 'API Performance Benchmark';
-
-  if (!fs.existsSync(jsonPath)) {
-    console.error(`Error: Summary JSON not found at ${jsonPath}`);
+  if (!fs.existsSync(summaryJsonPath)) {
+    console.error(`Error: Summary JSON not found at ${summaryJsonPath}`);
     process.exit(1);
   }
 
   let summaryData;
   try {
-    const raw = fs.readFileSync(jsonPath, 'utf8');
+    const raw = fs.readFileSync(summaryJsonPath, 'utf8');
     summaryData = JSON.parse(raw);
   } catch (err) {
     console.error(`Failed to parse k6 summary JSON:`, err.message);
     process.exit(1);
   }
 
-  const { md, hasThresholdFailures } = generateMarkdown(summaryData, title);
+  let baselineData = null;
+  if (baselinePath) {
+    if (fs.existsSync(baselinePath)) {
+      try {
+        const rawBaseline = fs.readFileSync(baselinePath, 'utf8');
+        baselineData = JSON.parse(rawBaseline);
+        console.log(`🔍 Loaded baseline reference from: ${baselinePath}`);
+      } catch (err) {
+        console.warn(`⚠️ Warning: Failed to parse baseline JSON at ${baselinePath}: ${err.message}`);
+      }
+    } else {
+      console.warn(`⚠️ Warning: Specified baseline file not found at ${baselinePath}. Continuing without baseline comparison.`);
+    }
+  }
+
+  const { md, hasThresholdFailures, hasRegression } = generateMarkdown(summaryData, title, baselineData, isRegressionSimulated);
 
   // Print to console
   console.log(md);
@@ -179,14 +308,21 @@ function main() {
     console.warn(`⚠️ Failed to write to ${artifactPath}:`, err.message);
   }
 
+  if (hasRegression) {
+    console.error(`❌ Performance Baseline Regression Gate Breached! Latency degraded by more than +${REGRESSION_THRESHOLD_PERCENT}% against golden baseline.`);
+    process.exit(1);
+  }
+
   if (hasThresholdFailures) {
     console.error(`❌ k6 benchmark failed threshold checks!`);
     process.exit(1);
   }
+
+  console.log(`✨ All performance assertions and baseline regression checks PASSED.`);
 }
 
 if (require.main === module) {
   main();
 }
 
-module.exports = { generateMarkdown };
+module.exports = { generateMarkdown, calculateDelta, formatDelta, getDeltaStatus };

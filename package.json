@@ -17,6 +17,8 @@
     "test:e2e:matrix": "cd playwright-e2e && npm run test:e2e:all",
     "test:perf": "node performance/run-k6.js performance/k6/catalog-load.js",
     "test:perf:stress": "node performance/run-k6.js performance/k6/inventory-stress.js",
+    "test:perf:soak": "node performance/run-k6.js performance/scenarios/soak-load.js",
+    "test:perf:breakpoint": "node performance/run-k6.js performance/scenarios/breakpoint-test.js",
     "test:lhci": "npx @lhci/cli autorun",
     "lint": "concurrently \"cd frontend && npm run lint\" \"cd backend && npm run lint\"",
     "lint:backend": "cd backend && npm run lint",
