@@ -1,0 +1,13 @@
+{
+  "name": "buggy-books-performance",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BuggyBooks k6 Performance, Endurance, and Saturation Benchmarks",
+  "scripts": {
+    "test:perf": "node run-k6.js k6/catalog-load.js",
+    "test:perf:smoke": "node run-k6.js k6/smoke-load.js",
+    "test:perf:stress": "node run-k6.js k6/inventory-stress.js",
+    "test:perf:soak": "node run-k6.js scenarios/soak-load.js",
+    "test:perf:breakpoint": "node run-k6.js scenarios/breakpoint-test.js"
+  }
+}
