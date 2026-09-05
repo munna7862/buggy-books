@@ -63,7 +63,7 @@ jobs:
           TZ: Australia/Adelaide
         run: |
           echo "Executing native dynamic shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
-          npx playwright test --config=src/config/playwright.config.ts --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob,allure-playwright,list
+          npx playwright test --config=src/config/playwright.config.ts --project=chromium --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob,allure-playwright,list
 
       - name: Upload Blob Report
         if: always()
