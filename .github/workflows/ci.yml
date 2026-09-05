@@ -416,17 +416,19 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-v2
 
       - name: Install Playwright Browsers & OS Dependencies
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         working-directory: playwright-e2e
-        run: npx playwright install --with-deps chrome
+        run: npx playwright install --with-deps chromium chrome
 
       - name: Install Playwright OS Dependencies Only
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         working-directory: playwright-e2e
-        run: npx playwright install-deps chrome
+        run: |
+          npx playwright install-deps chromium chrome
+          npx playwright install chromium chrome
 
       - name: Start Ephemeral Backend Server
         run: |
