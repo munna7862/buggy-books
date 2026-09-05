@@ -13,6 +13,8 @@
     "test:backend": "cd backend && npm test",
     "test:frontend": "cd frontend && npm test",
     "test:e2e": "cd playwright-e2e && npm test",
+    "test:e2e:local": "cd playwright-e2e && npm run test:e2e:local",
+    "test:e2e:matrix": "cd playwright-e2e && npm run test:e2e:all",
     "test:perf": "node performance/run-k6.js performance/k6/catalog-load.js",
     "test:perf:stress": "node performance/run-k6.js performance/k6/inventory-stress.js",
     "test:lhci": "npx @lhci/cli autorun",

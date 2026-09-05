@@ -1,9 +1,13 @@
-import { defineConfig } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test';
 import { envConfig } from './env.config';
 import * as path from 'path';
 
+const rootDir = path.resolve(__dirname, '../../..');
+const backendDir = path.resolve(rootDir, 'backend');
+const frontendDir = path.resolve(rootDir, 'frontend');
+
 export default defineConfig({
-  testDir: '../tests',
+  testDir: path.resolve(__dirname, '../tests'),
   testMatch: ['**/*.spec.ts'],
   fullyParallel: true,
   timeout: 300 * 1000,
@@ -27,25 +31,74 @@ export default defineConfig({
     }]
   ],
 
+  webServer: [
+    {
+      command: 'node dist/server.js',
+      cwd: backendDir,
+      port: 4000,
+      timeout: 120 * 1000,
+      reuseExistingServer: true,
+      stdout: 'pipe',
+      stderr: 'pipe',
+      env: {
+        PORT: '4000',
+        NODE_ENV: 'development',
+        JWT_SECRET: 'local-e2e-seed-secret'
+      }
+    },
+    {
+      command: 'npx vite preview --port 5173 --host 127.0.0.1',
+      cwd: frontendDir,
+      port: 5173,
+      timeout: 120 * 1000,
+      reuseExistingServer: true,
+      stdout: 'pipe',
+      stderr: 'pipe'
+    }
+  ],
+
   use: {
     baseURL: envConfig.baseUrl,
     headless: envConfig.headless,
-    viewport: null,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'retain-on-failure'
   },
+
   projects: [
     {
-      name: 'Google Chrome',
+      name: 'chromium',
       use: {
-        channel: 'chrome',
-        launchOptions: {
-          args: ['--disable-notifications', '--disable-infobars', '--disable-extensions', '--start-maximized'],
-        },
-        headless: envConfig.headless
-      }
-    }
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+    {
+      name: 'firefox',
+      use: {
+        ...devices['Desktop Firefox'],
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+    {
+      name: 'webkit',
+      use: {
+        ...devices['Desktop Safari'],
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+    {
+      name: 'mobile-chrome',
+      use: {
+        ...devices['Pixel 5'],
+      },
+    },
+    {
+      name: 'mobile-safari',
+      use: {
+        ...devices['iPhone 13'],
+      },
+    },
   ],
   outputDir: '../../reports/test-artifacts'
 });

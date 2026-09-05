@@ -23,28 +23,44 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function Header() {
   const { isAuthenticated, logout } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
 
   return (
     <header className="glass-nav">
-      <Link to="/" style={{textDecoration: 'none'}}>
+      <Link to="/" style={{textDecoration: 'none'}} onClick={closeMobileMenu}>
         <h2 className="nav-brand">BuggyBooks</h2>
       </Link>
-      <nav className="nav-links">
-        <Link to="/" className="nav-link">Catalog</Link>
-        <Link to="/admin/chaos" className="nav-link" id="nav-chaos-link">Chaos Control</Link>
+      <button
+        className="mobile-menu-btn"
+        id="mobile-menu-toggle"
+        aria-label="Toggle navigation menu"
+        aria-expanded={mobileMenuOpen}
+        onClick={() => setMobileMenuOpen((prev) => !prev)}
+      >
+        <span className="hamburger-icon" />
+      </button>
+      <nav className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
+        <Link to="/" className="nav-link" onClick={closeMobileMenu}>Catalog</Link>
+        <Link to="/admin/chaos" className="nav-link" id="nav-chaos-link" onClick={closeMobileMenu}>Chaos Control</Link>
         {isAuthenticated ? (
           <>
-            <Link to="/cart" className="nav-link">Cart</Link>
-            <Link to="/checkout" className="nav-link">Checkout</Link>
-            <Link to="/profile" className="nav-link" id="nav-profile-link">Profile</Link>
-            <button onClick={logout} className="nav-link" style={{background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem'}}>
+            <Link to="/cart" className="nav-link" onClick={closeMobileMenu}>Cart</Link>
+            <Link to="/checkout" className="nav-link" onClick={closeMobileMenu}>Checkout</Link>
+            <Link to="/profile" className="nav-link" id="nav-profile-link" onClick={closeMobileMenu}>Profile</Link>
+            <button
+              onClick={() => { logout(); closeMobileMenu(); }}
+              className="nav-link"
+              style={{background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem'}}
+            >
               Logout
             </button>
           </>
         ) : (
           <>
-            <Link to="/login" className="nav-link">Login</Link>
-            <Link to="/register" className="nav-link">Sign Up</Link>
+            <Link to="/login" className="nav-link" onClick={closeMobileMenu}>Login</Link>
+            <Link to="/register" className="nav-link" onClick={closeMobileMenu}>Sign Up</Link>
           </>
         )}
         <NotificationCenter />

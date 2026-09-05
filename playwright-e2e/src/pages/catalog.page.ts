@@ -8,8 +8,27 @@ export class CatalogPage extends BasePage {
     return this.page.locator("//button[text()='Logout']");
   }
 
+  private get btnMobileMenu(): Locator {
+    return this.page.locator('#mobile-menu-toggle');
+  }
+
   private getNavigateLink(sLink: string): Locator {
     return this.page.locator(`//a[text()='${sLink}']`);
+  }
+
+  private async ensureNavElementVisible(targetLocator: Locator): Promise<void> {
+    try {
+      const isMobileToggleVisible = await this.btnMobileMenu.isVisible();
+      if (isMobileToggleVisible) {
+        const isExpanded = (await this.btnMobileMenu.getAttribute('aria-expanded')) === 'true';
+        if (!isExpanded) {
+          await this.btnMobileMenu.click();
+          await targetLocator.waitFor({ state: 'visible', timeout: 5000 });
+        }
+      }
+    } catch {
+      // Non-blocking fallback
+    }
   }
 
   private get eleBooksCount(): Locator {
@@ -64,23 +83,36 @@ export class CatalogPage extends BasePage {
   }
 
   public async clickNavigateLink(sLink: string) {
-    await this.doClick(this.getNavigateLink(sLink), `Clicking on ${sLink} link`);
+    const linkLocator = this.getNavigateLink(sLink);
+    await this.ensureNavElementVisible(linkLocator);
+    await this.doClick(linkLocator, `Clicking on ${sLink} link`);
   }
 
   public async clickLogout() {
+    await this.ensureNavElementVisible(this.btnLogout);
     await this.doClick(this.btnLogout, "Clicking on Logout button");
   }
 
   public async verifyCheckoutPage() {
     await this.logMessage('INFO', "Verifying landing on Checkout Page");
-    let actualText = await this.doGetText(this.getNavigateLink("Checkout"), "Checking if Checkout label is visible");
+    const checkoutLink = this.getNavigateLink("Checkout");
+    await this.ensureNavElementVisible(checkoutLink);
+    let actualText = await this.doGetText(checkoutLink, "Checking if Checkout label is visible");
     await this.logMessage('INFO', "Landed on Checkout Page successfully and Text is: " + actualText);
     return actualText?.trim() === "Checkout" ? true : false;
   }
 
   public async isLoginVisible() {
-    await this.getNavigateLink("Login").waitFor({ state: 'visible', timeout: 5000 });
-    return await this.doesElementExist(this.getNavigateLink("Login"), "Checking if Login link is visible on Catalog page");
+    const loginLink = this.getNavigateLink("Login");
+    await this.ensureNavElementVisible(loginLink);
+    await loginLink.waitFor({ state: 'visible', timeout: 5000 });
+    return await this.doesElementExist(loginLink, "Checking if Login link is visible on Catalog page");
+  }
+
+  public async isLogoutVisible(): Promise<boolean> {
+    await this.ensureNavElementVisible(this.btnLogout);
+    await this.btnLogout.waitFor({ state: 'visible', timeout: 5000 });
+    return await this.doesElementExist(this.btnLogout, "Checking if Logout button is visible on Catalog page");
   }
 
   public async getBooksCount() {

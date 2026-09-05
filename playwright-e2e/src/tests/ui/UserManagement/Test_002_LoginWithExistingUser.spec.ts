@@ -4,7 +4,7 @@ import { envConfig, getLoginCredentials } from '../../../config/env.config';
 import { CatalogPage } from '../../../pages/catalog.page';
 import { AuthUtility } from '../../../utils/auth.util';
 
-test.describe('Login With Existing User', () => {
+test.describe.serial('Login With Existing User', () => {
 
   test('Testcase 1: Login With Existing User @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, context, networkInterceptor }) => {
     // networkInterceptor fixture automatically captures network logs (no direct usage needed)
@@ -37,16 +37,13 @@ test.describe('Login With Existing User', () => {
     try {
       await page.goto(envConfig.baseUrl);
 
+      const catalogPageWithNewContext = new CatalogPage(page);
       await test.step('Verify Logged In Without Re-entering Credentials', async () => {
-        await page.waitForLoadState('networkidle');
-        // Verify that the logout button is visible (user is logged in)
-        await page.locator("//button[text()='Logout']").waitFor({ state: 'visible', timeout: 5000 });
-        const isLoggedIn = await page.locator("//button[text()='Logout']").isVisible();
+        await page.waitForLoadState('domcontentloaded');
+        const isLoggedIn = await catalogPageWithNewContext.isLogoutVisible();
         let isVerified = await commonFunctions.compareTwoValues(isLoggedIn, true, "Verifying if user is logged in using saved session");
         expect(isVerified).toBeTruthy();
       });
-
-      const catalogPageWithNewContext = new CatalogPage(page);
       await test.step('Perform Logout', async () => {
         await catalogPageWithNewContext.clickLogout();
         const isLogout = await commonFunctions.compareTwoValues(await catalogPageWithNewContext.isLoginVisible(), true, "Verifying if user logged out successfully");

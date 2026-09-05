@@ -11,6 +11,8 @@ on:
         description: 'Git branch to checkout for this run'
         required: false
         default: 'main'
+  schedule:
+    - cron: '0 2 * * *' # Nightly cross-browser regression matrix run
   workflow_run:
     workflows: ["CI"]
     types:
@@ -23,11 +25,16 @@ permissions:
   id-token: write
 
 jobs:
-  # JOB 1: Run Automation Tests
+  # JOB 1: Run Automation Tests across Cross-Browser and Mobile Matrix
   test:
-    name: UI & API Automation
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
+    name: UI & API Automation (${{ matrix.project }})
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') }}
     runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        project: [chromium, firefox, webkit, mobile-chrome, mobile-safari]
     
     env:
       ENV: INTEROP
@@ -65,19 +72,18 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-v2
+          key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-${{ matrix.project }}-v2
 
       - name: Install Playwright Browsers & OS Dependencies
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        working-directory: playwright-e2e
-        run: npx playwright install --with-deps chromium chrome
-
-      - name: Install Playwright OS Dependencies Only
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
         working-directory: playwright-e2e
         run: |
-          npx playwright install-deps chromium chrome
-          npx playwright install chromium chrome
+          if [ "${{ matrix.project }}" = "firefox" ]; then
+            npx playwright install --with-deps firefox
+          elif [ "${{ matrix.project }}" = "webkit" ] || [ "${{ matrix.project }}" = "mobile-safari" ]; then
+            npx playwright install --with-deps webkit
+          else
+            npx playwright install --with-deps chromium
+          fi
 
       - name: Run Playwright Tests
         working-directory: playwright-e2e
@@ -87,15 +93,16 @@ jobs:
           USER_NAME: ${{ secrets.E2E_USER_NAME }}
           PASSWORD: ${{ secrets.E2E_PASSWORD }}
         run: |
-          npm run test
+          npx playwright test --project=${{ matrix.project }}
 
-      # Explicitly upload the allure-results folder
+      # Explicitly upload the allure-results folder for this matrix job
       - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: allure-results
+          name: allure-results-${{ matrix.project }}
           path: playwright-e2e/reports/allure-results
+          retention-days: 7
 
   # JOB 2: Merge and Deploy Allure Report
   deploy-report:
@@ -112,12 +119,13 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
-      # 2. Download the artifact to a specific, known folder
+      # 2. Download all matrix artifacts merged into allure-results
       - name: Download Allure Results
         uses: actions/download-artifact@v4
         with:
-          name: allure-results
+          pattern: allure-results-*
           path: allure-results
+          merge-multiple: true
 
       - name: Test Report Summary
         run: |
