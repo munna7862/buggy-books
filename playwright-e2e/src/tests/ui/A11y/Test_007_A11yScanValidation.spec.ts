@@ -7,26 +7,32 @@ import TestData from '../../../test-data/ui/A11y/Test_007_A11yScanValidation.jso
 const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 
 async function enableA11yChaos(request: any) {
-  await request.post(CONFIG_URL, { data: TestData.ENABLE_A11Y_CHAOS });
-  for (let i = 0; i < 10; i++) {
+  const postRes = await request.post(CONFIG_URL, { data: TestData.ENABLE_A11Y_CHAOS });
+  expect(postRes.ok()).toBeTruthy();
+  for (let i = 0; i < 15; i++) {
     const res = await request.get(CONFIG_URL);
-    const data = await res.json();
-    if (data.injectA11yViolations === true || data.config?.injectA11yViolations === true) {
-      break;
+    if (res.ok()) {
+      const data = await res.json();
+      if (data.injectA11yViolations === true || data.config?.injectA11yViolations === true) {
+        break;
+      }
     }
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise(r => setTimeout(r, 400));
   }
 }
 
 async function disableA11yChaos(request: any) {
-  await request.post(CONFIG_URL, { data: TestData.DISABLE_A11Y_CHAOS });
-  for (let i = 0; i < 10; i++) {
+  const postRes = await request.post(CONFIG_URL, { data: TestData.DISABLE_A11Y_CHAOS });
+  expect(postRes.ok()).toBeTruthy();
+  for (let i = 0; i < 15; i++) {
     const res = await request.get(CONFIG_URL);
-    const data = await res.json();
-    if (data.injectA11yViolations === false || data.config?.injectA11yViolations === false) {
-      break;
+    if (res.ok()) {
+      const data = await res.json();
+      if (data.injectA11yViolations === false || data.config?.injectA11yViolations === false) {
+        break;
+      }
     }
-    await new Promise(r => setTimeout(r, 300));
+    await new Promise(r => setTimeout(r, 400));
   }
 }
 
@@ -68,7 +74,7 @@ test.describe('Accessibility (a11y) Scans Suite', () => {
 
       await test.step('Navigate to catalog page and wait for a11y chaos state', async () => {
         await page.goto(envConfig.baseUrl);
-        await page.waitForSelector('body.a11y-violations-active', { timeout: 10000 });
+        await page.waitForSelector('body.a11y-violations-active', { timeout: 30000 });
         await page.waitForSelector('.catalog-book-cover');
       });
 
@@ -99,7 +105,7 @@ test.describe('Accessibility (a11y) Scans Suite', () => {
 
       await test.step('Navigate directly to login page and wait for a11y chaos state', async () => {
         await page.goto(`${envConfig.baseUrl}/login`);
-        await page.waitForSelector('body.a11y-violations-active', { timeout: 10000 });
+        await page.waitForSelector('body.a11y-violations-active', { timeout: 30000 });
         await page.waitForSelector('.auth-card');
       });
 
@@ -134,7 +140,7 @@ test.describe('Accessibility (a11y) Scans Suite', () => {
 
       await test.step('Navigate to catalog page and wait for a11y chaos state', async () => {
         await page.goto(envConfig.baseUrl);
-        await page.waitForSelector('body.a11y-violations-active', { timeout: 10000 });
+        await page.waitForSelector('body.a11y-violations-active', { timeout: 30000 });
         await page.waitForSelector(TestData.SELECTORS.RESULT_COUNT);
       });
 

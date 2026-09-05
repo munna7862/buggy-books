@@ -73,10 +73,15 @@ router.get('/orders', authenticateToken, asyncHandler(checkoutController.getOrde
 
 router.get('/inventory/report', asyncHandler(bookController.getInventoryReport));
 
+interface GlobalWithGC {
+  gc?: () => void;
+}
+
 router.get('/health', (req: Request, res: Response) => {
-  if (typeof (global as any).gc === 'function') {
+  const globalWithGC = global as unknown as GlobalWithGC;
+  if (typeof globalWithGC.gc === 'function') {
     try {
-      (global as any).gc();
+      globalWithGC.gc();
     } catch {
       // ignore
     }

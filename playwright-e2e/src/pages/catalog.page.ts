@@ -108,14 +108,18 @@ export class CatalogPage extends BasePage {
   }
 
   public async clickPaginationButton(btnNumber: number) {
+    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/books') && res.status() === 200);
     const btn = this.getpaginationButton(btnNumber);
     await this.doClick(btn, `Clicking on Pagination button number ${btnNumber}`);
+    await responsePromise;
     await expect(btn).toHaveClass(/active/, { timeout: 10000 }).catch(() => undefined);
   }
 
   public async searchBooks(term: string): Promise<void> {
+    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/books') && res.status() === 200);
     await this.doEnterText(this.inputSearch, term, `Filling search input with: ${term}`);
     await this.doClick(this.btnSearch, `Clicking Search button`);
+    await responsePromise;
     await this.eleResultCount.or(this.eleEmptyCatalog).first().waitFor({ state: 'visible', timeout: 30000 });
   }
 
