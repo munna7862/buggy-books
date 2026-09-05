@@ -3,6 +3,8 @@ import { test } from '../../../core/base/base.fixture';
 import { envConfig } from '../../../config/env.config';
 import TestData from '../../../test-data/ui/Checkout/Test_003_CartAndCheckoutValidation.json';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Cart Management and Checkout Validation', () => {
 
   test('UI_CART_02: Remove Item from Cart @regression', async ({ signUpPage, catalogPage, cartPage, commonFunctions, page, networkInterceptor }) => {

@@ -3,6 +3,8 @@ import { test } from '../../../core/base/base.fixture';
 import { envConfig } from '../../../config/env.config';
 import TestData from '../../../test-data/ui/Checkout/Test_004_CheckoutWizardValidation.json';
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Multi-Step Checkout Wizard', () => {
 
   test('UI_WIZ_01: Stepper Transition Validation @smoke @regression', async ({ signUpPage, catalogPage, cartPage, checkoutPage, commonFunctions, page, networkInterceptor }) => {

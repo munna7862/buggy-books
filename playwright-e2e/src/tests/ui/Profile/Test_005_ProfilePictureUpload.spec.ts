@@ -8,6 +8,8 @@ const validPngPath = path.join(__dirname, '../../../test-data/ui/Profile/valid_a
 const invalidFilePath = path.join(__dirname, '../../../test-data/ui/Profile/invalid_file.txt');
 const largeImagePath = path.join(__dirname, '../../../test-data/ui/Profile/large_image.png');
 
+test.use({ storageState: { cookies: [], origins: [] } });
+
 test.describe('Profile Picture Upload', () => {
 
   test('UI_UPL_01: Valid Profile Picture Upload @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
