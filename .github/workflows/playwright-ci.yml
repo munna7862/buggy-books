@@ -132,7 +132,7 @@ jobs:
           npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
         env:
           PORT: 4000
-          NODE_ENV: development
+          NODE_ENV: production
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Run API Automation Tests
@@ -144,8 +144,24 @@ jobs:
           API_BASE_URL: http://127.0.0.1:4000
           USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
           PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
+          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/api-results.json
         run: |
-          npx playwright test src/tests/api --config=src/config/playwright.config.ts --project=chromium --workers=4 --reporter=blob,allure-playwright,list
+          npx playwright test src/tests/api --config=src/config/playwright.config.ts --project=chromium --workers=4 --reporter=blob,allure-playwright,list,json
+
+      - name: Generate API Quality Gate Step Summary
+        if: always()
+        working-directory: playwright-e2e
+        run: node scripts/generate-playwright-summary.js test-results/api-results.json "API Automation (Chromium)" "playwright-traces-api"
+
+      - name: Upload Playwright Failure Traces & Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-api
+          path: |
+            playwright-e2e/test-results/
+            playwright-e2e/reports/test-artifacts/
+          retention-days: 7
 
       - name: Upload Ephemeral Server Logs
         if: always()
@@ -267,7 +283,7 @@ jobs:
           npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
         env:
           PORT: 4000
-          NODE_ENV: development
+          NODE_ENV: production
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Start Ephemeral Frontend Preview Server
@@ -285,8 +301,24 @@ jobs:
           API_BASE_URL: http://127.0.0.1:4000
           USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
           PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
+          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/ui-results-${{ matrix.project }}.json
         run: |
-          npx playwright test src/tests/ui --config=src/config/playwright.config.ts --project=${{ matrix.project }} --reporter=blob,allure-playwright,list
+          npx playwright test src/tests/ui --config=src/config/playwright.config.ts --project=${{ matrix.project }} --reporter=blob,allure-playwright,list,json
+
+      - name: Generate UI Quality Gate Step Summary
+        if: always()
+        working-directory: playwright-e2e
+        run: node scripts/generate-playwright-summary.js test-results/ui-results-${{ matrix.project }}.json "UI Automation (${{ matrix.project }})" "playwright-traces-${{ matrix.project }}"
+
+      - name: Upload Playwright Failure Traces & Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-${{ matrix.project }}
+          path: |
+            playwright-e2e/test-results/
+            playwright-e2e/reports/test-artifacts/
+          retention-days: 7
 
       - name: Upload Ephemeral Server Logs
         if: always()

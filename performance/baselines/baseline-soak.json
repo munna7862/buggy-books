@@ -1,0 +1,43 @@
+{
+  "description": "BuggyBooks Endurance Soak Golden Baseline (25 VUs, 15m)",
+  "version": "1.0.0",
+  "generated_at": "2026-09-05T12:00:00Z",
+  "environment": "CI/Linux-x64",
+  "metrics": {
+    "http_req_duration": {
+      "avg": 8.50,
+      "med": 6.20,
+      "p(90)": 22.00,
+      "p(95)": 245.00,
+      "p(99)": 420.00,
+      "max": 550.00
+    },
+    "catalog_duration": {
+      "avg": 8.10,
+      "med": 5.90,
+      "p(90)": 20.50,
+      "p(95)": 240.00,
+      "p(99)": 410.00
+    },
+    "search_duration": {
+      "avg": 8.90,
+      "med": 6.50,
+      "p(90)": 23.50,
+      "p(95)": 250.00,
+      "p(99)": 430.00
+    },
+    "detail_duration": {
+      "avg": 7.20,
+      "med": 5.40,
+      "p(90)": 18.00,
+      "p(95)": 225.00,
+      "p(99)": 380.00
+    },
+    "http_req_failed": {
+      "rate": 0.0005
+    },
+    "http_reqs": {
+      "rate": 75.0
+    }
+  }
+}

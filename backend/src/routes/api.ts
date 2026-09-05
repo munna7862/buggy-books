@@ -73,6 +73,21 @@ router.get('/orders', authenticateToken, asyncHandler(checkoutController.getOrde
 
 router.get('/inventory/report', asyncHandler(bookController.getInventoryReport));
 
+router.get('/health', (req: Request, res: Response) => {
+  const mem = process.memoryUsage();
+  res.json({
+    status: 'ok',
+    uptime: process.uptime(),
+    memory: {
+      heapUsed: mem.heapUsed,
+      heapTotal: mem.heapTotal,
+      rss: mem.rss,
+      external: mem.external,
+    },
+    timestamp: new Date().toISOString(),
+  });
+});
+
 router.get('/profile', authenticateToken, asyncHandler(profileController.getProfile));
 router.post('/profile/upload', profileController.handleAvatarUpload, authenticateToken, asyncHandler(profileController.uploadAvatar));
 

@@ -1,0 +1,125 @@
+# =============================================================
+# BuggyBooks – Playwright Quarantine Stability Audit & Governance
+#
+# Runs weekly on a scheduled cron and on demand via workflow_dispatch.
+# Executes quarantined tests with repetition (--repeat-each=5) to compute
+# the Quarantine Stability Index, generating actionable de-quarantine
+# recommendations directly in $GITHUB_STEP_SUMMARY.
+# =============================================================
+
+name: Quarantine Stability Audit
+
+on:
+  schedule:
+    # Run every Monday at 03:00 UTC
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+    inputs:
+      repeat_each:
+        description: 'Repetition count per quarantined test'
+        required: false
+        default: '5'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  quarantine-audit:
+    name: Quarantined Test Stability Audit (5x Repetition)
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: .
+
+    env:
+      ENV: LOCAL
+      BASE_URL: http://127.0.0.1:5173
+      API_BASE_URL: http://127.0.0.1:4000
+      HEADLESS: 'true'
+      REPEAT_EACH: ${{ github.event.inputs.repeat_each || '5' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+            playwright-e2e/package-lock.json
+
+      - name: Install & Build Backend
+        run: |
+          cd backend
+          npm ci
+          npm run build
+        env:
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Install & Build Frontend
+        run: |
+          cd frontend
+          npm ci
+          npm run build
+        env:
+          VITE_API_URL: http://127.0.0.1:4000/api
+
+      - name: Install Playwright Dependencies & Chromium
+        working-directory: playwright-e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Start Ephemeral Backend Server
+        run: |
+          cd backend
+          nohup node dist/server.js > ../backend-server.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
+        env:
+          PORT: 4000
+          NODE_ENV: production
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Start Ephemeral Frontend Preview Server
+        run: |
+          cd frontend
+          nohup npx vite preview --port 5173 --host 0.0.0.0 > ../frontend-preview.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:5173 || (cat ../frontend-preview.log && exit 1)
+
+      - name: Run Quarantine Stability Audit Runner
+        working-directory: playwright-e2e
+        env:
+          REPEAT_EACH: ${{ github.event.inputs.repeat_each || '5' }}
+          ENVIRONMENT: LOCAL
+          TZ: Australia/Adelaide
+          BASE_URL: http://127.0.0.1:5173
+          API_BASE_URL: http://127.0.0.1:4000
+        run: |
+          npm run test:quarantine:audit
+
+      - name: Upload Quarantine Audit Artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: quarantine-audit-report
+          path: |
+            playwright-e2e/reports/quarantine-audit.md
+            playwright-e2e/quarantine-results.json
+            backend-server.log
+            frontend-preview.log
+          retention-days: 14
+
+      - name: Stop Ephemeral Servers
+        if: always()
+        run: |
+          pkill -f "node dist/server.js" || true
+          pkill -f "vite preview" || true

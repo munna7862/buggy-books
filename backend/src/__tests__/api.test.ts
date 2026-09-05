@@ -248,4 +248,20 @@ describe('BuggyBooks API Integration Tests', () => {
       expect(ordersRes.body[0].customerName).toBe('Jane Doe');
     });
   });
+
+  describe('System Telemetry & Health API', () => {
+    it('GET /api/health should return status ok, uptime, and Node.js process memory metrics', async () => {
+      const res = await request(app).get('/api/health');
+      expect(res.status).toBe(200);
+      expect(res.body.status).toBe('ok');
+      expect(typeof res.body.uptime).toBe('number');
+      expect(res.body.memory).toBeDefined();
+      expect(typeof res.body.memory.heapUsed).toBe('number');
+      expect(res.body.memory.heapUsed).toBeGreaterThan(0);
+      expect(typeof res.body.memory.rss).toBe('number');
+      expect(res.body.memory.rss).toBeGreaterThan(0);
+      expect(typeof res.body.timestamp).toBe('string');
+    });
+  });
 });
+

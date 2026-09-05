@@ -9,6 +9,12 @@ const detailDuration = new Trend('detail_duration', true);
 const soakReqDuration = new Trend('soak_req_duration', true);
 const errorRate = new Rate('api_error_rate');
 
+// Node.js memory telemetry metrics
+const heapUsedTrend = new Trend('node_heap_used_mb', true);
+const rssTrend = new Trend('node_rss_mb', true);
+const heapDriftTrend = new Trend('node_heap_drift_percent', true);
+const memoryLeakRate = new Rate('memory_leak_detected');
+
 // Configurable options via environment variables or defaults
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:4000';
 const SOAK_DURATION = __ENV.SOAK_DURATION || __ENV.DURATION || '15m';
@@ -21,7 +27,7 @@ export const options = {
     { duration: '30s', target: 0 },                    // Graceful ramp-down
   ],
   thresholds: {
-    // US-PERF-501 Acceptance Criteria: p95 latency < 300ms, p99 < 600ms, error rate < 0.1% (with CI tolerance)
+    // US-PERF-501 & US-PERF-601 Acceptance Criteria: p95 latency < 300ms, p99 < 600ms, error rate < 0.1%, heap drift < 30%
     http_req_duration: ['p(90)<250', 'p(95)<300', 'p(99)<600'],
     catalog_duration: ['p(95)<300'],
     search_duration: ['p(95)<300'],
@@ -29,8 +35,39 @@ export const options = {
     soak_req_duration: ['p(95)<300'],
     http_req_failed: ['rate<0.01'],
     api_error_rate: ['rate<0.01'],
+    memory_leak_detected: ['rate<0.01'],
   },
 };
+
+export function setup() {
+  const params = {
+    headers: {
+      'Accept': 'application/json',
+      'x-bypass-rate-limit': 'true',
+    },
+  };
+  const res = http.get(`${BASE_URL}/api/health`, params);
+  let initialMemory = { heapUsed: 0, heapTotal: 0, rss: 0 };
+  if (res.status === 200) {
+    try {
+      const body = JSON.parse(res.body);
+      if (body.memory) {
+        initialMemory = body.memory;
+      }
+    } catch (e) {
+      console.warn('Warning: Failed to parse initial /api/health response:', e);
+    }
+  }
+
+  const initialHeapMb = (initialMemory.heapUsed / (1024 * 1024)).toFixed(2);
+  const initialRssMb = (initialMemory.rss / (1024 * 1024)).toFixed(2);
+  console.log(`[Soak Setup] Initial Node.js Process Memory: heapUsed=${initialHeapMb} MB, rss=${initialRssMb} MB`);
+
+  return {
+    initialMemory,
+    startTime: new Date().toISOString(),
+  };
+}
 
 export default function () {
   const sessionId = `k6-soak-vu-${__VU}`;
@@ -99,4 +136,85 @@ export default function () {
   errorRate.add(!detailOk);
 
   sleep(0.2);
+
+  // 4. Periodic Process Memory Telemetry Sampling (Sampled by VU 1 every 20 iterations)
+  if (__VU === 1 && __ITER % 20 === 0) {
+    const healthRes = http.get(`${BASE_URL}/api/health`, params);
+    if (healthRes.status === 200) {
+      try {
+        const healthData = JSON.parse(healthRes.body);
+        if (healthData.memory) {
+          heapUsedTrend.add(healthData.memory.heapUsed / (1024 * 1024));
+          rssTrend.add(healthData.memory.rss / (1024 * 1024));
+        }
+      } catch {
+        // ignore parse error in sample
+      }
+    }
+  }
+}
+
+export function teardown(data) {
+  const params = {
+    headers: {
+      'Accept': 'application/json',
+      'x-bypass-rate-limit': 'true',
+    },
+  };
+  const finalRes = http.get(`${BASE_URL}/api/health`, params);
+  let finalMemory = { heapUsed: 0, heapTotal: 0, rss: 0 };
+  if (finalRes.status === 200) {
+    try {
+      const body = JSON.parse(finalRes.body);
+      if (body.memory) {
+        finalMemory = body.memory;
+      }
+    } catch (e) {
+      console.warn('Warning: Failed to parse final /api/health response:', e);
+    }
+  }
+
+  const initialHeap = data.initialMemory ? data.initialMemory.heapUsed : 0;
+  const finalHeap = finalMemory.heapUsed;
+  const initialRss = data.initialMemory ? data.initialMemory.rss : 0;
+  const finalRss = finalMemory.rss;
+
+  const heapDriftPercent = initialHeap > 0 ? ((finalHeap - initialHeap) / initialHeap) * 100 : 0;
+  const rssDriftPercent = initialRss > 0 ? ((finalRss - initialRss) / initialRss) * 100 : 0;
+
+  heapDriftTrend.add(heapDriftPercent);
+
+  // Assert memory leak tripwire: heapUsed drift must not exceed 30%
+  const isMemoryStable = heapDriftPercent <= 30.0;
+  memoryLeakRate.add(!isMemoryStable);
+
+  check(finalRes, {
+    'heapUsed memory drift within 30% threshold': () => isMemoryStable,
+    'backend health status is ok': (r) => r.status === 200,
+  });
+
+  const initHeapMb = (initialHeap / (1024 * 1024)).toFixed(2);
+  const finHeapMb = (finalHeap / (1024 * 1024)).toFixed(2);
+  const initRssMb = (initialRss / (1024 * 1024)).toFixed(2);
+  const finRssMb = (finalRss / (1024 * 1024)).toFixed(2);
+
+  console.log(`
+================================================================================
+🧠 BUGGYBOOKS ENDURANCE SOAK NODE.JS MEMORY TELEMETRY REPORT
+================================================================================
+Initial heapUsed : ${initHeapMb} MB
+Final heapUsed   : ${finHeapMb} MB
+Heap Drift       : ${heapDriftPercent >= 0 ? '+' : ''}${heapDriftPercent.toFixed(2)}% (Max Threshold: +30.00%)
+Initial RSS      : ${initRssMb} MB
+Final RSS        : ${finRssMb} MB
+RSS Drift        : ${rssDriftPercent >= 0 ? '+' : ''}${rssDriftPercent.toFixed(2)}%
+Memory Stability : ${isMemoryStable ? 'PASSED 🟢 (No memory leak detected)' : 'FAILED 🔴 (Memory leak threshold exceeded)'}
+================================================================================
+`);
+}
+
+export function handleSummary(data) {
+  return {
+    'perf-summary-soak.json': JSON.stringify(data, null, 2),
+  };
 }

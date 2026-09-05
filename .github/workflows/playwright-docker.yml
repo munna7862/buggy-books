@@ -78,6 +78,16 @@ jobs:
           path: playwright-e2e/reports/allure-results
           retention-days: 7
 
+      - name: Upload Playwright Failure Traces & Screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces-shard-${{ matrix.shardIndex }}
+          path: |
+            playwright-e2e/test-results/
+            playwright-e2e/reports/test-artifacts/
+          retention-days: 7
+
   # JOB 2: Merge Blob Reports, Build Allure Dashboard & Deploy
   merge-reports:
     name: Merge Reports & Deploy

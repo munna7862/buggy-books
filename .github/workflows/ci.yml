@@ -316,7 +316,7 @@ jobs:
           npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../server.log && exit 1)
         env:
           PORT: 4000
-          NODE_ENV: development
+          NODE_ENV: production
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Setup k6
@@ -326,19 +326,19 @@ jobs:
         if: github.event_name == 'pull_request' || github.ref != 'refs/heads/main'
         run: |
           k6 run --summary-export=perf-summary-smoke.json performance/k6/smoke-load.js
-          node performance/report-perf-summary.js perf-summary-smoke.json "PR API Smoke Benchmark (5 VUs)" --baseline=performance/baselines/baseline-perf.json
+          node performance/report-perf-summary.js perf-summary-smoke.json "PR API Smoke Benchmark (5 VUs)" --baseline=performance/baselines/baseline-smoke.json
 
       - name: Run Main Catalog Load Benchmark (50 VUs)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           k6 run --summary-export=perf-summary-catalog.json performance/k6/catalog-load.js
-          node performance/report-perf-summary.js perf-summary-catalog.json "Catalog Load Benchmark (50 VUs)" --baseline=performance/baselines/baseline-perf.json
+          node performance/report-perf-summary.js perf-summary-catalog.json "Catalog Load Benchmark (50 VUs)" --baseline=performance/baselines/baseline-catalog.json
 
       - name: Run Main Inventory Stress Benchmark
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           k6 run --summary-export=perf-summary-inventory.json performance/k6/inventory-stress.js
-          node performance/report-perf-summary.js perf-summary-inventory.json "Inventory Stress Benchmark (30 VUs)" --baseline=performance/baselines/baseline-perf.json
+          node performance/report-perf-summary.js perf-summary-inventory.json "Inventory Stress Benchmark (30 VUs)" --baseline=performance/baselines/baseline-catalog.json
 
       - name: Upload Performance Summary Artifacts
         uses: actions/upload-artifact@v4
