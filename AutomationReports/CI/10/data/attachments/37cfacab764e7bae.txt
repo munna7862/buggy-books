@@ -1,0 +1,30 @@
+[2026-09-05 18:48:41] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-2-1788599921938-6pom
+[2026-09-05 18:48:41] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:48:41] INFO: 📤 Request Payload: {
+  "username": "johndoe17885999219401154bc32@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 18:48:43] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 18:48:43] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe17885999219401154bc32@"
+}
+[2026-09-05 18:48:43] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 18:48:43] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 18:48:43] INFO: 📤 Request Payload: {
+  "username": "<script>alert(\"xss\")</script>17885999129426e39e5aa@",
+  "password": "johna123@"
+}
+[2026-09-05 18:48:43] ERROR: ❌ Login security validation for script tag in username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "45121bd3-9501-4a2c-a647-d21daadfda20"
+}
+[2026-09-05 18:48:43] ERROR: ❌ Login security validation for script tag in username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "45121bd3-9501-4a2c-a647-d21daadfda20"
+}
+[2026-09-05 18:48:43] INFO:  Security status for script tag in username Success !! Actual and Expected Values are:: true
+[2026-09-05 18:48:44] INFO: Cleaned up ephemeral test session: pw-w2-2-1788599921938-6pom

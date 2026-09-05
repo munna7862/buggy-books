@@ -1,0 +1,4 @@
+[2026-09-05 18:50:05] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-3-1788600005710-ye3y
+[2026-09-05 18:50:07] ERROR:  Verifying visual pixel diff detected under chaos mode Failed!! Expected Value:: true || Actual Value:: false
+[2026-09-05 18:50:07] ERROR:  Verifying visual pixel diff detected under chaos mode Failed!! Expected Value:: true || Actual Value:: false
+[2026-09-05 18:50:07] INFO: Cleaned up ephemeral test session: pw-w7-3-1788600005710-ye3y

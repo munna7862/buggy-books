@@ -1,0 +1,20 @@
+[2026-09-05 18:49:35] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-3-1788599975605-ujr7
+[2026-09-05 18:49:35] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:49:36] INFO: Clicking on Sign Up link
+[2026-09-05 18:49:37] INFO: Entering full name: Full profile_user_s668A
+[2026-09-05 18:49:37] INFO: Entering username: profile_user_s668A
+[2026-09-05 18:49:37] INFO: Entering password: Password123!
+[2026-09-05 18:49:37] INFO: Entering confirming password: Password123!
+[2026-09-05 18:49:37] INFO: Clicking on Create Account button
+[2026-09-05 18:49:38] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:49:38] INFO: Checking if Checkout label is visible
+[2026-09-05 18:49:38] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:49:38] INFO: Clicking on Profile navbar link
+[2026-09-05 18:49:39] INFO: Selecting file for avatar upload: /home/runner/work/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/valid_avatar.png
+[2026-09-05 18:49:39] INFO: Clicking Upload Image button
+[2026-09-05 18:49:40] INFO: Getting profile avatar preview image src
+[2026-09-05 18:49:40] INFO:  Verifying avatar preview image src points to uploads path Success !! Actual and Expected Values are:: true
+[2026-09-05 18:49:40] INFO: Getting upload success message text
+[2026-09-05 18:49:40] INFO:  Verifying avatar upload success status message Success !! Actual and Expected Values are:: Avatar updated successfully!
+[2026-09-05 18:49:40] INFO: Captured 13 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_005_Profil-092ae-ure-Upload-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 18:49:40] INFO: Cleaned up ephemeral test session: pw-w7-3-1788599975605-ujr7

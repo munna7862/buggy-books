@@ -1,0 +1,40 @@
+[2026-09-05 18:48:30] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788599910846-5n4b
+[2026-09-05 18:48:30] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-09-05 18:48:30] INFO: 📤 Request Payload: {
+  "visualChaos": true
+}
+[2026-09-05 18:48:31] INFO: ✅ Toggle visualChaos to true Success! Status: 200 OK
+[2026-09-05 18:48:31] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 0,
+    "inventoryDelayMs": 0,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": true,
+    "inventoryLockingRate": 0
+  }
+}
+[2026-09-05 18:48:31] INFO:  Verifying POST /api/test/config status is 200 Success !! Actual and Expected Values are:: 200
+[2026-09-05 18:48:31] INFO:  Verifying visualChaos field is true in response config Success !! Actual and Expected Values are:: true
+[2026-09-05 18:48:31] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-09-05 18:48:31] INFO: 📤 Request Payload: {
+  "visualChaos": false
+}
+[2026-09-05 18:48:31] INFO: ✅ Reset visualChaos to false Success! Status: 200 OK
+[2026-09-05 18:48:31] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 0,
+    "inventoryDelayMs": 0,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": false,
+    "inventoryLockingRate": 0
+  }
+}
+[2026-09-05 18:48:31] INFO: Cleaned up ephemeral test session: pw-w1-1-1788599910846-5n4b

@@ -1,0 +1,19 @@
+[2026-09-05 18:50:02] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-3-1788600002451-jfg7
+[2026-09-05 18:50:02] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:50:04] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-05 18:50:04] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-05 18:50:04] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-05 18:50:04] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-05 18:50:04] INFO:  Verifying direct navigation to /checkout redirects to /login and Login page elements are fully loaded Success !! Actual and Expected Values are:: true
+[2026-09-05 18:50:04] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-05 18:50:04] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-05 18:50:04] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-05 18:50:04] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-05 18:50:04] INFO:  Verifying direct navigation to /profile redirects to /login and Login page elements are fully loaded Success !! Actual and Expected Values are:: true
+[2026-09-05 18:50:05] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-05 18:50:05] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-05 18:50:05] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-05 18:50:05] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-05 18:50:05] INFO:  Verifying direct navigation to /cart redirects to /login and Login page elements are fully loaded Success !! Actual and Expected Values are:: true
+[2026-09-05 18:50:05] INFO: Captured 20 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_003-f1bd5-s-to-Login-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 18:50:05] INFO: Cleaned up ephemeral test session: pw-w7-3-1788600002451-jfg7

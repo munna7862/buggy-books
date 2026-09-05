@@ -1,0 +1,29 @@
+[2026-09-05 18:50:21] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w8-2-1788600021127-x5dy
+[2026-09-05 18:50:21] INFO: Clicking on Sign Up link
+[2026-09-05 18:50:22] INFO: Entering full name: Full ws_user_F18W9
+[2026-09-05 18:50:22] INFO: Entering username: ws_user_F18W9
+[2026-09-05 18:50:22] INFO: Entering password: Password123!
+[2026-09-05 18:50:22] INFO: Entering confirming password: Password123!
+[2026-09-05 18:50:22] INFO: Clicking on Create Account button
+[2026-09-05 18:50:22] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:50:22] INFO: Checking if Checkout label is visible
+[2026-09-05 18:50:23] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:50:23] INFO: Clicking on Add to Cart button for book id: 1
+[2026-09-05 18:50:24] INFO: Waiting for cart status message: added to cart
+[2026-09-05 18:50:25] INFO: Cart status message "added to cart" is visible
+[2026-09-05 18:50:25] INFO: Clicking on Cart link
+[2026-09-05 18:50:26] INFO: Clicking on Proceed to Checkout button
+[2026-09-05 18:50:26] INFO: Entering first name: Web
+[2026-09-05 18:50:26] INFO: Entering last name: SocketUser
+[2026-09-05 18:50:26] INFO: Entering shipping address: 123 Buggy Lane
+[2026-09-05 18:50:26] INFO: Entering city: Stack City
+[2026-09-05 18:50:26] INFO: Clicking on Next Step button
+[2026-09-05 18:50:26] INFO: Entering card number
+[2026-09-05 18:50:26] INFO: Entering card expiry: 12/30
+[2026-09-05 18:50:26] INFO: Entering card CVV: 123
+[2026-09-05 18:50:26] INFO: Checking if Next Step button is visible - Element is visible
+[2026-09-05 18:50:26] INFO: Clicking on Next Step button on Payment page
+[2026-09-05 18:50:26] INFO: Waiting for confirmation message containing: Thank you for your order
+[2026-09-05 18:50:27] INFO: Payment completed successfully and order confirmation message is displayed.
+[2026-09-05 18:50:27] INFO:  Verifying hot-toast alert banner is rendered for purchase socket event Success !! Actual and Expected Values are:: true
+[2026-09-05 18:50:27] INFO: Cleaned up ephemeral test session: pw-w8-2-1788600021127-x5dy

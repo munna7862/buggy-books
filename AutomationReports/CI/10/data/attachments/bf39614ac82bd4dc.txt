@@ -1,0 +1,18 @@
+[2026-09-05 18:49:42] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w6-0-1788599982494-18vx
+[2026-09-05 18:49:42] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:49:42] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-09-05 18:49:43] INFO: Clicking on Sign Up link
+[2026-09-05 18:49:44] INFO: Entering full name: Profile Summary User
+[2026-09-05 18:49:44] INFO: Entering username: profile_user_1788599982895_13887164
+[2026-09-05 18:49:44] INFO: Entering password: Password123!
+[2026-09-05 18:49:44] INFO: Entering confirming password: Password123!
+[2026-09-05 18:49:44] INFO: Clicking on Create Account button
+[2026-09-05 18:49:44] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:49:44] INFO: Checking if Checkout label is visible
+[2026-09-05 18:49:45] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:49:45] INFO: Clicking on Profile navbar link
+[2026-09-05 18:49:46] INFO: Getting profile info section text
+[2026-09-05 18:49:46] INFO: Getting profile avatar preview image src
+[2026-09-05 18:49:51] INFO:  Verifying profile page renders registered full name, username, and avatar preview Success !! Actual and Expected Values are:: true
+[2026-09-05 18:49:51] INFO: Captured 12 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_006_Profil-9cd7f--correctly-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 18:49:51] INFO: Cleaned up ephemeral test session: pw-w6-0-1788599982494-18vx

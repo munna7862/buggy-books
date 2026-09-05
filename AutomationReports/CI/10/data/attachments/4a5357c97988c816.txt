@@ -1,0 +1,33 @@
+[2026-09-05 18:49:04] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w7-3-1788599944311-5360
+[2026-09-05 18:49:04] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:49:05] INFO: Clicking on Sign Up link
+[2026-09-05 18:49:06] INFO: Entering full name: Full user_a_cart_fHrGP
+[2026-09-05 18:49:07] INFO: Entering username: user_a_cart_fHrGP
+[2026-09-05 18:49:07] INFO: Entering password: Password123!
+[2026-09-05 18:49:07] INFO: Entering confirming password: Password123!
+[2026-09-05 18:49:07] INFO: Clicking on Create Account button
+[2026-09-05 18:49:08] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:49:08] INFO: Checking if Checkout label is visible
+[2026-09-05 18:49:08] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:49:09] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-09-05 18:49:09] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 18:49:09] INFO: Clicking on Add to Cart button for book id: 1
+[2026-09-05 18:49:11] INFO: Waiting for cart status message: added to cart
+[2026-09-05 18:49:11] INFO: Cart status message "added to cart" is visible
+[2026-09-05 18:49:11] INFO: Clicking on Cart link
+[2026-09-05 18:49:12] INFO:  Verifying User A cart contains added item Success !! Actual and Expected Values are:: 1
+[2026-09-05 18:49:12] INFO: Clicking on Logout button
+[2026-09-05 18:49:12] INFO: Clicking on Sign Up link
+[2026-09-05 18:49:13] INFO: Entering full name: Full user_b_cart_ghSuh
+[2026-09-05 18:49:13] INFO: Entering username: user_b_cart_ghSuh
+[2026-09-05 18:49:13] INFO: Entering password: Password123!
+[2026-09-05 18:49:13] INFO: Entering confirming password: Password123!
+[2026-09-05 18:49:14] INFO: Clicking on Create Account button
+[2026-09-05 18:49:14] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:49:14] INFO: Checking if Checkout label is visible
+[2026-09-05 18:49:15] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:49:15] INFO: Clicking on Cart link
+[2026-09-05 18:49:15] INFO: Checking if 'Your cart is empty.' message is visible - Element is visible
+[2026-09-05 18:49:20] INFO:  Verifying User B cart is completely empty Success !! Actual and Expected Values are:: true
+[2026-09-05 18:49:20] INFO: Captured 28 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_003_CartA-330d3-r-Cart-Isolation-regression-Google-Chrome/network-log.json
+[2026-09-05 18:49:21] INFO: Cleaned up ephemeral test session: pw-w7-3-1788599944311-5360
