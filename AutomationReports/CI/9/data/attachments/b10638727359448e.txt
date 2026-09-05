@@ -1,0 +1,30 @@
+[2026-09-05 18:35:25] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788599125736-iypx
+[2026-09-05 18:35:25] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:35:25] INFO: 📤 Request Payload: {
+  "username": "johndoe178859912573858a9bb7a@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 18:35:27] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 18:35:27] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe178859912573858a9bb7a@"
+}
+[2026-09-05 18:35:27] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 18:35:27] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 18:35:27] INFO: 📤 Request Payload: {
+  "username": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb1788599119727801f4e00@",
+  "password": "johna123@"
+}
+[2026-09-05 18:35:27] ERROR: ❌ Login security validation for oversized username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "7fc96fbc-a3f0-4c40-a7e5-790e66c880ec"
+}
+[2026-09-05 18:35:27] ERROR: ❌ Login security validation for oversized username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "7fc96fbc-a3f0-4c40-a7e5-790e66c880ec"
+}
+[2026-09-05 18:35:27] INFO:  Security status for oversized username Success !! Actual and Expected Values are:: true
+[2026-09-05 18:35:27] INFO: Cleaned up ephemeral test session: pw-w3-3-1788599125736-iypx

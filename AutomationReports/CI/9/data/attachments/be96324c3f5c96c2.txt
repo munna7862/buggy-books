@@ -1,0 +1,30 @@
+[2026-09-05 18:35:11] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788599111811-mfd6
+[2026-09-05 18:35:11] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:35:11] INFO: 📤 Request Payload: {
+  "username": "cartuser17885991118186ebe151c@",
+  "password": "Password123!",
+  "fullName": "Cart Test User"
+}
+[2026-09-05 18:35:13] INFO: ✅ Register user for Cart test Success! Status: 201 Created
+[2026-09-05 18:35:13] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "cartuser17885991118186ebe151c@"
+}
+[2026-09-05 18:35:13] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 18:35:13] INFO: 📤 Request Payload: {
+  "username": "cartuser17885991118186ebe151c@",
+  "password": "Password123!"
+}
+[2026-09-05 18:35:14] INFO: ✅ Login user for Cart test Success! Status: 200 OK
+[2026-09-05 18:35:14] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "cartuser17885991118186ebe151c@"
+}
+[2026-09-05 18:35:14] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/inventory/report
+[2026-09-05 18:35:14] INFO: ✅ Get inventory report Success! Status: 200 OK
+[2026-09-05 18:35:14] INFO: 📥 Response Payload: {
+  "totalBooks": 15,
+  "totalValue": 196.91000000000003,
+  "timestamp": "2026-09-05T09:05:14.372Z"
+}
+[2026-09-05 18:35:14] INFO: Cleaned up ephemeral test session: pw-w1-1-1788599111811-mfd6

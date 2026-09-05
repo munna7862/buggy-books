@@ -1,0 +1,30 @@
+[2026-09-05 18:35:21] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788599121339-m5jo
+[2026-09-05 18:35:21] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:35:21] INFO: 📤 Request Payload: {
+  "username": "johndoe17885991213417fef52af@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 18:35:23] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 18:35:23] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe17885991213417fef52af@"
+}
+[2026-09-05 18:35:23] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 18:35:23] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 18:35:23] INFO: 📤 Request Payload: {
+  "username": "johndoe17885991213417fef52af@",
+  "password": "wrongPassword123@"
+}
+[2026-09-05 18:35:24] ERROR: ❌ Login with incorrect password Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "e6993ffb-88ac-4207-9dd4-f14e68d26c1e"
+}
+[2026-09-05 18:35:24] ERROR: ❌ Login with incorrect password Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "e6993ffb-88ac-4207-9dd4-f14e68d26c1e"
+}
+[2026-09-05 18:35:24] INFO:  Incorrect password status Success !! Actual and Expected Values are:: true
+[2026-09-05 18:35:24] INFO: Cleaned up ephemeral test session: pw-w3-3-1788599121339-m5jo

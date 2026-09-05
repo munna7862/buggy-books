@@ -1,0 +1,25 @@
+[2026-09-05 18:36:34] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w5-1-1788599194749-0u2q
+[2026-09-05 18:36:34] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:36:35] INFO: Clicking on Sign Up link
+[2026-09-05 18:36:35] INFO: Entering full name: autoTestUser0DbQq
+[2026-09-05 18:36:35] INFO: Entering username: autoTestUserb6uuF
+[2026-09-05 18:36:35] INFO: Entering password: AutoTest@123
+[2026-09-05 18:36:35] INFO: Entering confirming password: AutoTest@123
+[2026-09-05 18:36:36] INFO: Clicking on Create Account button
+[2026-09-05 18:36:36] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:36:36] INFO: Checking if Checkout label is visible
+[2026-09-05 18:36:37] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:36:37] INFO: Clicking on Logout button
+[2026-09-05 18:36:37] INFO: Clicking on Login link
+[2026-09-05 18:36:38] INFO: Entering username: autoTestUserb6uuF
+[2026-09-05 18:36:38] INFO: Entering password: AutoTest@123
+[2026-09-05 18:36:38] INFO: Clicking on Sign In button
+[2026-09-05 18:36:39] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:36:39] INFO: Checking if Checkout label is visible
+[2026-09-05 18:36:39] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:36:39] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 18:36:39] INFO: Clicking on Logout button
+[2026-09-05 18:36:40] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-05 18:36:40] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 18:36:40] INFO: Captured 15 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-59107-and-Logout-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 18:36:40] INFO: Cleaned up ephemeral test session: pw-w5-1-1788599194749-0u2q

@@ -1,0 +1,16 @@
+[2026-09-05 18:35:33] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788599133521-rmyy
+[2026-09-05 18:35:33] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:35:33] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-09-05 18:35:35] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 18:35:35] INFO: Filling search input with: Mockingbird
+[2026-09-05 18:35:35] INFO: Clicking Search button
+[2026-09-05 18:35:36] INFO:  Verifying search results books count Success !! Actual and Expected Values are:: 1
+[2026-09-05 18:35:36] INFO: Getting catalog result count text
+[2026-09-05 18:35:36] INFO:  Verifying result count text contains search query Success !! Actual and Expected Values are:: true
+[2026-09-05 18:35:36] INFO: Getting first book title in catalog
+[2026-09-05 18:35:36] INFO:  Verifying search result book title Success !! Actual and Expected Values are:: To Kill a Mockingbird Exception
+[2026-09-05 18:35:36] INFO: Clicking Clear search button
+[2026-09-05 18:35:36] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 18:35:36] INFO:  Verifying catalog count after search clear Success !! Actual and Expected Values are:: 8
+[2026-09-05 18:35:36] INFO: Captured 8 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_002_Se-d6b4f-Search-Filtering-regression-Google-Chrome/network-log.json
+[2026-09-05 18:35:36] INFO: Cleaned up ephemeral test session: pw-w3-3-1788599133521-rmyy

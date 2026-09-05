@@ -1,0 +1,38 @@
+[2026-09-05 18:35:15] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788599115525-acbm
+[2026-09-05 18:35:15] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-09-05 18:35:15] INFO: 📤 Request Payload: {
+  "visualChaos": "yes"
+}
+[2026-09-05 18:35:15] ERROR: ❌ POST /api/test/config with invalid string type for visualChaos Failed! Status: 400 Bad Request | Response: {
+  "error": "Validation failed",
+  "errorName": "ValidationError",
+  "correlationId": "4f8fbd43-7456-4fba-a542-fd56df7d37d3",
+  "details": [
+    {
+      "expected": "boolean",
+      "code": "invalid_type",
+      "path": [
+        "visualChaos"
+      ],
+      "message": "Invalid input: expected boolean, received string"
+    }
+  ]
+}
+[2026-09-05 18:35:15] ERROR: ❌ POST /api/test/config with invalid string type for visualChaos Failed! Status: 400 Bad Request | Response: {
+  "error": "Validation failed",
+  "errorName": "ValidationError",
+  "correlationId": "4f8fbd43-7456-4fba-a542-fd56df7d37d3",
+  "details": [
+    {
+      "expected": "boolean",
+      "code": "invalid_type",
+      "path": [
+        "visualChaos"
+      ],
+      "message": "Invalid input: expected boolean, received string"
+    }
+  ]
+}
+[2026-09-05 18:35:15] INFO:  Verifying 400 Bad Request returned for invalid data type Success !! Actual and Expected Values are:: 400
+[2026-09-05 18:35:15] INFO:  Verifying response contains validation error message Success !! Actual and Expected Values are:: true
+[2026-09-05 18:35:15] INFO: Cleaned up ephemeral test session: pw-w3-3-1788599115525-acbm

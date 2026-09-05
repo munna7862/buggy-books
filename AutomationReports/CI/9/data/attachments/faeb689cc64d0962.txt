@@ -1,0 +1,26 @@
+[2026-09-05 18:35:27] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788599127361-aydc
+[2026-09-05 18:35:27] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:35:27] INFO: 📤 Request Payload: {
+  "username": "ref_issue_1788599127363_96ccf65a",
+  "password": "Password123!",
+  "fullName": "Token Refresh Test User"
+}
+[2026-09-05 18:35:28] INFO: ✅ Register user for refresh token issuance test Success! Status: 201 Created
+[2026-09-05 18:35:28] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "ref_issue_1788599127363_96ccf65a"
+}
+[2026-09-05 18:35:28] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 18:35:28] INFO: 📤 Request Payload: {
+  "username": "ref_issue_1788599127363_96ccf65a",
+  "password": "Password123!"
+}
+[2026-09-05 18:35:30] INFO: ✅ Login user to inspect Set-Cookie headers Success! Status: 200 OK
+[2026-09-05 18:35:30] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "ref_issue_1788599127363_96ccf65a"
+}
+[2026-09-05 18:35:30] INFO:  Verifying Set-Cookie contains access token Success !! Actual and Expected Values are:: true
+[2026-09-05 18:35:30] INFO:  Verifying Set-Cookie contains refresh token Success !! Actual and Expected Values are:: true
+[2026-09-05 18:35:30] INFO:  Verifying Set-Cookie includes HttpOnly security flag Success !! Actual and Expected Values are:: true
+[2026-09-05 18:35:30] INFO: Cleaned up ephemeral test session: pw-w1-1-1788599127361-aydc

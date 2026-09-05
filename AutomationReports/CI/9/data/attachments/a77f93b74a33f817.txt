@@ -1,0 +1,23 @@
+[2026-09-05 18:35:27] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-2-1788599127249-csg2
+[2026-09-05 18:35:27] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:35:27] INFO: 📤 Request Payload: {
+  "username": "johndoe1788599127251a310cfff@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 18:35:28] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 18:35:28] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe1788599127251a310cfff@"
+}
+[2026-09-05 18:35:28] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 18:35:28] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/cart
+[2026-09-05 18:35:28] ERROR: ❌ Request /api/cart without authentication Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Token required"
+}
+[2026-09-05 18:35:28] ERROR: ❌ Request /api/cart without authentication Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Token required"
+}
+[2026-09-05 18:35:28] INFO:  Response status code should be 401 Success !! Actual and Expected Values are:: 401
+[2026-09-05 18:35:28] INFO:  Error message for missing token Success !! Actual and Expected Values are:: Unauthorized: Token required
+[2026-09-05 18:35:28] INFO: Cleaned up ephemeral test session: pw-w2-2-1788599127249-csg2
