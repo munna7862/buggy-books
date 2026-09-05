@@ -1,0 +1,5 @@
+[2026-09-05 18:28:05] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788598685546-8qxv
+[2026-09-05 18:28:05] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:28:06] INFO: ✅ New context created with saved authentication state from: /home/runner/work/buggy-books/buggy-books/auth-state.json
+[2026-09-05 18:28:13] INFO: Captured 0 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-00237-on-Storage-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 18:28:13] INFO: Cleaned up ephemeral test session: pw-w0-0-1788598685546-8qxv

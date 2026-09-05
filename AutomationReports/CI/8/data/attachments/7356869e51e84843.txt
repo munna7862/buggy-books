@@ -1,0 +1,10 @@
+[2026-09-05 18:27:00] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788598620537-g8ae
+[2026-09-05 18:27:00] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/profile/upload
+[2026-09-05 18:27:00] ERROR: ❌ Attempt POST /api/profile/upload without auth cookies Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Token required"
+}
+[2026-09-05 18:27:00] ERROR: ❌ Attempt POST /api/profile/upload without auth cookies Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Token required"
+}
+[2026-09-05 18:27:00] INFO:  Verifying 401 Unauthorized for unauthenticated upload request Success !! Actual and Expected Values are:: 401
+[2026-09-05 18:27:00] INFO: Cleaned up ephemeral test session: pw-w3-3-1788598620537-g8ae

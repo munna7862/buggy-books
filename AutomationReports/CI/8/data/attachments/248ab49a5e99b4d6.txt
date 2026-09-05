@@ -1,0 +1,30 @@
+[2026-09-05 18:26:57] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788598617405-0913
+[2026-09-05 18:26:57] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:26:57] INFO: 📤 Request Payload: {
+  "username": "johndoe178859861740772305359@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 18:26:58] INFO: ✅ Register test user setup Success! Status: 201 Created
+[2026-09-05 18:26:58] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe178859861740772305359@"
+}
+[2026-09-05 18:26:58] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-05 18:26:58] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 18:26:58] INFO: 📤 Request Payload: {
+  "username": "' OR '1'='117885986086954463514a@",
+  "password": "johna123@"
+}
+[2026-09-05 18:26:58] ERROR: ❌ Login security validation for SQL injection pattern in username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "412f40f9-4ded-45b0-8b51-083d9da6be0a"
+}
+[2026-09-05 18:26:58] ERROR: ❌ Login security validation for SQL injection pattern in username Failed! Status: 401 Unauthorized | Response: {
+  "error": "Unauthorized: Invalid credentials",
+  "errorName": "UnauthorizedError",
+  "correlationId": "412f40f9-4ded-45b0-8b51-083d9da6be0a"
+}
+[2026-09-05 18:26:58] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true
+[2026-09-05 18:26:58] INFO: Cleaned up ephemeral test session: pw-w0-0-1788598617405-0913

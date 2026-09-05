@@ -1,0 +1,67 @@
+[2026-09-05 18:26:58] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-2-1788598618950-u5yq
+[2026-09-05 18:26:58] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:26:58] INFO: 📤 Request Payload: {
+  "username": "token_exp_1788598618952_32dc8bdd",
+  "password": "Password123!",
+  "fullName": "Token Refresh Test User"
+}
+[2026-09-05 18:27:00] INFO: ✅ Register user for token expiry test Success! Status: 201 Created
+[2026-09-05 18:27:00] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "token_exp_1788598618952_32dc8bdd"
+}
+[2026-09-05 18:27:00] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-09-05 18:27:00] INFO: 📤 Request Payload: {
+  "jwtExpirySeconds": 2
+}
+[2026-09-05 18:27:00] INFO: ✅ Inject jwtExpirySeconds: 2 via chaos config Success! Status: 200 OK
+[2026-09-05 18:27:00] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 0,
+    "inventoryDelayMs": 0,
+    "jwtExpirySeconds": 2,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": false,
+    "inventoryLockingRate": 0
+  }
+}
+[2026-09-05 18:27:00] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/login
+[2026-09-05 18:27:00] INFO: 📤 Request Payload: {
+  "username": "token_exp_1788598618952_32dc8bdd",
+  "password": "Password123!"
+}
+[2026-09-05 18:27:01] INFO: ✅ Login user to receive short-lived access token Success! Status: 200 OK
+[2026-09-05 18:27:01] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "token_exp_1788598618952_32dc8bdd"
+}
+[2026-09-05 18:27:04] INFO: 🚀 Making GET request to https://buggy-books.onrender.com/api/cart
+[2026-09-05 18:27:04] ERROR: ❌ Request GET /api/cart with expired access token Failed! Status: 403 Forbidden | Response: {
+  "error": "Forbidden: Invalid token"
+}
+[2026-09-05 18:27:04] ERROR: ❌ Request GET /api/cart with expired access token Failed! Status: 403 Forbidden | Response: {
+  "error": "Forbidden: Invalid token"
+}
+[2026-09-05 18:27:04] INFO:  Verifying 403 Forbidden returned for expired token Success !! Actual and Expected Values are:: 403
+[2026-09-05 18:27:04] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/test/config
+[2026-09-05 18:27:04] INFO: 📤 Request Payload: {
+  "jwtExpirySeconds": 900
+}
+[2026-09-05 18:27:04] INFO: ✅ Reset jwtExpirySeconds to 900 Success! Status: 200 OK
+[2026-09-05 18:27:04] INFO: 📥 Response Payload: {
+  "success": true,
+  "config": {
+    "checkoutFailureRate": 0,
+    "inventoryDelayMs": 0,
+    "jwtExpirySeconds": 900,
+    "websocketDropRate": 0,
+    "uploadFailureRate": 0,
+    "injectA11yViolations": false,
+    "visualChaos": false,
+    "inventoryLockingRate": 0
+  }
+}
+[2026-09-05 18:27:04] INFO: Cleaned up ephemeral test session: pw-w2-2-1788598618950-u5yq

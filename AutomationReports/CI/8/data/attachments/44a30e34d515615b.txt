@@ -1,0 +1,31 @@
+[2026-09-05 18:26:51] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-2-1788598611215-qmgm
+[2026-09-05 18:26:51] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:26:51] INFO: 📤 Request Payload: {
+  "username": "johndoe1788598611217e5bc8864@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 18:26:52] INFO: ✅ Register original user for duplicate validation Success! Status: 201 Created
+[2026-09-05 18:26:52] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "johndoe1788598611217e5bc8864@"
+}
+[2026-09-05 18:26:52] INFO: 🚀 Making POST request to https://buggy-books.onrender.com/api/register
+[2026-09-05 18:26:52] INFO: 📤 Request Payload: {
+  "username": "johndoe1788598611217e5bc8864@",
+  "password": "johna123@",
+  "fullName": "john doe"
+}
+[2026-09-05 18:26:53] ERROR: ❌ Register duplicate username Failed! Status: 409 Conflict | Response: {
+  "error": "Conflict: Username already exists",
+  "errorName": "ConflictError",
+  "correlationId": "cc4dbf45-c031-4c77-a1b1-58bef33dbed6"
+}
+[2026-09-05 18:26:53] ERROR: ❌ Register duplicate username Failed! Status: 409 Conflict | Response: {
+  "error": "Conflict: Username already exists",
+  "errorName": "ConflictError",
+  "correlationId": "cc4dbf45-c031-4c77-a1b1-58bef33dbed6"
+}
+[2026-09-05 18:26:53] INFO:  Initial registration response status Success !! Actual and Expected Values are:: 201
+[2026-09-05 18:26:53] INFO:  Duplicate registration status Success !! Actual and Expected Values are:: true
+[2026-09-05 18:26:53] INFO: Cleaned up ephemeral test session: pw-w2-2-1788598611215-qmgm

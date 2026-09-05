@@ -1,0 +1,25 @@
+[2026-09-05 18:28:00] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-3-1788598680416-9awk
+[2026-09-05 18:28:00] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:28:01] INFO: Clicking on Sign Up link
+[2026-09-05 18:28:01] INFO: Entering full name: autoTestUseraeT9f
+[2026-09-05 18:28:01] INFO: Entering username: autoTestUserYxzQf
+[2026-09-05 18:28:01] INFO: Entering password: AutoTest@123
+[2026-09-05 18:28:01] INFO: Entering confirming password: AutoTest@123
+[2026-09-05 18:28:02] INFO: Clicking on Create Account button
+[2026-09-05 18:28:02] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:28:02] INFO: Checking if Checkout label is visible
+[2026-09-05 18:28:03] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:28:03] INFO: Clicking on Logout button
+[2026-09-05 18:28:03] INFO: Clicking on Login link
+[2026-09-05 18:28:03] INFO: Entering username: autoTestUserYxzQf
+[2026-09-05 18:28:03] INFO: Entering password: AutoTest@123
+[2026-09-05 18:28:03] INFO: Clicking on Sign In button
+[2026-09-05 18:28:04] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:28:04] INFO: Checking if Checkout label is visible
+[2026-09-05 18:28:04] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:28:04] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 18:28:04] INFO: Clicking on Logout button
+[2026-09-05 18:28:05] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-05 18:28:05] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-05 18:28:05] INFO: Captured 14 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-59107-and-Logout-smoke-regression-Google-Chrome/network-log.json
+[2026-09-05 18:28:05] INFO: Cleaned up ephemeral test session: pw-w3-3-1788598680416-9awk

@@ -1,0 +1,40 @@
+[2026-09-05 18:27:36] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-1-1788598656012-rthb
+[2026-09-05 18:27:36] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:27:36] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-09-05 18:27:37] INFO: Clicking on Sign Up link
+[2026-09-05 18:27:38] INFO: Entering full name: Cart Quantity User
+[2026-09-05 18:27:38] INFO: Entering username: cart_qty_user_1788598656382_56de8210
+[2026-09-05 18:27:38] INFO: Entering password: Password123!
+[2026-09-05 18:27:38] INFO: Entering confirming password: Password123!
+[2026-09-05 18:27:38] INFO: Clicking on Create Account button
+[2026-09-05 18:27:39] INFO: Verifying landing on Checkout Page
+[2026-09-05 18:27:39] INFO: Checking if Checkout label is visible
+[2026-09-05 18:27:39] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-05 18:27:39] INFO: Clicking on Catalog link
+[2026-09-05 18:27:40] INFO: Filling search input with: Mockingbird
+[2026-09-05 18:27:40] INFO: Clicking Search button
+[2026-09-05 18:27:40] INFO: Clicking on Add to Cart button for book id: 2
+[2026-09-05 18:27:41] INFO: Waiting for cart status message: added to cart
+[2026-09-05 18:27:41] INFO: Cart status message "added to cart" is visible
+[2026-09-05 18:27:41] INFO: Waiting for cart status message: added to cart
+[2026-09-05 18:27:41] INFO: Cart status message "added to cart" is visible
+[2026-09-05 18:27:41] INFO: Clicking on Cart link
+[2026-09-05 18:27:42] INFO: Getting cart total text
+[2026-09-05 18:27:42] INFO:  Verifying 1 item in cart with non-zero total price Success !! Actual and Expected Values are:: true
+[2026-09-05 18:27:42] INFO: Clicking on Catalog link
+[2026-09-05 18:27:42] INFO: Filling search input with: Gatsby
+[2026-09-05 18:27:42] INFO: Clicking Search button
+[2026-09-05 18:27:43] INFO: Clicking on Add to Cart button for book id: 1
+[2026-09-05 18:27:45] INFO: Waiting for cart status message: added to cart
+[2026-09-05 18:27:45] INFO: Cart status message "added to cart" is visible
+[2026-09-05 18:27:45] INFO: Waiting for cart status message: added to cart
+[2026-09-05 18:27:45] INFO: Cart status message "added to cart" is visible
+[2026-09-05 18:27:45] INFO: Clicking on Cart link
+[2026-09-05 18:27:45] INFO: Getting cart total text
+[2026-09-05 18:27:45] INFO:  Verifying cart item count increased to 2 and grand total updated dynamically Success !! Actual and Expected Values are:: true
+[2026-09-05 18:27:45] INFO: Getting cart total text
+[2026-09-05 18:27:45] INFO: Clicking Remove item button
+[2026-09-05 18:27:46] INFO: Getting cart total text
+[2026-09-05 18:27:46] INFO:  Verifying cart item count decreased to 1 and grand total reduced dynamically Success !! Actual and Expected Values are:: true
+[2026-09-05 18:27:46] INFO: Captured 22 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Checkout-Test_006_CartQ-6d4e6--and-order-total-regression-Google-Chrome/network-log.json
+[2026-09-05 18:27:46] INFO: Cleaned up ephemeral test session: pw-w1-1-1788598656012-rthb

@@ -1,0 +1,11 @@
+[2026-09-05 18:27:07] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w0-0-1788598627835-3y92
+[2026-09-05 18:27:08] INFO: Network interception enabled with mode: api-only
+[2026-09-05 18:27:08] INFO: Navigating to catalog page: https://buggy-books-fe.onrender.com/
+[2026-09-05 18:27:08] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-05 18:27:08] INFO: Filling search input with: xyz999nonexistent
+[2026-09-05 18:27:09] INFO: Clicking Search button
+[2026-09-05 18:27:09] INFO:  Verifying zero books displayed for gibberish search Success !! Actual and Expected Values are:: 0
+[2026-09-05 18:27:09] INFO: Getting catalog empty state text
+[2026-09-05 18:27:09] INFO:  Verifying empty state message text Success !! Actual and Expected Values are:: true
+[2026-09-05 18:27:09] INFO: Captured 7 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-BookCatalog-Test_002_Se-dab46-rch---No-Results-regression-Google-Chrome/network-log.json
+[2026-09-05 18:27:09] INFO: Cleaned up ephemeral test session: pw-w0-0-1788598627835-3y92
