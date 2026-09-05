@@ -46,7 +46,7 @@ graph LR
 2. **[Sprint 4.2: Fast-Feedback Parallelization & Concurrency Control](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_4_2_fast_feedback_parallelization_and_concurrency.md)**
    - *Estimated Effort*: 5 Story Points
    - *Key Deliverable*: Shifting `e2e-quality-gate` to Stage 1 parallel execution, implementing workflow-level concurrency cancellation, and applying path-based triggering filters.
-   - *Status*: `[PLANNED]`
+   - *Status*: `[COMPLETED]`
 
 3. **[Sprint 4.3: Performance Runner Resilience & Consolidated Test Reporting](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_4_3_performance_resilience_and_test_reporting.md)**
    - *Estimated Effort*: 5 Story Points
@@ -60,9 +60,9 @@ graph LR
 - [x] Zero duplicate compilation steps: `backend` and `frontend` are built exactly once per workflow run.
 - [x] `lighthouse-ci` and `perf-benchmarks` consume pre-built artifacts without running `npm run build` or dev-dependency installs.
 - [x] All jobs in `.github/workflows/ci.yml` use `npm ci` for dependency installation.
-- [ ] `e2e-quality-gate` runs concurrently in Stage 1 with unit tests, executing static POM verification and typing checks with zero redundant compiler calls.
-- [ ] Concurrency control terminates obsolete workflow runs when new commits are pushed to the same pull request or branch.
-- [ ] Commits modifying exclusively markdown documentation or editor configs bypass CI execution cleanly.
+- [x] `e2e-quality-gate` runs concurrently in Stage 1 with unit tests, executing static POM verification and typing checks with zero redundant compiler calls.
+- [x] Concurrency control terminates obsolete workflow runs when new commits are pushed to the same pull request or branch.
+- [x] Commits modifying exclusively markdown documentation or editor configs bypass CI execution cleanly.
 - [ ] Pull requests execute lightweight API performance smoke tests, while full 50-VU stress benchmarks execute deterministically on `main` or scheduled nightly runs.
 - [ ] Total CI pipeline wall-clock time reduced by at least 40% compared to baseline.
 
