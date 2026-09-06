@@ -1,0 +1,18 @@
+[2026-09-06 13:43:27] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788668007356-elxd
+[2026-09-06 13:43:27] INFO: Network interception enabled with mode: api-only
+[2026-09-06 13:43:28] INFO: Clicking on Sign Up link
+[2026-09-06 13:43:28] INFO: Entering full name: Full profile_user_cild5
+[2026-09-06 13:43:28] INFO: Entering username: profile_user_cild5
+[2026-09-06 13:43:28] INFO: Entering password: Password123!
+[2026-09-06 13:43:28] INFO: Entering confirming password: Password123!
+[2026-09-06 13:43:28] INFO: Clicking on Create Account button
+[2026-09-06 13:43:29] INFO: Verifying landing on Checkout Page
+[2026-09-06 13:43:29] INFO: Checking if Checkout label is visible
+[2026-09-06 13:43:30] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-06 13:43:30] INFO: Clicking on Profile navbar link
+[2026-09-06 13:43:30] INFO: Selecting file for avatar upload: /__w/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/invalid_file.txt
+[2026-09-06 13:43:30] INFO: Clicking Upload Image button
+[2026-09-06 13:43:31] INFO: Getting upload error message text
+[2026-09-06 13:43:31] INFO:  Verifying file extension filter 400 error message Success !! Actual and Expected Values are:: true
+[2026-09-06 13:43:31] INFO: Captured 13 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-Profile-Test_005_Profil-90331-Validation-smoke-regression-chromium/network-log.json
+[2026-09-06 13:43:31] INFO: Cleaned up ephemeral test session: pw-w3-2-1788668007356-elxd

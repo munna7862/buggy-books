@@ -1,0 +1,8 @@
+[2026-09-06 13:43:01] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788667981200-y5ub
+[2026-09-06 13:43:01] INFO: Network interception enabled with mode: api-only
+[2026-09-06 13:43:01] INFO: Clicking on Login link
+[2026-09-06 13:43:01] INFO: Entering username: admin
+[2026-09-06 13:43:01] INFO: Entering password: wrongPassword123@
+[2026-09-06 13:43:01] INFO: Clicking on Sign In button
+[2026-09-06 13:43:07] INFO: Captured 8 network calls. Artifact: /__w/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-efe91-alidation-Errors-regression-chromium/network-log.json
+[2026-09-06 13:43:07] INFO: Cleaned up ephemeral test session: pw-w3-2-1788667981200-y5ub
