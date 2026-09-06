@@ -1,0 +1,3 @@
+[2026-09-06 22:13:53] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788698633590-4ezq
+[2026-09-06 22:13:55] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-06 22:13:57] INFO:  Status code for unregistered user Success !! Actual and Expected Values are:: true

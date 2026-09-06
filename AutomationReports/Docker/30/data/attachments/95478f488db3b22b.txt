@@ -1,0 +1,12 @@
+[2026-09-06 22:13:53] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788698633367-jrlb
+[2026-09-06 22:13:57] INFO: Filling search input with: the
+[2026-09-06 22:13:57] INFO: Clicking Search button
+[2026-09-06 22:14:03] INFO:  Verifying .layout-wrapper-xyz987 grid wrapper selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:03] INFO:  Verifying .complex-item-box-alpha book card selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:03] INFO:  Verifying .catalog-book-cover image selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:03] INFO:  Verifying .info-cell-beta info cell selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:03] INFO:  Verifying .price-tag-value price tag selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:03] INFO:  Verifying #book-search-input selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:03] INFO:  Verifying #book-search-btn selector exists in DOM Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:03] INFO:  Verifying #book-search-clear-btn selector exists in DOM after search Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:03] INFO: Cleaned up ephemeral test session: pw-w3-2-1788698633367-jrlb

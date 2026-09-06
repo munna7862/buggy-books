@@ -1,0 +1,58 @@
+[
+  {
+    "id": "1788698656594-1",
+    "startedAt": "2026-09-06T12:44:16.594Z",
+    "url": "https://buggy-books.onrender.com/socket.io/?EIO=4&transport=polling&t=szwhnojz",
+    "method": "GET",
+    "resourceType": "xhr",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Windows\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "accept-language": "en-US",
+      "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"HeadlessChrome\";v=\"145\", \"Chromium\";v=\"145\"",
+      "sec-ch-ua-mobile": "?0",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.7632.6 Safari/537.36",
+      "accept": "*/*",
+      "x-test-session-id": "pw-w1-0-1788698656215-jadg"
+    },
+    "postData": null
+  },
+  {
+    "id": "1788698656594-2",
+    "startedAt": "2026-09-06T12:44:16.594Z",
+    "url": "https://buggy-books.onrender.com/api/books?page=1&limit=8",
+    "method": "GET",
+    "resourceType": "fetch",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Windows\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "accept-language": "en-US",
+      "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"HeadlessChrome\";v=\"145\", \"Chromium\";v=\"145\"",
+      "sec-ch-ua-mobile": "?0",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.7632.6 Safari/537.36",
+      "x-test-session-id": "pw-w1-0-1788698656215-jadg",
+      "content-type": "application/json"
+    },
+    "postData": null
+  },
+  {
+    "id": "1788698656595-3",
+    "startedAt": "2026-09-06T12:44:16.595Z",
+    "url": "https://buggy-books.onrender.com/api/test/config",
+    "method": "GET",
+    "resourceType": "fetch",
+    "navigationRequest": false,
+    "headers": {
+      "sec-ch-ua-platform": "\"Windows\"",
+      "referer": "https://buggy-books-fe.onrender.com/",
+      "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.7632.6 Safari/537.36",
+      "sec-ch-ua": "\"Not:A-Brand\";v=\"99\", \"HeadlessChrome\";v=\"145\", \"Chromium\";v=\"145\"",
+      "x-test-session-id": "pw-w1-0-1788698656215-jadg",
+      "accept-language": "en-US",
+      "sec-ch-ua-mobile": "?0"
+    },
+    "postData": null
+  }
+]

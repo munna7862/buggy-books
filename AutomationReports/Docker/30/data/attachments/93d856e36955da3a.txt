@@ -1,0 +1,4 @@
+[2026-09-06 22:14:03] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788698643665-wjva
+[2026-09-06 22:14:09] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-06 22:14:09] INFO:  Unsupported login method status Success !! Actual and Expected Values are:: true
+[2026-09-06 22:14:09] INFO: Cleaned up ephemeral test session: pw-w1-0-1788698643665-wjva

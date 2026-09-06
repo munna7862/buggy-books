@@ -1,0 +1,4 @@
+[2026-09-06 22:14:07] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788698647576-8syj
+[2026-09-06 22:14:07] INFO:  Verifying GET /api/test/config status is 200 Success !! Actual and Expected Values are:: 200
+[2026-09-06 22:14:07] INFO:  Verifying visualChaos default value is false Success !! Actual and Expected Values are:: false
+[2026-09-06 22:14:08] INFO: Cleaned up ephemeral test session: pw-w2-1-1788698647576-8syj
