@@ -1,3 +1,5 @@
+/* jshint esversion: 11, node: true */
+
 const fs = require('fs');
 const path = require('path');
 const { merge } = require('monocart-reporter');
