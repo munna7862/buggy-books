@@ -1,0 +1,11 @@
+[2026-09-07 01:27:13] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788710233514-cn6d
+[2026-09-07 01:27:13] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-07 01:27:13] INFO:  Login response status Success !! Actual and Expected Values are:: 200
+[2026-09-07 01:27:13] INFO:  Login response is an object Success !! Actual and Expected Values are:: object
+[2026-09-07 01:27:13] INFO:  Login response is not null Success !! Actual and Expected Values are:: true
+[2026-09-07 01:27:13] INFO:  Login message is a string Success !! Actual and Expected Values are:: string
+[2026-09-07 01:27:13] INFO:  Login username is a string Success !! Actual and Expected Values are:: string
+[2026-09-07 01:27:13] INFO:  Login message Success !! Actual and Expected Values are:: Login successful
+[2026-09-07 01:27:13] INFO:  Logged in username matches request Success !! Actual and Expected Values are:: johndoe1788710233525c268a101@
+[2026-09-07 01:27:13] INFO:  Login response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","username"]
+[2026-09-07 01:27:13] INFO: Cleaned up ephemeral test session: pw-w3-2-1788710233514-cn6d
