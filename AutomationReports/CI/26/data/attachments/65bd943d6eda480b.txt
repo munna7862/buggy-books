@@ -1,0 +1,25 @@
+[2026-09-07 00:25:40] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788706540230-qosk
+[2026-09-07 00:25:40] INFO: Network interception enabled with mode: api-only
+[2026-09-07 00:25:40] INFO: Clicking on Sign Up link
+[2026-09-07 00:25:40] INFO: Entering full name: autoTestUserUztxp
+[2026-09-07 00:25:41] INFO: Entering username: autoTestUserOsvyi
+[2026-09-07 00:25:41] INFO: Entering password: AutoTest@123
+[2026-09-07 00:25:41] INFO: Entering confirming password: AutoTest@123
+[2026-09-07 00:25:41] INFO: Clicking on Create Account button
+[2026-09-07 00:25:41] INFO: Verifying landing on Checkout Page
+[2026-09-07 00:25:41] INFO: Checking if Checkout label is visible
+[2026-09-07 00:25:42] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-07 00:25:42] INFO: Clicking on Logout button
+[2026-09-07 00:25:42] INFO: Clicking on Login link
+[2026-09-07 00:25:42] INFO: Entering username: autoTestUserOsvyi
+[2026-09-07 00:25:42] INFO: Entering password: AutoTest@123
+[2026-09-07 00:25:42] INFO: Clicking on Sign In button
+[2026-09-07 00:25:43] INFO: Verifying landing on Checkout Page
+[2026-09-07 00:25:43] INFO: Checking if Checkout label is visible
+[2026-09-07 00:25:43] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-07 00:25:43] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-07 00:25:43] INFO: Clicking on Logout button
+[2026-09-07 00:25:43] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-07 00:25:43] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-07 00:25:43] INFO: Captured 15 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-59107-and-Logout-smoke-regression-chromium/network-log.json
+[2026-09-07 00:25:43] INFO: Cleaned up ephemeral test session: pw-w2-1-1788706540230-qosk
