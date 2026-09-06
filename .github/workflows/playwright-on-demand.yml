@@ -112,9 +112,9 @@ on:
           - 'false'
 
       branch:
-        description: 'Git branch to checkout for this run'
+        description: 'Git branch to checkout for this run (optional; defaults to current branch/ref)'
         required: false
-        default: 'main'
+        default: ''
         type: string
 
 concurrency:
@@ -293,6 +293,7 @@ jobs:
           USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
           PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/api-results.json
+          MONOCART_REPORT_PATH: reports/monocart-api/index.html
         run: |
           TARGET_PATH="src/tests/api"
           INPUT_PATH="${{ github.event.inputs.test_path }}"
@@ -413,6 +414,14 @@ jobs:
         with:
           name: blob-report-api
           path: playwright-e2e/blob-report
+          retention-days: 7
+
+      - name: Upload Monocart Report (API)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: monocart-report-api
+          path: playwright-e2e/reports/monocart-api
           retention-days: 7
 
       - name: Upload Allure Results
@@ -541,6 +550,7 @@ jobs:
           USER_NAME: ${{ secrets.E2E_USER_NAME || 'admin' }}
           PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/ui-results.json
+          MONOCART_REPORT_PATH: reports/monocart-ui/index.html
         run: |
           TARGET_PATH="src/tests/ui"
           INPUT_PATH="${{ github.event.inputs.test_path }}"
@@ -665,6 +675,14 @@ jobs:
           path: playwright-e2e/blob-report
           retention-days: 7
 
+      - name: Upload Monocart Report (UI)
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: monocart-report-ui
+          path: playwright-e2e/reports/monocart-ui
+          retention-days: 7
+
       - name: Upload Allure Results
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
@@ -748,6 +766,27 @@ jobs:
           path: playwright-e2e/playwright-report
           retention-days: 7
 
+      - name: Download all Monocart Reports
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        continue-on-error: true
+        with:
+          pattern: monocart-report-*
+          path: playwright-e2e/all-monocart
+          merge-multiple: false
+
+      - name: Merge Monocart Reports into HTML Report
+        working-directory: playwright-e2e
+        run: |
+          node scripts/merge-monocart.js all-monocart reports/monocart-report/index.html
+
+      - name: Upload Consolidated Monocart HTML Report Artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: playwright-monocart-report-on-demand
+          path: playwright-e2e/reports/monocart-report
+          retention-days: 7
+
       - name: Checkout gh-pages
         if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
@@ -780,11 +819,31 @@ jobs:
           allure_report: allure-report
           allure_history: allure-history
           keep_reports: 7
-          subfolder: AutomationReports/CI
+          subfolder: AutomationReports/OnDemand
 
-      - name: Fix permissions for GitHub Pages deployment
+      - name: Sync gh-pages history and prune old reports (keep max 7)
         if: (github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true) && always()
-        run: sudo chown -R $USER:$USER allure-history/ allure-results/ || true
+        run: |
+          sudo chown -R $USER:$USER allure-history/ allure-results/ || true
+          mkdir -p allure-history
+          if [ -d "gh-pages" ]; then
+            rsync -av --exclude="AutomationReports/OnDemand" --exclude=".git" gh-pages/ allure-history/ || true
+            cp -n gh-pages/.nojekyll allure-history/ 2>/dev/null || true
+            cp -n gh-pages/.gitignore allure-history/ 2>/dev/null || true
+          fi
+          TARGET_DIR="allure-history/AutomationReports/OnDemand"
+          if [ -d "$TARGET_DIR" ]; then
+            RUNS=$(find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | grep -E '^[0-9]+$' | sort -n -r)
+            COUNT=0
+            for RUN in $RUNS; do
+              COUNT=$((COUNT + 1))
+              if [ $COUNT -gt 7 ]; then
+                echo "Pruning old OnDemand report run: $RUN from $TARGET_DIR"
+                rm -rf "$TARGET_DIR/$RUN"
+              fi
+            done
+          fi
+          sudo chown -R $USER:$USER allure-history/ || true
 
       - name: Deploy to GitHub Pages
         if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
@@ -794,7 +853,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
-          keep_files: true
+          keep_files: false
 
       - name: Publish On-Demand Execution Summary
         if: always()
@@ -824,8 +883,8 @@ jobs:
           echo "| **Target Branch** | \`${{ github.event.inputs.branch || github.ref }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ github.event.inputs.publish_report }}" != "false" ]; then
-            echo "📊 **Allure Dashboard Link**: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/CI/${RUN_NUM}" >> $GITHUB_STEP_SUMMARY
+            echo "📊 **Allure Dashboard Link**: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/OnDemand/${RUN_NUM}" >> $GITHUB_STEP_SUMMARY
           else
             echo "📦 **Report Mode**: Artifact download only (GitHub Pages publishing bypassed)." >> $GITHUB_STEP_SUMMARY
           fi
-          echo "📁 Download the \`playwright-html-report-on-demand\` artifact below to view consolidated HTML results." >> $GITHUB_STEP_SUMMARY
+          echo "📁 Download \`playwright-html-report-on-demand\` and \`playwright-monocart-report-on-demand\` artifacts below to view offline reports." >> $GITHUB_STEP_SUMMARY

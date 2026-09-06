@@ -20,7 +20,8 @@
     "report": "npm run generate-allure && npm run open-allure",
     "clean-reports": "rimraf reports logs playwright-report test-results",
     "save-snapshot": "ts-node scripts/save-snapshot.ts",
-    "finalize-spec": "ts-node scripts/finalize-spec.ts"
+    "finalize-spec": "ts-node scripts/finalize-spec.ts",
+    "merge:monocart": "node scripts/merge-monocart.js"
   },
   "keywords": [],
   "author": "",
@@ -33,6 +34,7 @@
     "allure-commandline": "^2.34.1",
     "allure-js-commons": "^3.4.1",
     "allure-playwright": "^3.4.1",
+    "monocart-reporter": "^2.13.0",
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
