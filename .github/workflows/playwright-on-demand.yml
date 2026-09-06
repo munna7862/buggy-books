@@ -361,8 +361,25 @@ jobs:
             ARGS+=("--trace" "on")
           fi
 
-          echo "🚀 Executing API Tests:"
-          echo "npx playwright test ${ARGS[@]}"
+          echo "================================================================================"
+          echo "📋 PLAYWRIGHT ON-DEMAND API RUN CONFIGURATION"
+          echo "================================================================================"
+          echo "• Target Path:         $TARGET_PATH"
+          echo "• Target Environment:  ${{ github.event.inputs.target_env || 'LOCAL' }}"
+          echo "• Base URL:            $BASE_URL"
+          echo "• API Base URL:        $API_BASE_URL"
+          echo "• Tag Filter:          ${TAG:-all} (${TAG_REGEX:-none})"
+          echo "• Exclude Tag:         ${EXCLUDE_TAG:-none}"
+          echo "• Title Grep:          ${GREP_INPUT:-none}"
+          echo "• Combined Regex:      ${COMBINED_GREP:-none}"
+          echo "• Repeat Count:        $REPEAT_EACH"
+          echo "• Retries Policy:      $RETRIES"
+          echo "• Fail Fast:           $FAIL_FAST"
+          echo "• Trace Mode:          $TRACE_MODE"
+          echo "• Workers:             $WORKERS"
+          echo "• Headless:            ${{ github.event.inputs.headless || 'true' }}"
+          echo "================================================================================"
+          echo "🚀 Executing CLI: npx playwright test ${ARGS[@]}"
           npx playwright test "${ARGS[@]}"
 
       - name: Generate API Quality Gate Step Summary
@@ -593,8 +610,26 @@ jobs:
             ARGS+=("--trace" "on")
           fi
 
-          echo "🚀 Executing UI Tests:"
-          echo "npx playwright test ${ARGS[@]}"
+          echo "================================================================================"
+          echo "📋 PLAYWRIGHT ON-DEMAND UI RUN CONFIGURATION"
+          echo "================================================================================"
+          echo "• Target Path:         $TARGET_PATH"
+          echo "• Project / Browser:   $PROJECT"
+          echo "• Target Environment:  ${{ github.event.inputs.target_env || 'LOCAL' }}"
+          echo "• Base URL:            $BASE_URL"
+          echo "• API Base URL:        $API_BASE_URL"
+          echo "• Tag Filter:          ${TAG:-all} (${TAG_REGEX:-none})"
+          echo "• Exclude Tag:         ${EXCLUDE_TAG:-none}"
+          echo "• Title Grep:          ${GREP_INPUT:-none}"
+          echo "• Combined Regex:      ${COMBINED_GREP:-none}"
+          echo "• Repeat Count:        $REPEAT_EACH"
+          echo "• Retries Policy:      $RETRIES"
+          echo "• Fail Fast:           $FAIL_FAST"
+          echo "• Trace Mode:          $TRACE_MODE"
+          echo "• Workers:             $WORKERS"
+          echo "• Headless:            ${{ github.event.inputs.headless || 'true' }}"
+          echo "================================================================================"
+          echo "🚀 Executing CLI: npx playwright test ${ARGS[@]}"
           npx playwright test "${ARGS[@]}"
 
       - name: Generate UI Quality Gate Step Summary
@@ -783,7 +818,10 @@ jobs:
           echo "| **Retries Policy** | \`${{ github.event.inputs.retries || 'default' }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Fail Fast (-x)** | \`${{ github.event.inputs.fail_fast || 'false' }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **Trace Mode** | \`${{ github.event.inputs.trace_mode || 'retain-on-failure' }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Workers Concurrency** | \`${{ github.event.inputs.workers || '4' }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Headless Mode** | \`${{ github.event.inputs.headless || 'true' }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "| **GitHub Pages Publish** | \`${{ github.event.inputs.publish_report || 'true' }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| **Target Branch** | \`${{ github.event.inputs.branch || github.ref }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ github.event.inputs.publish_report }}" != "false" ]; then
             echo "📊 **Allure Dashboard Link**: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/CI/${RUN_NUM}" >> $GITHUB_STEP_SUMMARY
