@@ -1,0 +1,25 @@
+[2026-09-07 00:12:26] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w5-2-1788705746278-2x85
+[2026-09-07 00:12:26] INFO: Network interception enabled with mode: api-only
+[2026-09-07 00:12:27] INFO: Clicking on Sign Up link
+[2026-09-07 00:12:27] INFO: Entering full name: autoTestUserBfA4T
+[2026-09-07 00:12:27] INFO: Entering username: autoTestUserJRbJS
+[2026-09-07 00:12:27] INFO: Entering password: AutoTest@123
+[2026-09-07 00:12:27] INFO: Entering confirming password: AutoTest@123
+[2026-09-07 00:12:28] INFO: Clicking on Create Account button
+[2026-09-07 00:12:28] INFO: Verifying landing on Checkout Page
+[2026-09-07 00:12:28] INFO: Checking if Checkout label is visible
+[2026-09-07 00:12:28] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-07 00:12:28] INFO: Clicking on Logout button
+[2026-09-07 00:12:29] INFO: Clicking on Login link
+[2026-09-07 00:12:29] INFO: Entering username: autoTestUserJRbJS
+[2026-09-07 00:12:29] INFO: Entering password: AutoTest@123
+[2026-09-07 00:12:29] INFO: Clicking on Sign In button
+[2026-09-07 00:12:30] INFO: Verifying landing on Checkout Page
+[2026-09-07 00:12:30] INFO: Checking if Checkout label is visible
+[2026-09-07 00:12:31] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-07 00:12:31] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-07 00:12:31] INFO: Clicking on Logout button
+[2026-09-07 00:12:31] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-07 00:12:31] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-07 00:12:31] INFO: Captured 15 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-59107-and-Logout-smoke-regression-chromium-repeat1/network-log.json
+[2026-09-07 00:12:31] INFO: Cleaned up ephemeral test session: pw-w5-2-1788705746278-2x85
