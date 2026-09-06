@@ -1,0 +1,25 @@
+[2026-09-06 13:53:56] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788668636597-pnlt
+[2026-09-06 13:53:56] INFO: Network interception enabled with mode: api-only
+[2026-09-06 13:53:56] INFO: Clicking on Sign Up link
+[2026-09-06 13:53:57] INFO: Entering full name: autoTestUser4PfoO
+[2026-09-06 13:53:57] INFO: Entering username: autoTestUserYoB4e
+[2026-09-06 13:53:57] INFO: Entering password: AutoTest@123
+[2026-09-06 13:53:57] INFO: Entering confirming password: AutoTest@123
+[2026-09-06 13:53:57] INFO: Clicking on Create Account button
+[2026-09-06 13:53:57] INFO: Verifying landing on Checkout Page
+[2026-09-06 13:53:57] INFO: Checking if Checkout label is visible
+[2026-09-06 13:53:58] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-06 13:53:58] INFO: Clicking on Logout button
+[2026-09-06 13:53:58] INFO: Clicking on Login link
+[2026-09-06 13:53:58] INFO: Entering username: autoTestUserYoB4e
+[2026-09-06 13:53:58] INFO: Entering password: AutoTest@123
+[2026-09-06 13:53:58] INFO: Clicking on Sign In button
+[2026-09-06 13:53:59] INFO: Verifying landing on Checkout Page
+[2026-09-06 13:53:59] INFO: Checking if Checkout label is visible
+[2026-09-06 13:53:59] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-06 13:53:59] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-06 13:53:59] INFO: Clicking on Logout button
+[2026-09-06 13:54:00] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-06 13:54:00] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-06 13:54:00] INFO: Captured 15 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-59107-and-Logout-smoke-regression-chromium/network-log.json
+[2026-09-06 13:54:00] INFO: Cleaned up ephemeral test session: pw-w3-2-1788668636597-pnlt

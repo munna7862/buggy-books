@@ -1,0 +1,16 @@
+[2026-09-06 13:53:58] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788668638248-u9c9
+[2026-09-06 13:53:58] INFO: Network interception enabled with mode: api-only
+[2026-09-06 13:53:58] INFO: Clicking on Login link
+[2026-09-06 13:53:59] INFO: Entering username: admin
+[2026-09-06 13:53:59] INFO: Entering password: password123
+[2026-09-06 13:53:59] INFO: Clicking on Sign In button
+[2026-09-06 13:54:00] INFO: Verifying landing on Checkout Page
+[2026-09-06 13:54:00] INFO: Checking if Checkout label is visible
+[2026-09-06 13:54:00] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-06 13:54:00] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-06 13:54:00] INFO: ✅ Authentication state saved to: /home/runner/work/buggy-books/buggy-books/auth-state.json
+[2026-09-06 13:54:00] INFO: Clicking on Logout button
+[2026-09-06 13:54:00] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-06 13:54:00] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-06 13:54:00] INFO: Captured 10 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-ef8d5-sting-User-smoke-regression-chromium/network-log.json
+[2026-09-06 13:54:00] INFO: Cleaned up ephemeral test session: pw-w2-1-1788668638248-u9c9
