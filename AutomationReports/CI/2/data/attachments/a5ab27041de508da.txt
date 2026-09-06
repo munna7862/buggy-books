@@ -1,0 +1,5 @@
+[2026-09-07 00:07:14] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788705434533-i4bo
+[2026-09-07 00:07:14] INFO:  Status code should be 200 when no query parameters are provided Success !! Actual and Expected Values are:: 200
+[2026-09-07 00:07:14] INFO:  should provide all books count 15 Success !! Actual and Expected Values are:: 15
+[2026-09-07 00:07:14] INFO:  Response should be an array Success !! Actual and Expected Values are:: true
+[2026-09-07 00:07:14] INFO: Cleaned up ephemeral test session: pw-w3-2-1788705434533-i4bo
