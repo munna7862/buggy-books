@@ -1,5 +1,0 @@
-[2026-09-06 13:53:12] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788668592707-z22a
-[2026-09-06 13:53:12] INFO:  Verifying POST /api/test/config status is 200 Success !! Actual and Expected Values are:: 200
-[2026-09-06 13:53:12] INFO:  Verifying visualChaos saved as true Success !! Actual and Expected Values are:: true
-[2026-09-06 13:53:12] INFO:  Verifying checkoutFailureRate saved as 0.5 Success !! Actual and Expected Values are:: 0.5
-[2026-09-06 13:53:12] INFO: Cleaned up ephemeral test session: pw-w4-3-1788668592707-z22a

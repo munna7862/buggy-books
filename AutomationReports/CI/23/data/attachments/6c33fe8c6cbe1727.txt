@@ -1,4 +1,0 @@
-[2026-09-06 13:53:13] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788668593842-hv1y
-[2026-09-06 13:53:13] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
-[2026-09-06 13:53:14] INFO:  Incorrect password status Success !! Actual and Expected Values are:: true
-[2026-09-06 13:53:14] INFO: Cleaned up ephemeral test session: pw-w1-0-1788668593842-hv1y

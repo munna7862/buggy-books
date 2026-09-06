@@ -1,3 +1,0 @@
-[2026-09-06 13:54:06] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788668646499-psrc
-[2026-09-06 13:54:07] INFO:  Verifying WebSocket status dot has status-connected class Success !! Actual and Expected Values are:: true
-[2026-09-06 13:54:07] INFO: Cleaned up ephemeral test session: pw-w2-1-1788668646499-psrc

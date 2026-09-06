@@ -1,3 +1,0 @@
-[2026-09-06 13:53:13] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788668593547-ysys
-[2026-09-06 13:53:13] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true
-[2026-09-06 13:53:13] INFO: Cleaned up ephemeral test session: pw-w4-3-1788668593547-ysys

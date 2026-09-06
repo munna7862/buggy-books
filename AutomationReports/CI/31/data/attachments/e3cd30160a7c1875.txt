@@ -1,0 +1,4 @@
+[2026-09-07 02:46:40] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788715000498-85u8
+[2026-09-07 02:46:40] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-07 02:46:40] INFO:  Status code for empty username Success !! Actual and Expected Values are:: true
+[2026-09-07 02:46:40] INFO: Cleaned up ephemeral test session: pw-w3-2-1788715000498-85u8
