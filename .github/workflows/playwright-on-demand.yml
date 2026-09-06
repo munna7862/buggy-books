@@ -651,6 +651,9 @@ jobs:
   # ============================================================================
   deploy-report:
     name: Consolidate Reports & Summary
+    concurrency:
+      group: pages-deploy-allure
+      cancel-in-progress: false
     needs: [api-tests, ui-tests]
     if: >-
       ${{
@@ -751,6 +754,7 @@ jobs:
       - name: Deploy to GitHub Pages
         if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
         uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
+        continue-on-error: true
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
