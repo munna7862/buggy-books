@@ -819,11 +819,31 @@ jobs:
           allure_report: allure-report
           allure_history: allure-history
           keep_reports: 7
-          subfolder: AutomationReports/CI
+          subfolder: AutomationReports/OnDemand
 
-      - name: Fix permissions for GitHub Pages deployment
+      - name: Sync gh-pages history and prune old reports (keep max 7)
         if: (github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true) && always()
-        run: sudo chown -R $USER:$USER allure-history/ allure-results/ || true
+        run: |
+          sudo chown -R $USER:$USER allure-history/ allure-results/ || true
+          mkdir -p allure-history
+          if [ -d "gh-pages" ]; then
+            rsync -av --exclude="AutomationReports/OnDemand" --exclude=".git" gh-pages/ allure-history/ || true
+            cp -n gh-pages/.nojekyll allure-history/ 2>/dev/null || true
+            cp -n gh-pages/.gitignore allure-history/ 2>/dev/null || true
+          fi
+          TARGET_DIR="allure-history/AutomationReports/OnDemand"
+          if [ -d "$TARGET_DIR" ]; then
+            RUNS=$(find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | grep -E '^[0-9]+$' | sort -n -r)
+            COUNT=0
+            for RUN in $RUNS; do
+              COUNT=$((COUNT + 1))
+              if [ $COUNT -gt 7 ]; then
+                echo "Pruning old OnDemand report run: $RUN from $TARGET_DIR"
+                rm -rf "$TARGET_DIR/$RUN"
+              fi
+            done
+          fi
+          sudo chown -R $USER:$USER allure-history/ || true
 
       - name: Deploy to GitHub Pages
         if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
@@ -833,7 +853,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
-          keep_files: true
+          keep_files: false
 
       - name: Publish On-Demand Execution Summary
         if: always()
@@ -863,7 +883,7 @@ jobs:
           echo "| **Target Branch** | \`${{ github.event.inputs.branch || github.ref }}\` |" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ github.event.inputs.publish_report }}" != "false" ]; then
-            echo "📊 **Allure Dashboard Link**: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/CI/${RUN_NUM}" >> $GITHUB_STEP_SUMMARY
+            echo "📊 **Allure Dashboard Link**: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/OnDemand/${RUN_NUM}" >> $GITHUB_STEP_SUMMARY
           else
             echo "📦 **Report Mode**: Artifact download only (GitHub Pages publishing bypassed)." >> $GITHUB_STEP_SUMMARY
           fi

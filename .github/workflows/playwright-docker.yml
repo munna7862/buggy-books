@@ -217,9 +217,29 @@ jobs:
           keep_reports: 7
           subfolder: AutomationReports/Docker
 
-      - name: Fix permissions for GitHub Pages deployment
+      - name: Sync gh-pages history and prune old reports (keep max 7)
         if: always()
-        run: sudo chown -R $USER:$USER allure-history/ allure-results/ || true
+        run: |
+          sudo chown -R $USER:$USER allure-history/ allure-results/ || true
+          mkdir -p allure-history
+          if [ -d "gh-pages" ]; then
+            rsync -av --exclude="AutomationReports/Docker" --exclude=".git" gh-pages/ allure-history/ || true
+            cp -n gh-pages/.nojekyll allure-history/ 2>/dev/null || true
+            cp -n gh-pages/.gitignore allure-history/ 2>/dev/null || true
+          fi
+          TARGET_DIR="allure-history/AutomationReports/Docker"
+          if [ -d "$TARGET_DIR" ]; then
+            RUNS=$(find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' 2>/dev/null | grep -E '^[0-9]+$' | sort -n -r)
+            COUNT=0
+            for RUN in $RUNS; do
+              COUNT=$((COUNT + 1))
+              if [ $COUNT -gt 7 ]; then
+                echo "Pruning old Docker report run: $RUN from $TARGET_DIR"
+                rm -rf "$TARGET_DIR/$RUN"
+              fi
+            done
+          fi
+          sudo chown -R $USER:$USER allure-history/ || true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
@@ -227,7 +247,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
-          keep_files: true
+          keep_files: false
 
       - name: Print Report URL
         run: |
