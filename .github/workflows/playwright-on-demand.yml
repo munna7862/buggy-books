@@ -485,14 +485,14 @@ jobs:
         working-directory: playwright-e2e
         run: |
           SELECTED_PROJECT="${{ github.event.inputs.project || 'chromium' }}"
-          BROWSER="chromium"
+          BROWSERS="chromium"
           if [[ "$SELECTED_PROJECT" == "firefox" ]]; then
-            BROWSER="firefox"
+            BROWSERS="firefox chromium"
           elif [[ "$SELECTED_PROJECT" == "webkit" || "$SELECTED_PROJECT" == "mobile-safari" ]]; then
-            BROWSER="webkit"
+            BROWSERS="webkit chromium"
           fi
-          echo "Installing Playwright browser: $BROWSER for project: $SELECTED_PROJECT"
-          npx playwright install --with-deps "$BROWSER"
+          echo "Installing Playwright browsers: $BROWSERS for project: $SELECTED_PROJECT"
+          npx playwright install --with-deps $BROWSERS
 
       - name: Start Ephemeral Backend Server (Local Mode)
         if: github.event.inputs.target_env != 'INTEROP'
