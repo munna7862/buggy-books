@@ -8,9 +8,9 @@ on:
         required: false
         default: 'true'
       branch:
-        description: 'Git branch to checkout for this run'
+        description: 'Git branch to checkout for this run (optional; defaults to current branch/ref)'
         required: false
-        default: 'main'
+        default: ''
 
 concurrency:
   group: pages-deploy-allure
@@ -49,7 +49,7 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         with:
-          ref: ${{ github.event.inputs.branch || 'main' }}
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Install dependencies
         working-directory: playwright-e2e
@@ -124,7 +124,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         with:
-          ref: ${{ github.event.inputs.branch || 'main' }}
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
       - name: Set up Node.js 20
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
@@ -218,16 +218,17 @@ jobs:
           keep_reports: 7
           subfolder: AutomationReports/Docker
 
-      - name: Copy Monocart Report to GitHub Pages Directory
-        run: |
-          mkdir -p allure-history/monocart
-          if [ -d "playwright-e2e/reports/monocart-report" ]; then
-            cp -r playwright-e2e/reports/monocart-report/* allure-history/monocart/ || true
-          fi
-
       - name: Fix permissions for GitHub Pages deployment
         if: always()
         run: sudo chown -R $USER:$USER allure-history/ allure-results/ || true
+
+      - name: Copy Monocart Report to GitHub Pages Directory
+        run: |
+          sudo mkdir -p allure-history/monocart
+          if [ -d "playwright-e2e/reports/monocart-report" ]; then
+            sudo cp -r playwright-e2e/reports/monocart-report/* allure-history/monocart/ || true
+          fi
+          sudo chown -R $USER:$USER allure-history/ || true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3

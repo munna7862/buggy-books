@@ -112,9 +112,9 @@ on:
           - 'false'
 
       branch:
-        description: 'Git branch to checkout for this run'
+        description: 'Git branch to checkout for this run (optional; defaults to current branch/ref)'
         required: false
-        default: 'main'
+        default: ''
         type: string
 
 concurrency:
@@ -821,17 +821,18 @@ jobs:
           keep_reports: 7
           subfolder: AutomationReports/CI
 
-      - name: Copy Monocart Report to GitHub Pages Directory
-        if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
-        run: |
-          mkdir -p allure-history/monocart
-          if [ -d "playwright-e2e/reports/monocart-report" ]; then
-            cp -r playwright-e2e/reports/monocart-report/* allure-history/monocart/ || true
-          fi
-
       - name: Fix permissions for GitHub Pages deployment
         if: (github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true) && always()
         run: sudo chown -R $USER:$USER allure-history/ allure-results/ || true
+
+      - name: Copy Monocart Report to GitHub Pages Directory
+        if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
+        run: |
+          sudo mkdir -p allure-history/monocart
+          if [ -d "playwright-e2e/reports/monocart-report" ]; then
+            sudo cp -r playwright-e2e/reports/monocart-report/* allure-history/monocart/ || true
+          fi
+          sudo chown -R $USER:$USER allure-history/ || true
 
       - name: Deploy to GitHub Pages
         if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
