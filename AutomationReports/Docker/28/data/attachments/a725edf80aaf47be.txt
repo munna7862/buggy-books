@@ -1,0 +1,4 @@
+[2026-09-06 13:25:02] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788666902622-vrxa
+[2026-09-06 13:25:02] INFO:  Verifying POST /api/test/config status is 200 Success !! Actual and Expected Values are:: 200
+[2026-09-06 13:25:02] INFO:  Verifying visualChaos field is true in response config Success !! Actual and Expected Values are:: true
+[2026-09-06 13:25:02] INFO: Cleaned up ephemeral test session: pw-w3-2-1788666902622-vrxa

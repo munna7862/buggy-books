@@ -1,0 +1,2 @@
+[2026-09-06 13:24:45] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788666885758-s8g1
+[2026-09-06 13:24:51] INFO:  Security status for script tag in fullName Success !! Actual and Expected Values are:: true

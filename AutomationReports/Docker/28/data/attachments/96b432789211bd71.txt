@@ -1,0 +1,2 @@
+[2026-09-06 13:24:46] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788666886240-q184
+[2026-09-06 13:24:51] INFO:  Status code should be 200 when Content-Type header is missing Success !! Actual and Expected Values are:: 200
