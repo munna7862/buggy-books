@@ -80,7 +80,19 @@ export class ChaosDashboardPage extends BasePage {
     const cleanBase = baseUrl.replace(/\/+$/, '');
     const url = `${cleanBase}/admin/chaos`;
     await this.logMessage('INFO', `Navigating to Chaos Control Dashboard: ${url}`);
-    await this.page.goto(url);
+    const response = await this.page.goto(url).catch(() => null);
+    if (!response || response.status() === 404 || !this.page.url().includes('/admin/chaos')) {
+      await this.page.goto(cleanBase);
+      const chaosLink = this.page.locator('#nav-chaos-link');
+      if (await chaosLink.count() > 0 && await chaosLink.first().isVisible()) {
+        await chaosLink.first().click();
+      } else {
+        await this.page.evaluate(() => {
+          window.history.pushState({}, '', '/admin/chaos');
+          window.dispatchEvent(new Event('popstate'));
+        });
+      }
+    }
     await this.dashboardContainer.waitFor({ state: 'visible' });
   }
 

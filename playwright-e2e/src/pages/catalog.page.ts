@@ -8,27 +8,8 @@ export class CatalogPage extends BasePage {
     return this.page.locator("//button[text()='Logout']");
   }
 
-  private get btnMobileMenu(): Locator {
-    return this.page.locator('#mobile-menu-toggle');
-  }
-
   private getNavigateLink(sLink: string): Locator {
     return this.page.locator(`//a[text()='${sLink}']`);
-  }
-
-  private async ensureNavElementVisible(targetLocator: Locator): Promise<void> {
-    try {
-      const isMobileToggleVisible = await this.btnMobileMenu.isVisible();
-      if (isMobileToggleVisible) {
-        const isExpanded = (await this.btnMobileMenu.getAttribute('aria-expanded')) === 'true';
-        if (!isExpanded) {
-          await this.btnMobileMenu.click();
-          await targetLocator.waitFor({ state: 'visible', timeout: 5000 });
-        }
-      }
-    } catch {
-      // Non-blocking fallback
-    }
   }
 
   private get eleBooksCount(): Locator {
@@ -127,14 +108,18 @@ export class CatalogPage extends BasePage {
   }
 
   public async clickPaginationButton(btnNumber: number) {
+    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/books') && res.status() === 200);
     const btn = this.getpaginationButton(btnNumber);
     await this.doClick(btn, `Clicking on Pagination button number ${btnNumber}`);
+    await responsePromise;
     await expect(btn).toHaveClass(/active/, { timeout: 10000 }).catch(() => undefined);
   }
 
   public async searchBooks(term: string): Promise<void> {
+    const responsePromise = this.page.waitForResponse(res => res.url().includes('/api/books') && res.status() === 200);
     await this.doEnterText(this.inputSearch, term, `Filling search input with: ${term}`);
     await this.doClick(this.btnSearch, `Clicking Search button`);
+    await responsePromise;
     await this.eleResultCount.or(this.eleEmptyCatalog).first().waitFor({ state: 'visible', timeout: 30000 });
   }
 

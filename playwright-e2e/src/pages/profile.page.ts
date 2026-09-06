@@ -42,6 +42,7 @@ export class ProfilePage extends BasePage {
 
   // Actions and Interaction Methods
   public async clickProfileLink(): Promise<void> {
+    await this.ensureNavElementVisible(this.navProfileLink);
     await this.doClick(this.navProfileLink, "Clicking on Profile navbar link");
   }
 

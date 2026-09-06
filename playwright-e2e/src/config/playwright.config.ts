@@ -23,10 +23,19 @@ export default defineConfig({
   },
 
   reporter: [
-    ['html', { open: 'never' }],
     ['list'],
+    ...(process.env.CI ? [
+      ['blob', { outputDir: path.resolve(__dirname, '../../blob-report') }] as [string, any],
+    ] : [
+      ['html', { open: 'never' }] as [string, any],
+    ]),
+    ['json', {
+      outputFile: process.env.PLAYWRIGHT_JSON_OUTPUT_NAME
+        ? path.resolve(__dirname, '../..', process.env.PLAYWRIGHT_JSON_OUTPUT_NAME)
+        : path.resolve(__dirname, '../../test-results/results.json')
+    }],
     ['allure-playwright', {
-      resultsDir: path.resolve(__dirname, '../..', 'reports', 'allure-results'),
+      resultsDir: path.resolve(__dirname, '../../reports/allure-results'),
       suiteTitle: 'Automation Test Suite',
       detail: false,
       environmentInfo: {
@@ -38,7 +47,7 @@ export default defineConfig({
     }]
   ],
 
-  webServer: [
+  webServer: (envConfig.baseUrl.includes('127.0.0.1') || envConfig.baseUrl.includes('localhost')) ? [
     {
       command: 'node dist/server.js',
       cwd: backendDir,
@@ -62,7 +71,7 @@ export default defineConfig({
       stdout: 'pipe',
       stderr: 'pipe'
     }
-  ],
+  ] : undefined,
 
   use: {
     baseURL: envConfig.baseUrl,

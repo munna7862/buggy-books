@@ -9,9 +9,31 @@ export class BasePage extends CommonFunctions {
     super();
   }
 
+  public async ensureNavElementVisible(targetLocator?: Locator): Promise<void> {
+    try {
+      const btnMobileMenu = this.page.locator('#mobile-menu-toggle');
+      if (await btnMobileMenu.isVisible()) {
+        const isExpanded = (await btnMobileMenu.getAttribute('aria-expanded')) === 'true';
+        if (!isExpanded) {
+          await btnMobileMenu.click();
+          if (targetLocator) {
+            await targetLocator.waitFor({ state: 'visible', timeout: 5000 }).catch(() => undefined);
+          }
+        }
+      }
+    } catch {
+      // Non-blocking fallback
+    }
+  }
+
   public async doClick(locator: Locator, sLogMessage: string): Promise<void> {
     await this.logMessage('INFO', sLogMessage);
-    await locator.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
+    try {
+      await locator.waitFor({ state: 'visible', timeout: 3000 });
+    } catch {
+      await this.ensureNavElementVisible(locator);
+      await locator.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
+    }
     await locator.click();
   }
 

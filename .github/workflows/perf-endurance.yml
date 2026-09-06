@@ -38,6 +38,7 @@ jobs:
   perf-endurance:
     name: k6 Endurance Soak & Breakpoint Benchmarks
     runs-on: ubuntu-latest
+    timeout-minutes: 45
 
     defaults:
       run:
@@ -45,10 +46,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -62,15 +63,10 @@ jobs:
         env:
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
-      - name: Install Backend Production Dependencies
-        run: |
-          cd backend
-          npm ci --omit=dev
-
       - name: Start Backend Server
         run: |
           cd backend
-          nohup node dist/server.js > ../backend-endurance.log 2>&1 &
+          nohup node --expose-gc dist/server.js > ../backend-endurance.log 2>&1 &
           npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-endurance.log && exit 1)
         env:
           PORT: 4000
@@ -78,12 +74,18 @@ jobs:
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Setup k6
-        uses: grafana/setup-k6-action@v1
+        uses: grafana/setup-k6-action@db07bd9765aac508ef18982e52ab937fe633a065 # v1.1.0
 
       - name: Run Endurance Soak Benchmark
         run: |
+          set +e
           k6 run --summary-export=perf-summary-soak.json performance/scenarios/soak-load.js
+          K6_SOAK_EXIT=$?
           node performance/report-perf-summary.js perf-summary-soak.json "Endurance Soak Benchmark (${{ github.event.inputs.soak_vus || '25' }} VUs)" --baseline=performance/baselines/baseline-soak.json
+          if [ $K6_SOAK_EXIT -ne 0 ]; then
+            echo "k6 soak benchmark failed or breached thresholds (exit code: $K6_SOAK_EXIT)"
+            exit $K6_SOAK_EXIT
+          fi
         env:
           SOAK_DURATION: ${{ github.event.inputs.soak_duration || '15m' }}
           SOAK_VUS: ${{ github.event.inputs.soak_vus || '25' }}
@@ -91,14 +93,20 @@ jobs:
 
       - name: Run Capacity Breakpoint Saturation Test
         run: |
+          set +e
           k6 run --summary-export=perf-summary-breakpoint.json performance/scenarios/breakpoint-test.js
+          K6_BP_EXIT=$?
           node performance/report-perf-summary.js perf-summary-breakpoint.json "Breakpoint Capacity Saturation Test" --baseline=performance/baselines/baseline-catalog.json
+          if [ $K6_BP_EXIT -ne 0 ]; then
+            echo "k6 breakpoint test failed or breached thresholds (exit code: $K6_BP_EXIT)"
+            exit $K6_BP_EXIT
+          fi
         env:
           MAX_VUS: ${{ github.event.inputs.max_breakpoint_vus || '200' }}
           BASE_URL: http://127.0.0.1:4000
 
       - name: Upload Endurance Performance Artifacts & Telemetry
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: always()
         with:
           name: perf-endurance-artifacts

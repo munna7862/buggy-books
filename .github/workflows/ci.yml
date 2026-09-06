@@ -35,7 +35,7 @@ on:
       - '.gitignore'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -48,6 +48,7 @@ jobs:
   backend-tests:
     name: Backend Tests & Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     defaults:
       run:
@@ -55,10 +56,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -81,7 +82,7 @@ jobs:
         run: node ../scripts/generate-test-summary.js backend .
 
       - name: Upload Backend Coverage Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: always()
         with:
           name: backend-coverage
@@ -94,6 +95,7 @@ jobs:
   frontend-tests:
     name: Frontend Tests & Lint
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     defaults:
       run:
@@ -101,10 +103,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -126,7 +128,7 @@ jobs:
         run: node ../scripts/generate-test-summary.js frontend .
 
       - name: Upload Frontend Coverage Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: always()
         with:
           name: frontend-coverage
@@ -139,6 +141,7 @@ jobs:
   e2e-quality-gate:
     name: E2E Quality Gate & Typecheck
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     defaults:
       run:
@@ -146,10 +149,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -167,6 +170,7 @@ jobs:
   backend-build:
     name: Backend TypeScript Build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: backend-tests
 
     defaults:
@@ -175,10 +179,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -193,7 +197,7 @@ jobs:
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Upload Backend Dist Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: backend-dist
           path: backend/dist
@@ -205,6 +209,7 @@ jobs:
   frontend-build:
     name: Frontend Vite Build
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: frontend-tests
 
     defaults:
@@ -213,10 +218,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -229,7 +234,7 @@ jobs:
         run: npm run build
 
       - name: Upload Frontend Dist Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: frontend-dist
           path: frontend/dist
@@ -241,6 +246,7 @@ jobs:
   lighthouse-ci:
     name: Lighthouse CI Quality Gate
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: frontend-build
 
     defaults:
@@ -249,15 +255,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
 
       - name: Download Frontend Dist Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: frontend-dist
           path: frontend/dist
@@ -266,7 +272,7 @@ jobs:
         run: npx @lhci/cli autorun
 
       - name: Upload Lighthouse Reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: always()
         with:
           name: lighthouse-reports
@@ -281,6 +287,7 @@ jobs:
   perf-benchmarks:
     name: k6 API Performance Benchmarks
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: backend-build
 
     defaults:
@@ -289,17 +296,17 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
           cache-dependency-path: backend/package-lock.json
 
       - name: Download Backend Dist Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: backend-dist
           path: backend/dist
@@ -320,28 +327,46 @@ jobs:
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Setup k6
-        uses: grafana/setup-k6-action@v1
+        uses: grafana/setup-k6-action@db07bd9765aac508ef18982e52ab937fe633a065 # v1.1.0
 
       - name: Run PR Performance Smoke Benchmark (5 VUs)
         if: github.event_name == 'pull_request' || github.ref != 'refs/heads/main'
         run: |
+          set +e
           k6 run --summary-export=perf-summary-smoke.json performance/k6/smoke-load.js
+          K6_SMOKE_EXIT=$?
           node performance/report-perf-summary.js perf-summary-smoke.json "PR API Smoke Benchmark (5 VUs)" --baseline=performance/baselines/baseline-smoke.json
+          if [ $K6_SMOKE_EXIT -ne 0 ]; then
+            echo "k6 PR smoke benchmark breached thresholds (exit code: $K6_SMOKE_EXIT)"
+            exit $K6_SMOKE_EXIT
+          fi
 
       - name: Run Main Catalog Load Benchmark (50 VUs)
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
+          set +e
           k6 run --summary-export=perf-summary-catalog.json performance/k6/catalog-load.js
+          K6_CAT_EXIT=$?
           node performance/report-perf-summary.js perf-summary-catalog.json "Catalog Load Benchmark (50 VUs)" --baseline=performance/baselines/baseline-catalog.json
+          if [ $K6_CAT_EXIT -ne 0 ]; then
+            echo "k6 catalog load benchmark breached thresholds (exit code: $K6_CAT_EXIT)"
+            exit $K6_CAT_EXIT
+          fi
 
       - name: Run Main Inventory Stress Benchmark
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
+          set +e
           k6 run --summary-export=perf-summary-inventory.json performance/k6/inventory-stress.js
+          K6_INV_EXIT=$?
           node performance/report-perf-summary.js perf-summary-inventory.json "Inventory Stress Benchmark (30 VUs)" --baseline=performance/baselines/baseline-catalog.json
+          if [ $K6_INV_EXIT -ne 0 ]; then
+            echo "k6 inventory stress benchmark breached thresholds (exit code: $K6_INV_EXIT)"
+            exit $K6_INV_EXIT
+          fi
 
       - name: Upload Performance Summary Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: always()
         with:
           name: perf-summaries
@@ -360,6 +385,7 @@ jobs:
   e2e-smoke:
     name: Playwright E2E Smoke Gate
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     needs: [backend-build, frontend-build]
 
     defaults:
@@ -368,10 +394,10 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Node.js 20
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: "20"
           cache: "npm"
@@ -381,13 +407,13 @@ jobs:
             playwright-e2e/package-lock.json
 
       - name: Download Backend Dist Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: backend-dist
           path: backend/dist
 
       - name: Download Frontend Dist Artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: frontend-dist
           path: frontend/dist
@@ -413,22 +439,20 @@ jobs:
 
       - name: Cache Playwright Browser Binaries
         id: playwright-cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.cache/ms-playwright
           key: playwright-browsers-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}-v2
 
-      - name: Install Playwright Browsers & OS Dependencies
+      - name: Install Playwright Browsers & OS Dependencies (Cache Miss)
         if: steps.playwright-cache.outputs.cache-hit != 'true'
         working-directory: playwright-e2e
         run: npx playwright install --with-deps chromium chrome
 
-      - name: Install Playwright OS Dependencies Only
+      - name: Install Playwright OS Dependencies Only (Cache Hit)
         if: steps.playwright-cache.outputs.cache-hit == 'true'
         working-directory: playwright-e2e
-        run: |
-          npx playwright install-deps chromium chrome
-          npx playwright install chromium chrome
+        run: npx playwright install-deps chromium chrome
 
       - name: Start Ephemeral Backend Server
         run: |
@@ -462,7 +486,7 @@ jobs:
           npx playwright test --project=chromium --grep "@smoke" --grep-invert "@quarantine" --workers=2
 
       - name: Upload Playwright Failure Artifacts (Traces & Screenshots)
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: failure()
         with:
           name: playwright-smoke-failure-artifacts
@@ -472,7 +496,7 @@ jobs:
           retention-days: 7
 
       - name: Upload Ephemeral Server Logs on Failure
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: failure()
         with:
           name: ephemeral-server-logs
@@ -486,4 +510,3 @@ jobs:
         run: |
           pkill -f "node dist/server.js" || true
           pkill -f "vite preview" || true
-
