@@ -1,3 +1,0 @@
-[2026-09-07 01:27:03] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788710223749-lpwl
-[2026-09-07 01:27:06] INFO: Inventory report request took: 3009 ms
-[2026-09-07 01:27:06] INFO: Cleaned up ephemeral test session: pw-w4-3-1788710223749-lpwl

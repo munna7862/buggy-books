@@ -1,1 +1,0 @@
-[2026-08-31 00:47:40] INFO:  Verifying visual pixel diff detected under chaos mode Success !! Actual and Expected Values are:: true

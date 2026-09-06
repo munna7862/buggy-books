@@ -1,1 +1,0 @@
-[2026-08-31 00:33:29] INFO:  Verifying WebSocket status dot has status-connected class Success !! Actual and Expected Values are:: true

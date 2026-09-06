@@ -1,5 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","3441","Testcase 1: Register New User @smoke @regression","mobile-chrome","2026-09-06","passed","2026-09-06","Register New User","ui/UserManagement/Test_001_RegisterUser.spec.ts","",""
-"","3135","Testcase 3: Password Strength Indicator @regression","mobile-chrome","2026-09-06","passed","2026-09-06","Register New User","ui/UserManagement/Test_001_RegisterUser.spec.ts","",""
-"","657","authenticate seed user and cache storage state","setup","2026-09-06","passed","2026-09-06","","auth.setup.ts","",""
-"","5366","Testcase 2: Login With Registered User and Logout @smoke @regression","mobile-chrome","2026-09-06","passed","2026-09-06","Register New User","ui/UserManagement/Test_001_RegisterUser.spec.ts","",""

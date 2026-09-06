@@ -1,3 +1,0 @@
-[2026-09-06 13:18:37] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788666517129-diq4
-[2026-09-06 13:18:37] INFO:  Status code should be 200 when Content-Type header is missing Success !! Actual and Expected Values are:: 200
-[2026-09-06 13:18:37] INFO: Cleaned up ephemeral test session: pw-w4-3-1788666517129-diq4

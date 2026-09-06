@@ -1,3 +1,0 @@
-[2026-09-07 02:14:37] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788713077079-4k1z
-[2026-09-07 02:14:40] INFO:  Verifying 403 Forbidden returned for expired token Success !! Actual and Expected Values are:: 403
-[2026-09-07 02:14:40] INFO: Cleaned up ephemeral test session: pw-w2-1-1788713077079-4k1z

@@ -1,4 +1,0 @@
-[2026-09-07 00:42:29] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788707549301-atot
-[2026-09-07 00:42:30] INFO:  Initial registration response status Success !! Actual and Expected Values are:: 201
-[2026-09-07 00:42:30] INFO:  Duplicate registration status Success !! Actual and Expected Values are:: true
-[2026-09-07 00:42:30] INFO: Cleaned up ephemeral test session: pw-w2-1-1788707549301-atot
