@@ -1,0 +1,3 @@
+[2026-09-06 16:17:54] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788677274791-bt2y
+[2026-09-06 16:17:54] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true
+[2026-09-06 16:17:54] INFO: Cleaned up ephemeral test session: pw-w3-2-1788677274791-bt2y
