@@ -1,0 +1,10 @@
+[2026-09-07 00:55:02] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788708302382-ug4p
+[2026-09-07 00:55:02] INFO: Network interception enabled with mode: api-only
+[2026-09-07 00:55:02] INFO: Clicking on Login link
+[2026-09-07 00:55:03] INFO: Entering username: admin
+[2026-09-07 00:55:03] INFO: Entering password: wrongPassword123@
+[2026-09-07 00:55:03] INFO: Clicking on Sign In button
+[2026-09-07 00:55:04] INFO: Getting error banner text
+[2026-09-07 00:55:04] INFO:  Verifying if error message is correct Success !! Actual and Expected Values are:: Unauthorized: Invalid credentials
+[2026-09-07 00:55:04] INFO: Captured 7 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_002-efe91-alidation-Errors-regression-chromium/network-log.json
+[2026-09-07 00:55:04] INFO: Cleaned up ephemeral test session: pw-w1-0-1788708302382-ug4p
