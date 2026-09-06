@@ -1,0 +1,4 @@
+[2026-09-07 02:14:36] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788713076662-ijb0
+[2026-09-07 02:14:36] INFO:  Initial registration response status Success !! Actual and Expected Values are:: 201
+[2026-09-07 02:14:36] INFO:  Duplicate registration status Success !! Actual and Expected Values are:: true
+[2026-09-07 02:14:36] INFO: Cleaned up ephemeral test session: pw-w4-3-1788713076662-ijb0
