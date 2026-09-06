@@ -66,6 +66,11 @@ jobs:
           echo "Executing native dynamic shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
           npx playwright test --config=src/config/playwright.config.ts --project=chromium --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
+      - name: Generate Shard Quality Gate Step Summary
+        if: always()
+        working-directory: playwright-e2e
+        run: node scripts/generate-playwright-summary.js test-results/results.json "Shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}" "playwright-traces-shard-${{ matrix.shardIndex }}"
+
       - name: Upload Blob Report
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
