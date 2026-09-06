@@ -1,0 +1,25 @@
+[2026-09-07 00:22:53] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788706373947-ug69
+[2026-09-07 00:22:54] INFO: Network interception enabled with mode: api-only
+[2026-09-07 00:22:56] INFO: Clicking on Sign Up link
+[2026-09-07 00:22:56] INFO: Entering full name: autoTestUserh7UZd
+[2026-09-07 00:22:56] INFO: Entering username: autoTestUserZ2kAe
+[2026-09-07 00:22:57] INFO: Entering password: AutoTest@123
+[2026-09-07 00:22:57] INFO: Entering confirming password: AutoTest@123
+[2026-09-07 00:22:57] INFO: Clicking on Create Account button
+[2026-09-07 00:22:57] INFO: Verifying landing on Checkout Page
+[2026-09-07 00:22:57] INFO: Checking if Checkout label is visible
+[2026-09-07 00:22:58] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-07 00:22:58] INFO: Clicking on Logout button
+[2026-09-07 00:22:58] INFO: Clicking on Login link
+[2026-09-07 00:22:58] INFO: Entering username: autoTestUserZ2kAe
+[2026-09-07 00:22:59] INFO: Entering password: AutoTest@123
+[2026-09-07 00:22:59] INFO: Clicking on Sign In button
+[2026-09-07 00:22:59] INFO: Verifying landing on Checkout Page
+[2026-09-07 00:22:59] INFO: Checking if Checkout label is visible
+[2026-09-07 00:22:59] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-07 00:22:59] INFO:  Verifying if user logged in successfully Success !! Actual and Expected Values are:: true
+[2026-09-07 00:22:59] INFO: Clicking on Logout button
+[2026-09-07 00:23:00] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-07 00:23:00] INFO:  Verifying if user logged out successfully Success !! Actual and Expected Values are:: true
+[2026-09-07 00:23:00] INFO: Captured 15 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-59107-and-Logout-smoke-regression-firefox/network-log.json
+[2026-09-07 00:23:00] INFO: Cleaned up ephemeral test session: pw-w2-1-1788706373947-ug69
