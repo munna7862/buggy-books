@@ -62,6 +62,7 @@ jobs:
         env:
           ENVIRONMENT: INTEROP
           TZ: Australia/Adelaide
+          MONOCART_REPORT_PATH: reports/monocart-shard-${{ matrix.shardIndex }}/index.html
         run: |
           echo "Executing native dynamic shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
           npx playwright test --config=src/config/playwright.config.ts --project=chromium --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
@@ -77,6 +78,14 @@ jobs:
         with:
           name: blob-report-${{ matrix.shardIndex }}
           path: playwright-e2e/blob-report
+          retention-days: 7
+
+      - name: Upload Monocart Report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: monocart-report-${{ matrix.shardIndex }}
+          path: playwright-e2e/reports/monocart-shard-${{ matrix.shardIndex }}
           retention-days: 7
 
       - name: Upload Allure Results
@@ -148,6 +157,27 @@ jobs:
           path: playwright-e2e/playwright-report
           retention-days: 7
 
+      - name: Download all Monocart Reports
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        continue-on-error: true
+        with:
+          pattern: monocart-report-*
+          path: playwright-e2e/all-monocart
+          merge-multiple: false
+
+      - name: Merge Monocart Reports into HTML Report
+        working-directory: playwright-e2e
+        run: |
+          node scripts/merge-monocart.js all-monocart reports/monocart-report/index.html
+
+      - name: Upload Consolidated Monocart HTML Report Artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        with:
+          name: playwright-monocart-report-docker
+          path: playwright-e2e/reports/monocart-report
+          retention-days: 7
+
       - name: Checkout gh-pages
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
         continue-on-error: true
@@ -174,7 +204,9 @@ jobs:
         run: |
           echo "### 📊 Sharded Test Execution Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Execution Strategy:** Playwright Native Dynamic Sharding (8 Shards)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/Docker/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Allure Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/Docker/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Monocart Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/Docker/${{ github.run_number }}/monocart/index.html" >> $GITHUB_STEP_SUMMARY
+          echo "- **Monocart Artifact:** Download \`playwright-monocart-report-docker\` below for offline single-file interactive viewing." >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@385367cde61ac68c2568a117f7579f7f148dc459 # v1.12
@@ -185,6 +217,13 @@ jobs:
           allure_history: allure-history
           keep_reports: 7
           subfolder: AutomationReports/Docker
+
+      - name: Copy Monocart Report to GitHub Pages Directory
+        run: |
+          mkdir -p allure-history/monocart
+          if [ -d "playwright-e2e/reports/monocart-report" ]; then
+            cp -r playwright-e2e/reports/monocart-report/* allure-history/monocart/ || true
+          fi
 
       - name: Fix permissions for GitHub Pages deployment
         if: always()
@@ -202,6 +241,7 @@ jobs:
         run: |
           REPO_NAME="${{ github.event.repository.name }}"
           OWNER="${{ github.repository_owner }}"
-          echo "✅ Report published successfully!"
-          echo "📊 Report URL: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/Docker/${{ github.run_number }}"
+          echo "✅ Reports published successfully!"
+          echo "📊 Allure Report: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/Docker/${{ github.run_number }}"
+          echo "📋 Monocart Report: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/Docker/${{ github.run_number }}/monocart/index.html"
           echo "📈 Check the job summary for detailed test results."

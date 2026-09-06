@@ -44,6 +44,20 @@ export default defineConfig({
         OS: process.platform,
         NodeVersion: process.version
       }
+    }],
+    ['monocart-reporter', {
+      name: 'BuggyBooks Automation Test Report',
+      outputFile: process.env.MONOCART_REPORT_PATH
+        ? path.resolve(__dirname, '../..', process.env.MONOCART_REPORT_PATH)
+        : path.resolve(__dirname, '../../reports/monocart-report/index.html'),
+      tags: {
+        smoke: { style: { background: '#28a745', color: '#fff' }, description: 'Smoke Tests' },
+        regression: { style: { background: '#17a2b8', color: '#fff' }, description: 'Regression Tests' },
+        chaos: { style: { background: '#dc3545', color: '#fff' }, description: 'Chaos Resilience Tests' },
+        visual: { style: { background: '#6f42c1', color: '#fff' }, description: 'Visual Regression Tests' },
+        a11y: { style: { background: '#ffc107', color: '#000' }, description: 'Accessibility Scans' },
+        quarantine: { style: { background: '#6c757d', color: '#fff' }, description: 'Quarantined Tests' }
+      }
     }]
   ],
 
