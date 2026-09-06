@@ -62,7 +62,7 @@ graph LR
      - Negative filtering: `exclude_tag` / `grep_invert` to omit unwanted suites (e.g., exclude `@chaos`).
      - Deep forensics: `trace_mode` toggle (`retain-on-failure` vs `on` for full DOM snapshot capture).
      - Browser and viewport profiling: `project` choice (`chromium`, `firefox`, `webkit`, `mobile-chrome`, `mobile-safari`).
-   - *Status*: `[PLANNED]`
+   - *Status*: `[COMPLETED]` 🟢 (Runs: 34039925580, 34040480692, 34040731171, 34040973888)
 
 3. **[Sprint 7.3: Multi-Environment Routing, Resilient Reporting & Telemetry](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_7_3_multi_env_dispatch_resilient_reporting_and_governance.md)**
    - *Estimated Effort*: 4 Story Points
