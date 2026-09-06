@@ -463,6 +463,14 @@ jobs:
           path: allure-results
           merge-multiple: true
 
+      - name: Prepare Allure Results Directory
+        run: |
+          mkdir -p allure-results
+          find allure-results -mindepth 2 -type f -exec cp -t allure-results/ {} + 2>/dev/null || true
+          find allure-results -mindepth 1 -maxdepth 1 -type d -exec rm -rf {} + 2>/dev/null || true
+          echo "Total Allure result files prepared: $(find allure-results -maxdepth 1 -type f | wc -l)"
+          ls -la allure-results/ | head -n 20
+
       - name: Test Report Summary
         run: |
           echo "### 📊 Playwright CI Test Summary" >> $GITHUB_STEP_SUMMARY
@@ -479,6 +487,10 @@ jobs:
           allure_history: allure-history
           keep_reports: 7
           subfolder: AutomationReports/CI
+
+      - name: Fix permissions for GitHub Pages deployment
+        if: always()
+        run: sudo chown -R $USER:$USER allure-history/ allure-results/ || true
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
