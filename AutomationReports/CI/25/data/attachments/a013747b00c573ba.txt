@@ -1,0 +1,3 @@
+[2026-09-07 00:03:52] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788705232725-86fw
+[2026-09-07 00:03:55] INFO: Inventory report request took: 3005 ms
+[2026-09-07 00:03:55] INFO: Cleaned up ephemeral test session: pw-w4-3-1788705232725-86fw

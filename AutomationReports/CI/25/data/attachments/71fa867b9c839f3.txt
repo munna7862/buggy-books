@@ -1,0 +1,4 @@
+[2026-09-07 00:03:54] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788705234557-ysns
+[2026-09-07 00:03:54] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-07 00:03:54] INFO:  Incorrect password status Success !! Actual and Expected Values are:: true
+[2026-09-07 00:03:54] INFO: Cleaned up ephemeral test session: pw-w3-2-1788705234557-ysns
