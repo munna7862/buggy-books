@@ -35,6 +35,7 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.58.0-jammy
 
     env:
+      CI: "true"
       ENV: INTEROP
       BASE_URL: https://buggy-books-fe.onrender.com/
       API_BASE_URL: https://buggy-books.onrender.com
@@ -63,7 +64,7 @@ jobs:
           TZ: Australia/Adelaide
         run: |
           echo "Executing native dynamic shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}"
-          npx playwright test --config=src/config/playwright.config.ts --project=chromium --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }} --reporter=blob,allure-playwright,list
+          npx playwright test --config=src/config/playwright.config.ts --project=chromium --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
 
       - name: Upload Blob Report
         if: always()
@@ -78,7 +79,9 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: allure-results-shard-${{ matrix.shardIndex }}
-          path: playwright-e2e/reports/allure-results
+          path: |
+            playwright-e2e/reports/allure-results
+            playwright-e2e/allure-results
           retention-days: 7
 
       - name: Upload Playwright Failure Traces & Screenshots

@@ -186,7 +186,7 @@ jobs:
           PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/api-results.json
         run: |
-          npx playwright test src/tests/api --config=src/config/playwright.config.ts --project=chromium --workers=4 --reporter=blob,allure-playwright,list,json
+          npx playwright test src/tests/api --config=src/config/playwright.config.ts --project=chromium --workers=4
 
       - name: Generate API Quality Gate Step Summary
         if: always()
@@ -226,7 +226,9 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: allure-results-api
-          path: playwright-e2e/reports/allure-results
+          path: |
+            playwright-e2e/reports/allure-results
+            playwright-e2e/allure-results
           retention-days: 7
 
       - name: Stop Ephemeral Servers
@@ -347,7 +349,7 @@ jobs:
           PASSWORD: ${{ secrets.E2E_PASSWORD || 'password123' }}
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/ui-results-${{ matrix.project }}.json
         run: |
-          npx playwright test src/tests/ui --config=src/config/playwright.config.ts --project=${{ matrix.project }} --reporter=blob,allure-playwright,list,json
+          npx playwright test src/tests/ui --config=src/config/playwright.config.ts --project=${{ matrix.project }}
 
       - name: Generate UI Quality Gate Step Summary
         if: always()
@@ -387,7 +389,9 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         with:
           name: allure-results-${{ matrix.project }}
-          path: playwright-e2e/reports/allure-results
+          path: |
+            playwright-e2e/reports/allure-results
+            playwright-e2e/allure-results
           retention-days: 7
 
       - name: Stop Ephemeral Servers
