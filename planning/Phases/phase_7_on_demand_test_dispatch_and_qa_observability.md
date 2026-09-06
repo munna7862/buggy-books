@@ -52,7 +52,7 @@ graph LR
      - Inputs for `test_scope` (`all`, `ui`, `api`), `tag` (`@smoke`, `@regression`, etc.), `test_path` (file or directory), and `grep` (title regex).
      - Bash array-based CLI argument builder with injection safety, tag prefix normalization (`smoke` -> `@smoke`), and `--pass-with-no-tests` zero-match protection.
      - Preservation of default full-suite execution when triggered without overrides.
-   - *Status*: `[PLANNED]`
+   - *Status*: `[COMPLETED]`
 
 2. **[Sprint 7.2: Advanced QA Controls, Flakiness Buster & Device Profiles](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_7_2_advanced_qa_controls_flakiness_buster_and_cross_browser.md)**
    - *Estimated Effort*: 5 Story Points
