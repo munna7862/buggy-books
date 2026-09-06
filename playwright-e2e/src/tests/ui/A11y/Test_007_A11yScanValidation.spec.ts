@@ -104,7 +104,15 @@ test.describe('Accessibility (a11y) Scans Suite', () => {
       });
 
       await test.step('Navigate directly to login page and wait for a11y chaos state', async () => {
-        await page.goto(`${envConfig.baseUrl}/login`);
+        const targetUrl = `${envConfig.baseUrl}/login`;
+        const response = await page.goto(targetUrl).catch(() => null);
+        if (!response || response.status() === 404 || !page.url().includes('/login')) {
+          await page.goto(envConfig.baseUrl);
+          await page.evaluate(() => {
+            window.history.pushState({}, '', '/login');
+            window.dispatchEvent(new Event('popstate'));
+          });
+        }
         await page.waitForSelector('body.a11y-violations-active', { timeout: 30000 });
         await page.waitForSelector('.auth-card');
       });
