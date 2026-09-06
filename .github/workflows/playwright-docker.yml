@@ -205,8 +205,7 @@ jobs:
           echo "### 📊 Sharded Test Execution Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Execution Strategy:** Playwright Native Dynamic Sharding (8 Shards)" >> $GITHUB_STEP_SUMMARY
           echo "- **Allure Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/Docker/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Monocart Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/Docker/${{ github.run_number }}/monocart/index.html" >> $GITHUB_STEP_SUMMARY
-          echo "- **Monocart Artifact:** Download \`playwright-monocart-report-docker\` below for offline single-file interactive viewing." >> $GITHUB_STEP_SUMMARY
+          echo "- **Monocart Offline Report:** Download \`playwright-monocart-report-docker\` below for offline single-file interactive viewing." >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Allure Report
         uses: simple-elf/allure-report-action@385367cde61ac68c2568a117f7579f7f148dc459 # v1.12
@@ -222,14 +221,6 @@ jobs:
         if: always()
         run: sudo chown -R $USER:$USER allure-history/ allure-results/ || true
 
-      - name: Copy Monocart Report to GitHub Pages Directory
-        run: |
-          sudo mkdir -p allure-history/monocart
-          if [ -d "playwright-e2e/reports/monocart-report" ]; then
-            sudo cp -r playwright-e2e/reports/monocart-report/* allure-history/monocart/ || true
-          fi
-          sudo chown -R $USER:$USER allure-history/ || true
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
         with:
@@ -244,5 +235,5 @@ jobs:
           OWNER="${{ github.repository_owner }}"
           echo "✅ Reports published successfully!"
           echo "📊 Allure Report: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/Docker/${{ github.run_number }}"
-          echo "📋 Monocart Report: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/Docker/${{ github.run_number }}/monocart/index.html"
+          echo "📋 Monocart Report: Download the 'playwright-monocart-report-docker' artifact for offline viewing."
           echo "📈 Check the job summary for detailed test results."

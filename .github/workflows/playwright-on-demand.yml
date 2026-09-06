@@ -825,15 +825,6 @@ jobs:
         if: (github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true) && always()
         run: sudo chown -R $USER:$USER allure-history/ allure-results/ || true
 
-      - name: Copy Monocart Report to GitHub Pages Directory
-        if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
-        run: |
-          sudo mkdir -p allure-history/monocart
-          if [ -d "playwright-e2e/reports/monocart-report" ]; then
-            sudo cp -r playwright-e2e/reports/monocart-report/* allure-history/monocart/ || true
-          fi
-          sudo chown -R $USER:$USER allure-history/ || true
-
       - name: Deploy to GitHub Pages
         if: github.event.inputs.publish_report == 'true' || github.event.inputs.publish_report == true
         uses: peaceiris/actions-gh-pages@373f7f263a76c20808c831209c920827a82a2847 # v3.9.3
@@ -873,7 +864,6 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           if [ "${{ github.event.inputs.publish_report }}" != "false" ]; then
             echo "📊 **Allure Dashboard Link**: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/CI/${RUN_NUM}" >> $GITHUB_STEP_SUMMARY
-            echo "📋 **Monocart Report Link**: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/CI/${RUN_NUM}/monocart/index.html" >> $GITHUB_STEP_SUMMARY
           else
             echo "📦 **Report Mode**: Artifact download only (GitHub Pages publishing bypassed)." >> $GITHUB_STEP_SUMMARY
           fi
