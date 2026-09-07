@@ -1,4 +1,0 @@
-[2026-09-06 16:17:53] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788677273680-h115
-[2026-09-06 16:17:53] INFO:  Verifying 400 Bad Request returned for invalid data type Success !! Actual and Expected Values are:: 400
-[2026-09-06 16:17:53] INFO:  Verifying response contains validation error message Success !! Actual and Expected Values are:: true
-[2026-09-06 16:17:53] INFO: Cleaned up ephemeral test session: pw-w1-0-1788677273680-h115

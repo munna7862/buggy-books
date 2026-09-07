@@ -1,5 +1,0 @@
-[2026-09-06 16:17:56] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788677276179-1ypt
-[2026-09-06 16:17:56] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
-[2026-09-06 16:17:56] INFO:  Response status code should be 401 Success !! Actual and Expected Values are:: 401
-[2026-09-06 16:17:56] INFO:  Error message for missing token Success !! Actual and Expected Values are:: Unauthorized: Token required
-[2026-09-06 16:17:56] INFO: Cleaned up ephemeral test session: pw-w1-0-1788677276179-1ypt
