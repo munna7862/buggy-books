@@ -1,3 +1,0 @@
-[2026-09-07 00:04:38] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788705278707-qr1v
-[2026-09-07 00:04:39] INFO:  Verifying status dot reflects disconnected or reconnecting state under socket chaos Success !! Actual and Expected Values are:: true
-[2026-09-07 00:04:39] INFO: Cleaned up ephemeral test session: pw-w1-0-1788705278707-qr1v

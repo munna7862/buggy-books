@@ -1,0 +1,4 @@
+[2026-09-08 16:22:17] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788850337192-1qz4
+[2026-09-08 16:22:17] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-08 16:22:17] INFO:  Unsupported login content type status Success !! Actual and Expected Values are:: true
+[2026-09-08 16:22:17] INFO: Cleaned up ephemeral test session: pw-w3-2-1788850337192-1qz4

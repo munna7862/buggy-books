@@ -1,3 +1,0 @@
-[2026-09-07 00:03:54] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788705234213-qp8u
-[2026-09-07 00:03:54] INFO:  Security status for script tag in fullName Success !! Actual and Expected Values are:: true
-[2026-09-07 00:03:54] INFO: Cleaned up ephemeral test session: pw-w1-0-1788705234213-qp8u

@@ -1,0 +1,5 @@
+[2026-09-08 16:22:13] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788850333792-pnrf
+[2026-09-08 16:22:13] INFO:  Status code should be 200 for Minimum limit Success !! Actual and Expected Values are:: 200
+[2026-09-08 16:22:13] INFO:  Response page should be 1 for Minimum limit Success !! Actual and Expected Values are:: 1
+[2026-09-08 16:22:13] INFO:  Books array length should be less than or equal to limit 1 Success !! Actual and Expected Values are:: true
+[2026-09-08 16:22:13] INFO: Cleaned up ephemeral test session: pw-w3-2-1788850333792-pnrf
