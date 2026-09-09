@@ -1,4 +1,0 @@
-[2026-09-07 00:25:04] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788706504128-q5sm
-[2026-09-07 00:25:04] INFO: Last item on page 1 ID: 5
-[2026-09-07 00:25:04] INFO: First item on page 2 ID: 6
-[2026-09-07 00:25:04] INFO: Cleaned up ephemeral test session: pw-w2-1-1788706504128-q5sm

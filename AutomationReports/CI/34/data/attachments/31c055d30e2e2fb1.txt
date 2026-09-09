@@ -1,0 +1,4 @@
+[2026-09-09 16:31:11] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788937271499-0xv1
+[2026-09-09 16:31:11] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-09 16:31:11] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true
+[2026-09-09 16:31:11] INFO: Cleaned up ephemeral test session: pw-w3-2-1788937271499-0xv1

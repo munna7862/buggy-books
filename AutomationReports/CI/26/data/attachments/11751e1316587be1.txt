@@ -1,3 +1,0 @@
-[2026-09-07 00:25:08] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788706508754-psoo
-[2026-09-07 00:25:08] INFO:  Verifying 401 Unauthorized for unauthenticated upload request Success !! Actual and Expected Values are:: 401
-[2026-09-07 00:25:08] INFO: Cleaned up ephemeral test session: pw-w1-0-1788706508754-psoo

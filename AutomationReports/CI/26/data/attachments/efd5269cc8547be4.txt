@@ -1,3 +1,0 @@
-[2026-09-07 00:25:05] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788706505660-oa8i
-[2026-09-07 00:25:08] INFO: Inventory report request took: 3008 ms
-[2026-09-07 00:25:08] INFO: Cleaned up ephemeral test session: pw-w3-2-1788706505660-oa8i

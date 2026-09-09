@@ -1,3 +1,0 @@
-[2026-09-07 00:25:07] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1788706507266-3p30
-[2026-09-07 00:25:07] INFO:  Unsupported content type status Success !! Actual and Expected Values are:: true
-[2026-09-07 00:25:07] INFO: Cleaned up ephemeral test session: pw-w2-1-1788706507266-3p30

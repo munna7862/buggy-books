@@ -1,0 +1,3 @@
+[2026-09-09 16:31:10] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788937270767-sobh
+[2026-09-09 16:31:10] INFO:  Unsupported content type status Success !! Actual and Expected Values are:: true
+[2026-09-09 16:31:10] INFO: Cleaned up ephemeral test session: pw-w4-3-1788937270767-sobh
