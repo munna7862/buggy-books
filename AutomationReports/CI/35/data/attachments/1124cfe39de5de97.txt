@@ -1,0 +1,4 @@
+[2026-09-10 16:27:23] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1789023443685-shrc
+[2026-09-10 16:27:23] INFO:  Initial registration response status Success !! Actual and Expected Values are:: 201
+[2026-09-10 16:27:23] INFO:  Duplicate registration status Success !! Actual and Expected Values are:: true
+[2026-09-10 16:27:23] INFO: Cleaned up ephemeral test session: pw-w2-1-1789023443685-shrc

@@ -1,3 +1,0 @@
-[2026-09-07 00:31:19] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788706879499-k9se
-[2026-09-07 00:31:19] INFO:  Verifying 401 Unauthorized for unauthenticated upload request Success !! Actual and Expected Values are:: 401
-[2026-09-07 00:31:19] INFO: Cleaned up ephemeral test session: pw-w4-3-1788706879499-k9se

@@ -1,3 +1,0 @@
-[2026-09-07 00:31:20] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788706880208-qupc
-[2026-09-07 00:31:22] INFO:  Verifying zero image-alt and label violations in standard compliance mode Success !! Actual and Expected Values are:: 0
-[2026-09-07 00:31:23] INFO: Cleaned up ephemeral test session: pw-w1-0-1788706880208-qupc
