@@ -1,0 +1,5 @@
+[2026-09-11 16:27:03] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1789109823583-5m48
+[2026-09-11 16:27:03] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-11 16:27:03] INFO:  Response status code should be 401 Success !! Actual and Expected Values are:: 401
+[2026-09-11 16:27:03] INFO:  Error message for missing token Success !! Actual and Expected Values are:: Unauthorized: Token required
+[2026-09-11 16:27:03] INFO: Cleaned up ephemeral test session: pw-w2-1-1789109823583-5m48

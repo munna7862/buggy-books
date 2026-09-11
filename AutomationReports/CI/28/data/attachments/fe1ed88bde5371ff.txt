@@ -1,4 +1,0 @@
-[2026-09-07 00:54:19] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788708259752-ndzv
-[2026-09-07 00:54:19] INFO: Last item on page 1 ID: 5
-[2026-09-07 00:54:19] INFO: First item on page 2 ID: 6
-[2026-09-07 00:54:19] INFO: Cleaned up ephemeral test session: pw-w1-0-1788708259752-ndzv
