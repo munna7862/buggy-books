@@ -1,0 +1,14 @@
+[2026-09-12 16:19:29] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789195769289-ytxq
+[2026-09-12 16:19:29] INFO: Network interception enabled with mode: api-only
+[2026-09-12 16:19:29] INFO: Clicking on Sign Up link
+[2026-09-12 16:19:30] INFO: Entering full name: autoTestUserb1TNS
+[2026-09-12 16:19:30] INFO: Entering username: autoTestUseryVOBk
+[2026-09-12 16:19:30] INFO: Entering password: AutoTest@123
+[2026-09-12 16:19:30] INFO: Entering confirming password: AutoTest@123
+[2026-09-12 16:19:30] INFO: Clicking on Create Account button
+[2026-09-12 16:19:31] INFO: Verifying landing on Checkout Page
+[2026-09-12 16:19:31] INFO: Checking if Checkout label is visible
+[2026-09-12 16:19:31] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-12 16:19:31] INFO:  Verifying if user registered successfully Success !! Actual and Expected Values are:: true
+[2026-09-12 16:19:31] INFO: Captured 9 network calls. Artifact: /home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/test-artifacts/ui-UserManagement-Test_001-8d0dc-r-New-User-smoke-regression-chromium/network-log.json
+[2026-09-12 16:19:31] INFO: Cleaned up ephemeral test session: pw-w4-3-1789195769289-ytxq

@@ -1,0 +1,5 @@
+[2026-09-12 16:18:48] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789195728439-klg3
+[2026-09-12 16:18:48] INFO:  Status code should be 200 for Standard page 2 Success !! Actual and Expected Values are:: 200
+[2026-09-12 16:18:48] INFO:  Response page should be 2 for Standard page 2 Success !! Actual and Expected Values are:: 2
+[2026-09-12 16:18:48] INFO:  Books array length should be less than or equal to limit 5 Success !! Actual and Expected Values are:: true
+[2026-09-12 16:18:48] INFO: Cleaned up ephemeral test session: pw-w4-3-1789195728439-klg3

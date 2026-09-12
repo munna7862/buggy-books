@@ -1,3 +1,0 @@
-[2026-09-07 01:27:13] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788710233314-solh
-[2026-09-07 01:27:13] INFO:  Security status for script tag in fullName Success !! Actual and Expected Values are:: true
-[2026-09-07 01:27:13] INFO: Cleaned up ephemeral test session: pw-w3-2-1788710233314-solh

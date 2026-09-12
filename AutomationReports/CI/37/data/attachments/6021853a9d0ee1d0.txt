@@ -1,0 +1,4 @@
+[2026-09-12 16:18:55] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789195735250-cmke
+[2026-09-12 16:18:55] INFO:  Verifying POST /api/auth/refresh returns 200 OK Success !! Actual and Expected Values are:: 200
+[2026-09-12 16:18:55] INFO:  Verifying new access token issued in Set-Cookie Success !! Actual and Expected Values are:: true
+[2026-09-12 16:18:55] INFO: Cleaned up ephemeral test session: pw-w3-2-1789195735250-cmke

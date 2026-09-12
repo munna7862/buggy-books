@@ -1,0 +1,2 @@
+[2026-09-12 16:18:51] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789195731767-2ytf
+[2026-09-12 16:18:52] INFO: Cleaned up ephemeral test session: pw-w4-3-1789195731767-2ytf

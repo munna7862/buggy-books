@@ -1,0 +1,4 @@
+[2026-09-12 16:18:50] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1789195730353-jdws
+[2026-09-12 16:18:50] INFO: Last item on page 1 ID: 5
+[2026-09-12 16:18:50] INFO: First item on page 2 ID: 6
+[2026-09-12 16:18:50] INFO: Cleaned up ephemeral test session: pw-w2-1-1789195730353-jdws
