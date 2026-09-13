@@ -1,5 +1,6 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import { monitorEventLoopDelay } from 'perf_hooks';
 import { JWT_SECRET } from '../config';
 import { loggerStore } from '../utils/logger';
 import { asyncHandler } from '../utils/asyncHandler';
@@ -77,7 +78,60 @@ interface GlobalWithGC {
   gc?: () => void;
 }
 
-router.get('/health', (req: Request, res: Response) => {
+// Runtime Telemetry & Event Loop Delay Observability (resolution: 20ms)
+const eventLoopDelay = monitorEventLoopDelay({ resolution: 20 });
+eventLoopDelay.enable();
+
+let lastCpuUsage = process.cpuUsage();
+let lastCpuTime = process.hrtime.bigint();
+
+function getEventLoopMetrics() {
+  const toMs = (ns: number) => (Number.isFinite(ns) && ns >= 0 ? Number((ns / 1e6).toFixed(3)) : 0.0);
+  return {
+    min: toMs(eventLoopDelay.min),
+    max: toMs(eventLoopDelay.max),
+    mean: toMs(eventLoopDelay.mean),
+    p50: toMs(eventLoopDelay.percentile(50)),
+    p90: toMs(eventLoopDelay.percentile(90)),
+    p95: toMs(eventLoopDelay.percentile(95)),
+    p99: toMs(eventLoopDelay.percentile(99)),
+  };
+}
+
+function getCpuMetrics() {
+  const currentUsage = process.cpuUsage(lastCpuUsage);
+  const currentTime = process.hrtime.bigint();
+  const elapsedMicros = Number(currentTime - lastCpuTime) / 1000;
+
+  lastCpuUsage = process.cpuUsage();
+  lastCpuTime = currentTime;
+
+  const userMicros = currentUsage.user;
+  const systemMicros = currentUsage.system;
+  const totalMicros = userMicros + systemMicros;
+  const percent = elapsedMicros > 0 ? (totalMicros / elapsedMicros) * 100 : 0.0;
+
+  return {
+    percent: Math.min(100.0, Math.max(0.0, Number(percent.toFixed(2)))),
+    userMicros,
+    systemMicros,
+  };
+}
+
+function getActiveHandlesCount(): number {
+  const proc = process as unknown as { _getActiveHandles?: () => unknown[] };
+  if (typeof proc._getActiveHandles === 'function') {
+    try {
+      const handles = proc._getActiveHandles();
+      return Array.isArray(handles) ? handles.length : 0;
+    } catch {
+      return 0;
+    }
+  }
+  return 0;
+}
+
+const getDiagnosticsPayload = () => {
   const globalWithGC = global as unknown as GlobalWithGC;
   if (typeof globalWithGC.gc === 'function') {
     try {
@@ -87,7 +141,7 @@ router.get('/health', (req: Request, res: Response) => {
     }
   }
   const mem = process.memoryUsage();
-  res.json({
+  return {
     status: 'ok',
     uptime: process.uptime(),
     memory: {
@@ -96,8 +150,21 @@ router.get('/health', (req: Request, res: Response) => {
       rss: mem.rss,
       external: mem.external,
     },
+    eventLoop: getEventLoopMetrics(),
+    cpu: getCpuMetrics(),
+    handles: {
+      active: getActiveHandlesCount(),
+    },
     timestamp: new Date().toISOString(),
-  });
+  };
+};
+
+router.get('/health', (req: Request, res: Response) => {
+  res.json(getDiagnosticsPayload());
+});
+
+router.get('/metrics', (req: Request, res: Response) => {
+  res.json(getDiagnosticsPayload());
 });
 
 router.get('/profile', authenticateToken, asyncHandler(profileController.getProfile));

@@ -76,6 +76,15 @@ jobs:
       - name: Setup k6
         uses: grafana/setup-k6-action@db07bd9765aac508ef18982e52ab937fe633a065 # v1.1.0
 
+      - name: Restore Performance History Cache
+        uses: actions/cache/restore@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        with:
+          path: performance/perf-history.json
+          key: perf-history-${{ runner.os }}-${{ github.run_id }}
+          restore-keys: |
+            perf-history-${{ runner.os }}-
+            perf-history-
+
       - name: Run Endurance Soak Benchmark
         run: |
           set +e
@@ -105,6 +114,13 @@ jobs:
           MAX_VUS: ${{ github.event.inputs.max_breakpoint_vus || '200' }}
           BASE_URL: http://127.0.0.1:4000
 
+      - name: Save Performance History Cache
+        uses: actions/cache/save@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        if: always()
+        with:
+          path: performance/perf-history.json
+          key: perf-history-${{ runner.os }}-${{ github.run_id }}
+
       - name: Upload Endurance Performance Artifacts & Telemetry
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: always()
@@ -115,6 +131,7 @@ jobs:
             performance/k6-summary*.md
             performance/report*.html
             report*.html
+            performance/perf-history.json
             backend-endurance.log
           retention-days: 14
 
