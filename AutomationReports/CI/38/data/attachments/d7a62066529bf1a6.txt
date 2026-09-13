@@ -1,0 +1,4 @@
+[2026-09-13 16:36:32] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789283192141-0ppz
+[2026-09-13 16:36:32] INFO: Last item on page 1 ID: 5
+[2026-09-13 16:36:32] INFO: First item on page 2 ID: 6
+[2026-09-13 16:36:32] INFO: Cleaned up ephemeral test session: pw-w4-3-1789283192141-0ppz

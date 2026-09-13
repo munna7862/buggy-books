@@ -1,0 +1,4 @@
+[2026-09-13 16:36:35] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789283195994-3z2y
+[2026-09-13 16:36:36] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-13 16:36:36] INFO:  Security status for script tag in username Success !! Actual and Expected Values are:: true
+[2026-09-13 16:36:36] INFO: Cleaned up ephemeral test session: pw-w4-3-1789283195994-3z2y

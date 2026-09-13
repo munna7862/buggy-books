@@ -1,4 +1,0 @@
-[2026-09-07 02:46:39] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1788714999168-dgl9
-[2026-09-07 02:46:39] INFO:  Verifying status code is 400 Bad Request Success !! Actual and Expected Values are:: 400
-[2026-09-07 02:46:39] INFO:  Verifying error response body contains exact same correlationId Success !! Actual and Expected Values are:: custom-correlation-uuid-99999_err
-[2026-09-07 02:46:39] INFO: Cleaned up ephemeral test session: pw-w3-2-1788714999168-dgl9

@@ -1,3 +1,0 @@
-[2026-09-07 02:46:37] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1788714997392-9oq5
-[2026-09-07 02:46:37] INFO:  Status code should be 200 or 400 for invalid parameters: Negative page number Success !! Actual and Expected Values are:: true
-[2026-09-07 02:46:37] INFO: Cleaned up ephemeral test session: pw-w1-0-1788714997392-9oq5

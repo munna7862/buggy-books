@@ -1,3 +1,0 @@
-[2026-09-07 02:46:39] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1788714999830-rqxr
-[2026-09-07 02:46:39] INFO:  Unsupported method status Success !! Actual and Expected Values are:: true
-[2026-09-07 02:46:39] INFO: Cleaned up ephemeral test session: pw-w4-3-1788714999830-rqxr
