@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Trend, Rate } from 'k6/metrics';
+import { createSummaryHandler } from '../utils/summary-handler.js';
 
 // Custom metrics for granular reporting
 const catalogDuration = new Trend('catalog_duration', true);
@@ -88,3 +89,9 @@ export default function () {
 
   sleep(0.2);
 }
+
+export const handleSummary = createSummaryHandler({
+  jsonFilename: 'perf-summary-smoke.json',
+  htmlFilename: 'performance/report-smoke.html',
+  title: 'PR API Smoke Benchmark (5 VUs)',
+});

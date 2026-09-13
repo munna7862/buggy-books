@@ -4,11 +4,13 @@
  * BuggyBooks k6 Performance Summary Reporter & Relative Baseline Regression Gate
  *
  * Parses k6 summary export JSON, calculates relative deltas against git golden baselines,
- * enforces > +20% latency regression failure exit codes, and generates formatted GitHub Step Summaries ($GITHUB_STEP_SUMMARY).
+ * enforces > +20% latency regression failure exit codes, generates formatted GitHub Step Summaries,
+ * and renders interactive, self-contained HTML5 dashboards.
  */
 
 const fs = require('fs');
 const path = require('path');
+const { generateHtmlReport } = require('./utils/html-reporter.js');
 
 const REGRESSION_THRESHOLD_PERCENT = 20.0;
 const WARNING_THRESHOLD_PERCENT = 10.0;
@@ -77,7 +79,9 @@ function generateMarkdown(summaryData, title, baselineData = null, isRegressionS
 
   const totalReqs = getMetricValue(httpReqs, 'count');
   const rps = getMetricValue(httpReqs, 'rate');
-  const failRate = getMetricValue(httpFailed, 'rate') !== undefined ? getMetricValue(httpFailed, 'rate') * 100 : (getMetricValue(httpFailed, 'value') !== undefined ? getMetricValue(httpFailed, 'value') * 100 : 0);
+  const failRate = getMetricValue(httpFailed, 'rate') !== undefined
+    ? getMetricValue(httpFailed, 'rate') * 100
+    : (getMetricValue(httpFailed, 'value') !== undefined ? getMetricValue(httpFailed, 'value') * 100 : 0);
   const maxVus = getMetricValue(vusMax, 'max') || getMetricValue(vusMax, 'value');
 
   // Check thresholds for pass/fail
@@ -105,7 +109,7 @@ function generateMarkdown(summaryData, title, baselineData = null, isRegressionS
     }
   }
 
-  // Baseline comparison
+  // Dynamic Baseline Comparison: Check all duration metrics dynamically
   let hasRegression = false;
   const baselineRows = [];
 
@@ -116,10 +120,34 @@ function generateMarkdown(summaryData, title, baselineData = null, isRegressionS
       { key: 'http_req_duration', subKey: 'avg', label: 'http_req_duration (avg)', currentVal: avgDuration },
       { key: 'http_req_duration', subKey: 'p(90)', label: 'http_req_duration (p90)', currentVal: p90Duration },
       { key: 'http_req_duration', subKey: 'p(95)', label: 'http_req_duration (p95)', currentVal: p95Duration },
-      { key: 'catalog_duration', subKey: 'p(95)', label: 'catalog_duration (p95)', currentVal: getMetricValue(metrics['catalog_duration'], 'p(95)') },
-      { key: 'search_duration', subKey: 'p(95)', label: 'search_duration (p95)', currentVal: getMetricValue(metrics['search_duration'], 'p(95)') },
-      { key: 'detail_duration', subKey: 'p(95)', label: 'detail_duration (p95)', currentVal: getMetricValue(metrics['detail_duration'], 'p(95)') },
     ];
+
+    // Dynamically add all other custom Trend metrics ending in _duration
+    const seenKeys = new Set(['http_req_duration']);
+    for (const key of Object.keys(metrics)) {
+      if (key.endsWith('_duration') && !seenKeys.has(key)) {
+        seenKeys.add(key);
+        metricsToCompare.push({
+          key,
+          subKey: 'p(95)',
+          label: `${key} (p95)`,
+          currentVal: getMetricValue(metrics[key], 'p(95)'),
+        });
+      }
+    }
+
+    // Also check any baseline duration metrics not present in current metrics
+    for (const key of Object.keys(baseMetrics)) {
+      if (key.endsWith('_duration') && !seenKeys.has(key)) {
+        seenKeys.add(key);
+        metricsToCompare.push({
+          key,
+          subKey: 'p(95)',
+          label: `${key} (p95)`,
+          currentVal: getMetricValue(metrics[key], 'p(95)'),
+        });
+      }
+    }
 
     for (const item of metricsToCompare) {
       const baseMetricObj = baseMetrics[item.key];
@@ -260,6 +288,8 @@ function parseCommandLineArgs() {
   let title = 'API Performance Benchmark';
   let baselinePath = null;
   let isRegressionSimulated = false;
+  let htmlPath = null;
+  let cleanMarkdown = false;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -267,6 +297,12 @@ function parseCommandLineArgs() {
       baselinePath = path.resolve(arg.split('=')[1]);
     } else if (arg === '--baseline' && i + 1 < args.length) {
       baselinePath = path.resolve(args[++i]);
+    } else if (arg.startsWith('--html=')) {
+      htmlPath = path.resolve(arg.split('=')[1]);
+    } else if (arg === '--html' && i + 1 < args.length) {
+      htmlPath = path.resolve(args[++i]);
+    } else if (arg === '--clean') {
+      cleanMarkdown = true;
     } else if (arg === '--regression-test' || arg === '--simulate-regression') {
       isRegressionSimulated = true;
     } else if (!arg.startsWith('--')) {
@@ -278,14 +314,18 @@ function parseCommandLineArgs() {
     }
   }
 
-  return { summaryJsonPath, title, baselinePath, isRegressionSimulated };
+  if (!htmlPath) {
+    htmlPath = path.resolve(__dirname, 'report.html');
+  }
+
+  return { summaryJsonPath, title, baselinePath, isRegressionSimulated, htmlPath, cleanMarkdown };
 }
 
 function main() {
-  const { summaryJsonPath, title, baselinePath, isRegressionSimulated } = parseCommandLineArgs();
+  const { summaryJsonPath, title, baselinePath, isRegressionSimulated, htmlPath, cleanMarkdown } = parseCommandLineArgs();
 
   if (!summaryJsonPath) {
-    console.error('Usage: node report-perf-summary.js <summary-json-path> [benchmark-title] [--baseline=<path>] [--regression-test]');
+    console.error('Usage: node report-perf-summary.js <summary-json-path> [benchmark-title] [--baseline=<path>] [--html=<path>] [--clean] [--regression-test]');
     process.exit(1);
   }
 
@@ -323,6 +363,25 @@ function main() {
   // Print to console
   console.log(md);
 
+  // Generate and save interactive HTML report
+  try {
+    const htmlContent = generateHtmlReport(summaryData, {
+      title,
+      baselineData,
+      isRegressionSimulated,
+    });
+    fs.writeFileSync(htmlPath, htmlContent, 'utf8');
+    console.log(`✅ Saved interactive HTML performance report to ${htmlPath}`);
+
+    // Also write to root-level report.html if different
+    const rootHtml = path.resolve(process.cwd(), 'report.html');
+    if (path.resolve(htmlPath) !== rootHtml) {
+      fs.writeFileSync(rootHtml, htmlContent, 'utf8');
+    }
+  } catch (err) {
+    console.warn(`⚠️ Warning: Failed to write HTML report to ${htmlPath}:`, err.message);
+  }
+
   // Append to GITHUB_STEP_SUMMARY if present
   const stepSummaryFile = process.env.GITHUB_STEP_SUMMARY;
   if (stepSummaryFile) {
@@ -334,9 +393,12 @@ function main() {
     }
   }
 
-  // Also write to local markdown artifact file
+  // Write to local markdown artifact file (rotate if cleanMarkdown requested)
   const artifactPath = path.resolve(__dirname, 'k6-summary.md');
   try {
+    if (cleanMarkdown) {
+      fs.writeFileSync(artifactPath, `# BuggyBooks k6 Performance Summary\n\nGenerated: ${new Date().toISOString()}\n\n`, 'utf8');
+    }
     fs.appendFileSync(artifactPath, md, 'utf8');
     console.log(`✅ Saved performance summary artifact to ${artifactPath}`);
   } catch (err) {
