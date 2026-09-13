@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Trend, Rate, Counter } from 'k6/metrics';
+import { createSummaryHandler } from '../utils/summary-handler.js';
 
 // Custom metric trends for capacity saturation and breakpoint tracking
 const catalogDuration = new Trend('catalog_duration', true);
@@ -112,8 +113,12 @@ ${bottleneckDiagnosis}
 ================================================================================
 `;
 
-  return {
-    'stdout': summaryReport,
-    'perf-summary-breakpoint.json': JSON.stringify(data, null, 2),
-  };
+  const handler = createSummaryHandler({
+    jsonFilename: 'perf-summary-breakpoint.json',
+    htmlFilename: 'performance/report-breakpoint.html',
+    title: 'Breakpoint Capacity Saturation Test',
+    customStdout: summaryReport,
+  });
+
+  return handler(data);
 }

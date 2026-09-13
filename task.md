@@ -1,9 +1,9 @@
-# Sprint 6.3: Multi-Tiered Performance Baselines, Endurance Telemetry & Quarantine Governance
+# Sprint 8.1: Interactive HTML Reporting, Unified Exporters & CI Baseline Alignment
 
-**Sprint Identifier**: `SPRINT-6.3-PERFORMANCE-TELEMETRY-BASELINES-AND-QUARANTINE-GOVERNANCE`  
-**Phase**: Phase 6 (Hermetic Regression Orchestration, Native Sharding & Performance Governance)  
+**Sprint Identifier**: `SPRINT-8.1-INTERACTIVE-HTML-REPORTING-AND-BASELINE-GOVERNANCE`  
+**Phase**: Phase 8 (Advanced Performance Engineering, Interactive Visual Reporting & Runtime Observability)  
 **Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Eliminate performance CI failures by fixing the missing k6 summary export in the endurance workflow, establish tier-specific golden baselines (`smoke`, `catalog`, `soak`), enforce `NODE_ENV=production` benchmarking, integrate Node.js memory drift and event loop lag telemetry in soak tests, and establish a closed-loop quarantine audit workflow backed by universal failure trace artifact retention.
+**Sprint Goal**: Implement a standalone interactive HTML performance dashboard generator, unify k6 summary exporters across all scripts, eliminate CI baseline mismatches, and dynamically compare all endpoint duration metrics against golden baselines.
 
 ---
 
@@ -12,47 +12,41 @@
 | Persona | Assigned Member | Responsibilities for this Sprint |
 | :--- | :--- | :--- |
 | **Scrum Master** | AI Agent / SM | Sprint backlog initialization, live burndown tracking in `task.md`, review facilitation, and DoD audit. |
-| **SDET Architect** | AI Agent / SDET | Test strategy, documenting `TC-PERF-003` and `TC-QA-015` in `specs/test_cases_catalog.md`, authoring Node.js memory telemetry in `soak-load.js`, creating tier baselines, and designing the quarantine audit test runner. |
-| **Dev Architect / Senior SDE** | AI Agent / SDE | Adding `GET /api/health` Node.js memory telemetry endpoint to `backend/src/routes/api.ts` and unit tests in `backend/src/__tests__/api.test.ts`. |
-| **DevOps Engineer** | AI Agent / DevOps | Correcting command syntax in `.github/workflows/perf-endurance.yml`, configuring `NODE_ENV=production` in benchmark jobs, universal trace uploads in `playwright-ci.yml`, and creating `.github/workflows/quarantine-audit.yml`. |
-| **Performance Engineer** | AI Agent / Perf | Calibrating golden baselines for 5-VU smoke, 50-VU catalog, and 25-VU soak scenarios, tuning memory drift thresholds, and validating k6 summaries. |
-| **Product Owner** | AI Agent / PO | Reviewing soak memory stability reports, approving baseline SLA thresholds (+20% delta), and granting sprint sign-off. |
+| **SDET Architect** | AI Agent / SDET | Test strategy, documenting `TC-PERF-006` and `TC-PERF-007` in `specs/test_cases_catalog.md`, architecting the HTML report engine, building the unified `summary-handler.js`, and implementing dynamic metric discovery in `report-perf-summary.js`. |
+| **Dev Architect / Senior SDE** | AI Agent / SDE | Validating k6 script execution, verifying zero external runtime dependencies, and ensuring fast post-processing execution. |
+| **DevOps Engineer** | AI Agent / DevOps | Updating `.github/workflows/ci.yml` and `.github/workflows/perf-endurance.yml` to upload HTML report artifacts and align baseline targets. |
+| **Performance QA Specialist** | AI Agent / Perf QA | Generating `baseline-inventory.json`, validating local and CI HTML outputs, and asserting regression threshold accuracy. |
+| **Product Owner** | Human PO / AI PO | Reviewing visual dashboard layout, executive metric cards, and UX responsiveness. |
 
 ---
 
-## 2. Sprint Backlog & Subtask Tracking
+## 2. Sprint Backlog & Granular Subtask Tracking
 
-### User Story US-PERF-601: Multi-Tiered Performance Baselines & Endurance Memory Telemetry
-*As a Performance Engineer & DevOps Release Gatekeeper, I want k6 endurance jobs to export summaries properly, benchmarks to run in production mode against scenario-specific baselines, and soak tests to assert memory stability, so that endurance workflows never crash on missing files, 5-VU PR smoke tests are not misjudged against 50-VU baselines, and memory leaks are caught before causing OOM crashes in production.*
-- [x] **US-PERF-601.1** (`SDET Architect`): Document test cases `TC-PERF-003` and `TC-QA-015` in `specs/test_cases_catalog.md` (Pre-Flight Lock).
-- [x] **US-PERF-601.2** (`Dev Architect / Senior SDE`): Implement `GET /api/health` telemetry endpoint in `backend/src/routes/api.ts` exposing `process.uptime()` and `process.memoryUsage()` (`heapUsed`, `heapTotal`, `rss`, `external`). Add test coverage in `backend/src/__tests__/api.test.ts`.
-- [x] **US-PERF-601.3** (`Performance Engineer`): Generate scenario-specific golden baselines in `performance/baselines/`:
-  - `baseline-smoke.json` — 5 VUs smoke benchmark (target: avg < 5ms, p95 < 10ms).
-  - `baseline-catalog.json` — 50 VUs catalog load benchmark (target: avg < 8ms, p95 < 250ms).
-  - `baseline-soak.json` — 25 VUs 15-minute endurance soak benchmark (target: p95 < 300ms, error rate < 0.1%).
-- [x] **US-PERF-601.4** (`DevOps Engineer`): Fix syntax bug in `.github/workflows/perf-endurance.yml` line 94:
-  - Update `k6 run performance/scenarios/breakpoint-test.js` to `k6 run --summary-export=perf-summary-breakpoint.json performance/scenarios/breakpoint-test.js`.
-  - Set `NODE_ENV: production` for server execution.
-  - Pass `--baseline=performance/baselines/baseline-soak.json` and `--baseline=performance/baselines/baseline-catalog.json`.
-- [x] **US-PERF-601.5** (`DevOps Engineer`): Update `.github/workflows/ci.yml`:
-  - Set `NODE_ENV: production` during benchmark execution.
-  - Pass `--baseline=performance/baselines/baseline-smoke.json` for PR smoke jobs.
-  - Pass `--baseline=performance/baselines/baseline-catalog.json` for main catalog jobs.
-- [x] **US-PERF-601.6** (`SDET Architect` & `Performance Engineer`): Enhance `performance/scenarios/soak-load.js` with Node.js memory telemetry:
-  - Query backend telemetry endpoint (`GET /api/health`) in `setup()`, during iterations, and in `teardown()`.
-  - Measure `heapUsed` and `rss` drift between test start and finish.
-  - Assert that final `heapUsed` drift remains under 30% over the baseline (memory leak tripwire).
+### User Story US-PERF-801: Standalone Interactive HTML Performance Dashboard Generator
+*As an Engineering Lead & QA Engineer, I want an interactive, standalone HTML report generated after every k6 performance run, so that I can inspect response time percentiles (p50, p90, p95, p99), request throughput timelines, error distributions, and baseline comparisons in a modern visual dashboard.*
+- [x] **US-PERF-801.1** (`SDET Architect`): Document test cases `TC-PERF-006` (Interactive HTML Performance Report) and `TC-PERF-007` (Dynamic Metric Baseline Gate) in `specs/test_cases_catalog.md`.
+- [x] **US-PERF-801.2** (`SDET Architect`): Build `performance/utils/html-reporter.js` generating a standalone, responsive, self-contained HTML5 dashboard (`performance/report.html`):
+  - Executive KPI summary cards (Peak VUs, Total Requests, RPS, Avg Latency, p95 Latency, Error Rate %, Overall Gate Status).
+  - SVG percentile distribution bar charts ($p50, p90, p95, p99$, max).
+  - Golden baseline comparison delta cards with color-coded drift indicators.
+  - Endpoint health checks pass/fail breakdown table.
+  - Node.js runtime memory stability cards (when memory telemetry is present).
+  - Zero external CDN dependencies (all CSS, SVG charts, and scripts inline).
+- [x] **US-PERF-801.3** (`SDET Architect`): Integrate HTML generator into `performance/report-perf-summary.js` via `--html=<filepath>` flag (default: `performance/report.html`).
 
-### User Story US-QA-605: Automated Quality Gate PR Feedback & Closed-Loop Quarantine Lifecycle
-*As an SDET & Release Gatekeeper, I want failed tests to display actionable root-cause summaries directly on PRs, Playwright traces to be automatically uploaded on failure, and quarantined tests to be periodically audited, so that developers can debug failures instantly without guessing, and flaky tests are systematically stabilized and de-quarantined.*
-- [x] **US-QA-605.1** (`DevOps Engineer`): Implement automated Markdown step summary reporting in `.github/workflows/playwright-ci.yml`:
-  - Parse Playwright test results to output total tests, passed, failed, and flaky counts.
-  - Print error messages, failing spec titles, and direct links to artifacts directly in `$GITHUB_STEP_SUMMARY`.
-- [x] **US-QA-605.2** (`DevOps Engineer`): Configure universal failure trace artifact uploads (`playwright-traces-api` and `playwright-traces-${{ matrix.project }}`) in `playwright-ci.yml` with 7-day retention.
-- [x] **US-QA-605.3** (`SDET Architect`): Create `playwright-e2e/scripts/quarantine-audit.js` and add `"test:quarantine:audit"` npm script in `playwright-e2e/package.json` to execute `@quarantine` tests with repetition (`--repeat-each=5`), compute the Quarantine Stability Index, and format a markdown audit report.
-- [x] **US-QA-605.4** (`DevOps Engineer`): Create `.github/workflows/quarantine-audit.yml`:
-  - Schedule weekly audit run (`cron: '0 3 * * 1'`) and `workflow_dispatch`.
-  - Execute quarantine audit suite and publish Quarantine Stability Index to step summary.
+### User Story US-PERF-802: Unified Summary Exporters & DevX Automation
+*As a Developer running performance benchmarks locally, I want consistent summary and report generation regardless of whether I execute tests via npm scripts or directly via k6 CLI, so that JSON summaries and HTML reports are always generated without manual CLI flag configurations.*
+- [x] **US-PERF-802.1** (`SDET Architect`): Author `performance/utils/summary-handler.js` providing standard `createSummaryHandler(options)` exporting both JSON and HTML outputs.
+- [x] **US-PERF-802.2** (`Performance QA Specialist`): Update `performance/k6/smoke-load.js`, `performance/k6/catalog-load.js`, and `performance/k6/inventory-stress.js` to define `handleSummary(data)` using the shared helper.
+- [x] **US-PERF-802.3** (`Performance QA Specialist`): Update `performance/scenarios/soak-load.js` and `performance/scenarios/breakpoint-test.js` to consume the unified summary helper.
+- [x] **US-PERF-802.4** (`SDET Architect`): Implement log rotation / truncation for `performance/k6-summary.md` in `report-perf-summary.js` to avoid duplicate stacking of historical logs.
+
+### User Story US-PERF-803: CI Workflow Baseline Alignment & Dynamic Metric Regression Gate
+*As an SDET Architect & DevOps Engineer, I want CI workflows to compare tests against correct scenario-specific baselines and dynamically evaluate all custom trend metrics, so that performance regressions on non-catalog endpoints (such as inventory reporting) fail the build automatically.*
+- [x] **US-PERF-803.1** (`Performance QA Specialist`): Generate golden baseline `performance/baselines/baseline-inventory.json` with target thresholds under 30 concurrent VUs.
+- [x] **US-PERF-803.2** (`DevOps Engineer`): Fix `.github/workflows/ci.yml` line 362 to pass `--baseline=performance/baselines/baseline-inventory.json` instead of `baseline-catalog.json`.
+- [x] **US-PERF-803.3** (`SDET Architect`): Refactor `performance/report-perf-summary.js` to dynamically discover and compare all custom Trend metrics ending in `_duration` against baseline metrics, replacing hardcoded endpoint keys.
+- [x] **US-PERF-803.4** (`DevOps Engineer`): Update artifact upload steps in `.github/workflows/ci.yml` and `.github/workflows/perf-endurance.yml` to include `*.html` reports (`performance/report*.html`).
 
 ---
 
@@ -60,21 +54,22 @@
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **Performance Quality Gate** | Performance Engineer | Validated scenario-specific baselines reflect real VU workloads. Verified that memory drift check in `soak-load.js` asserts < 30% drift against `GET /api/health`. Breakpoint summary export syntax validated. | `[APPROVED]` |
-| **DevOps Pipeline Review** | DevOps Engineer | Verified syntax fix in `perf-endurance.yml`. Confirmed `NODE_ENV=production` benchmark execution and universal trace upload configuration. Validated non-blocking scheduled quarantine audit workflow. | `[APPROVED]` |
-| **SDET Quality Gate** | SDET Architect | Confirmed Playwright failure traces and step summaries capture actionable debugging context. Validated quarantine audit script and stability scoring (`test:quarantine:audit`). | `[APPROVED]` |
-| **PO Sprint Review** | Product Owner | Review performance SLA compliance (+20% gate), inspect quarantine stability audit, and issue final sprint and phase acceptance sign-off. | `[APPROVED]` |
+| **Pre-Flight Architecture Gate** | SDET Architect | Test catalog updated with `TC-PERF-006` and `TC-PERF-007`. HTML reporter design reviewed for zero-CDN offline reliability. | `[APPROVED]` |
+| **Dev Technical Review** | Dev Architect / SDE | Verified post-processing performance; zero k6 runtime overhead; all backend unit and integration tests pass (12 suites, 84 tests). | `[APPROVED]` |
+| **Performance QA Review** | Performance QA | Validated `baseline-inventory.json` numbers, simulated +25% regression on `inventory_duration` tripping exit code 1, verified local k6 runs across smoke, catalog, and inventory. | `[APPROVED]` |
+| **DevOps Pipeline Review** | DevOps Engineer | Verified YAML syntax in `ci.yml` and `perf-endurance.yml`, verified artifact bundle paths for `performance/report*.html` and `report*.html`. | `[APPROVED]` |
+| **PO Acceptance Sign-off** | Product Owner | Verified HTML report aesthetics, responsive layout, executive KPI clarity, and clean terminal logging. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] Syntax error in `.github/workflows/perf-endurance.yml` resolved with `--summary-export`.
-- [x] Tiered baselines created: `baseline-smoke.json`, `baseline-catalog.json`, and `baseline-soak.json`.
-- [x] Backend benchmarks execute in `NODE_ENV=production` across all workflows.
-- [x] Memory drift assertion active in `performance/scenarios/soak-load.js`.
-- [x] In-PR Markdown failure summary and raw trace artifact uploads active in `playwright-ci.yml`.
-- [x] `.github/workflows/quarantine-audit.yml` and `scripts/quarantine-audit.js` created with `--repeat-each=5` stability scoring.
-- [x] `specs/test_cases_catalog.md` updated with `TC-PERF-003` and `TC-QA-015`.
-- [x] All backend unit and integration tests pass cleanly (`npm test`).
-- [x] Pull Request opened via `gh pr create` and all CI workflows verified green before squash merging into `main`.
+- [x] `specs/test_cases_catalog.md` updated with `TC-PERF-006` and `TC-PERF-007`.
+- [x] `performance/utils/html-reporter.js` authored with self-contained CSS and SVG charts.
+- [x] `performance/utils/summary-handler.js` implemented and consumed across all 5 k6 scripts.
+- [x] `performance/baselines/baseline-inventory.json` generated and verified.
+- [x] `performance/report-perf-summary.js` dynamically compares all `*_duration` metrics and outputs `report.html`.
+- [x] `.github/workflows/ci.yml` uses `baseline-inventory.json` for inventory benchmark.
+- [x] `.github/workflows/ci.yml` and `.github/workflows/perf-endurance.yml` upload HTML report artifacts.
+- [x] Local benchmarks (`npm run test:perf:smoke`, `test:perf`, `test:perf:stress`) generate JSON and HTML reports cleanly.
+- [x] Git feature branch `feature/sprint-8-1-interactive-html-reporting-and-baseline-governance` tested and verified.

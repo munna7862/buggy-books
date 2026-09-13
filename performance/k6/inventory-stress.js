@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Trend, Rate, Counter } from 'k6/metrics';
+import { createSummaryHandler } from '../utils/summary-handler.js';
 
 // Custom metrics
 const inventoryDuration = new Trend('inventory_duration', true);
@@ -65,3 +66,9 @@ export default function () {
 
   sleep(0.15);
 }
+
+export const handleSummary = createSummaryHandler({
+  jsonFilename: 'perf-summary-inventory.json',
+  htmlFilename: 'performance/report-inventory.html',
+  title: 'Inventory Stress Benchmark (30 VUs)',
+});

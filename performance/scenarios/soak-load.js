@@ -1,6 +1,7 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
 import { Trend, Rate } from 'k6/metrics';
+import { createSummaryHandler } from '../utils/summary-handler.js';
 
 // Custom metric trends for endurance and latency stability tracking
 const catalogDuration = new Trend('catalog_duration', true);
@@ -219,8 +220,8 @@ Memory Stability : ${isMemoryStable ? 'PASSED 🟢 (No memory leak detected)' : 
 `);
 }
 
-export function handleSummary(data) {
-  return {
-    'perf-summary-soak.json': JSON.stringify(data, null, 2),
-  };
-}
+export const handleSummary = createSummaryHandler({
+  jsonFilename: 'perf-summary-soak.json',
+  htmlFilename: 'performance/report-soak.html',
+  title: 'Endurance Soak Benchmark (25 VUs)',
+});

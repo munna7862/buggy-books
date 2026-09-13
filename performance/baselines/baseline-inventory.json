@@ -1,0 +1,33 @@
+{
+  "description": "BuggyBooks Inventory Stress Golden Baseline (30 VUs)",
+  "version": "1.0.0",
+  "generated_at": "2026-09-05T12:00:00Z",
+  "environment": "CI/Linux-x64",
+  "metrics": {
+    "http_req_duration": {
+      "avg": 12.50,
+      "med": 9.20,
+      "p(90)": 28.00,
+      "p(95)": 185.00,
+      "p(99)": 340.00,
+      "max": 490.00
+    },
+    "inventory_duration": {
+      "avg": 12.20,
+      "med": 9.00,
+      "p(90)": 27.50,
+      "p(95)": 180.00,
+      "p(99)": 335.00,
+      "max": 485.00
+    },
+    "http_req_failed": {
+      "rate": 0.00
+    },
+    "inventory_success_rate": {
+      "rate": 1.00
+    },
+    "http_reqs": {
+      "rate": 85.0
+    }
+  }
+}

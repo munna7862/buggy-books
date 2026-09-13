@@ -81,7 +81,7 @@ jobs:
           set +e
           k6 run --summary-export=perf-summary-soak.json performance/scenarios/soak-load.js
           K6_SOAK_EXIT=$?
-          node performance/report-perf-summary.js perf-summary-soak.json "Endurance Soak Benchmark (${{ github.event.inputs.soak_vus || '25' }} VUs)" --baseline=performance/baselines/baseline-soak.json
+          node performance/report-perf-summary.js perf-summary-soak.json "Endurance Soak Benchmark (${{ github.event.inputs.soak_vus || '25' }} VUs)" --baseline=performance/baselines/baseline-soak.json --html=performance/report-soak.html
           if [ $K6_SOAK_EXIT -ne 0 ]; then
             echo "k6 soak benchmark failed or breached thresholds (exit code: $K6_SOAK_EXIT)"
             exit $K6_SOAK_EXIT
@@ -96,7 +96,7 @@ jobs:
           set +e
           k6 run --summary-export=perf-summary-breakpoint.json performance/scenarios/breakpoint-test.js
           K6_BP_EXIT=$?
-          node performance/report-perf-summary.js perf-summary-breakpoint.json "Breakpoint Capacity Saturation Test" --baseline=performance/baselines/baseline-catalog.json
+          node performance/report-perf-summary.js perf-summary-breakpoint.json "Breakpoint Capacity Saturation Test" --baseline=performance/baselines/baseline-catalog.json --html=performance/report-breakpoint.html
           if [ $K6_BP_EXIT -ne 0 ]; then
             echo "k6 breakpoint test failed or breached thresholds (exit code: $K6_BP_EXIT)"
             exit $K6_BP_EXIT
@@ -113,6 +113,8 @@ jobs:
           path: |
             perf-summary*.json
             performance/k6-summary*.md
+            performance/report*.html
+            report*.html
             backend-endurance.log
           retention-days: 14
 
