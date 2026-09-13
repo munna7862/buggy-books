@@ -250,7 +250,7 @@ describe('BuggyBooks API Integration Tests', () => {
   });
 
   describe('System Telemetry & Health API', () => {
-    it('GET /api/health should return status ok, uptime, and Node.js process memory metrics', async () => {
+    it('GET /api/health should return status ok, uptime, memory, event loop, CPU, and handles metrics', async () => {
       const res = await request(app).get('/api/health');
       expect(res.status).toBe(200);
       expect(res.body.status).toBe('ok');
@@ -260,7 +260,38 @@ describe('BuggyBooks API Integration Tests', () => {
       expect(res.body.memory.heapUsed).toBeGreaterThan(0);
       expect(typeof res.body.memory.rss).toBe('number');
       expect(res.body.memory.rss).toBeGreaterThan(0);
+
+      // Event Loop Observability
+      expect(res.body.eventLoop).toBeDefined();
+      expect(typeof res.body.eventLoop.p50).toBe('number');
+      expect(typeof res.body.eventLoop.p90).toBe('number');
+      expect(typeof res.body.eventLoop.p95).toBe('number');
+      expect(typeof res.body.eventLoop.p99).toBe('number');
+      expect(typeof res.body.eventLoop.max).toBe('number');
+      expect(typeof res.body.eventLoop.mean).toBe('number');
+
+      // CPU Metrics
+      expect(res.body.cpu).toBeDefined();
+      expect(typeof res.body.cpu.percent).toBe('number');
+      expect(res.body.cpu.percent).toBeGreaterThanOrEqual(0);
+      expect(res.body.cpu.percent).toBeLessThanOrEqual(100);
+
+      // Handles Count
+      expect(res.body.handles).toBeDefined();
+      expect(typeof res.body.handles.active).toBe('number');
+      expect(res.body.handles.active).toBeGreaterThanOrEqual(0);
+
       expect(typeof res.body.timestamp).toBe('string');
+    });
+
+    it('GET /api/metrics should return identical runtime telemetry structure', async () => {
+      const res = await request(app).get('/api/metrics');
+      expect(res.status).toBe(200);
+      expect(res.body.status).toBe('ok');
+      expect(res.body.eventLoop).toBeDefined();
+      expect(res.body.cpu).toBeDefined();
+      expect(res.body.handles).toBeDefined();
+      expect(res.body.memory).toBeDefined();
     });
   });
 });

@@ -1,0 +1,177 @@
+# =============================================================
+# BuggyBooks – Performance Baseline Automated Recalibration
+#
+# Dedicated workflow for automated baseline recalibration after
+# intentional architectural optimizations. Executes benchmarks
+# in clean container under NODE_ENV=production and opens a PR.
+# =============================================================
+
+name: Performance Baseline Automated Recalibration
+
+on:
+  workflow_dispatch:
+    inputs:
+      tier:
+        description: 'Performance Benchmark Tier to Recalibrate'
+        required: true
+        default: 'smoke'
+        type: choice
+        options:
+          - 'smoke'
+          - 'catalog'
+          - 'inventory'
+          - 'journey'
+          - 'auth'
+          - 'checkout'
+          - 'soak'
+          - 'all'
+      create_pr:
+        description: 'Automatically open a Pull Request with updated baselines'
+        required: false
+        default: true
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  recalibrate:
+    name: Recalibrate Performance Baselines (${{ github.event.inputs.tier }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        working-directory: .
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install and Build Backend
+        run: |
+          cd backend
+          npm ci
+          npm run build
+        env:
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Start Backend Server
+        run: |
+          cd backend
+          nohup node --expose-gc dist/server.js > ../backend-recalibrate.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-recalibrate.log && exit 1)
+        env:
+          PORT: 4000
+          NODE_ENV: production
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
+
+      - name: Setup k6
+        uses: grafana/setup-k6-action@db07bd9765aac508ef18982e52ab937fe633a065 # v1.1.0
+
+      - name: Execute Benchmark - Smoke
+        if: github.event.inputs.tier == 'smoke' || github.event.inputs.tier == 'all'
+        run: |
+          k6 run --summary-export=perf-summary-smoke.json performance/k6/smoke-load.js
+        env:
+          BASE_URL: http://127.0.0.1:4000
+
+      - name: Execute Benchmark - Catalog
+        if: github.event.inputs.tier == 'catalog' || github.event.inputs.tier == 'all'
+        run: |
+          k6 run --summary-export=perf-summary-catalog.json performance/k6/catalog-load.js
+        env:
+          BASE_URL: http://127.0.0.1:4000
+
+      - name: Execute Benchmark - Inventory
+        if: github.event.inputs.tier == 'inventory' || github.event.inputs.tier == 'all'
+        run: |
+          k6 run --summary-export=perf-summary-inventory.json performance/k6/inventory-stress.js
+        env:
+          BASE_URL: http://127.0.0.1:4000
+
+      - name: Execute Benchmark - Journey
+        if: github.event.inputs.tier == 'journey' || github.event.inputs.tier == 'all'
+        run: |
+          k6 run --summary-export=perf-summary-journey.json performance/scenarios/ecommerce-journey.js
+        env:
+          BASE_URL: http://127.0.0.1:4000
+
+      - name: Execute Benchmark - Auth
+        if: github.event.inputs.tier == 'auth' || github.event.inputs.tier == 'all'
+        run: |
+          k6 run --summary-export=perf-summary-auth.json performance/k6/auth-stress.js
+        env:
+          BASE_URL: http://127.0.0.1:4000
+
+      - name: Execute Benchmark - Checkout
+        if: github.event.inputs.tier == 'checkout' || github.event.inputs.tier == 'all'
+        run: |
+          k6 run --summary-export=perf-summary-checkout.json performance/k6/checkout-stress.js
+        env:
+          BASE_URL: http://127.0.0.1:4000
+
+      - name: Execute Benchmark - Soak (Condensed)
+        if: github.event.inputs.tier == 'soak' || github.event.inputs.tier == 'all'
+        run: |
+          k6 run --summary-export=perf-summary-soak.json performance/scenarios/soak-load.js
+        env:
+          BASE_URL: http://127.0.0.1:4000
+          SOAK_DURATION: '2m'
+          SOAK_VUS: '25'
+
+      - name: Recalibrate Golden Baselines
+        id: recalibrate
+        run: |
+          node performance/recalibrate-baselines.js ${{ github.event.inputs.tier }}
+
+      - name: Create Pull Request with Updated Baselines
+        if: github.event.inputs.create_pr == 'true' || github.event.inputs.create_pr == true
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        with:
+          commit-message: "chore(perf): recalibrate golden baselines [tier: ${{ github.event.inputs.tier }}]"
+          title: "chore(perf): recalibrate golden baselines [tier: ${{ github.event.inputs.tier }}]"
+          body: |
+            ## 🎯 Automated Baseline Recalibration
+
+            This Pull Request was generated automatically by the **Performance Baseline Automated Recalibration** workflow.
+
+            - **Recalibrated Tier**: `${{ github.event.inputs.tier }}`
+            - **Triggered By**: @${{ github.actor }}
+            - **Target Branch**: `${{ github.ref_name }}`
+            - **Environment**: Linux x64 / Production Container
+
+            Please review the diff in `performance/baselines/` before approving and merging.
+          branch: "perf/recalibrate-${{ github.event.inputs.tier }}-${{ github.run_number }}"
+          delete-branch: true
+          labels: |
+            performance
+            automated-pr
+            baselines
+
+      - name: Upload Baseline Recalibration Artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        if: always()
+        with:
+          name: perf-recalibration-artifacts
+          path: |
+            performance/baselines/
+            perf-summary*.json
+            backend-recalibrate.log
+          retention-days: 14
+
+      - name: Stop Backend Server
+        if: always()
+        run: pkill -f "node dist/server.js" || true

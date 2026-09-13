@@ -16,6 +16,11 @@ const rssTrend = new Trend('node_rss_mb', true);
 const heapDriftTrend = new Trend('node_heap_drift_percent', true);
 const memoryLeakRate = new Rate('memory_leak_detected');
 
+// Node.js runtime telemetry & event loop observability
+const eventLoopLagTrend = new Trend('node_event_loop_lag_ms', true);
+const cpuPercentTrend = new Trend('node_cpu_percent', true);
+const activeHandlesTrend = new Trend('node_active_handles', true);
+
 // Configurable options via environment variables or defaults
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:4000';
 const SOAK_DURATION = __ENV.SOAK_DURATION || __ENV.DURATION || '15m';
@@ -37,6 +42,7 @@ export const options = {
     http_req_failed: ['rate<0.01'],
     api_error_rate: ['rate<0.01'],
     memory_leak_detected: ['rate<0.01'],
+    node_event_loop_lag_ms: ['p(95)<50'],
   },
 };
 
@@ -144,7 +150,7 @@ export default function () {
 
   sleep(0.2);
 
-  // 4. Periodic Process Memory Telemetry Sampling (Sampled by VU 1 every 20 iterations)
+  // 4. Periodic Process Telemetry Sampling (Sampled by VU 1 every 20 iterations)
   if (__VU === 1 && __ITER % 20 === 0) {
     const healthRes = http.get(`${BASE_URL}/api/health`, params);
     if (healthRes.status === 200) {
@@ -153,6 +159,16 @@ export default function () {
         if (healthData.memory) {
           heapUsedTrend.add(healthData.memory.heapUsed / (1024 * 1024));
           rssTrend.add(healthData.memory.rss / (1024 * 1024));
+        }
+        if (healthData.eventLoop) {
+          const lag = healthData.eventLoop.p95 !== undefined ? healthData.eventLoop.p95 : (healthData.eventLoop.mean || 0);
+          eventLoopLagTrend.add(lag);
+        }
+        if (healthData.cpu && typeof healthData.cpu.percent === 'number') {
+          cpuPercentTrend.add(healthData.cpu.percent);
+        }
+        if (healthData.handles && typeof healthData.handles.active === 'number') {
+          activeHandlesTrend.add(healthData.handles.active);
         }
       } catch {
         // ignore parse error in sample

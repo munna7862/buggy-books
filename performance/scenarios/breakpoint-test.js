@@ -10,6 +10,11 @@ const detailDuration = new Trend('detail_duration', true);
 const errorRate = new Rate('api_error_rate');
 const totalErrors = new Counter('total_server_errors');
 
+// Node.js runtime telemetry & event loop observability
+const eventLoopLagTrend = new Trend('node_event_loop_lag_ms', true);
+const cpuPercentTrend = new Trend('node_cpu_percent', true);
+const activeHandlesTrend = new Trend('node_active_handles', true);
+
 // Configurable options via environment variables or defaults
 const BASE_URL = __ENV.BASE_URL || 'http://localhost:4000';
 const MAX_VUS = parseInt(__ENV.MAX_VUS || '200', 10);
@@ -29,6 +34,7 @@ export const options = {
     http_req_failed: [{ threshold: 'rate<=0.05', abortOnFail: true, delayAbortEval: '5s' }],
     http_req_duration: [{ threshold: 'p(95)<=1000', abortOnFail: true, delayAbortEval: '5s' }],
     api_error_rate: [{ threshold: 'rate<=0.05', abortOnFail: true, delayAbortEval: '5s' }],
+    node_event_loop_lag_ms: ['p(95)<50'],
   },
 };
 
@@ -75,6 +81,28 @@ export default function () {
   if (!detailOk) totalErrors.add(1);
 
   sleep(0.1);
+
+  // 4. Periodic server runtime diagnostics polling (Sampled by VU 1 every 15 iterations)
+  if (__VU === 1 && __ITER % 15 === 0) {
+    const healthRes = http.get(`${BASE_URL}/api/health`, params);
+    if (healthRes.status === 200) {
+      try {
+        const healthData = JSON.parse(healthRes.body);
+        if (healthData.eventLoop) {
+          const lag = healthData.eventLoop.p95 !== undefined ? healthData.eventLoop.p95 : (healthData.eventLoop.mean || 0);
+          eventLoopLagTrend.add(lag);
+        }
+        if (healthData.cpu && typeof healthData.cpu.percent === 'number') {
+          cpuPercentTrend.add(healthData.cpu.percent);
+        }
+        if (healthData.handles && typeof healthData.handles.active === 'number') {
+          activeHandlesTrend.add(healthData.handles.active);
+        }
+      } catch {
+        // ignore parse error in telemetry sample
+      }
+    }
+  }
 }
 
 export function handleSummary(data) {
@@ -85,6 +113,11 @@ export function handleSummary(data) {
   const avg = duration['avg'] !== undefined ? duration['avg'].toFixed(2) : 'N/A';
   const failed = metrics['http_req_failed'] ? (metrics['http_req_failed'].values.rate * 100).toFixed(2) : '0.00';
   const reqCount = metrics['http_reqs'] ? metrics['http_reqs'].values.count : 0;
+
+  const elLag = metrics['node_event_loop_lag_ms'] ? metrics['node_event_loop_lag_ms'].values : null;
+  const elP95 = elLag && elLag['p(95)'] !== undefined ? elLag['p(95)'].toFixed(2) : 'N/A';
+  const cpuMetric = metrics['node_cpu_percent'] ? metrics['node_cpu_percent'].values : null;
+  const cpuAvg = cpuMetric && cpuMetric['avg'] !== undefined ? cpuMetric['avg'].toFixed(2) : 'N/A';
 
   let breakpointDetected = false;
   let bottleneckDiagnosis = 'System operated stably within defined SLA limits without capacity saturation.';
@@ -106,6 +139,8 @@ Total Requests Executed    : ${reqCount}
 Average Latency            : ${avg} ms
 p95 Latency                : ${p95} ms
 HTTP Failure Rate          : ${failed} %
+Event Loop Lag (p95)       : ${elP95} ms
+Process CPU (Avg)          : ${cpuAvg} %
 Breakpoint Reached         : ${breakpointDetected ? 'YES 🔴' : 'NO 🟢'}
 
 DIAGNOSIS & BOTTLENECK ANALYSIS:

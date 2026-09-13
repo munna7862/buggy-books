@@ -203,11 +203,91 @@ function generateHtmlReport(summaryData, options = {}) {
     checks = Object.values(rawChecks);
   }
 
-  // Memory telemetry
+  // Memory & Runtime Telemetry
   const heapUsedMetric = metrics['node_heap_used_mb'];
   const rssMetric = metrics['node_rss_mb'];
   const driftMetric = metrics['node_heap_drift_percent'];
   const leakMetric = metrics['memory_leak_detected'];
+  const eventLoopMetric = metrics['node_event_loop_lag_ms'];
+  const cpuMetric = metrics['node_cpu_percent'];
+  const handlesMetric = metrics['node_active_handles'];
+
+  const elAvg = getMetricValue(eventLoopMetric, 'avg');
+  const elP95 = getMetricValue(eventLoopMetric, 'p(95)');
+  const elMax = getMetricValue(eventLoopMetric, 'max');
+  const cpuAvg = getMetricValue(cpuMetric, 'avg');
+  const cpuMax = getMetricValue(cpuMetric, 'max');
+  const handlesVal = getMetricValue(handlesMetric, 'value') !== undefined
+    ? getMetricValue(handlesMetric, 'value')
+    : (getMetricValue(handlesMetric, 'max') !== undefined ? getMetricValue(handlesMetric, 'max') : getMetricValue(handlesMetric, 'avg'));
+
+  // Historical data & creeping regression
+  const historyData = options.historyData || null;
+  const creepingAnalysis = options.creepingAnalysis || null;
+
+  let historySvg = '';
+  let relevantHistory = [];
+  if (Array.isArray(historyData) && historyData.length > 0) {
+    relevantHistory = historyData.slice(-15);
+    const histW = 680;
+    const histH = 200;
+    const padL = 50;
+    const padR = 30;
+    const padT = 25;
+    const padB = 45;
+    const plotW = histW - padL - padR;
+    const plotH = histH - padT - padB;
+
+    const latencies = relevantHistory.map(h => Number(h.p95_latency) || 0);
+    const maxLat = Math.max(...latencies, 15);
+
+    const points = relevantHistory.map((h, i) => {
+      const x = relevantHistory.length > 1
+        ? padL + (i / (relevantHistory.length - 1)) * plotW
+        : padL + plotW / 2;
+      const y = padT + plotH - ((Number(h.p95_latency) || 0) / maxLat) * plotH;
+      return { x, y, h };
+    });
+
+    const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ');
+    const areaD = points.length > 1
+      ? `${pathD} L ${points[points.length - 1].x.toFixed(1)},${(padT + plotH).toFixed(1)} L ${points[0].x.toFixed(1)},${(padT + plotH).toFixed(1)} Z`
+      : '';
+
+    const dots = points.map((p, i) => {
+      const isLatest = i === points.length - 1;
+      const circleFill = isLatest ? '#10b981' : '#38bdf8';
+      const labelY = p.y - 8 < padT ? p.y + 16 : p.y - 8;
+      const shaShort = escapeHtml((p.h.commit_sha || `B${i + 1}`).substring(0, 7));
+      return `
+        <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${isLatest ? 6 : 4}" fill="${circleFill}" stroke="#1e293b" stroke-width="2">
+          <title>Build: ${shaShort} | p95: ${formatNumber(p.h.p95_latency, 2)}ms | RPS: ${formatNumber(p.h.rps, 1)} | Err: ${formatNumber(p.h.error_rate, 2)}% | Date: ${escapeHtml(p.h.timestamp)}</title>
+        </circle>
+        <text x="${p.x.toFixed(1)}" y="${labelY.toFixed(1)}" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="600">${formatNumber(p.h.p95_latency, 1)}ms</text>
+        <text x="${p.x.toFixed(1)}" y="${(padT + plotH + 18).toFixed(1)}" text-anchor="middle" fill="#64748b" font-size="9">${shaShort}</text>
+      `;
+    }).join('');
+
+    historySvg = `
+      <svg width="${histW}" height="${histH}" viewBox="0 0 ${histW} ${histH}" style="max-width:100%;height:auto;overflow:visible">
+        <defs>
+          <linearGradient id="histGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.0"/>
+          </linearGradient>
+        </defs>
+        <line x1="${padL}" y1="${padT}" x2="${padL + plotW}" y2="${padT}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1"/>
+        <line x1="${padL}" y1="${padT + plotH / 2}" x2="${padL + plotW}" y2="${padT + plotH / 2}" stroke="#334155" stroke-dasharray="3,3" stroke-width="1"/>
+        <line x1="${padL}" y1="${padT + plotH}" x2="${padL + plotW}" y2="${padT + plotH}" stroke="#334155" stroke-width="1"/>
+        <text x="${padL - 8}" y="${padT + 4}" text-anchor="end" fill="#64748b" font-size="10">${formatNumber(maxLat, 0)}ms</text>
+        <text x="${padL - 8}" y="${padT + plotH / 2 + 4}" text-anchor="end" fill="#64748b" font-size="10">${formatNumber(maxLat / 2, 0)}ms</text>
+        <text x="${padL - 8}" y="${padT + plotH + 4}" text-anchor="end" fill="#64748b" font-size="10">0ms</text>
+        ${areaD ? `<path d="${areaD}" fill="url(#histGrad)" />` : ''}
+        ${pathD ? `<path d="${pathD}" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />` : ''}
+        ${dots}
+      </svg>
+    `;
+  }
 
   const overallPassed = !hasThresholdFailures && !hasRegression;
   const overallBadgeText = overallPassed ? 'PASSED' : (hasRegression ? 'REGRESSION' : 'FAILED');
@@ -582,20 +662,42 @@ function generateHtmlReport(summaryData, options = {}) {
       </table>
     </div>` : ''}
 
-    ${(heapUsedMetric || rssMetric || driftMetric || leakMetric) ? `
-    <!-- Node.js Memory Telemetry -->
+    ${(heapUsedMetric || rssMetric || driftMetric || leakMetric || eventLoopMetric || cpuMetric || handlesMetric) ? `
+    <!-- Node.js Runtime Telemetry & Event Loop Observability -->
     <div class="section">
-      <div class="section-title">🧠 Node.js Runtime Memory & Drift Telemetry</div>
-      <div class="kpi-grid" style="margin-bottom:0">
+      <div class="section-title">🧠 Node.js Runtime Telemetry & Event Loop Observability</div>
+      <div class="kpi-grid" style="margin-bottom:16px">
+        ${eventLoopMetric ? `
+        <div class="kpi-card">
+          <div class="kpi-label">Event Loop Lag (Avg / p95)</div>
+          <div class="kpi-value" style="font-size:20px; color:${(elP95 || 0) < 50 ? 'var(--color-pass)' : 'var(--color-fail)'}">
+            ${formatNumber(elAvg, 2)} / ${formatNumber(elP95, 2)} ms
+          </div>
+          <div class="kpi-sub">SLA: p(95) &lt; 50.00 ms ${((elP95 || 0) < 50) ? '🟢' : '🔴'}</div>
+        </div>` : ''}
+        ${cpuMetric ? `
+        <div class="kpi-card">
+          <div class="kpi-label">Process CPU % (Avg / Max)</div>
+          <div class="kpi-value" style="font-size:20px">${formatNumber(cpuAvg, 1)}% / ${formatNumber(cpuMax, 1)}%</div>
+          <div class="kpi-sub">Differential CPU Sampling</div>
+        </div>` : ''}
+        ${handlesMetric ? `
+        <div class="kpi-card">
+          <div class="kpi-label">Active libuv Handles</div>
+          <div class="kpi-value" style="font-size:20px">${Math.round(handlesVal || 0)}</div>
+          <div class="kpi-sub">I/O & Timer Descriptors</div>
+        </div>` : ''}
         ${heapUsedMetric ? `
         <div class="kpi-card">
           <div class="kpi-label">Heap Used (Avg / Max)</div>
           <div class="kpi-value" style="font-size:20px">${formatNumber(getMetricValue(heapUsedMetric, 'avg'), 1)} / ${formatNumber(getMetricValue(heapUsedMetric, 'max'), 1)} MB</div>
+          <div class="kpi-sub">V8 Memory Space</div>
         </div>` : ''}
         ${rssMetric ? `
         <div class="kpi-card">
           <div class="kpi-label">Process RSS (Max)</div>
           <div class="kpi-value" style="font-size:20px">${formatNumber(getMetricValue(rssMetric, 'max'), 1)} MB</div>
+          <div class="kpi-sub">Resident Set Size</div>
         </div>` : ''}
         ${driftMetric ? `
         <div class="kpi-card">
@@ -611,8 +713,89 @@ function generateHtmlReport(summaryData, options = {}) {
           <div class="kpi-value" style="font-size:20px; color:${(getMetricValue(leakMetric, 'value') || 0) === 0 ? 'var(--color-pass)' : 'var(--color-fail)'}">
             ${(getMetricValue(leakMetric, 'value') || 0) === 0 ? 'NONE 🟢' : 'BREACH 🔴'}
           </div>
+          <div class="kpi-sub">Sustained Soak Guard</div>
         </div>` : ''}
       </div>
+
+      <!-- Server Vitals vs Client Response Latency Comparison -->
+      <div style="background:rgba(30,41,59,0.5);border:1px solid var(--border-color);border-radius:8px;padding:16px;margin-top:12px">
+        <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:8px">
+          ⚡ Latency Attribution Analysis: Client Response Time vs Server Event Loop Delay
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <div style="flex:1;min-width:240px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+              <span>Client HTTP p95 Latency</span>
+              <strong style="color:var(--color-accent)">${formatNumber(p95Duration, 2)} ms</strong>
+            </div>
+            <div class="progress-bar" style="height:8px">
+              <div class="progress-fill" style="width:100%;background:var(--color-accent)"></div>
+            </div>
+          </div>
+          ${eventLoopMetric ? `
+          <div style="flex:1;min-width:240px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+              <span>Server Event Loop Lag (p95)</span>
+              <strong style="color:${(elP95 || 0) < 50 ? 'var(--color-pass)' : 'var(--color-fail)'}">${formatNumber(elP95, 2)} ms</strong>
+            </div>
+            <div class="progress-bar" style="height:8px">
+              <div class="progress-fill" style="width:${p95Duration > 0 ? Math.min(100, ((elP95 || 0) / p95Duration) * 100) : 0}%;background:${(elP95 || 0) < 50 ? 'var(--color-pass)' : 'var(--color-fail)'}"></div>
+            </div>
+          </div>` : ''}
+        </div>
+        <div style="font-size:11px;color:var(--text-muted);margin-top:8px">
+          ${eventLoopMetric && (elP95 || 0) < 50
+            ? `🟢 Event loop lag is minimal (${formatNumber(elP95, 2)}ms), confirming application latency is I/O-bound rather than blocked by synchronous CPU computations or GC pauses.`
+            : 'ℹ️ Telemetry captured via Node.js perf_hooks and process diagnostics during load execution.'}
+        </div>
+      </div>
+    </div>` : ''}
+
+    ${historySvg ? `
+    <!-- Continuous Historical Performance Trajectory -->
+    <div class="section">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center">
+        <span>📈 Continuous Historical Performance Trajectory (Last ${relevantHistory.length} Builds)</span>
+        ${creepingAnalysis ? `
+          <span class="tag ${creepingAnalysis.isCreepingRegression ? 'badge-warn' : 'badge-pass'}">
+            ${creepingAnalysis.isCreepingRegression ? '⚠️ CREEPING DRIFT' : 'STABLE TREND 🟢'}
+          </span>` : ''}
+      </div>
+
+      ${creepingAnalysis && creepingAnalysis.isCreepingRegression ? `
+      <div style="background:rgba(245,158,11,0.1);border:1px solid var(--color-warn);border-radius:6px;padding:12px;margin-bottom:16px;font-size:13px;color:var(--color-warn)">
+        ⚠️ <strong>Creeping Performance Regression Warning</strong>: 5-run rolling average latency has degraded by <strong>+${formatNumber(creepingAnalysis.delta, 2)}%</strong> against ${escapeHtml(creepingAnalysis.referenceType)} (SLA Threshold: +10.00%). Single-run threshold has not tripped, but multi-build trend reveals gradual degradation.
+      </div>` : ''}
+
+      <div class="chart-container" style="padding:16px 8px;margin-bottom:16px">
+        ${historySvg}
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Build / Commit</th>
+            <th>Timestamp</th>
+            <th>Test Type</th>
+            <th>Throughput (RPS)</th>
+            <th>p95 Latency</th>
+            <th>Error Rate</th>
+            <th>Event Loop Lag</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${relevantHistory.map(h => `
+          <tr>
+            <td><code>${escapeHtml((h.commit_sha || 'local').substring(0, 7))}</code></td>
+            <td>${escapeHtml((h.timestamp || '').replace('T', ' ').substring(0, 19))}</td>
+            <td><code>${escapeHtml(h.test_type || 'default')}</code></td>
+            <td>${formatNumber(h.rps, 1)} req/s</td>
+            <td><strong>${formatNumber(h.p95_latency, 2)} ms</strong></td>
+            <td style="color:${(Number(h.error_rate) || 0) > 0 ? 'var(--color-fail)' : 'var(--color-pass)'}">${formatNumber(h.error_rate, 2)}%</td>
+            <td>${h.event_loop_lag_p95 !== undefined ? `${formatNumber(h.event_loop_lag_p95, 2)} ms` : '—'}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
     </div>` : ''}
 
     ${thresholdRows.length > 0 ? `

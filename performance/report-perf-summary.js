@@ -11,6 +11,13 @@
 const fs = require('fs');
 const path = require('path');
 const { generateHtmlReport } = require('./utils/html-reporter.js');
+const {
+  getGitCommitSha,
+  getWorkflowRunId,
+  inferTestType,
+  appendHistoryRecord,
+  analyzeCreepingRegression,
+} = require('./utils/history-tracker.js');
 
 const REGRESSION_THRESHOLD_PERCENT = 20.0;
 const WARNING_THRESHOLD_PERCENT = 10.0;
@@ -54,7 +61,7 @@ function getDeltaStatus(delta) {
   return { text: `🟢 PASS (${formatDelta(delta)})`, isRegression: false };
 }
 
-function generateMarkdown(summaryData, title, baselineData = null, isRegressionSimulated = false) {
+function generateMarkdown(summaryData, title, baselineData = null, isRegressionSimulated = false, creepingAnalysis = null) {
   const metrics = summaryData.metrics || {};
   const rootGroup = summaryData.root_group || {};
 
@@ -268,6 +275,55 @@ function generateMarkdown(summaryData, title, baselineData = null, isRegressionS
     md += `\n`;
   }
 
+  // Node.js Event Loop & CPU Observability Table
+  const eventLoopMetric = metrics['node_event_loop_lag_ms'];
+  const cpuMetric = metrics['node_cpu_percent'];
+  const handlesMetric = metrics['node_active_handles'];
+
+  if (eventLoopMetric || cpuMetric || handlesMetric) {
+    md += `\n#### ⚡ Node.js Runtime Telemetry & Event Loop Observability\n\n`;
+    md += `| Runtime Diagnostic | Measured Value | Threshold / SLA | Status |\n`;
+    md += `| :--- | :---: | :---: | :---: |\n`;
+    if (eventLoopMetric) {
+      const elP95 = getMetricValue(eventLoopMetric, 'p(95)');
+      const elMax = getMetricValue(eventLoopMetric, 'max');
+      const isBreached = elP95 !== undefined && elP95 >= 50.0;
+      md += `| **Event Loop Lag (p95 / Max)** | \`${formatNumber(elP95, 2)} ms / ${formatNumber(elMax, 2)} ms\` | \`p(95) < 50.00 ms\` | ${!isBreached ? '✅ PASS' : '🔴 FREEZE (≥50ms)'} |\n`;
+    }
+    if (cpuMetric) {
+      const cpuAvg = getMetricValue(cpuMetric, 'avg');
+      const cpuMax = getMetricValue(cpuMetric, 'max');
+      md += `| **Process CPU % (Avg / Max)** | \`${formatNumber(cpuAvg, 1)}% / ${formatNumber(cpuMax, 1)}%\` | — | ℹ️ |\n`;
+    }
+    if (handlesMetric) {
+      const handlesVal = getMetricValue(handlesMetric, 'value') !== undefined ? getMetricValue(handlesMetric, 'value') : (getMetricValue(handlesMetric, 'max') !== undefined ? getMetricValue(handlesMetric, 'max') : getMetricValue(handlesMetric, 'avg'));
+      md += `| **Active libuv Handles** | \`${Math.round(handlesVal || 0)}\` | — | ℹ️ |\n`;
+    }
+    md += `\n`;
+  }
+
+  // Continuous Historical Performance Trajectory & Creeping Regression Table
+  if (creepingAnalysis && creepingAnalysis.sampleCount > 0) {
+    md += `\n#### 📈 Historical Performance Trajectory & Creeping Regression Analysis\n\n`;
+    md += `| Historical Metric | Measured Value | Reference / SLA | Status |\n`;
+    md += `| :--- | :---: | :---: | :---: |\n`;
+    md += `| **Historical Runs Tracked** | \`${creepingAnalysis.sampleCount}\` | Circular Buffer: 30 runs | ℹ️ |\n`;
+    if (creepingAnalysis.sparkline) {
+      const minP95 = Math.min(...creepingAnalysis.p95Values).toFixed(1);
+      const maxP95 = Math.max(...creepingAnalysis.p95Values).toFixed(1);
+      md += `| **p95 Latency Sparkline** | \`${creepingAnalysis.sparkline}\` | \`min: ${minP95}ms, max: ${maxP95}ms\` | ℹ️ |\n`;
+    }
+    if (creepingAnalysis.rollingAvg !== null && creepingAnalysis.referenceAvg !== null) {
+      const sign = creepingAnalysis.delta > 0 ? '+' : '';
+      const statusIcon = creepingAnalysis.isCreepingRegression ? '🟡 WARNING' : '✅ STABLE';
+      md += `| **5-Run Rolling Average** | \`${formatNumber(creepingAnalysis.rollingAvg, 2)} ms\` | Ref (${creepingAnalysis.referenceType}): \`${formatNumber(creepingAnalysis.referenceAvg, 2)} ms\` | ${statusIcon} (\`${sign}${formatNumber(creepingAnalysis.delta, 2)}%\`) |\n`;
+    }
+    if (creepingAnalysis.isCreepingRegression) {
+      md += `\n> ⚠️ **Creeping Performance Regression Warning**: 5-run rolling average latency has degraded by **+${creepingAnalysis.delta.toFixed(2)}%** against ${creepingAnalysis.referenceType} (SLA Threshold: +10.00%). Single-run threshold has not tripped, but multi-build trend reveals gradual degradation.\n`;
+    }
+    md += `\n`;
+  }
+
   // Thresholds table
   if (thresholdRows.length > 0) {
     md += `\n#### Threshold Evaluations\n\n`;
@@ -290,6 +346,7 @@ function parseCommandLineArgs() {
   let isRegressionSimulated = false;
   let htmlPath = null;
   let cleanMarkdown = false;
+  let historyPath = null;
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
@@ -297,6 +354,10 @@ function parseCommandLineArgs() {
       baselinePath = path.resolve(arg.split('=')[1]);
     } else if (arg === '--baseline' && i + 1 < args.length) {
       baselinePath = path.resolve(args[++i]);
+    } else if (arg.startsWith('--history=')) {
+      historyPath = path.resolve(arg.split('=')[1]);
+    } else if (arg === '--history' && i + 1 < args.length) {
+      historyPath = path.resolve(args[++i]);
     } else if (arg.startsWith('--html=')) {
       htmlPath = path.resolve(arg.split('=')[1]);
     } else if (arg === '--html' && i + 1 < args.length) {
@@ -318,14 +379,18 @@ function parseCommandLineArgs() {
     htmlPath = path.resolve(__dirname, 'report.html');
   }
 
-  return { summaryJsonPath, title, baselinePath, isRegressionSimulated, htmlPath, cleanMarkdown };
+  if (!historyPath) {
+    historyPath = path.resolve(__dirname, 'perf-history.json');
+  }
+
+  return { summaryJsonPath, title, baselinePath, isRegressionSimulated, htmlPath, cleanMarkdown, historyPath };
 }
 
 function main() {
-  const { summaryJsonPath, title, baselinePath, isRegressionSimulated, htmlPath, cleanMarkdown } = parseCommandLineArgs();
+  const { summaryJsonPath, title, baselinePath, isRegressionSimulated, htmlPath, cleanMarkdown, historyPath } = parseCommandLineArgs();
 
   if (!summaryJsonPath) {
-    console.error('Usage: node report-perf-summary.js <summary-json-path> [benchmark-title] [--baseline=<path>] [--html=<path>] [--clean] [--regression-test]');
+    console.error('Usage: node report-perf-summary.js <summary-json-path> [benchmark-title] [--baseline=<path>] [--history=<path>] [--html=<path>] [--clean] [--regression-test]');
     process.exit(1);
   }
 
@@ -358,7 +423,54 @@ function main() {
     }
   }
 
-  const { md, hasThresholdFailures, hasRegression } = generateMarkdown(summaryData, title, baselineData, isRegressionSimulated);
+  // Extract core metrics for historical tracking
+  const metrics = summaryData.metrics || {};
+  const httpDuration = metrics['http_req_duration'] || metrics['http_req_duration{expected_response:true}'] || {};
+  const httpReqs = metrics['http_reqs'] || {};
+  const httpFailed = metrics['http_req_failed'] || {};
+  const p95Duration = getMetricValue(httpDuration, 'p(95)');
+  const rps = getMetricValue(httpReqs, 'rate') || 0;
+  const failRate = getMetricValue(httpFailed, 'rate') !== undefined
+    ? getMetricValue(httpFailed, 'rate') * 100
+    : (getMetricValue(httpFailed, 'value') !== undefined ? getMetricValue(httpFailed, 'value') * 100 : 0);
+
+  const elMetric = metrics['node_event_loop_lag_ms'];
+  const elP95 = elMetric ? getMetricValue(elMetric, 'p(95)') : undefined;
+  const cpuMetric = metrics['node_cpu_percent'];
+  const cpuAvg = cpuMetric ? getMetricValue(cpuMetric, 'avg') : undefined;
+
+  const testType = inferTestType(title, summaryJsonPath);
+  const currentRecord = {
+    timestamp: new Date().toISOString(),
+    commit_sha: getGitCommitSha(),
+    workflow_run_id: getWorkflowRunId(),
+    test_type: testType,
+    rps: Number(formatNumber(rps, 2)),
+    p95_latency: Number(formatNumber(p95Duration, 2)),
+    error_rate: Number(formatNumber(failRate, 2)),
+    event_loop_lag_p95: elP95 !== undefined ? Number(formatNumber(elP95, 2)) : undefined,
+    cpu_percent: cpuAvg !== undefined ? Number(formatNumber(cpuAvg, 2)) : undefined,
+  };
+
+  // Append to perf-history.json
+  const historyData = appendHistoryRecord(historyPath, currentRecord);
+  console.log(`📊 Persisted benchmark metrics to historical time-series (${historyPath}) [${historyData.history.length} builds recorded]`);
+
+  // Extract baseline p95 for creeping regression analysis if available
+  let baselineP95 = null;
+  if (baselineData) {
+    const baseMetrics = baselineData.metrics || baselineData;
+    const baseDuration = baseMetrics['http_req_duration'];
+    baselineP95 = getMetricValue(baseDuration, 'p(95)');
+  }
+
+  const creepingAnalysis = analyzeCreepingRegression(historyData.history, testType, baselineP95);
+
+  if (creepingAnalysis.isCreepingRegression) {
+    console.warn(`\n⚠️  CREEPING REGRESSION DETECTED: 5-run rolling average latency (${creepingAnalysis.rollingAvg.toFixed(2)}ms) degraded by +${creepingAnalysis.delta.toFixed(2)}% against ${creepingAnalysis.referenceType} (SLA Threshold: +10.00%).\n`);
+  }
+
+  const { md, hasThresholdFailures, hasRegression } = generateMarkdown(summaryData, title, baselineData, isRegressionSimulated, creepingAnalysis);
 
   // Print to console
   console.log(md);
@@ -369,6 +481,8 @@ function main() {
       title,
       baselineData,
       isRegressionSimulated,
+      historyData: historyData.history,
+      creepingAnalysis,
     });
     fs.writeFileSync(htmlPath, htmlContent, 'utf8');
     console.log(`✅ Saved interactive HTML performance report to ${htmlPath}`);
