@@ -365,6 +365,42 @@ jobs:
             exit $K6_INV_EXIT
           fi
 
+      - name: Run E-Commerce User Journey Benchmark
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          set +e
+          k6 run --summary-export=perf-summary-journey.json performance/scenarios/ecommerce-journey.js
+          K6_JOURNEY_EXIT=$?
+          node performance/report-perf-summary.js perf-summary-journey.json "E-Commerce User Journey Benchmark (50 VUs)" --baseline=performance/baselines/baseline-journey.json --html=performance/report-journey.html
+          if [ $K6_JOURNEY_EXIT -ne 0 ]; then
+            echo "k6 e-commerce journey benchmark breached thresholds (exit code: $K6_JOURNEY_EXIT)"
+            exit $K6_JOURNEY_EXIT
+          fi
+
+      - name: Run Authentication Burst Benchmark
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          set +e
+          k6 run --summary-export=perf-summary-auth.json performance/k6/auth-stress.js
+          K6_AUTH_EXIT=$?
+          node performance/report-perf-summary.js perf-summary-auth.json "Authentication Burst Benchmark (40 VUs)" --baseline=performance/baselines/baseline-auth.json --html=performance/report-auth.html
+          if [ $K6_AUTH_EXIT -ne 0 ]; then
+            echo "k6 auth burst benchmark breached thresholds (exit code: $K6_AUTH_EXIT)"
+            exit $K6_AUTH_EXIT
+          fi
+
+      - name: Run High-Concurrency Checkout Contention Benchmark
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          set +e
+          k6 run --summary-export=perf-summary-checkout.json performance/k6/checkout-stress.js
+          K6_CHECKOUT_EXIT=$?
+          node performance/report-perf-summary.js perf-summary-checkout.json "Checkout Contention Benchmark (100 VUs)" --baseline=performance/baselines/baseline-checkout.json --html=performance/report-checkout.html
+          if [ $K6_CHECKOUT_EXIT -ne 0 ]; then
+            echo "k6 checkout contention benchmark breached thresholds (exit code: $K6_CHECKOUT_EXIT)"
+            exit $K6_CHECKOUT_EXIT
+          fi
+
       - name: Upload Performance Summary Artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
         if: always()

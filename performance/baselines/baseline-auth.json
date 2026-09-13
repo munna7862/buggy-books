@@ -1,0 +1,36 @@
+{
+  "description": "BuggyBooks Authentication Burst & Bcrypt Saturation Golden Baseline (40 VUs)",
+  "version": "1.0.0",
+  "generated_at": "2026-09-13T12:00:00Z",
+  "environment": "CI/Linux-x64",
+  "metrics": {
+    "http_req_duration": {
+      "avg": 55.00,
+      "med": 45.00,
+      "p(90)": 140.00,
+      "p(95)": 280.00,
+      "p(99)": 450.00,
+      "max": 600.00
+    },
+    "auth_login_duration": {
+      "avg": 95.00,
+      "med": 92.00,
+      "p(90)": 150.00,
+      "p(95)": 290.00,
+      "p(99)": 480.00
+    },
+    "auth_refresh_duration": {
+      "avg": 2.50,
+      "med": 1.80,
+      "p(90)": 8.00,
+      "p(95)": 15.00,
+      "p(99)": 35.00
+    },
+    "http_req_failed": {
+      "rate": 0.00
+    },
+    "auth_error_rate": {
+      "rate": 0.00
+    }
+  }
+}

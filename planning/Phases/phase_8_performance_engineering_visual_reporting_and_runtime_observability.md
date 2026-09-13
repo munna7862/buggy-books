@@ -52,7 +52,7 @@ graph LR
      - Dedicated [baseline-inventory.json](file:///c:/BuggyBooks/buggy-books/performance/baselines/baseline-inventory.json) and fix for [ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml#L362) baseline alignment.
      - Dynamic metric discovery in [report-perf-summary.js](file:///c:/BuggyBooks/buggy-books/performance/report-perf-summary.js) removing hardcoded metric keys.
      - Report artifact publishing in [ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml) and [perf-endurance.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/perf-endurance.yml).
-   - *Status*: `[PLANNED]`
+   - *Status*: `[COMPLETED]`
 
 2. **[Sprint 8.2: Stateful E-Commerce Journeys, Auth Bursts & Checkout Concurrency](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_8_2_stateful_ecommerce_journeys_and_concurrency_stress.md)**
    - *Estimated Effort*: 5 Story Points
@@ -62,7 +62,7 @@ graph LR
      - High-concurrency checkout race condition benchmark (`performance/k6/checkout-stress.js`) validating inventory lock contention under load.
      - New golden baselines: `baseline-journey.json`, `baseline-auth.json`, and `baseline-checkout.json`.
      - NPM script bindings in `performance/package.json` for all new test suites.
-   - *Status*: `[PLANNED]`
+   - *Status*: `[COMPLETED]`
 
 3. **[Sprint 8.3: Runtime Telemetry, Event Loop Observability & Continuous Trending](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_8_3_runtime_telemetry_event_loop_and_historical_trending.md)**
    - *Estimated Effort*: 5 Story Points

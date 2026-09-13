@@ -7,6 +7,9 @@
     "test:perf": "node run-k6.js k6/catalog-load.js",
     "test:perf:smoke": "node run-k6.js k6/smoke-load.js",
     "test:perf:stress": "node run-k6.js k6/inventory-stress.js",
+    "test:perf:journey": "node run-k6.js scenarios/ecommerce-journey.js",
+    "test:perf:auth": "node run-k6.js k6/auth-stress.js",
+    "test:perf:checkout": "node run-k6.js k6/checkout-stress.js",
     "test:perf:soak": "node run-k6.js scenarios/soak-load.js",
     "test:perf:breakpoint": "node run-k6.js scenarios/breakpoint-test.js"
   }
