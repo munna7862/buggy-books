@@ -1,0 +1,39 @@
+{
+  "description": "BuggyBooks High-Concurrency Checkout Contention Golden Baseline (100 VUs)",
+  "version": "1.0.0",
+  "generated_at": "2026-09-13T12:00:00Z",
+  "environment": "CI/Linux-x64",
+  "metrics": {
+    "http_req_duration": {
+      "avg": 65.00,
+      "med": 60.00,
+      "p(90)": 140.00,
+      "p(95)": 180.00,
+      "p(99)": 280.00,
+      "max": 400.00
+    },
+    "checkout_duration": {
+      "avg": 65.00,
+      "med": 60.00,
+      "p(90)": 120.00,
+      "p(95)": 180.00,
+      "p(99)": 280.00
+    },
+    "checkout_contention_duration": {
+      "avg": 65.00,
+      "med": 60.00,
+      "p(90)": 120.00,
+      "p(95)": 180.00,
+      "p(99)": 280.00
+    },
+    "http_req_failed": {
+      "rate": 0.00
+    },
+    "checkout_overselling_count": {
+      "count": 0
+    },
+    "checkout_crashes_total": {
+      "count": 0
+    }
+  }
+}

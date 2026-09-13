@@ -1,0 +1,64 @@
+{
+  "description": "BuggyBooks End-to-End Realistic E-Commerce User Journey Golden Baseline (50 VUs)",
+  "version": "1.0.0",
+  "generated_at": "2026-09-13T12:00:00Z",
+  "environment": "CI/Linux-x64",
+  "metrics": {
+    "http_req_duration": {
+      "avg": 45.00,
+      "med": 30.00,
+      "p(90)": 120.00,
+      "p(95)": 280.00,
+      "p(99)": 480.00,
+      "max": 650.00
+    },
+    "journey_browse_duration": {
+      "avg": 8.50,
+      "med": 6.20,
+      "p(90)": 25.00,
+      "p(95)": 180.00,
+      "p(99)": 320.00
+    },
+    "journey_search_duration": {
+      "avg": 9.20,
+      "med": 6.80,
+      "p(90)": 28.00,
+      "p(95)": 190.00,
+      "p(99)": 340.00
+    },
+    "journey_detail_duration": {
+      "avg": 7.80,
+      "med": 5.50,
+      "p(90)": 22.00,
+      "p(95)": 170.00,
+      "p(99)": 300.00
+    },
+    "journey_cart_duration": {
+      "avg": 25.00,
+      "med": 15.00,
+      "p(90)": 80.00,
+      "p(95)": 220.00,
+      "p(99)": 380.00
+    },
+    "journey_checkout_duration": {
+      "avg": 75.00,
+      "med": 60.00,
+      "p(90)": 180.00,
+      "p(95)": 320.00,
+      "p(99)": 520.00
+    },
+    "journey_profile_duration": {
+      "avg": 12.00,
+      "med": 8.00,
+      "p(90)": 40.00,
+      "p(95)": 180.00,
+      "p(99)": 300.00
+    },
+    "http_req_failed": {
+      "rate": 0.00
+    },
+    "api_error_rate": {
+      "rate": 0.00
+    }
+  }
+}

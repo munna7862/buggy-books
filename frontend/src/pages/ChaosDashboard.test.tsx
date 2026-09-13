@@ -60,7 +60,7 @@ describe('ChaosDashboard Component Tests', () => {
     render(<ChaosDashboard />);
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/Checkout Failure Rate/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Checkout Failure Rate/i)).toHaveValue('0.15');
     });
 
     const slider = screen.getByLabelText(/Checkout Failure Rate/i);
@@ -74,7 +74,7 @@ describe('ChaosDashboard Component Tests', () => {
     render(<ChaosDashboard />);
 
     await waitFor(() => {
-      expect(screen.getByLabelText(/Inject A11y Violations/i)).toBeInTheDocument();
+      expect(screen.getByText('Live Engine Active')).toBeInTheDocument();
     });
 
     const a11yToggle = screen.getByLabelText(/Inject A11y Violations/i);
@@ -88,7 +88,7 @@ describe('ChaosDashboard Component Tests', () => {
     render(<ChaosDashboard />);
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Flaky Gateway/i })).toBeInTheDocument();
+      expect(screen.getByText('Live Engine Active')).toBeInTheDocument();
     });
 
     const presetBtn = screen.getByRole('button', { name: /Flaky Gateway/i });
@@ -102,7 +102,7 @@ describe('ChaosDashboard Component Tests', () => {
     render(<ChaosDashboard />);
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Apply Chaos Config/i })).toBeInTheDocument();
+      expect(screen.getByLabelText(/Checkout Failure Rate/i)).toHaveValue('0.15');
     });
 
     const applyBtn = screen.getByRole('button', { name: /Apply Chaos Config/i });
@@ -120,7 +120,7 @@ describe('ChaosDashboard Component Tests', () => {
     render(<ChaosDashboard />);
 
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /Reset Factory Defaults/i })).toBeInTheDocument();
+      expect(screen.getByText('Live Engine Active')).toBeInTheDocument();
     });
 
     const resetBtn = screen.getByRole('button', { name: /Reset Factory Defaults/i });

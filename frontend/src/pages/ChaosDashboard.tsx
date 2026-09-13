@@ -430,7 +430,7 @@ export default function ChaosDashboard() {
           id="btn-reset-chaos"
           className="chaos-btn chaos-btn-secondary"
           onClick={handleReset}
-          disabled={saving}
+          disabled={saving || loading}
         >
           🔄 Reset Factory Defaults
         </button>
@@ -440,7 +440,7 @@ export default function ChaosDashboard() {
           id="btn-save-chaos"
           className="chaos-btn chaos-btn-primary"
           onClick={handleSave}
-          disabled={saving}
+          disabled={saving || loading}
         >
           {saving ? '⏳ Synchronizing...' : '⚡ Apply Chaos Config'}
         </button>
