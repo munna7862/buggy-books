@@ -288,8 +288,6 @@ function generateHtmlReport(summaryData, options = {}) {
       </svg>
     `;
   }
-=======
->>>>>>> origin/main
 
   const overallPassed = !hasThresholdFailures && !hasRegression;
   const overallBadgeText = overallPassed ? 'PASSED' : (hasRegression ? 'REGRESSION' : 'FAILED');
@@ -798,7 +796,6 @@ function generateHtmlReport(summaryData, options = {}) {
           </tr>`).join('')}
         </tbody>
       </table>
-    </div>` : ''}
     </div>` : ''}
 
     ${thresholdRows.length > 0 ? `
