@@ -145,24 +145,17 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: |
-            backend/package-lock.json
-            frontend/package-lock.json
+          cache-dependency-path: package-lock.json
 
-      - name: Install & Build Backend
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Build Services
         run: |
-          cd backend
-          npm ci
-          npm run build
+          npm run build --workspace=buggy-books-backend
+          npm run build --workspace=frontend
         env:
           JWT_SECRET: ci-test-secret-do-not-use-in-production
-
-      - name: Install & Build Frontend
-        run: |
-          cd frontend
-          npm ci
-          npm run build
-        env:
           VITE_API_URL: http://127.0.0.1:4000/api
 
       - name: Upload Backend Dist Artifact
@@ -206,10 +199,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: |
-            frontend/package-lock.json
-            backend/package-lock.json
-            playwright-e2e/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Download Backend Dist Artifact (Local Mode)
         if: github.event.inputs.target_env != 'INTEROP'
@@ -225,20 +215,7 @@ jobs:
           name: frontend-dist
           path: frontend/dist
 
-      - name: Install Backend Production Dependencies (Local Mode)
-        if: github.event.inputs.target_env != 'INTEROP'
-        run: |
-          cd backend
-          npm ci --omit=dev
-
-      - name: Install Frontend Dependencies (Local Mode)
-        if: github.event.inputs.target_env != 'INTEROP'
-        run: |
-          cd frontend
-          npm ci
-
-      - name: Install Playwright Dependencies
-        working-directory: playwright-e2e
+      - name: Install Monorepo Dependencies
         run: npm ci
 
       - name: Get Playwright version
@@ -467,10 +444,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: |
-            frontend/package-lock.json
-            backend/package-lock.json
-            playwright-e2e/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Download Backend Dist Artifact (Local Mode)
         if: github.event.inputs.target_env != 'INTEROP'
@@ -486,20 +460,7 @@ jobs:
           name: frontend-dist
           path: frontend/dist
 
-      - name: Install Backend Production Dependencies (Local Mode)
-        if: github.event.inputs.target_env != 'INTEROP'
-        run: |
-          cd backend
-          npm ci --omit=dev
-
-      - name: Install Frontend Dependencies (Local Mode)
-        if: github.event.inputs.target_env != 'INTEROP'
-        run: |
-          cd frontend
-          npm ci
-
-      - name: Install Playwright Dependencies
-        working-directory: playwright-e2e
+      - name: Install Monorepo Dependencies
         run: npm ci
 
       - name: Get Playwright version
@@ -732,10 +693,9 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: playwright-e2e/package-lock.json
+          cache-dependency-path: package-lock.json
 
-      - name: Install Playwright Dependencies
-        working-directory: playwright-e2e
+      - name: Install Monorepo Dependencies
         run: npm ci
 
       - name: Download all Blob Reports
@@ -777,7 +737,11 @@ jobs:
       - name: Merge Monocart Reports into HTML Report
         working-directory: playwright-e2e
         run: |
-          node scripts/merge-monocart.js all-monocart reports/monocart-report/index.html
+          if [ -d "all-monocart" ] && [ "$(ls -A all-monocart 2>/dev/null)" ]; then
+            node scripts/merge-monocart.js all-monocart reports/monocart-report/index.html
+          else
+            echo "No monocart reports found to merge."
+          fi
 
       - name: Upload Consolidated Monocart HTML Report Artifact
         if: always()
