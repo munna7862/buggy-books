@@ -46,8 +46,8 @@ class OrderSummaryElement extends HTMLElement {
           color: var(--text-h, #2c3e50); 
         }
       </style>
-      <div class="summary-box">
-        <h3>Secure Order Summary</h3>
+      <div class="summary-box summary-wrapper" role="region" aria-label="Order Summary">
+        <h3 id="summary-title">Secure Order Summary</h3>
         <p>Total to pay: <span class="total-amount">$${total}</span></p>
       </div>
     `;

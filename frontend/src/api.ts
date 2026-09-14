@@ -33,20 +33,56 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 // --- CSRF Token Management ---
 let csrfToken: string | null = null;
+let pendingCsrfPromise: Promise<string> | null = null;
 
-const fetchCsrfToken = async (): Promise<string> => {
-  if (csrfToken) return csrfToken;
-  try {
-    const res = await fetch(`${BASE_URL}/csrf-token`, { credentials: 'include' });
-    if (res.ok) {
-      const data = (await res.json()) as { csrfToken?: string };
-      csrfToken = data.csrfToken || null;
-      return csrfToken || '';
+export const fetchCsrfToken = async (forceRefresh = false): Promise<string> => {
+  if (csrfToken && !forceRefresh) return csrfToken;
+  if (pendingCsrfPromise && !forceRefresh) return pendingCsrfPromise;
+
+  pendingCsrfPromise = (async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/csrf-token`, { credentials: 'include' });
+      if (res.ok) {
+        const data = (await res.json()) as { csrfToken?: string };
+        csrfToken = data.csrfToken || null;
+        return csrfToken || '';
+      }
+    } catch (err) {
+      console.error('Failed to fetch CSRF token:', err);
+    } finally {
+      pendingCsrfPromise = null;
     }
-  } catch (err) {
-    console.error('Failed to fetch CSRF token:', err);
+    return '';
+  })();
+
+  return pendingCsrfPromise;
+};
+
+export const clearCsrfToken = (): void => {
+  csrfToken = null;
+  pendingCsrfPromise = null;
+};
+
+// --- Unauthorized / Session Expiry Management ---
+export type UnauthorizedHandler = () => void;
+let unauthorizedHandler: UnauthorizedHandler | null = null;
+
+export const setUnauthorizedHandler = (handler: UnauthorizedHandler | null): void => {
+  unauthorizedHandler = handler;
+};
+
+const handleUnauthorized = (): void => {
+  clearCsrfToken();
+  try {
+    localStorage.removeItem('authUser');
+  } catch {
+    // Ignore storage exceptions in test runners or sandboxed environments
   }
-  return '';
+  if (unauthorizedHandler) {
+    unauthorizedHandler();
+  } else if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+    window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+  }
 };
 
 /**
@@ -79,7 +115,7 @@ const processResponse = async <T = unknown>(res: Response): Promise<T> => {
 
 const apiRequest = async <T = unknown>(url: string, options?: RequestInit): Promise<T> => {
   const isFormData = options?.body instanceof FormData;
-  const isMutating = options?.method && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(options.method);
+  const isMutating = !!(options?.method && ['POST', 'PUT', 'DELETE', 'PATCH'].includes(options.method.toUpperCase()));
 
   // Fetch CSRF token for mutating requests (skip for auth endpoints)
   let csrfHeader: Record<string, string> = {};
@@ -102,12 +138,49 @@ const apiRequest = async <T = unknown>(url: string, options?: RequestInit): Prom
 
   const res = await fetch(url, mergedOptions);
 
+  // Self-Healing CSRF Lifecycle:
+  // If a mutating request fails with HTTP 403 and the error mentions CSRF token mismatch,
+  // invalidate csrfToken = null, fetch a new token via /csrf-token, and retry once before throwing.
+  if (res.status === 403 && isMutating) {
+    let isCsrfMismatch = false;
+    try {
+      const cloned = res.clone();
+      const contentType = cloned.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        const bodyJson = (await cloned.json()) as Record<string, unknown>;
+        const bodyStr = JSON.stringify(bodyJson).toLowerCase();
+        if (bodyStr.includes('csrf')) {
+          isCsrfMismatch = true;
+        }
+      } else {
+        const bodyText = (await cloned.text()).toLowerCase();
+        if (bodyText.includes('csrf')) {
+          isCsrfMismatch = true;
+        }
+      }
+    } catch {
+      // Ignore cloning errors
+    }
+
+    if (isCsrfMismatch) {
+      clearCsrfToken();
+      const freshToken = await fetchCsrfToken(true);
+      const retryOptions: RequestInit = {
+        ...mergedOptions,
+        headers: {
+          ...mergedOptions.headers,
+          ...(freshToken ? { 'x-csrf-token': freshToken } : {})
+        }
+      };
+      const retryRes = await fetch(url, retryOptions);
+      return processResponse<T>(retryRes);
+    }
+  }
+
   if (res.status === 401 && !url.includes('/login') && !url.includes('/register')) {
-    // If the refresh request itself fails with 401/403, redirect to login
+    // If the refresh request itself fails with 401/403, notify unauthorized
     if (url.includes('/auth/refresh')) {
-      csrfToken = null;
-      localStorage.removeItem('authUser');
-      window.location.href = '/login';
+      handleUnauthorized();
       return undefined as unknown as T;
     }
 
@@ -120,12 +193,11 @@ const apiRequest = async <T = unknown>(url: string, options?: RequestInit): Prom
       });
 
       if (refreshRes.ok) {
-        csrfToken = null; // Clear cached token for the refreshed session
+        clearCsrfToken(); // Clear cached token for the refreshed session
         // Retry original request
         const retryRes = await fetch(url, mergedOptions);
         if (retryRes.status === 401) {
-          localStorage.removeItem('authUser');
-          window.location.href = '/login';
+          handleUnauthorized();
           return undefined as unknown as T;
         }
         return processResponse<T>(retryRes);
@@ -134,9 +206,7 @@ const apiRequest = async <T = unknown>(url: string, options?: RequestInit): Prom
       console.error('Silent token refresh failed:', err);
     }
 
-    csrfToken = null;
-    localStorage.removeItem('authUser');
-    window.location.href = '/login';
+    handleUnauthorized();
     return undefined as unknown as T;
   }
 
@@ -144,8 +214,11 @@ const apiRequest = async <T = unknown>(url: string, options?: RequestInit): Prom
 };
 
 export const api = {
+  onUnauthorized: setUnauthorizedHandler,
+  fetchCsrfToken,
+  clearCsrfToken,
   login: async (username: string, password: string): Promise<AuthResponse> => {
-    csrfToken = null;
+    clearCsrfToken();
     return apiRequest<AuthResponse>(`${BASE_URL}/login`, {
       method: 'POST',
       body: JSON.stringify({ username, password }),
@@ -153,7 +226,7 @@ export const api = {
   },
 
   register: async (username: string, password: string, fullName?: string): Promise<AuthResponse> => {
-    csrfToken = null;
+    clearCsrfToken();
     return apiRequest<AuthResponse>(`${BASE_URL}/register`, {
       method: 'POST',
       body: JSON.stringify({ username, password, fullName }),
@@ -161,7 +234,7 @@ export const api = {
   },
 
   logout: async (): Promise<MessageResponse> => {
-    csrfToken = null;
+    clearCsrfToken();
     return apiRequest<MessageResponse>(`${BASE_URL}/logout`, { method: 'POST' });
   },
 
