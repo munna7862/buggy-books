@@ -81,5 +81,5 @@ graph LR
 - [x] `auth-state.json` is untracked and absent from git history.
 - [x] Backend storage tests pass without Windows `EPERM`/`EBUSY` errors under 50 concurrent writes.
 - [x] Security scan confirms unauthorized CORS requests from `https://attacker.onrender.com` are blocked.
-- [ ] Frontend tests execute with MSW without unhandled route redirects or global fetch mock conflicts.
-- [x] All 12 backend test suites (91 tests) and 10 frontend test suites (32 tests) pass with 100% green status.
+- [x] Frontend tests execute with MSW without unhandled route redirects or global fetch mock conflicts.
+- [x] All 12 backend test suites (91 tests) and 11 frontend test suites (38 tests) pass with 100% green status.

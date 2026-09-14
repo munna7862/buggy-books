@@ -1,50 +1,7 @@
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { server } from './mocks/server';
 
-// Mock global fetch to handle ChaosProvider's configuration polling and Catalog book loading cleanly in tests
-globalThis.fetch = vi.fn().mockImplementation((input: RequestInfo | URL) => {
-  const url = typeof input === 'string' ? input : input instanceof URL ? input.toString() : (input as Request)?.url || '';
-  if (url.includes('/test/config')) {
-    const configData = {
-      checkoutFailureRate: 0.15,
-      inventoryDelayMs: 0,
-      jwtExpirySeconds: 900,
-      websocketDropRate: 0,
-      uploadFailureRate: 0,
-      injectA11yViolations: false,
-      visualChaos: false,
-      inventoryLockingRate: 0,
-    };
-    return Promise.resolve(
-      new Response(JSON.stringify(configData), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      })
-    );
-  }
-  if (url.includes('/books')) {
-    const booksData = {
-      books: [
-        { id: '1', title: 'Test Book 1', author: 'Author 1', price: 9.99, image: 'https://example.com/test-book.jpg' }
-      ],
-      total: 1,
-      page: 1,
-      totalPages: 1
-    };
-    return Promise.resolve(
-      new Response(JSON.stringify(booksData), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      })
-    );
-  }
-  if (url.includes('/csrf-token')) {
-    return Promise.resolve(
-      new Response(JSON.stringify({ csrfToken: 'mock-csrf-token' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      })
-    );
-  }
-  return Promise.reject(new Error(`Unhandled fetch request in test: ${url}`));
-});
+// Boot MSW request interception for all component and hook tests
+beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());

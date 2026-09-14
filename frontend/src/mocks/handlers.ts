@@ -146,6 +146,32 @@ export const handlers = [
   }),
 
   // -------------------------------------------------------------------------
+  // CSRF Protection
+  // -------------------------------------------------------------------------
+  http.get(`${BASE}/csrf-token`, () => {
+    return HttpResponse.json({ csrfToken: "mock-csrf-token" });
+  }),
+
+  // -------------------------------------------------------------------------
+  // Profile & User Info
+  // -------------------------------------------------------------------------
+  http.get(`${BASE}/profile`, () => {
+    return HttpResponse.json({
+      username: "testuser",
+      fullName: "Test User",
+      avatarUrl: null,
+    });
+  }),
+
+  http.post(`${BASE}/profile/upload`, () => {
+    return HttpResponse.json({
+      success: true,
+      message: "Avatar uploaded successfully",
+      avatarUrl: "/uploads/mock-avatar.png",
+    });
+  }),
+
+  // -------------------------------------------------------------------------
   // Chaos / Test configuration
   // -------------------------------------------------------------------------
   http.get(`${BASE}/test/config`, () => {
@@ -170,3 +196,4 @@ export const handlers = [
     return HttpResponse.json({ success: true, message: "Test state reset successfully" });
   }),
 ];
+

@@ -8,9 +8,6 @@ import Checkout from '../pages/Checkout';
 import { AuthProvider } from '../AuthContext';
 import { ChaosProvider } from '../ChaosContext';
 
-beforeAll(() => server.listen({ onUnhandledRequest: 'bypass' }));
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
 
 describe('MSW API Mocking Test Suite', () => {
 

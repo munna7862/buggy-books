@@ -28,15 +28,15 @@
   *So that* requests do not fail with unexpected 403 Forbidden errors and token expiration does not abruptly crash the SPA or Vitest tests.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] In [frontend/src/api.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/api.ts#L35-L50):
+  - [x] In [frontend/src/api.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/api.ts#L35-L50):
     - Replace static global `csrfToken` with dynamic lifecycle handling.
     - If a mutating request fails with HTTP 403 and the error mentions CSRF token mismatch, invalidate `csrfToken = null`, fetch a new token via `/csrf-token`, and retry the request once before throwing.
-  - [ ] In [frontend/src/api.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/api.ts#L110,L128,L139):
+  - [x] In [frontend/src/api.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/api.ts#L110,L128,L139):
     - Remove hardcoded `window.location.href = '/login'`.
     - Provide an `onUnauthorized` callback hook or event listener registered by [AuthContext.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/AuthContext.tsx) to execute smooth client-side navigation (`navigate('/login')`) without wiping browser memory or breaking Vitest test runners.
 - **Acceptance Criteria**:
-  - [ ] A simulated 403 CSRF token mismatch automatically triggers a token refresh and succeeds on the retry attempt.
-  - [ ] An unauthenticated 401 response invokes the `AuthContext` navigation handler instead of triggering a full-page browser reload.
+  - [x] A simulated 403 CSRF token mismatch automatically triggers a token refresh and succeeds on the retry attempt.
+  - [x] An unauthenticated 401 response invokes the `AuthContext` navigation handler instead of triggering a full-page browser reload.
 
 ---
 
@@ -47,13 +47,13 @@
   *So that* test mocking is consistent, isolated, and doesn't rely on brittle string-matching `globalThis.fetch` overrides.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Review [setupTests.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/setupTests.ts#L5-L50) and deprecate the crude `globalThis.fetch = vi.fn().mockImplementation(...)` block.
-  - [ ] Expand [frontend/src/mocks/handlers.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/mocks/handlers.ts) with default handlers for `/api/test/config`, `/api/books`, `/api/csrf-token`, and `/api/cart`.
-  - [ ] Update `setupTests.ts` to boot MSW (`server.listen()`) before all tests, reset handlers after each test (`server.resetHandlers()`), and close the server on teardown.
-  - [ ] Verify all 10 frontend test suites in `frontend/src/` execute against MSW cleanly.
+  - [x] Review [setupTests.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/setupTests.ts#L5-L50) and deprecate the crude `globalThis.fetch = vi.fn().mockImplementation(...)` block.
+  - [x] Expand [frontend/src/mocks/handlers.ts](file:///c:/BuggyBooks/buggy-books/frontend/src/mocks/handlers.ts) with default handlers for `/api/test/config`, `/api/books`, `/api/csrf-token`, and `/api/cart`.
+  - [x] Update `setupTests.ts` to boot MSW (`server.listen()`) before all tests, reset handlers after each test (`server.resetHandlers()`), and close the server on teardown.
+  - [x] Verify all 10 frontend test suites in `frontend/src/` execute against MSW cleanly.
 - **Acceptance Criteria**:
-  - [ ] All 32 frontend component and hook tests pass using MSW without unhandled request warnings.
-  - [ ] Removing the `globalThis.fetch` override does not break Catalog, Cart, Checkout, Login, or Register tests.
+  - [x] All 32 frontend component and hook tests pass using MSW without unhandled request warnings.
+  - [x] Removing the `globalThis.fetch` override does not break Catalog, Cart, Checkout, Login, or Register tests.
 
 ---
 
@@ -64,37 +64,39 @@
   *So that* automated accessibility scans pass cleanly when chaos mode is disabled while preserving the shadow boundary for automation test challenges.
 - **Story Points**: 1 SP (Low)
 - **Technical Subtasks**:
-  - [ ] In [frontend/src/components/OrderSummary.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/components/OrderSummary.tsx), inspect the internal Web Component template.
-  - [ ] Add semantic landmark container attributes inside the shadow root:
+  - [x] In [frontend/src/components/OrderSummary.tsx](file:///c:/BuggyBooks/buggy-books/frontend/src/components/OrderSummary.tsx), inspect the internal Web Component template.
+  - [x] Add semantic landmark container attributes inside the shadow root:
     ```html
     <div class="summary-wrapper" role="region" aria-label="Order Summary">
       <h3 id="summary-title">Order Summary</h3>
       ...
     </div>
     ```
-  - [ ] Retain the shadow root isolation (`this.attachShadow({ mode: 'open' })`) to ensure the intentional testing challenge remains fully active for Selenium and Playwright scripts.
+  - [x] Retain the shadow root isolation (`this.attachShadow({ mode: 'open' })`) to ensure the intentional testing challenge remains fully active for Selenium and Playwright scripts.
 - **Acceptance Criteria**:
-  - [ ] Axe accessibility scan on the Checkout page passes with 0 violations when `injectA11yViolations` chaos is disabled.
-  - [ ] Shadow root encapsulation remains fully intact for test automation piercing exercises.
+  - [x] Axe accessibility scan on the Checkout page passes with 0 violations when `injectA11yViolations` chaos is disabled.
+  - [x] Shadow root encapsulation remains fully intact for test automation piercing exercises.
 
 ---
 
 ## 3. Definition of Done & Quality Gates
 
-- [ ] Mutating API requests in `api.ts` transparently recover from 403 CSRF token mismatches via automatic retry.
-- [ ] No direct assignments to `window.location.href` exist in `api.ts`; navigation is managed via `AuthContext`.
-- [ ] All frontend component tests in `frontend/` execute using MSW with zero global fetch mock collisions.
-- [ ] `<order-summary-box>` contains valid ARIA region roles inside the shadow root.
-- [ ] All 10 frontend test suites (32 tests) pass with 100% green status in Vitest.
+- [x] Mutating API requests in `api.ts` transparently recover from 403 CSRF token mismatches via automatic retry.
+- [x] No direct assignments to `window.location.href` exist in `api.ts`; navigation is managed via `AuthContext`.
+- [x] All frontend component tests in `frontend/` execute using MSW with zero global fetch mock collisions.
+- [x] `<order-summary-box>` contains valid ARIA region roles inside the shadow root.
+- [x] All 11 frontend test suites (38 tests) pass with 100% green status in Vitest.
 
 ---
 
 ## 4. Sprint Velocity & Deliverables Summary
 
-- **Sprint Status**: `[PLANNED]`
+- **Sprint Status**: `[COMPLETED]`
 - **Committed Story Points**: 5 SP
+- **Delivered Story Points**: 5 SP
 - **Primary Deliverables**:
   1. Self-healing CSRF retry lifecycle in `frontend/src/api.ts`.
-  2. Non-destructive React Router navigation callback integration.
-  3. Consolidated MSW mock architecture across all Vitest suites.
+  2. Non-destructive React Router navigation callback integration via `AuthContext.tsx` and `App.tsx`.
+  3. Consolidated MSW mock architecture across all Vitest suites in `setupTests.ts` and `handlers.ts`.
   4. Accessible ARIA landmark roles inside the Order Summary Shadow DOM.
+  5. Dedicated automated test suite in `frontend/src/__tests__/api-csrf-lifecycle.test.ts`.

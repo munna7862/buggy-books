@@ -18,7 +18,7 @@ describe('App Component', () => {
     expect(loginLink).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByText('Test Book 1')).toBeInTheDocument();
+      expect(screen.getByText('The Great Buggy Gatsby')).toBeInTheDocument();
     });
   });
 });

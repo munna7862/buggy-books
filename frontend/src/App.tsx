@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
 import Catalog from './pages/Catalog';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
@@ -19,6 +19,28 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return <Navigate to="/login" replace />;
   }
   return children;
+}
+
+function AuthNavigationBridge() {
+  const navigate = useNavigate();
+  const { setNavigateHandler } = useAuth();
+
+  useEffect(() => {
+    setNavigateHandler(navigate);
+    const handleAuthNavigate = (e: Event) => {
+      const customEvent = e as CustomEvent<{ path: string }>;
+      if (customEvent.detail?.path) {
+        navigate(customEvent.detail.path);
+      }
+    };
+    window.addEventListener('auth:navigate', handleAuthNavigate);
+    return () => {
+      setNavigateHandler(null);
+      window.removeEventListener('auth:navigate', handleAuthNavigate);
+    };
+  }, [navigate, setNavigateHandler]);
+
+  return null;
 }
 
 function Header() {
@@ -74,6 +96,7 @@ function App() {
     <AuthProvider>
       <ChaosProvider>
         <BrowserRouter>
+          <AuthNavigationBridge />
           <div className="app-container">
           <Toaster position="bottom-right" toastOptions={{
             style: {
