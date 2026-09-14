@@ -1,0 +1,16 @@
+[2026-09-15 00:05:29] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789396529799-efc5889b
+[2026-09-15 00:05:29] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-15 00:05:30] INFO: Clicking on Sign Up link
+[2026-09-15 00:05:30] INFO: Entering full name: Profile Summary User
+[2026-09-15 00:05:30] INFO: Entering username: profile_user_1789396529908_8c107e5f
+[2026-09-15 00:05:30] INFO: Entering password: Password123!
+[2026-09-15 00:05:31] INFO: Entering confirming password: Password123!
+[2026-09-15 00:05:31] INFO: Clicking on Create Account button
+[2026-09-15 00:05:31] INFO: Verifying landing on Checkout Page
+[2026-09-15 00:05:31] INFO: Checking if Checkout label is visible
+[2026-09-15 00:05:32] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-15 00:05:32] INFO: Clicking on Profile navbar link
+[2026-09-15 00:05:32] INFO: Getting profile info section text
+[2026-09-15 00:05:32] INFO: Getting profile avatar preview image src
+[2026-09-15 00:05:37] INFO: Verifying profile page renders registered full name, username, and avatar preview - Condition met (true)
+[2026-09-15 00:05:37] INFO: Cleaned up ephemeral test session: pw-w4-3-1789396529799-efc5889b

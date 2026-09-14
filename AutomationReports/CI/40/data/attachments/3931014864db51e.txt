@@ -1,3 +1,0 @@
-[2026-09-14 01:46:59] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789316219687-6i3s
-[2026-09-14 01:46:59] INFO:  Status code should be 200 or 400 for invalid parameters: String instead of number Success !! Actual and Expected Values are:: true
-[2026-09-14 01:46:59] INFO: Cleaned up ephemeral test session: pw-w3-2-1789316219687-6i3s
