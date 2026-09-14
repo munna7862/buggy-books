@@ -70,4 +70,4 @@
 - [x] New diagnostic assertion test suite passes (10/10 checks in `finalize-spec`).
 - [x] `npm run typecheck` passes with 0 errors across all monorepo workspaces.
 - [x] `npm run lint` passes with 0 errors and 0 warnings across frontend and backend.
-- [x] Definition of Done audited and signed off by Scrum Master and Product Owner.
+- [x] Pull Request raised and linked: [#93 (Sprint 10.1)](https://github.com/munna7862/buggy-books/pull/93).
