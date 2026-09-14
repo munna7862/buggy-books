@@ -55,8 +55,8 @@ graph LR
      - Repository cleanup and `.gitignore` standardization for test summaries and reports.
      - Frontend ESLint `globalIgnores` update to exclude `coverage/` files.
 
-2. **[Sprint 9.2: Backend Atomic Persistence, Concurrency Mutex & Security Hardening](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_9_2_backend_atomic_persistence_concurrency_mutex_and_security_hardening.md)**
-   - *Estimated Effort*: 5 Story Points
+2. **[Sprint 9.2: Backend Atomic Persistence, Concurrency Mutex & Security Hardening](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_9_2_backend_atomic_persistence_concurrency_mutex_and_security_hardening.md)** `[COMPLETED]`
+   - *Estimated Effort*: 5 Story Points (5 / 5 Delivered)
    - *Key Deliverables*:
      - Safe atomic file-writing utility in [storage.ts](file:///c:/BuggyBooks/buggy-books/backend/src/data/storage.ts) eliminating Windows `EPERM`/`EBUSY` exceptions.
      - Mutex-backed sequential write queue ensuring no dropped database writes under high concurrency.
@@ -79,7 +79,7 @@ graph LR
 - [x] `npm install` at root installs all 5 workspaces seamlessly across Windows, Linux, and macOS.
 - [x] `npm run lint` and `npm run typecheck` execute cleanly with 0 errors and 0 warnings across all workspaces.
 - [x] `auth-state.json` is untracked and absent from git history.
-- [ ] Backend storage tests pass without Windows `EPERM`/`EBUSY` errors under 50 concurrent writes.
-- [ ] Security scan confirms unauthorized CORS requests from `https://attacker.onrender.com` are blocked.
+- [x] Backend storage tests pass without Windows `EPERM`/`EBUSY` errors under 50 concurrent writes.
+- [x] Security scan confirms unauthorized CORS requests from `https://attacker.onrender.com` are blocked.
 - [ ] Frontend tests execute with MSW without unhandled route redirects or global fetch mock conflicts.
-- [x] All 12 backend test suites (85 tests) and 10 frontend test suites (32 tests) pass with 100% green status.
+- [x] All 12 backend test suites (91 tests) and 10 frontend test suites (32 tests) pass with 100% green status.

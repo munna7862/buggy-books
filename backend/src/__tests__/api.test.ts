@@ -294,5 +294,49 @@ describe('BuggyBooks API Integration Tests', () => {
       expect(res.body.memory).toBeDefined();
     });
   });
+
+  describe('CORS Security Hardening (TC-SEC-002)', () => {
+    it('should allow requests from verified production frontend origin with credentials', async () => {
+      const res = await request(app)
+        .get('/api/books')
+        .set('Origin', 'https://buggy-books-fe.onrender.com');
+
+      expect(res.status).toBe(200);
+      expect(res.headers['access-control-allow-origin']).toBe('https://buggy-books-fe.onrender.com');
+      expect(res.headers['access-control-allow-credentials']).toBe('true');
+    });
+
+    it('should allow requests from local development origin', async () => {
+      const res = await request(app)
+        .get('/api/books')
+        .set('Origin', 'http://localhost:5173');
+
+      expect(res.status).toBe(200);
+      expect(res.headers['access-control-allow-origin']).toBe('http://localhost:5173');
+      expect(res.headers['access-control-allow-credentials']).toBe('true');
+    });
+
+    it('should reject requests from arbitrary onrender.com subdomains with 403 Forbidden', async () => {
+      const res = await request(app)
+        .get('/api/books')
+        .set('Origin', 'https://malicious-app.onrender.com');
+
+      expect(res.status).toBe(403);
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+      expect(res.body.error).toBe('Not allowed by CORS');
+      expect(res.body.errorName).toBe('ForbiddenError');
+    });
+
+    it('should reject preflight OPTIONS requests from unauthorized origins', async () => {
+      const res = await request(app)
+        .options('/api/books')
+        .set('Origin', 'https://attacker.onrender.com')
+        .set('Access-Control-Request-Method', 'GET');
+
+      expect(res.status).toBe(403);
+      expect(res.headers['access-control-allow-origin']).toBeUndefined();
+    });
+  });
 });
+
 

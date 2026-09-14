@@ -1,4 +1,4 @@
-import { storage, sessionStorageManager, sessionStorageContext, DB_PATH } from '../data/storage';
+import { storage, sessionStorageManager, SessionStorageManager, sessionStorageContext, DB_PATH } from '../data/storage';
 import { dataStore } from '../data/dataStore';
 import { userRepository } from '../repositories/user.repository';
 import request from 'supertest';
@@ -94,6 +94,30 @@ describe('Storage Persistence & Session Sandboxing Unit Tests', () => {
       expect(finalVal).toBeDefined();
       expect(finalVal?.inventoryDelayMs).toBeGreaterThanOrEqual(1000);
     });
+
+    it('TC-PERSIST-001: should execute 50 concurrent writes with zero EPERM/EBUSY exceptions and persist latest state', async () => {
+      const concurrency = 50;
+      const writePromises = Array.from({ length: concurrency }, async (_, idx) => {
+        // Interleave asynchronous delays to exercise concurrent queue and file replacement
+        await new Promise(r => setTimeout(r, Math.random() * 10));
+        storage.set('chaosStore', {
+          ...baseChaosConfig,
+          inventoryDelayMs: 2000 + idx
+        });
+      });
+
+      await expect(Promise.all(writePromises)).resolves.not.toThrow();
+      await storage.flush();
+
+      // Read file directly from disk to verify atomic persistence
+      const fileContent = await fs.promises.readFile(DB_PATH, 'utf-8');
+      const parsed = JSON.parse(fileContent);
+      expect(parsed.chaosStore).toBeDefined();
+      expect(parsed.chaosStore.inventoryDelayMs).toBeGreaterThanOrEqual(2000);
+      expect(parsed.chaosStore.inventoryDelayMs).toBeLessThanOrEqual(2000 + concurrency);
+      // Ensure in-memory cache and persisted file are strictly synchronized
+      expect(parsed.chaosStore).toEqual(storage.get('chaosStore'));
+    });
   });
 
   describe('Session Partitioning & Multi-User Sandboxing (US-BE-301)', () => {
@@ -181,6 +205,28 @@ describe('Storage Persistence & Session Sandboxing Unit Tests', () => {
       expect(purgedCount).toBe(1);
       expect(storage.hasSession(expiredSession)).toBe(false);
       expect(storage.hasSession(activeSession)).toBe(true);
+    });
+
+    it('TC-RESIL-001: should enforce LRU session capacity bound and evict least recently used session', () => {
+      const testManager = new SessionStorageManager(30 * 60 * 1000, 3); // Max 3 sessions
+
+      testManager.getSession('sess-1');
+      testManager.getSession('sess-2');
+      testManager.getSession('sess-3');
+      expect(testManager.getActiveSessionCount()).toBe(3);
+
+      // Access sess-1 so sess-2 becomes the least recently accessed session
+      testManager.getSession('sess-1');
+
+      // Adding sess-4 should trigger LRU eviction of sess-2
+      testManager.getSession('sess-4');
+      expect(testManager.getActiveSessionCount()).toBe(3);
+      expect(testManager.hasSession('sess-2')).toBe(false);
+      expect(testManager.hasSession('sess-1')).toBe(true);
+      expect(testManager.hasSession('sess-3')).toBe(true);
+      expect(testManager.hasSession('sess-4')).toBe(true);
+
+      testManager.stopCleanup();
     });
   });
 

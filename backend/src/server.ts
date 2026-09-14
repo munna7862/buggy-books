@@ -66,28 +66,45 @@ function getRandomElement<T>(arr: T[]): T {
   return arr[Math.floor(Math.random() * arr.length)];
 }
 
-setInterval(() => {
-  const templateObj = getRandomElement(EVENT_TEMPLATES);
-  const city = getRandomElement(CITIES);
-  const book = getRandomElement(BOOKS);
-  const count = Math.floor(Math.random() * 40) + 5;
+let eventInterval: NodeJS.Timeout | null = null;
 
-  const message = templateObj.template
-    .replace('{city}', city)
-    .replace('{book}', book)
-    .replace('{count}', count.toString());
+export const startEventSimulation = (): void => {
+  if (eventInterval) return;
+  eventInterval = setInterval(() => {
+    const templateObj = getRandomElement(EVENT_TEMPLATES);
+    const city = getRandomElement(CITIES);
+    const book = getRandomElement(BOOKS);
+    const count = Math.floor(Math.random() * 40) + 5;
 
-  const eventPayload = {
-    id: `evt-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
-    type: templateObj.type,
-    message,
-    timestamp: new Date().toISOString()
-  };
+    const message = templateObj.template
+      .replace('{city}', city)
+      .replace('{book}', book)
+      .replace('{count}', count.toString());
 
-  io.emit('bookstore-event', eventPayload);
-}, 8000);
+    const eventPayload = {
+      id: `evt-${Date.now()}-${Math.random().toString(36).substr(2, 5)}`,
+      type: templateObj.type,
+      message,
+      timestamp: new Date().toISOString()
+    };
+
+    io.emit('bookstore-event', eventPayload);
+  }, 8000);
+
+  if (eventInterval && typeof eventInterval.unref === 'function') {
+    eventInterval.unref();
+  }
+};
+
+export const stopEventSimulation = (): void => {
+  if (eventInterval) {
+    clearInterval(eventInterval);
+    eventInterval = null;
+  }
+};
 
 if (process.env.NODE_ENV !== 'test') {
+  startEventSimulation();
   server.listen(PORT, () => {
     logger.info(`BuggyBooks Backend API Server running on port ${PORT}`, {
       port: PORT,

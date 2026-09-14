@@ -364,6 +364,22 @@ These test cases validate native npm workspaces orchestration across all five su
 | **TC-SEC-001** | Git Secret Hygiene & Isolated Playwright Auth State Management | Verify that authentication storage state (`auth-state.json`) containing live/expired JWTs and cookies is permanently untracked from Git. Verify `auth.util.ts` saves test session state exclusively to gitignored `playwright-e2e/.auth/user.json`, creating parent directories automatically if absent. Assert `git status` displays zero untracked or modified credential files after running authentication fixtures. | Critical | Security Audit & Auth State Isolation | `@sec` `@auth` | **Yes**<br>- Helper: `playwright-e2e/src/utils/auth.util.ts`<br>- Setup: `playwright-e2e/src/tests/auth.setup.ts`<br>- Ignore: `.gitignore` |
 | **TC-ARCH-002** | Clean Linter Execution & Test Artifact Git Exclusion | Verify that running `npm run lint` executes ESLint across workspaces and outputs 0 errors and 0 warnings. Assert that `frontend/eslint.config.js` properly ignores `coverage/` directories to prevent Istanbul/Vitest coverage files from raising unused-disable warnings. Verify `.gitignore` comprehensively excludes all ephemeral test databases (`backend/db.test.*.json`), test results, and performance test summaries (`perf-summary*.json`, `report*.html`). | High | Code Quality & Linter Hygiene | `@lint` `@dx` | **Yes**<br>- Linter: `frontend/eslint.config.js`<br>- Ignore: `.gitignore`<br>- Script: `npm run lint` |
 
+---
+
+## 14. Backend Atomic Persistence, Concurrency Mutex & Security Hardening
+
+*Sprint Source: [Sprint 9.2: Backend Atomic Persistence, Concurrency Mutex & Security Hardening](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_9_2_backend_atomic_persistence_concurrency_mutex_and_security_hardening.md)*
+
+These test cases validate atomic file persistence with Windows-safe file replacement fallbacks, serialized FIFO write queues preventing data loss under concurrency, multi-tenant CORS wildcard hardening, background timer lifecycle unreferencing, and LRU memory-bounded session caching.
+
+### **Suite: Backend Atomic Persistence, Concurrency Mutex & Security Hardening**
+| ID | Title | Description | Priority | Target Coverage | Tags | Covered |
+|:---|:---|:---|:---|:---|:---|:---|
+| **TC-PERSIST-001** | Windows-Safe Atomic File Persistence & Concurrency Mutex Queue | Verify that database file writes in `storage.ts` execute atomically using unique temporary files (`${DB_PATH}.${timestamp}.${rand}.tmp`) and atomic `rename` with automatic fallback to `copyFile` + `unlink` upon encountering Windows file locking errors (`EPERM`, `EBUSY`, `EEXIST`, `EACCES`). Verify that concurrent asynchronous writes are serialized via a FIFO write queue without dropping intermediate updates, and that 50 rapid concurrent mutations flush cleanly with zero file corruption or unhandled errors. | Critical | Backend Persistence & Storage Layer | `@persist` `@concurrency` | **Yes**<br>- Engine: `backend/src/data/storage.ts`<br>- Tests: `backend/src/__tests__/storage.test.ts` |
+| **TC-SEC-002** | Multi-Tenant CORS Origin Hardening & Hostname Restriction | Verify that CORS middleware in `backend/src/app.ts` strictly whitelists authorized frontend origins (`https://buggy-books-fe.onrender.com`, `http://localhost:*`, `http://127.0.0.1:*`, and `ALLOWED_ORIGINS` env). Assert that unauthorized wildcard subdomains on shared multi-tenant hosts (e.g. `https://attacker.onrender.com`, `https://malicious-app.onrender.com`) are rejected with CORS validation failure and no credentials/allow-origin headers are exposed. | Critical | Backend Security & CORS Boundary | `@sec` `@cors` | **Yes**<br>- Config: `backend/src/config.ts`<br>- Middleware: `backend/src/app.ts`<br>- Tests: `backend/src/__tests__/api.test.ts` |
+| **TC-RESIL-001** | Server Lifecycle Timer Unreferencing & LRU Session Storage Bounds | Verify that periodic background simulation intervals in `backend/src/server.ts` call `.unref()` and are disabled in test environments (`NODE_ENV === 'test'`) to ensure clean Jest test worker shutdown without open handle leaks. Verify that `SessionStorageManager` in `backend/src/data/storage.ts` enforces an upper bound (`MAX_SESSIONS = 1000`) and automatically purges the least-recently-accessed (LRU) sessions to prevent heap exhaustion. | High | System Resilience & Resource Hygiene | `@resilience` `@lifecycle` | **Yes**<br>- Server: `backend/src/server.ts`<br>- Storage: `backend/src/data/storage.ts`<br>- Tests: `backend/src/__tests__/storage.test.ts` |
+
+
 
 
 
