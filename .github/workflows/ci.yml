@@ -303,7 +303,7 @@ jobs:
         with:
           node-version: "20"
           cache: "npm"
-          cache-dependency-path: backend/package-lock.json
+          cache-dependency-path: package-lock.json
 
       - name: Download Backend Dist Artifact
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
@@ -311,10 +311,8 @@ jobs:
           name: backend-dist
           path: backend/dist
 
-      - name: Install Backend Production Dependencies
-        run: |
-          cd backend
-          npm ci --omit=dev
+      - name: Install Monorepo Dependencies
+        run: npm ci
 
       - name: Start Backend Server
         run: |
