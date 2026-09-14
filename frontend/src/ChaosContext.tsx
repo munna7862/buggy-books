@@ -7,7 +7,19 @@ interface ChaosContextType {
 
 const ChaosContext = createContext<ChaosContextType>({ config: {} });
 
-const BASE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const resolveBaseUrl = (): string => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+    return envUrl;
+  }
+  if (typeof window !== 'undefined' && window.location.hostname) {
+    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+    return `${protocol}//${window.location.hostname}:4000/api`;
+  }
+  return envUrl || 'http://127.0.0.1:4000/api';
+};
+
+const BASE_API_URL = resolveBaseUrl();
 
 export function ChaosProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<Partial<ChaosConfig>>({});

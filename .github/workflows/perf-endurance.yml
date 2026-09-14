@@ -73,6 +73,9 @@ jobs:
           NODE_ENV: production
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
+      - name: Snapshot Database State
+        run: cp backend/db.json backend/db.json.bak
+
       - name: Setup k6
         uses: grafana/setup-k6-action@db07bd9765aac508ef18982e52ab937fe633a065 # v1.1.0
 
@@ -99,6 +102,11 @@ jobs:
           SOAK_DURATION: ${{ github.event.inputs.soak_duration || '15m' }}
           SOAK_VUS: ${{ github.event.inputs.soak_vus || '25' }}
           BASE_URL: http://127.0.0.1:4000
+
+      - name: Restore Database State (Soak -> Breakpoint)
+        run: |
+          cp backend/db.json.bak backend/db.json
+          curl -s -X POST http://127.0.0.1:4000/api/test/reset || true
 
       - name: Run Capacity Breakpoint Saturation Test
         run: |

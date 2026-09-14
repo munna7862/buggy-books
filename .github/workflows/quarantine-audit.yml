@@ -100,22 +100,6 @@ jobs:
         working-directory: playwright-e2e
         run: npx playwright install-deps chromium
 
-      - name: Start Ephemeral Backend Server
-        run: |
-          cd backend
-          nohup node dist/server.js > ../backend-server.log 2>&1 &
-          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat ../backend-server.log && exit 1)
-        env:
-          PORT: 4000
-          NODE_ENV: production
-          JWT_SECRET: ci-test-secret-do-not-use-in-production
-
-      - name: Start Ephemeral Frontend Preview Server
-        run: |
-          cd frontend
-          nohup npx vite preview --port 5173 --host 0.0.0.0 > ../frontend-preview.log 2>&1 &
-          npx wait-on -t 30000 http://127.0.0.1:5173 || (cat ../frontend-preview.log && exit 1)
-
       - name: Run Quarantine Stability Audit Runner
         working-directory: playwright-e2e
         env:
@@ -135,12 +119,4 @@ jobs:
           path: |
             playwright-e2e/reports/quarantine-audit.md
             playwright-e2e/quarantine-results.json
-            backend-server.log
-            frontend-preview.log
           retention-days: 14
-
-      - name: Stop Ephemeral Servers
-        if: always()
-        run: |
-          pkill -f "node dist/server.js" || true
-          pkill -f "vite preview" || true

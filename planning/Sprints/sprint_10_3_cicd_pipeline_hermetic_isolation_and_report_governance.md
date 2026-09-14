@@ -28,7 +28,7 @@
   *So that* we eliminate brittle `nohup ... &` background starts, `wait-on` polls, and `pkill -f` cleanups that risk zombie processes or port conflicts.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] In [playwright.config.ts lines 64-88](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/config/playwright.config.ts#L64-L88):
+  - [x] In [playwright.config.ts lines 64-88](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/config/playwright.config.ts#L64-L88):
     - Update the `webServer` configuration to support both local dev and CI execution:
       ```typescript
       webServer: [
@@ -40,7 +40,7 @@
           reuseExistingServer: !process.env.CI,
           env: {
             PORT: '4000',
-            NODE_ENV: 'production',
+            NODE_ENV: process.env.NODE_ENV || 'development',
             JWT_SECRET: process.env.JWT_SECRET || 'ci-test-secret',
           },
         },
@@ -53,12 +53,12 @@
         },
       ],
       ```
-  - [ ] In [ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml#L512-L527) and [playwright-ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/playwright-ci.yml#L162-L177):
+  - [x] In [ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml#L512-L527) and [playwright-ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/playwright-ci.yml#L162-L177):
     - Remove manual `nohup node dist/server.js ... &`, `npx wait-on ...`, and `pkill -f "node dist/server.js"`.
     - Let `npx playwright test` automatically boot the pre-built backend and frontend servers, wait for the readiness URLs, run tests, and cleanly terminate the child processes upon completion.
 - **Acceptance Criteria**:
-  - [ ] Playwright E2E smoke tests in `ci.yml` and full suites in `playwright-ci.yml` boot and tear down servers without manual background shell commands.
-  - [ ] Zero lingering node processes remain on the runner after test completion.
+  - [x] Playwright E2E smoke tests in `ci.yml` and full suites in `playwright-ci.yml` boot and tear down servers without manual background shell commands.
+  - [x] Zero lingering node processes remain on the runner after test completion.
 
 ---
 
@@ -69,13 +69,13 @@
   *So that* high-load mutations (such as 100 VU checkout stress depleting inventory) do not corrupt subsequent benchmark suites.
 - **Story Points**: 1 SP (Low)
 - **Technical Subtasks**:
-  - [ ] In [ci.yml Stage 3B](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml#L341-L412):
+  - [x] In [ci.yml Stage 3B](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml#L341-L412):
     - Add a pre-benchmark step that snapshots `backend/db.json` to `backend/db.json.bak`.
     - Between k6 benchmark runs (`smoke`, `catalog`, `inventory`, `journey`, `auth`, `checkout`), automatically restore `backend/db.json` from `backend/db.json.bak` (or invoke `POST /api/test/reset` with dedicated session headers).
     - Ensure `perf-endurance.yml` follows the same database state snapshotting practice.
 - **Acceptance Criteria**:
-  - [ ] Running all 5 k6 benchmarks sequentially in CI preserves initial book inventory levels for every test.
-  - [ ] `inventory_duration` and `checkout_duration` metrics are evaluated against identical initial database state.
+  - [x] Running all 5 k6 benchmarks sequentially in CI preserves initial book inventory levels for every test.
+  - [x] `inventory_duration` and `checkout_duration` metrics are evaluated against identical initial database state.
 
 ---
 
@@ -86,14 +86,14 @@
   *So that* GitHub Pages report links are never broken and cold-start timeouts on Render do not cause false-positive test failures.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] In [playwright-ci.yml line 518 and lines 565-568](file:///c:/BuggyBooks/buggy-books/.github/workflows/playwright-ci.yml#L518):
+  - [x] In [playwright-ci.yml line 518 and lines 565-568](file:///c:/BuggyBooks/buggy-books/.github/workflows/playwright-ci.yml#L518):
     - Replace `${{ github.event.repository.name }}` with safe extraction from `${{ github.repository }}`:
       ```bash
       REPO_NAME="${GITHUB_REPOSITORY#*/}"
       OWNER="${GITHUB_REPOSITORY%/*}"
       ```
     - Verify that on `workflow_dispatch` and `schedule`, the generated Allure link in `$GITHUB_STEP_SUMMARY` resolves accurately.
-  - [ ] In [playwright-docker.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/playwright-docker.yml):
+  - [x] In [playwright-docker.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/playwright-docker.yml):
     - Add a pre-flight warm-up step in Job 1:
       ```bash
       echo "Pinging Render backend and frontend to wake from sleep..."
@@ -101,29 +101,30 @@
       npx wait-on -t 90000 https://buggy-books.onrender.com/api/books
       ```
     - Prevents 8 simultaneous Docker shards from timing out during Render's initial spin-up phase.
-  - [ ] In [quarantine-audit.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/quarantine-audit.yml) and [playwright.config.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/config/playwright.config.ts):
+  - [x] In [quarantine-audit.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/quarantine-audit.yml) and [playwright.config.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/config/playwright.config.ts):
     - Set `grepInvert: process.env.RUN_QUARANTINE ? undefined : /@quarantine/`.
 - **Acceptance Criteria**:
-  - [ ] Allure report URLs in Step Summary are well-formed across scheduled, push, and dispatch runs.
-  - [ ] Docker matrix shards execute against a verified, awake staging environment.
-  - [ ] Quarantine audit runs without config collision.
+  - [x] Allure report URLs in Step Summary are well-formed across scheduled, push, and dispatch runs.
+  - [x] Docker matrix shards execute against a verified, awake staging environment.
+  - [x] Quarantine audit runs without config collision.
 
 ---
 
 ## 3. Definition of Done & Quality Gates
 
-- [ ] Playwright `webServer` cleanly manages backend and frontend servers during CI smoke and regression jobs.
-- [ ] Database state is restored cleanly between each k6 performance tier in `ci.yml`.
-- [ ] Allure report deployment accurately prints GitHub Pages URL regardless of trigger event.
-- [ ] Render pre-flight warm-up prevents cold start timeout failures in `playwright-docker.yml`.
-- [ ] All GitHub Actions workflow syntax checks pass validation.
+- [x] Playwright `webServer` cleanly manages backend and frontend servers during CI smoke and regression jobs.
+- [x] Database state is restored cleanly between each k6 performance tier in `ci.yml`.
+- [x] Allure report deployment accurately prints GitHub Pages URL regardless of trigger event.
+- [x] Render pre-flight warm-up prevents cold start timeout failures in `playwright-docker.yml`.
+- [x] All GitHub Actions workflow syntax checks pass validation.
 
 ---
 
 ## 4. Sprint Velocity & Deliverables Summary
 
-- **Sprint Status**: `[PLANNED]`
+- **Sprint Status**: `[COMPLETED]`
 - **Committed Story Points**: 5 SP
+- **Completed Story Points**: 5 SP
 - **Primary Deliverables**:
   1. Playwright managed `webServer` integration in CI workflows.
   2. Database snapshotting and state isolation for performance benchmarks.

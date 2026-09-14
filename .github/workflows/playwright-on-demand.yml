@@ -822,8 +822,8 @@ jobs:
       - name: Publish On-Demand Execution Summary
         if: always()
         run: |
-          REPO_NAME="${{ github.event.repository.name }}"
-          OWNER="${{ github.repository_owner }}"
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          OWNER="${GITHUB_REPOSITORY%/*}"
           RUN_NUM="${{ github.run_number }}"
 
           echo "## 🎭 Playwright On-Demand Execution Dashboard" >> $GITHUB_STEP_SUMMARY
