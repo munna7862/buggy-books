@@ -1,0 +1,5 @@
+[2026-09-14 17:00:21] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789371021268-25gy
+[2026-09-14 17:00:21] INFO:  Verifying Set-Cookie contains access token Success !! Actual and Expected Values are:: true
+[2026-09-14 17:00:21] INFO:  Verifying Set-Cookie contains refresh token Success !! Actual and Expected Values are:: true
+[2026-09-14 17:00:21] INFO:  Verifying Set-Cookie includes HttpOnly security flag Success !! Actual and Expected Values are:: true
+[2026-09-14 17:00:21] INFO: Cleaned up ephemeral test session: pw-w4-3-1789371021268-25gy

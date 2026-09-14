@@ -1,0 +1,3 @@
+[2026-09-14 17:00:18] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789371018365-rfts
+[2026-09-14 17:00:21] INFO: Inventory report request took: 3009 ms
+[2026-09-14 17:00:21] INFO: Cleaned up ephemeral test session: pw-w3-2-1789371018365-rfts
