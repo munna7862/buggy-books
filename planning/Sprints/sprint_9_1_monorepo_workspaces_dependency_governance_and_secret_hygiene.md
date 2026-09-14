@@ -28,7 +28,7 @@
   *So that* dependencies install deterministically in a single step and scripts run reliably without fragile OS-dependent `cd ... &&` chaining.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Update root [package.json](file:///c:/BuggyBooks/buggy-books/package.json) to declare `workspaces`:
+  - [x] Update root [package.json](file:///c:/BuggyBooks/buggy-books/package.json) to declare `workspaces`:
     ```json
     "workspaces": [
       "backend",
@@ -38,20 +38,20 @@
       "shared"
     ]
     ```
-  - [ ] Add `"buggy-books"` workspace reference to `shared/types` if needed for clean monorepo symlinking.
-  - [ ] Replace brittle `cd dir && npm ...` scripts in root `package.json` with standard workspace commands:
-    - `"dev:backend": "npm run dev --workspace=backend"`
+  - [x] Add `"buggy-books"` workspace reference to `shared/types` if needed for clean monorepo symlinking.
+  - [x] Replace brittle `cd dir && npm ...` scripts in root `package.json` with standard workspace commands:
+    - `"dev:backend": "npm run dev --workspace=buggy-books-backend"`
     - `"dev:frontend": "npm run dev --workspace=frontend"`
-    - `"build": "npm run build --workspaces --if-present"`
-    - `"typecheck": "concurrently \"npm run build --workspace=backend\" \"npm run build --workspace=frontend\" \"npx tsc --noEmit --prefix playwright-e2e\""`
-    - `"test:unit": "concurrently \"npm test --workspace=backend\" \"npm test --workspace=frontend\""`
-    - `"test:e2e": "npm test --workspace=playwright-e2e"`
+    - `"build": "npm run build --workspace=buggy-books-backend && npm run build --workspace=frontend"`
+    - `"typecheck": "concurrently \"npm run build --workspace=buggy-books-backend\" \"npm run build --workspace=frontend\" \"npm run typecheck --workspace=automationframeworks\""`
+    - `"test:unit": "concurrently \"npm run test:backend\" \"npm run test:frontend\""`
+    - `"test:e2e": "npm test --workspace=automationframeworks"`
     - `"install:all": "npm install"`
-  - [ ] Update [performance/package.json](file:///c:/BuggyBooks/buggy-books/performance/package.json) to be included in the workspace ecosystem.
+  - [x] Update [performance/package.json](file:///c:/BuggyBooks/buggy-books/performance/package.json) to be included in the workspace ecosystem.
 - **Acceptance Criteria**:
-  - [ ] Running `npm install` at repository root installs all workspace dependencies without error on both Windows and Linux.
-  - [ ] Running `npm run dev:backend` or `npm run dev:frontend` works from any working directory.
-  - [ ] No scripts in root `package.json` rely on raw shell `cd` commands.
+  - [x] Running `npm install` at repository root installs all workspace dependencies without error on both Windows and Linux.
+  - [x] Running `npm run dev:backend` or `npm run dev:frontend` works from any working directory.
+  - [x] No scripts in root `package.json` rely on raw shell `cd` commands.
 
 ---
 
@@ -62,14 +62,14 @@
   *So that* sensitive test tokens are never exposed or committed into public source control.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Untrack [auth-state.json](file:///c:/BuggyBooks/buggy-books/auth-state.json) from Git index: `git rm --cached auth-state.json`.
-  - [ ] Refactor [auth.util.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/utils/auth.util.ts):
+  - [x] Untrack [auth-state.json](file:///c:/BuggyBooks/buggy-books/auth-state.json) from Git index: `git rm --cached auth-state.json`.
+  - [x] Refactor [auth.util.ts](file:///c:/BuggyBooks/buggy-books/playwright-e2e/src/utils/auth.util.ts):
     - Update `DEFAULT_AUTH_STATE_FILE` to point strictly to `playwright-e2e/.auth/user.json` instead of monorepo root.
     - Ensure directory creation (`fs.mkdirSync(dir, { recursive: true })`) occurs automatically before writes.
-  - [ ] Update root [.gitignore](file:///c:/BuggyBooks/buggy-books/.gitignore) to ensure `auth-state.json`, `**/auth-state*.json`, and `.auth/` are thoroughly ignored across all directories.
+  - [x] Update root [.gitignore](file:///c:/BuggyBooks/buggy-books/.gitignore) to ensure `auth-state.json`, `**/auth-state*.json`, and `.auth/` are thoroughly ignored across all directories.
 - **Acceptance Criteria**:
-  - [ ] `git status` confirms `auth-state.json` is no longer tracked by Git.
-  - [ ] Running Playwright authentication setup writes state to `playwright-e2e/.auth/user.json` and does not generate unversioned files in the repository root.
+  - [x] `git status` confirms `auth-state.json` is no longer tracked by Git.
+  - [x] Running Playwright authentication setup writes state to `playwright-e2e/.auth/user.json` and does not generate unversioned files in the repository root.
 
 ---
 
@@ -80,34 +80,36 @@
   *So that* `npm run lint` and `git status` remain completely clean after running test suites.
 - **Story Points**: 1 SP (Low)
 - **Technical Subtasks**:
-  - [ ] Update [frontend/eslint.config.js](file:///c:/BuggyBooks/buggy-books/frontend/eslint.config.js#L9) to add `coverage` to `globalIgnores`:
+  - [x] Update [frontend/eslint.config.js](file:///c:/BuggyBooks/buggy-books/frontend/eslint.config.js#L9) to add `coverage` to `globalIgnores`:
     ```javascript
     globalIgnores(['dist', 'coverage', 'node_modules'])
     ```
-  - [ ] Add `.gitignore` rules for `backend/db.test.*.json` and `backend/test-results.json`.
-  - [ ] Standardize performance test scripts in [performance/run-k6.js](file:///c:/BuggyBooks/buggy-books/performance/run-k6.js) to store generated JSON summaries and HTML reports inside `performance/reports/`.
-  - [ ] Verify `npm run lint` passes with 0 errors and 0 warnings.
+  - [x] Add `.gitignore` rules for `backend/db.test.*.json` and `backend/test-results.json`.
+  - [x] Standardize performance test scripts in [performance/run-k6.js](file:///c:/BuggyBooks/buggy-books/performance/run-k6.js) to store generated JSON summaries and HTML reports inside `performance/reports/`.
+  - [x] Verify `npm run lint` passes with 0 errors and 0 warnings.
 - **Acceptance Criteria**:
-  - [ ] Running `npm run lint` across frontend and backend produces 0 warnings (no unused eslint-disable directives on coverage files).
-  - [ ] Running local unit and performance tests leaves git working tree clean.
+  - [x] Running `npm run lint` across frontend and backend produces 0 warnings (no unused eslint-disable directives on coverage files).
+  - [x] Running local unit and performance tests leaves git working tree clean.
 
 ---
 
 ## 3. Definition of Done & Quality Gates
 
-- [ ] Root `package.json` defines valid npm workspaces covering all subprojects.
-- [ ] `npm install` runs cleanly without manual per-folder installs.
-- [ ] `auth-state.json` is purged from Git tracking.
-- [ ] `auth.util.ts` writes exclusively to `playwright-e2e/.auth/user.json`.
-- [ ] `npm run lint` executes cleanly with zero errors and zero warnings across all workspaces.
-- [ ] All automated unit tests in backend and frontend continue to pass with 100% green status.
+- [x] Root `package.json` defines valid npm workspaces covering all subprojects.
+- [x] `npm install` runs cleanly without manual per-folder installs.
+- [x] `auth-state.json` is purged from Git tracking.
+- [x] `auth.util.ts` writes exclusively to `playwright-e2e/.auth/user.json`.
+- [x] `npm run lint` executes cleanly with zero errors and zero warnings across all workspaces.
+- [x] All automated unit tests in backend and frontend continue to pass with 100% green status.
+- [x] Pull Request raised and linked: [#89](https://github.com/munna7862/buggy-books/pull/89).
 
 ---
 
 ## 4. Sprint Velocity & Deliverables Summary
 
-- **Sprint Status**: `[PLANNED]`
-- **Committed Story Points**: 5 SP
+- **Sprint Status**: `[COMPLETED]`
+- **Committed Story Points**: 5 SP (5 / 5 Delivered)
+- **Pull Request**: [#89](https://github.com/munna7862/buggy-books/pull/89)
 - **Primary Deliverables**:
   1. Monorepo npm workspaces configuration in `package.json`.
   2. Git secret purge of `auth-state.json` and `auth.util.ts` path correction.

@@ -57,6 +57,8 @@ Options:
   } else {
     // Default paths: check root workspace first
     const possiblePaths = [
+      path.resolve(__dirname, '../.auth/user.json'),
+      path.resolve(__dirname, '../../.auth/user.json'),
       path.resolve(__dirname, '../../auth-state.json'),
       path.resolve(__dirname, '../auth-state.json'),
       path.resolve(__dirname, 'auth-state.json')

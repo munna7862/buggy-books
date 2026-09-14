@@ -45,8 +45,9 @@ graph LR
 
 ### Sprint Breakdown
 
-1. **[Sprint 9.1: Monorepo Workspaces, Dependency Governance & Secret Hygiene](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_9_1_monorepo_workspaces_dependency_governance_and_secret_hygiene.md)**
-   - *Estimated Effort*: 5 Story Points
+1. **[Sprint 9.1: Monorepo Workspaces, Dependency Governance & Secret Hygiene](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_9_1_monorepo_workspaces_dependency_governance_and_secret_hygiene.md)** `[COMPLETED - PR #89]`
+   - *Estimated Effort*: 5 Story Points (5 / 5 Delivered)
+   - *Pull Request*: [#89](https://github.com/munna7862/buggy-books/pull/89)
    - *Key Deliverables*:
      - Root `package.json` converted to native npm workspaces encompassing all 5 packages.
      - Deprecation of fragile chained `cd` commands in favor of standard workspace scripts.
@@ -75,10 +76,10 @@ graph LR
 
 ## 4. Definition of Done for Phase 9
 
-- [ ] `npm install` at root installs all 5 workspaces seamlessly across Windows, Linux, and macOS.
-- [ ] `npm run lint` and `npm run typecheck` execute cleanly with 0 errors and 0 warnings across all workspaces.
-- [ ] `auth-state.json` is untracked and absent from git history.
+- [x] `npm install` at root installs all 5 workspaces seamlessly across Windows, Linux, and macOS.
+- [x] `npm run lint` and `npm run typecheck` execute cleanly with 0 errors and 0 warnings across all workspaces.
+- [x] `auth-state.json` is untracked and absent from git history.
 - [ ] Backend storage tests pass without Windows `EPERM`/`EBUSY` errors under 50 concurrent writes.
 - [ ] Security scan confirms unauthorized CORS requests from `https://attacker.onrender.com` are blocked.
 - [ ] Frontend tests execute with MSW without unhandled route redirects or global fetch mock conflicts.
-- [ ] All 12 backend test suites (85 tests) and 10 frontend test suites (32 tests) pass with 100% green status.
+- [x] All 12 backend test suites (85 tests) and 10 frontend test suites (32 tests) pass with 100% green status.

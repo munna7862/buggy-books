@@ -34,13 +34,22 @@ test-results.json
 *.log
 **/server.log
 
-# Performance test summaries
+# Performance test summaries & reports
 perf-summary*.json
+**/perf-summary*.json
 performance/k6-summary*.md
 performance/report*.html
 report*.html
+**/report*.html
 
 # Playwright auth state & reports
 .auth/
+**/.auth/
+auth-state.json
+**/auth-state*.json
 **/playwright-report/
 **/test-results/
+**/blob-report/
+**/allure-results/
+**/allure-report/
+

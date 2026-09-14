@@ -1,0 +1,7 @@
+{
+  "name": "@buggybooks/types",
+  "version": "1.0.0",
+  "private": true,
+  "main": "types/index.d.ts",
+  "types": "types/index.d.ts"
+}
