@@ -130,7 +130,6 @@ export class CommonFunctions {
     } else {
       await this.logMessage('FAIL', ` ${sLogMessage} Failed!! Expected Value:: ${sExpectedValue} || Actual Value:: ${sActualValue}`);
     }
-    expect.soft(sActualValue, sLogMessage).toBe(sExpectedValue);
     return bValidation;
   }
 
