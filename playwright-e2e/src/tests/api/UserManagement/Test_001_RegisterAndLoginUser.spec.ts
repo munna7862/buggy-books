@@ -1,5 +1,4 @@
-import { test, expect } from '../../../core/base/base.fixture';
-import type { APIRequestContext } from '@playwright/test';
+import { test, expect, type APIRequestContext } from '@playwright/test';
 import { envConfig } from '../../../config/env.config';
 import { CommonFunctions } from '../../../utils/common.util';
 import testData from '../../../test-data/api/UserManagement/Test_001_RegisterAndLoginUser.json';
@@ -76,7 +75,7 @@ function buildLoginSecurityPayload(template: any): LoginPayload {
   };
 }
 
-async function registerUser(request: APIRequestContext, payload: RegisterPayload, logMessage: string) {
+async function registerUser(request: APIRequestContext, payload: RegisterPayload, _logMessage: string) {
   const response = await request.post('/api/register', {
     data: payload,
     headers: { 'Content-Type': 'application/json' },
@@ -85,7 +84,7 @@ async function registerUser(request: APIRequestContext, payload: RegisterPayload
   return { status: response.status(), data };
 }
 
-async function loginUser(request: APIRequestContext, payload: LoginPayload, logMessage: string) {
+async function loginUser(request: APIRequestContext, payload: LoginPayload, _logMessage: string) {
   const response = await request.post('/api/login', {
     data: payload,
     headers: { 'Content-Type': 'application/json' },

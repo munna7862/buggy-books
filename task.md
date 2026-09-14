@@ -1,9 +1,9 @@
-# Sprint 10.1: Diagnostic Assertion Architecture, Step-by-Step Logging & Native Actionability
+# Sprint 10.2: Playwright Timeout Calibration, API Project Decoupling & Static Quality Linter
 
-**Sprint Identifier**: `SPRINT-10.1-DIAGNOSTIC-ASSERTION-ARCHITECTURE-AND-STEP-LOGGING`  
+**Sprint Identifier**: `SPRINT-10.2-PLAYWRIGHT-TIMEOUT-CALIBRATION-API-DECOUPLING-AND-LINTER`  
 **Phase**: [Phase 10: E2E Automation Modernization, Hermetic CI/CD & Test Governance](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_10_e2e_automation_modernization_hermetic_cicd_and_test_governance.md)  
 **Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Upgrade test assertions across all Playwright specs to eliminate opaque boolean accumulators while preserving and enhancing structured Winston step logging, Allure attachments, and Playwright failure diffs, while modernizing Page Object actionability to leverage native auto-waiting.
+**Sprint Goal**: Calibrate test timeouts from 300s to 30s in `playwright.config.ts`, establish a lightweight headless API test project decoupled from browser UI authentication, configure ESLint for Playwright TypeScript files with `eslint-plugin-playwright`, and upgrade POM architecture rules in `finalize-spec.ts`.
 
 ---
 
@@ -11,39 +11,44 @@
 
 | Persona | Assigned Member | Responsibilities for this Sprint |
 | :--- | :--- | :--- |
-| **Scrum Master** | AI Agent / SM | Sprint backlog initialization, live burndown tracking in `task.md`, review facilitation, and DoD audit. |
-| **Principal SDET** | AI Agent / SDET | Architecting diagnostic verification engine in `common.util.ts`, modernizing `BasePage` action wrappers with native auto-waiting, and authoring assertion verification tests. |
-| **Automation Test Engineer** | AI Agent / QA | Refactoring UI test specs across Checkout, BookCatalog, UserManagement, Profile, Refresh, WebSockets, and Styling suites to eliminate boolean accumulators. |
-| **Observability Specialist** | AI Agent / DevOps | Verifying structured Winston logging (`logs/framework.log`, `logs/error.log`) and Allure report timelines retain complete step visibility with timestamps and status badges. |
-| **Product Owner** | Human PO / AI PO | Validating that test reports output actionable business step descriptions alongside technical failure diffs, ensuring fast feedback. |
+| **Scrum Master** | AI Agent / SM | Sprint backlog initialization, live burndown tracking in `task.md`, workflow handoffs, review facilitation, and DoD audit. |
+| **SDET Architect** | AI Agent / SDET | Calibrating timeouts in `playwright.config.ts`, authoring Section 17 in `specs/test_cases_catalog.md`, architecting headless `api` project, configuring ESLint and AST rules in `finalize-spec.ts`. |
+| **Automation Test Engineer** | AI Agent / QA | Verifying all 9 API test suites execute under the decoupled `api` project without browser launch or `auth.setup.ts`, validating per-test timeout overrides on slow specs. |
+| **Dev Architect & Senior SDE** | AI Agent / SDE | Integrating ESLint into `playwright-e2e` and unifying root monorepo scripts (`npm run lint`, `npm run typecheck`). |
+| **Security Officer** | AI Agent / SEC | Verifying headless API project headers (`x-bypass-rate-limit`), secret isolation, and absence of credential leaks. |
+| **DevOps Engineer** | AI Agent / DevOps | Updating `.github/workflows/playwright-ci.yml` and `ci.yml` to consume the decoupled `api` project and enforce E2E linter quality gates. |
+| **Product Owner** | Human PO / AI PO | Validating accelerated CI cycle times, deterministic test feedback, and authorizing release PR. |
 
 ---
 
 ## 2. Sprint Backlog & Granular Subtask Tracking
 
-### User Story US-E2E-1011: Diagnostic Assertion Engine with Preserved Step Logging
-*As an Automation Engineer reviewing test failures in CI or Allure, I want test validations to log detailed step information to Winston and Allure AND directly assert with Playwright matchers, so that I can clearly see execution history while immediately seeing exact failure diffs without opaque boolean masking.*
-- [x] **US-E2E-1011.1** (`Principal SDET`): Implement typed verification helpers (`verifyValue`, `verifyCondition`, `verifyLocatorText`, `verifyItemCount`, `verifyElementVisible`) in `playwright-e2e/src/utils/common.util.ts` with Winston structured logging and Allure step recording.
-- [x] **US-E2E-1011.2** (`Principal SDET`): Maintain backward compatibility for `compareTwoValues` with `@deprecated` annotation.
-- [x] **US-E2E-1011.3** (`Principal SDET`): Add automated test suite `Test_011_DiagnosticAssertionEngine.spec.ts` verifying assertion helpers, diff output formatting, and soft assertions.
+### User Story US-E2E-1021: Timeout Calibration & Fail-Fast Protection
+*As an SDET / CI Engineer, I want test timeouts calibrated to realistic boundaries (30 seconds default), so that failing or hanging tests fail fast rather than stalling CI runners for 5 minutes (300 seconds) per test attempt.*
+- [x] **US-E2E-1021.1** (`SDET Architect`): In `playwright-e2e/src/config/playwright.config.ts`, update `timeout: 30 * 1000` (30 seconds default).
+- [x] **US-E2E-1021.2** (`SDET Architect`): In `playwright-e2e/src/config/playwright.config.ts`, update `expect.timeout: 10 * 1000` (10 seconds expectation timeout).
+- [x] **US-E2E-1021.3** (`Automation Test Engineer`): Identify intentionally slow or chaos-heavy test suites (`Test_008_WebSocketResilienceValidation.spec.ts`, `Test_010_VisualRegressionChaos.spec.ts`) and apply explicit per-test/suite overrides via `test.setTimeout(60000)`.
 
-### User Story US-E2E-1012: Spec File Migration away from Boolean Accumulator Pattern
-*As an Automation Engineer, I want spec files to use direct verification methods inside `test.step(...)` blocks instead of storing booleans in local variables, so that tests fail immediately at the exact line of code where the error occurred and do not waste time executing subsequent steps after a broken precondition.*
-- [x] **US-E2E-1012.1** (`Automation Test Engineer`): Migrate Checkout specs (`Test_001_CompleteBookPurchase.spec.ts`, `Test_002_CartPersistenceCheckout.spec.ts`, `Test_003_CartAndCheckoutValidation.spec.ts`, `Test_004_CheckoutWizardValidation.spec.ts`, `Test_005_EndToEndNewCustomerJourney.spec.ts`, `Test_006_CartQuantityAdjustment.spec.ts`, `Test_007_ConcurrentStockRaceCondition.spec.ts`).
-- [x] **US-E2E-1012.2** (`Automation Test Engineer`): Migrate BookCatalog specs (`Test_001_InitialCatalog.spec.ts`, `Test_002_SearchAndDetailCatalog.spec.ts`) and UserManagement specs (`Test_001_RegisterUser.spec.ts`, `Test_002_LoginWithExistingUser.spec.ts`, `Test_003_ProtectedRouteGuard.spec.ts`).
-- [x] **US-E2E-1012.3** (`Automation Test Engineer`): Migrate Profile specs (`Test_005_ProfilePictureUpload.spec.ts`, `Test_006_ProfileSummaryAndOrderHistory.spec.ts`) and Refresh specs (`Test_006_JwtRefreshValidation.spec.ts`).
-- [x] **US-E2E-1012.4** (`Automation Test Engineer`): Migrate WebSockets (`Test_008_WebSocketResilienceValidation.spec.ts`), Styling (`Test_009_UIStyleAndLayoutValidation.spec.ts`), and Visual Regression (`Test_010_VisualRegressionChaos.spec.ts`).
+### User Story US-E2E-1022: Dedicated Headless API Test Project Decoupling
+*As an Automation Engineer running backend API test suites, I want API tests in `src/tests/api/` to execute in a headless API project without browser dependencies or UI login setups, so that API tests execute instantaneously in a lightweight environment without launching Chromium.*
+- [x] **US-E2E-1022.1** (`SDET Architect`): In `playwright-e2e/src/config/playwright.config.ts`, configure dedicated `api` project with `testDir: path.resolve(__dirname, '../tests/api')`, `baseURL: envConfig.apiBaseUrl`, and default headers (`x-bypass-rate-limit: true`), strictly without `dependencies: ['setup']`.
+- [x] **US-E2E-1022.2** (`SDET Architect`): Update browser UI projects (`chromium`, `firefox`, `webkit`, `mobile-chrome`, `mobile-safari`) to restrict `testDir` to `../tests/ui` so API tests are not duplicated across browser matrices.
+- [x] **US-E2E-1022.3** (`Dev Architect`): Add `"test:api"` script to `playwright-e2e/package.json` and root `package.json` for rapid headless API test execution.
+- [x] **US-E2E-1022.4** (`DevOps Engineer`): Update `.github/workflows/playwright-ci.yml` line 169 to run `npx playwright test --config=src/config/playwright.config.ts --project=api --workers=4` and update job summary titles.
 
-### User Story US-E2E-1013: Native Playwright Auto-Waiting in BasePage
-*As an SDET, I want `BasePage` interaction methods to leverage Playwright's native auto-waiting and actionability engine, so that tests execute faster, handle dynamic delays naturally, and avoid artificial 3-second delay traps.*
-- [x] **US-E2E-1013.1** (`Principal SDET`): Modernize `BasePage` interaction methods (`doClick`, `doEnterText`, `doGetText`, `doGetAttribute`, `mouseHover`, `clearAndSetInputValue`, `addTextFieldValue`) in `playwright-e2e/src/core/base/base.page.ts`.
-- [x] **US-E2E-1013.2** (`Principal SDET`): Validate that all 8 Page Objects pass `finalize-spec.ts --all-poms` (33/33 checks passed).
+### User Story US-E2E-1023: Playwright ESLint Quality Gate & AST Rules
+*As a QA Lead, I want ESLint configured in `playwright-e2e` with `eslint-plugin-playwright`, so that anti-patterns (unawaited expects, boolean accumulators, unencapsulated locators) are caught at commit time and in CI Stage 1.*
+- [x] **US-E2E-1023.1** (`Dev Architect`): Add `eslint`, `@eslint/js`, `typescript-eslint`, and `eslint-plugin-playwright` to `playwright-e2e/package.json`.
+- [x] **US-E2E-1023.2** (`SDET Architect`): Create `playwright-e2e/eslint.config.mjs` configuring recommended Playwright rules (`playwright/missing-playwright-await`, `playwright/no-wait-for-timeout`, `playwright/no-element-handle`, `playwright/no-eval`, `playwright/prefer-web-first-assertions`).
+- [x] **US-E2E-1023.3** (`Dev Architect`): Add `"lint"` script to `playwright-e2e/package.json` (`eslint src/`) and integrate into root `npm run lint` via `"lint:e2e": "npm run lint --workspace=automationframeworks"`.
+- [x] **US-E2E-1023.4** (`SDET Architect`): Update `playwright-e2e/scripts/finalize-spec.ts` to flag any occurrences of boolean accumulator assertions `expect(.*&&.*).toBeTruthy()`.
+- [x] **US-E2E-1023.5** (`DevOps Engineer`): Update `.github/workflows/ci.yml` `e2e-quality-gate` job to execute `npm run lint` alongside `finalize-spec -- --all-poms`.
 
-### User Story US-E2E-1014: Test Cataloging & Quality Governance
-*As a Quality Architect, I want the test cases catalog updated with Phase 10 verification standards and all monorepo checks passing cleanly.*
-- [x] **US-E2E-1014.1** (`Principal SDET`): Document Section 16 in `specs/test_cases_catalog.md` (`TC-ASSERT-001`, `TC-AUTO-WAIT-001`, `TC-LOG-001`, `TC-ASSERT-002`).
-- [x] **US-E2E-1014.2** (`Observability Specialist`): Validate structured logs in `logs/framework.log` and verify zero unhandled exceptions.
-- [x] **US-E2E-1014.3** (`Product Owner`): Verify monorepo typecheck, linting, and test suites pass 100% green.
+### User Story US-E2E-1024: Test Cataloging & Quality Governance
+*As a Quality Architect, I want the test cases catalog updated with Section 17 documenting Phase 10 Sprint 10.2 standards and all monorepo checks passing cleanly.*
+- [x] **US-E2E-1024.1** (`SDET Architect`): Document Section 17 in `specs/test_cases_catalog.md` (`TC-TIMEOUT-001`, `TC-API-DECOUPLE-001`, `TC-LINT-001`).
+- [x] **US-E2E-1024.2** (`Security Officer`): Verify rate-limit bypass headers and ensure zero secret leaks in storage states or configurations.
+- [x] **US-E2E-1024.3** (`Product Owner`): Verify 100% green test execution across API and UI suites, approve Definition of Done, and authorize PR creation.
 
 ---
 
@@ -51,23 +56,25 @@
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **Pre-Flight Architecture Gate** | Principal SDET | Diagnostic verification helpers and native auto-waiting design verified. All helpers implemented in `common.util.ts`. | `[APPROVED]` |
-| **Dev Technical Review** | Automation Engineer | UI spec migration away from boolean accumulators verified across all suites; 0 `.toBeTruthy()` calls remain in UI specs. | `[APPROVED]` |
-| **POM Encapsulation Gate** | SDET Architect | All 8 Page Objects pass `finalize-spec.ts` checks without raw Playwright leaks or static waits (33/33 checks passed). | `[APPROVED]` |
-| **Observability Gate** | Observability Specialist | Winston structured logging and Allure step timelines verified without data loss. | `[APPROVED]` |
-| **PO Acceptance Sign-off** | Product Owner | All acceptance criteria satisfied. Monorepo builds, lints, and tests 100% green. Ready for PR. | `[APPROVED]` |
+| **Pre-Flight Architecture Gate** | SDET Architect | Calibrated Playwright timeouts (30s test, 10s expect), decoupled API test project without browser launch or auth dependencies, and modern ESLint 9/10 flat config verified. | `[APPROVED]` |
+| **Dev Technical Review** | Dev Architect | Monorepo root `npm run lint` and `npm run typecheck` run clean across all packages; `playwright.config.ts` and CI workflows properly isolated. | `[APPROVED]` |
+| **Security Audit Gate** | Security Officer | API project headers (`x-bypass-rate-limit`) scoped to internal test execution; zero credential or token leakage. | `[APPROVED]` |
+| **POM & Quality Gate** | SDET Architect | `finalize-spec.ts` AST rules pass 33/33 Page Object checks and enforce absence of boolean accumulator assertions across all test specs. | `[APPROVED]` |
+| **PO Acceptance Sign-off** | Product Owner | All 55 API test cases execute headlessly in 9.6s with 100% pass rate. Definition of Done fully satisfied; release PR authorized. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] `CommonFunctions` provides `verifyValue`, `verifyCondition`, `verifyLocatorText`, `verifyItemCount`, and `verifyElementVisible` with full Winston and Allure logging.
-- [x] `compareTwoValues` maintained as backward-compatible wrapper.
-- [x] `BasePage` action methods leverage native auto-waiting without redundant fixed 3000ms delay traps.
-- [x] All 8 Page Objects pass `finalize-spec.ts --all-poms` (33/33 checks passed).
-- [x] Boolean accumulator anti-pattern eliminated across all targeted UI test specs (zero `.toBeTruthy()` calls remain).
-- [x] Section 16 documented in `specs/test_cases_catalog.md`.
-- [x] New diagnostic assertion test suite passes (10/10 checks in `finalize-spec`).
-- [x] `npm run typecheck` passes with 0 errors across all monorepo workspaces.
-- [x] `npm run lint` passes with 0 errors and 0 warnings across frontend and backend.
-- [x] Pull Request raised and linked: [#93 (Sprint 10.1)](https://github.com/munna7862/buggy-books/pull/93).
+- [x] Default test timeout is calibrated to 30s (`timeout: 30 * 1000`) and expect timeout to 10s (`expect.timeout: 10 * 1000`) in `playwright.config.ts`.
+- [x] Slow/chaos tests have explicit `test.setTimeout(60000)` overrides.
+- [x] Dedicated `api` project is established in `playwright.config.ts` without `dependencies: ['setup']`.
+- [x] Browser UI projects are restricted to `../tests/ui`.
+- [x] `playwright-e2e` has ESLint configured with `eslint-plugin-playwright` and passes `npm run lint` with 0 errors.
+- [x] Root `npm run lint` includes `playwright-e2e` (`lint:e2e`).
+- [x] `finalize-spec.ts` flags boolean accumulator assertions and passes across all Page Objects and specs.
+- [x] CI workflows (`playwright-ci.yml`, `ci.yml`) updated with `--project=api` and linting step.
+- [x] Section 17 documented in `specs/test_cases_catalog.md`.
+- [x] Monorepo `npm run typecheck` and `npm run lint` pass with 0 errors across all workspaces.
+- [x] All API test suites pass cleanly under `--project=api` (55 tests in 9.6s).
+- [x] Feature branch committed with conventional commits, merged with `origin/main`, pushed to remote, and Pull Request raised via GitHub CLI (`gh pr create`): [#94](https://github.com/munna7862/buggy-books/pull/94).

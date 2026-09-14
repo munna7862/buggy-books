@@ -1,6 +1,7 @@
 import { logger, errorLogger } from '../core/logger/logger';
 import { expect, Locator } from '@playwright/test';
 import * as allure from "allure-js-commons";
+import { randomInt } from 'crypto';
 
 export class CommonFunctions {
   /**
@@ -161,7 +162,7 @@ export class CommonFunctions {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     let result = '';
     for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
+      result += characters.charAt(randomInt(0, characters.length));
     }
     return result;
   }

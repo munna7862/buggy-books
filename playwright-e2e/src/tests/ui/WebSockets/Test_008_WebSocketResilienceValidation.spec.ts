@@ -8,6 +8,7 @@ const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('WebSockets Event & Resilience Suite', () => {
+  test.setTimeout(60000); // Intentionally slow resilience / connection recovery test override
 
   test('WS_CONN_01: WebSocket State Indicator @smoke @regression', async ({ notificationCenter, commonFunctions, page }) => {
     await test.step('Navigate to home page', async () => {

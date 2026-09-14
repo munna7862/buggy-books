@@ -2,9 +2,6 @@ import { expect } from '@playwright/test';
 import * as path from 'path';
 import { test } from '../../../core/base/base.fixture';
 import { envConfig } from '../../../config/env.config';
-import { CartPage } from '../../../pages/cart.page';
-import { CheckoutPage } from '../../../pages/checkout.page';
-import { ChaosDashboardPage } from '../../../pages/chaos-dashboard.page';
 
 type ConcurrentStockRaceTestData = {
   book: {
@@ -35,15 +32,10 @@ const TestData = require(testDataPath) as ConcurrentStockRaceTestData;
 test.describe('Concurrent Stock Race Condition & Chaos Dashboard Resilience', () => {
 
   test('TC-CONC-001: Concurrent buyers competing for final stock unit (stock = 1) results in exactly one 200 OK and one 409 Conflict @smoke @regression @chaos', async ({
-    catalogPage,
-    signUpPage,
     commonFunctions,
-    page,
     apiUtil,
     chaosDashboardPage
   }) => {
-    const cartPage = new CartPage(page);
-    const checkoutPage = new CheckoutPage(page);
 
     const timestamp = Date.now();
     const userA = `racer_a_${timestamp}`;

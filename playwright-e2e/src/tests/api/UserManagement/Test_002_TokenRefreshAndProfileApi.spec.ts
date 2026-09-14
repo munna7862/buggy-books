@@ -1,4 +1,4 @@
-import { test, expect } from '../../../core/base/base.fixture';
+import { test, expect } from '@playwright/test';
 import { envConfig } from '../../../config/env.config';
 import { CommonFunctions } from '../../../utils/common.util';
 import TestData from '../../../test-data/api/UserManagement/Test_002_TokenRefreshAndProfileApi.json';
@@ -16,8 +16,6 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     const username = uniqueUsername('token_exp');
     const password = TestData.PASSWORD;
     const fullName = TestData.FULL_NAME;
-
-    let isForbiddenReturned = false;
 
     try {
       const regRes = await request.post('/api/register', {
@@ -45,28 +43,19 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
         headers: { 'Cookie': cookieHeader },
       });
 
-      isForbiddenReturned = await commonUtil.compareTwoValues(
-        protectedRes.status(),
-        403,
-        'Verifying 403 Forbidden returned for expired token'
-      );
+      await commonUtil.logMessage('INFO', 'Verifying 403 Forbidden returned for expired token');
+      expect(protectedRes.status()).toBe(403);
     } finally {
       await request.post('/api/test/config', {
         data: { jwtExpirySeconds: 900 },
       });
     }
-
-    expect(isForbiddenReturned).toBeTruthy();
   });
 
   test('API_REF_02: Refresh Token Issuance @smoke @regression', async ({ request }) => {
     const username = uniqueUsername('ref_issue');
     const password = TestData.PASSWORD;
     const fullName = TestData.FULL_NAME;
-
-    let hasAccessToken = false;
-    let hasRefreshToken = false;
-    let hasHttpOnlyFlag = false;
 
     const regRes = await request.post('/api/register', {
       data: { username, password, fullName },
@@ -81,32 +70,20 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     const setCookieHeaders = loginRes.headersArray().filter(h => h.name.toLowerCase() === 'set-cookie');
     const setCookieStr = setCookieHeaders.map(h => h.value).join('; ');
 
-    hasAccessToken = await commonUtil.compareTwoValues(
-      setCookieStr.includes('token='),
-      true,
-      'Verifying Set-Cookie contains access token'
-    );
-    hasRefreshToken = await commonUtil.compareTwoValues(
-      setCookieStr.includes('refreshToken='),
-      true,
-      'Verifying Set-Cookie contains refresh token'
-    );
-    hasHttpOnlyFlag = await commonUtil.compareTwoValues(
-      setCookieStr.toLowerCase().includes('httponly'),
-      true,
-      'Verifying Set-Cookie includes HttpOnly security flag'
-    );
+    await commonUtil.logMessage('INFO', 'Verifying Set-Cookie contains access token');
+    expect(setCookieStr.includes('token=')).toBe(true);
 
-    expect(hasAccessToken && hasRefreshToken && hasHttpOnlyFlag).toBeTruthy();
+    await commonUtil.logMessage('INFO', 'Verifying Set-Cookie contains refresh token');
+    expect(setCookieStr.includes('refreshToken=')).toBe(true);
+
+    await commonUtil.logMessage('INFO', 'Verifying Set-Cookie includes HttpOnly security flag');
+    expect(setCookieStr.toLowerCase().includes('httponly')).toBe(true);
   });
 
   test('API_REF_03: Silent Token Refresh @regression', async ({ request }) => {
     const username = uniqueUsername('silent_ref');
     const password = TestData.PASSWORD;
     const fullName = TestData.FULL_NAME;
-
-    let isRefreshOk = false;
-    let hasNewAccessToken = false;
 
     const regRes = await request.post('/api/register', {
       data: { username, password, fullName },
@@ -126,26 +103,17 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
       headers: { 'Cookie': refreshTokenHeader },
     });
 
-    isRefreshOk = await commonUtil.compareTwoValues(
-      refreshRes.status(),
-      200,
-      'Verifying POST /api/auth/refresh returns 200 OK'
-    );
+    await commonUtil.logMessage('INFO', 'Verifying POST /api/auth/refresh returns 200 OK');
+    expect(refreshRes.status()).toBe(200);
 
     const refreshSetCookieHeaders = refreshRes.headersArray().filter(h => h.name.toLowerCase() === 'set-cookie');
     const refreshSetCookieStr = refreshSetCookieHeaders.map(h => h.value).join('; ');
-    hasNewAccessToken = await commonUtil.compareTwoValues(
-      refreshSetCookieStr.includes('token='),
-      true,
-      'Verifying new access token issued in Set-Cookie'
-    );
 
-    expect(isRefreshOk && hasNewAccessToken).toBeTruthy();
+    await commonUtil.logMessage('INFO', 'Verifying new access token issued in Set-Cookie');
+    expect(refreshSetCookieStr.includes('token=')).toBe(true);
   });
 
   test('API_UPL_01: Unauthorized Session Check @regression', async ({ playwright }) => {
-    let isUnauthorized = false;
-
     const unauthContext = await playwright.request.newContext({
       baseURL: envConfig.apiBaseUrl,
       storageState: { cookies: [], origins: [] },
@@ -165,13 +133,8 @@ test.describe('Token Refresh and Profile Upload API Suite', () => {
     const status = uploadRes.status();
     await unauthContext.dispose();
 
-    isUnauthorized = await commonUtil.compareTwoValues(
-      status,
-      401,
-      'Verifying 401 Unauthorized for unauthenticated upload request'
-    );
-
-    expect(isUnauthorized).toBeTruthy();
+    await commonUtil.logMessage('INFO', 'Verifying 401 Unauthorized for unauthenticated upload request');
+    expect(status).toBe(401);
   });
 
 });

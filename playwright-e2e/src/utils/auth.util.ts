@@ -76,7 +76,7 @@ export class AuthUtility {
     try {
       await fs.unlink(targetPath);
       logger.info(`✅ Authentication state cleared: ${targetPath}`);
-    } catch (error) {
+    } catch {
       logger.warn(`⚠️  Authentication state file not found for deletion: ${targetPath}`);
     }
   }

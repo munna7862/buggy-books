@@ -11,11 +11,12 @@ export default defineConfig({
   testDir: path.resolve(__dirname, '../tests'),
   testMatch: ['**/*.spec.ts', '**/*.setup.ts'],
   fullyParallel: true,
-  timeout: 300 * 1000,
+  timeout: 30 * 1000,
   retries: 1,
   workers: process.env.CI ? 4 : undefined,
   grepInvert: /@quarantine/,
   expect: {
+    timeout: 10 * 1000,
     toHaveScreenshot: {
       maxDiffPixelRatio: 0.05,
       animations: 'disabled',
@@ -101,8 +102,22 @@ export default defineConfig({
       testMatch: /.*auth\.setup\.ts/,
     },
     {
+      name: 'api',
+      testDir: path.resolve(__dirname, '../tests/api'),
+      testMatch: /.*\.spec\.ts/,
+      use: {
+        baseURL: envConfig.apiBaseUrl,
+        extraHTTPHeaders: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'x-bypass-rate-limit': 'true',
+        },
+      },
+    },
+    {
       name: 'chromium',
       dependencies: ['setup'],
+      testDir: path.resolve(__dirname, '../tests/ui'),
       testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['Desktop Chrome'],
@@ -113,6 +128,7 @@ export default defineConfig({
     {
       name: 'firefox',
       dependencies: ['setup'],
+      testDir: path.resolve(__dirname, '../tests/ui'),
       testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['Desktop Firefox'],
@@ -123,6 +139,7 @@ export default defineConfig({
     {
       name: 'webkit',
       dependencies: ['setup'],
+      testDir: path.resolve(__dirname, '../tests/ui'),
       testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['Desktop Safari'],
@@ -133,6 +150,7 @@ export default defineConfig({
     {
       name: 'mobile-chrome',
       dependencies: ['setup'],
+      testDir: path.resolve(__dirname, '../tests/ui'),
       testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['Pixel 5'],
@@ -142,6 +160,7 @@ export default defineConfig({
     {
       name: 'mobile-safari',
       dependencies: ['setup'],
+      testDir: path.resolve(__dirname, '../tests/ui'),
       testMatch: /.*\.spec\.ts/,
       use: {
         ...devices['iPhone 13'],

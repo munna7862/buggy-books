@@ -166,12 +166,12 @@ jobs:
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/api-results.json
           MONOCART_REPORT_PATH: reports/monocart-api/index.html
         run: |
-          npx playwright test src/tests/api --config=src/config/playwright.config.ts --project=chromium --workers=4
+          npx playwright test --config=src/config/playwright.config.ts --project=api --workers=4
 
       - name: Generate API Quality Gate Step Summary
         if: always()
         working-directory: playwright-e2e
-        run: node scripts/generate-playwright-summary.js test-results/api-results.json "API Automation (Chromium)" "playwright-traces-api"
+        run: node scripts/generate-playwright-summary.js test-results/api-results.json "API Automation (Headless API)" "playwright-traces-api"
 
       - name: Upload Playwright Failure Traces & Screenshots
         if: failure()

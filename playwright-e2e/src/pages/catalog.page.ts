@@ -101,7 +101,7 @@ export class CatalogPage extends BasePage {
     await this.logMessage('INFO', "Verifying landing on Checkout Page");
     const checkoutLink = this.getNavigateLink("Checkout");
     await this.ensureNavElementVisible(checkoutLink);
-    let actualText = await this.doGetText(checkoutLink, "Checking if Checkout label is visible");
+    const actualText = await this.doGetText(checkoutLink, "Checking if Checkout label is visible");
     await this.logMessage('INFO', "Landed on Checkout Page successfully and Text is: " + actualText);
     return actualText?.trim() === "Checkout" ? true : false;
   }
@@ -121,7 +121,7 @@ export class CatalogPage extends BasePage {
 
   public async getBooksCount() {
     await this.eleBooksCount.first().waitFor({ state: 'visible', timeout: 60000 });
-    let count = await this.eleBooksCount.count();
+    const count = await this.eleBooksCount.count();
     await this.logMessage('INFO', "Total Books displayed in Catalog page are: " + count);
     return count;
   }

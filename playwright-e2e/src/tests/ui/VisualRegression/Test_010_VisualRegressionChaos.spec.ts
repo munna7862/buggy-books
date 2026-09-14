@@ -21,6 +21,7 @@ async function syncVisualChaos(request: any, state: boolean) {
 }
 
 test.describe('Visual Regression & Layout Chaos Suite', () => {
+  test.setTimeout(60000); // Visual snapshot baseline & chaos suite override
   // Visual baseline comparison currently calibrated for Desktop Chromium
   test.skip(({ browserName, isMobile }) => browserName !== 'chromium' || isMobile, 'Visual baseline comparison currently calibrated for Desktop Chromium');
 
