@@ -10,6 +10,7 @@ import { sessionMiddleware } from './middleware/session.middleware';
 import { logger, loggerStore } from './utils/logger';
 import { config } from './config';
 import { errorHandler } from './middleware/error.middleware';
+import { ForbiddenError } from './errors/app-error';
 
 const app = express();
 
@@ -76,16 +77,22 @@ app.use((req, res, next) => {
 // Security Headers
 app.use(helmet());
 
-// Enable CORS with restricted but flexible origins
+// Enable CORS with restricted origins (eliminates wildcard multi-tenant exploit)
 const isAllowedOrigin = (origin: string): boolean => {
   const allowed: readonly string[] = config.cors.allowedOrigins;
   if (allowed.includes(origin)) return true;
   try {
-    const hostname = new URL(origin).hostname;
-    return hostname === 'localhost' ||
-           hostname === '127.0.0.1' ||
-           hostname === 'buggy-books-fe.onrender.com' ||
-           /^([a-z0-9-]+\.)*onrender\.com$/.test(hostname);
+    const parsed = new URL(origin);
+    const hostname = parsed.hostname;
+    // Allow local development on localhost / 127.0.0.1
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return true;
+    }
+    // Strict production frontend origin check
+    if (hostname === 'buggy-books-fe.onrender.com' && parsed.protocol === 'https:') {
+      return true;
+    }
+    return false;
   } catch {
     return false;
   }
@@ -96,7 +103,7 @@ app.use(cors({
     if (!origin || isAllowedOrigin(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new ForbiddenError('Not allowed by CORS', 'CORS_ERROR'));
     }
   },
   credentials: true

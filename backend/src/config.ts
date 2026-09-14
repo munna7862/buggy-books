@@ -20,14 +20,17 @@ export const config = {
   isTest: process.env.NODE_ENV === 'test',
   
   cors: {
-    // Configurable list of allowed origins, with sensible defaults
+    // Configurable list of allowed origins, with sensible defaults and environment override
     allowedOrigins: [
       'http://localhost:5173',
       'http://127.0.0.1:5173',
-      'https://buggy-books-fe.onrender.com'
-    ],
-    // Subdomains/render domains suffix matcher
-    wildcardSuffix: '.onrender.com'
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'https://buggy-books-fe.onrender.com',
+      ...(process.env.ALLOWED_ORIGINS
+        ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim()).filter(Boolean)
+        : [])
+    ]
   },
   
   rateLimit: {

@@ -29,15 +29,20 @@ export class SessionStorageManager {
   private sessions = new Map<string, SessionRecord>();
   private cleanupInterval: NodeJS.Timeout | null = null;
   private readonly defaultTtlMs: number;
+  private readonly maxSessions: number;
 
-  constructor(ttlMs: number = 30 * 60 * 1000) {
+  constructor(ttlMs: number = 30 * 60 * 1000, maxSessions: number = 1000) {
     this.defaultTtlMs = ttlMs;
+    this.maxSessions = maxSessions;
     this.startCleanupInterval();
   }
 
   public getSession(sessionId: string, seedSupplier?: () => DbSchema): DbSchema {
     let session = this.sessions.get(sessionId);
     if (!session) {
+      if (this.sessions.size >= this.maxSessions) {
+        this.evictLeastRecentlyUsedSession();
+      }
       const initialSchema: DbSchema = seedSupplier
         ? seedSupplier()
         : {
@@ -53,8 +58,24 @@ export class SessionStorageManager {
       this.sessions.set(sessionId, session);
     } else {
       session.lastAccessedAt = Date.now();
+      // Re-insert into Map to maintain strict LRU order
+      this.sessions.delete(sessionId);
+      this.sessions.set(sessionId, session);
     }
     return session.schema;
+  }
+
+  public evictLeastRecentlyUsedSession(): string | null {
+    const oldestKey = this.sessions.keys().next().value;
+    if (oldestKey !== undefined) {
+      this.sessions.delete(oldestKey);
+      return oldestKey;
+    }
+    return null;
+  }
+
+  public getMaxSessions(): number {
+    return this.maxSessions;
   }
 
   public hasSession(sessionId: string): boolean {
@@ -90,7 +111,7 @@ export class SessionStorageManager {
     this.cleanupInterval = setInterval(() => {
       this.cleanupExpiredSessions();
     }, intervalMs);
-    if (this.cleanupInterval.unref) {
+    if (this.cleanupInterval && typeof this.cleanupInterval.unref === 'function') {
       this.cleanupInterval.unref();
     }
   }
@@ -113,7 +134,9 @@ class Storage {
   };
 
   private isWriting = false;
-  private pendingWrite: (() => void) | null = null;
+  private needsSubsequentWrite = false;
+  private writeResolvers: Array<() => void> = [];
+  private writeRejecters: Array<(err: unknown) => void> = [];
 
   constructor() {
     if (config.isTest && process.env.JEST_WORKER_ID) {
@@ -193,44 +216,104 @@ class Storage {
   }
 
   public async flush(): Promise<void> {
-    while (this.isWriting || this.pendingWrite) {
-      await new Promise(resolve => setTimeout(resolve, 10));
-    }
-  }
-
-  private enqueueSave() {
-    if (this.isWriting) {
-      if (!this.pendingWrite) {
-        this.pendingWrite = () => {
-          this.performWrite();
-        };
-      }
+    if (!this.isWriting && !this.needsSubsequentWrite) {
       return;
     }
-
-    this.performWrite();
+    return new Promise<void>((resolve, reject) => {
+      this.writeResolvers.push(resolve);
+      this.writeRejecters.push(reject);
+    });
   }
 
-  private async performWrite() {
+  private enqueueSave(): void {
+    if (this.isWriting) {
+      this.needsSubsequentWrite = true;
+      return;
+    }
+    this.processWriteQueue();
+  }
+
+  private async processWriteQueue(): Promise<void> {
     this.isWriting = true;
     try {
-      const content = JSON.stringify(this.data, null, 2);
-      const TEMP_DB_PATH = `${DB_PATH}.tmp`;
-      await fs.promises.writeFile(TEMP_DB_PATH, content, 'utf-8');
-      await fs.promises.rename(TEMP_DB_PATH, DB_PATH);
-    } catch (err: unknown) {
-      // Suppress filesystem errors during Jest worker process exit/teardown
-      const errorCode = typeof err === 'object' && err !== null && 'code' in err ? (err as { code: string }).code : undefined;
-      const isTeardownError = errorCode === 'ENOENT' || errorCode === 'EPERM' || errorCode === 'EBUSY';
-      if (!(config.isTest && isTeardownError)) {
-        console.error(`Failed to write ${filename} asynchronously`, err);
+      while (true) {
+        this.needsSubsequentWrite = false;
+        await this.performWriteWithRetry();
+        if (!this.needsSubsequentWrite) {
+          break;
+        }
       }
     } finally {
       this.isWriting = false;
-      if (this.pendingWrite) {
-        const nextWrite = this.pendingWrite;
-        this.pendingWrite = null;
-        nextWrite();
+      const resolvers = this.writeResolvers;
+      this.writeResolvers = [];
+      this.writeRejecters = [];
+      for (const resolve of resolvers) {
+        resolve();
+      }
+      if (this.needsSubsequentWrite) {
+        this.processWriteQueue();
+      }
+    }
+  }
+
+  private async performWriteWithRetry(): Promise<void> {
+    const tempFile = `${DB_PATH}.${Date.now()}.${Math.random().toString(36).substring(2, 7)}.tmp`;
+    const content = JSON.stringify(this.data, null, 2);
+
+    try {
+      await fs.promises.writeFile(tempFile, content, 'utf-8');
+
+      let attempts = 0;
+      const maxAttempts = 4; // 1 initial attempt + 3 retries with jitter
+      let lastError: unknown = null;
+
+      while (attempts < maxAttempts) {
+        try {
+          await fs.promises.rename(tempFile, DB_PATH);
+          return; // Atomic rename successful!
+        } catch (renameErr: unknown) {
+          attempts++;
+          lastError = renameErr;
+          const code = typeof renameErr === 'object' && renameErr !== null && 'code' in renameErr
+            ? (renameErr as { code: string }).code
+            : undefined;
+
+          const isLockError = code === 'EPERM' || code === 'EBUSY' || code === 'EEXIST' || code === 'EACCES';
+          if (isLockError) {
+            // Windows file locking fallback: copyFile + unlink
+            try {
+              await fs.promises.copyFile(tempFile, DB_PATH);
+              return; // Fallback copy succeeded!
+            } catch (copyErr: unknown) {
+              lastError = copyErr;
+            }
+          }
+
+          if (attempts < maxAttempts) {
+            const jitter = Math.floor(Math.random() * 25);
+            const delay = Math.pow(2, attempts) * 15 + jitter;
+            await new Promise(resolve => setTimeout(resolve, delay));
+          }
+        }
+      }
+
+      // Suppress filesystem errors during Jest worker process exit/teardown
+      const errorCode = typeof lastError === 'object' && lastError !== null && 'code' in lastError
+        ? (lastError as { code: string }).code
+        : undefined;
+      const isTeardownError = errorCode === 'ENOENT' || errorCode === 'EPERM' || errorCode === 'EBUSY';
+      if (!(config.isTest && isTeardownError)) {
+        console.error(`Failed to write ${filename} asynchronously after ${maxAttempts} attempts`, lastError);
+      }
+    } finally {
+      // Ensure tempFile is unlinked if it still exists
+      try {
+        if (fs.existsSync(tempFile)) {
+          await fs.promises.unlink(tempFile);
+        }
+      } catch {
+        // Silently ignore temp file cleanup errors during teardown
       }
     }
   }
