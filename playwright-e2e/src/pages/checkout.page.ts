@@ -250,4 +250,12 @@ export class CheckoutPage extends BasePage {
     await this.fillPaymentDetails(validCardNumber);
     await this.submitPaymentUntilConfirmation(expectedMessage, retryAttempts, 'Payment completed successfully after correcting card number.');
   }
+
+  public async getNextStepButtonMarginLeft(): Promise<string> {
+    return await this.nextStepButton.evaluate(el => getComputedStyle(el).marginLeft);
+  }
+
+  public async waitForNextStepButton(): Promise<void> {
+    await this.nextStepButton.waitFor({ state: 'visible', timeout: 30000 });
+  }
 }

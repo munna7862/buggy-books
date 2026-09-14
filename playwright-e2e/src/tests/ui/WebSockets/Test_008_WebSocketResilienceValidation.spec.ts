@@ -10,22 +10,16 @@ test.use({ storageState: { cookies: [], origins: [] } });
 test.describe('WebSockets Event & Resilience Suite', () => {
 
   test('WS_CONN_01: WebSocket State Indicator @smoke @regression', async ({ notificationCenter, commonFunctions, page }) => {
-    let isConnected = false;
-
     await test.step('Navigate to home page', async () => {
       await page.goto(envConfig.baseUrl);
     });
 
     await test.step('Verify ws-status-dot has status-connected class', async () => {
-      isConnected = await commonFunctions.compareTwoValues(await notificationCenter.isStatusConnected(), true, "Verifying WebSocket status dot has status-connected class");
+      await commonFunctions.verifyValue(await notificationCenter.isStatusConnected(), true, "Verifying WebSocket status dot has status-connected class");
     });
-
-    expect(isConnected).toBeTruthy();
   });
 
   test('WS_EVENT_01: Broadcasted Event Reception @smoke @regression', async ({ notificationCenter, commonFunctions, page }) => {
-    let isDropdownOpened = false;
-
     await test.step('Navigate to home page', async () => {
       await page.goto(envConfig.baseUrl);
     });
@@ -35,16 +29,12 @@ test.describe('WebSockets Event & Resilience Suite', () => {
     });
 
     await test.step('Verify live updates dropdown is visible', async () => {
-      isDropdownOpened = await commonFunctions.compareTwoValues(await notificationCenter.isDropdownVisible(), true, "Verifying live updates notification dropdown is visible upon clicking bell icon");
+      await commonFunctions.verifyValue(await notificationCenter.isDropdownVisible(), true, "Verifying live updates notification dropdown is visible upon clicking bell icon");
     });
-
-    expect(isDropdownOpened).toBeTruthy();
   });
 
   test('WS_EVENT_02: Hot-Toast Alert Trigger @regression', async ({ signUpPage, catalogPage, cartPage, checkoutPage, notificationCenter, commonFunctions, page }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
-
-    let isToastTriggered = false;
 
     await test.step('Register new user and navigate to catalog', async () => {
       await page.goto(envConfig.baseUrl);
@@ -69,15 +59,11 @@ test.describe('WebSockets Event & Resilience Suite', () => {
     });
 
     await test.step('Verify purchase event hot-toast alert is displayed', async () => {
-      isToastTriggered = await commonFunctions.compareTwoValues(await notificationCenter.isToastNotificationVisible(), true, "Verifying hot-toast alert banner is rendered for purchase socket event");
+      await commonFunctions.verifyValue(await notificationCenter.isToastNotificationVisible(), true, "Verifying hot-toast alert banner is rendered for purchase socket event");
     });
-
-    expect(isToastTriggered).toBeTruthy();
   });
 
   test('WS_RESIL_01: Automatic Connection Recovery @regression @chaos', async ({ notificationCenter, commonFunctions, page, request }) => {
-    let isDisconnectedOrReconnecting = false;
-
     try {
       await test.step('Inject websocketDropRate: 1.0 via chaos API config', async () => {
         const res = await request.post(CONFIG_URL, { data: TestData.ENABLE_WS_CHAOS });
@@ -86,15 +72,13 @@ test.describe('WebSockets Event & Resilience Suite', () => {
 
       await test.step('Navigate to home page and verify WebSocket state changes to disconnected or reconnecting', async () => {
         await page.goto(envConfig.baseUrl);
-        isDisconnectedOrReconnecting = await commonFunctions.compareTwoValues(await notificationCenter.isStatusDisconnectedOrReconnecting(), true, "Verifying status dot reflects disconnected or reconnecting state under socket chaos");
+        await commonFunctions.verifyValue(await notificationCenter.isStatusDisconnectedOrReconnecting(), true, "Verifying status dot reflects disconnected or reconnecting state under socket chaos");
       });
     } finally {
       await test.step('Reset websocketDropRate to 0', async () => {
         await request.post(CONFIG_URL, { data: TestData.DISABLE_WS_CHAOS });
       });
     }
-
-    expect(isDisconnectedOrReconnecting).toBeTruthy();
   });
 
 });

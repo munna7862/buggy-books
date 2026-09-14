@@ -12,11 +12,8 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Profile Picture Upload', () => {
 
-  test('UI_UPL_01: Valid Profile Picture Upload @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_UPL_01: Valid Profile Picture Upload @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
-
-    let isSrcUpdated = false;
-    let isSuccessMsgValid = false;
 
     await test.step('Register user and navigate to profile page', async () => {
       await page.goto(envConfig.baseUrl);
@@ -31,19 +28,15 @@ test.describe('Profile Picture Upload', () => {
 
     await test.step('Verify preview src updated and success message rendered', async () => {
       const src = await profilePage.getAvatarPreviewSrc();
-      isSrcUpdated = await commonFunctions.compareTwoValues(src.includes('/uploads/'), true, "Verifying avatar preview image src points to uploads path");
+      await commonFunctions.verifyCondition(src.includes('/uploads/'), "Verifying avatar preview image src points to uploads path");
 
       const successMsg = await profilePage.getSuccessMessageText();
-      isSuccessMsgValid = await commonFunctions.compareTwoValues(successMsg, TestData.SUCCESS_MSG, "Verifying avatar upload success status message");
+      await commonFunctions.verifyValue(successMsg, TestData.SUCCESS_MSG, "Verifying avatar upload success status message");
     });
-
-    expect(isSrcUpdated && isSuccessMsgValid).toBeTruthy();
   });
 
-  test('UI_UPL_02: File Extension Filter Validation @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_UPL_02: File Extension Filter Validation @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
-
-    let isErrorMsgValid = false;
 
     await test.step('Register user and navigate to profile page', async () => {
       await page.goto(envConfig.baseUrl);
@@ -58,16 +51,12 @@ test.describe('Profile Picture Upload', () => {
 
     await test.step('Verify 400 error message rendered for invalid extension', async () => {
       const errorMsg = await profilePage.getErrorMessageText();
-      isErrorMsgValid = await commonFunctions.compareTwoValues(errorMsg.includes(TestData.INVALID_EXT_ERR), true, "Verifying file extension filter 400 error message");
+      await commonFunctions.verifyCondition(errorMsg.includes(TestData.INVALID_EXT_ERR), "Verifying file extension filter 400 error message");
     });
-
-    expect(isErrorMsgValid).toBeTruthy();
   });
 
-  test('UI_UPL_03: File Size Limit Validation @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_UPL_03: File Size Limit Validation @smoke @regression', async ({ signUpPage, profilePage, commonFunctions, page }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
-
-    let isSizeErrorMsgValid = false;
 
     await test.step('Register user and navigate to profile page', async () => {
       await page.goto(envConfig.baseUrl);
@@ -82,16 +71,12 @@ test.describe('Profile Picture Upload', () => {
 
     await test.step('Verify 400 error message rendered for file size limit', async () => {
       const errorMsg = await profilePage.getErrorMessageText();
-      isSizeErrorMsgValid = await commonFunctions.compareTwoValues(errorMsg.includes(TestData.LARGE_SIZE_ERR), true, "Verifying file size limit 400 error message");
+      await commonFunctions.verifyCondition(errorMsg.includes(TestData.LARGE_SIZE_ERR), "Verifying file size limit 400 error message");
     });
-
-    expect(isSizeErrorMsgValid).toBeTruthy();
   });
 
-  test('UI_UPL_04: Upload Chaos Failure Recovery @regression @chaos', async ({ signUpPage, profilePage, commonFunctions, page, request, networkInterceptor }) => {
+  test('UI_UPL_04: Upload Chaos Failure Recovery @regression @chaos', async ({ signUpPage, profilePage, commonFunctions, page, request }) => {
     const testUser = TestData.USER_PREFIX + commonFunctions.generateRandomString(5);
-
-    let isChaosErrorValid = false;
 
     try {
       await test.step('Configure uploadFailureRate: 1.0 via API request', async () => {
@@ -114,7 +99,7 @@ test.describe('Profile Picture Upload', () => {
 
       await test.step('Verify 500 status code and error banner display', async () => {
         const errorMsg = await profilePage.getErrorMessageText();
-        isChaosErrorValid = await commonFunctions.compareTwoValues(errorMsg.includes(TestData.CHAOS_FAILURE_ERR), true, "Verifying upload chaos 500 error message");
+        await commonFunctions.verifyCondition(errorMsg.includes(TestData.CHAOS_FAILURE_ERR), "Verifying upload chaos 500 error message");
       });
     } finally {
       await test.step('Reset chaos configuration to normal', async () => {
@@ -123,8 +108,6 @@ test.describe('Profile Picture Upload', () => {
         });
       });
     }
-
-    expect(isChaosErrorValid).toBeTruthy();
   });
 
 });

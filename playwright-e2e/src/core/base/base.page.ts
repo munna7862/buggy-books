@@ -28,54 +28,43 @@ export class BasePage extends CommonFunctions {
 
   public async doClick(locator: Locator, sLogMessage: string): Promise<void> {
     await this.logMessage('INFO', sLogMessage);
-    try {
-      await locator.waitFor({ state: 'visible', timeout: 3000 });
-    } catch {
-      await this.ensureNavElementVisible(locator);
-      await locator.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
-    }
-    await locator.click();
+    await this.ensureNavElementVisible(locator);
+    await locator.click({ timeout: BasePage.DEFAULT_TIMEOUT });
   }
 
   public async doEnterText(locator: Locator, sValue: string, sLogMessage: string): Promise<void> {
     await this.logMessage('INFO', sLogMessage);
-    await locator.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
-    await locator.fill(sValue);
+    await locator.fill(sValue, { timeout: BasePage.DEFAULT_TIMEOUT });
   }
 
   public async doGetText(locator: Locator, sLogMessage: string): Promise<string> {
     await this.logMessage('INFO', sLogMessage);
-    await locator.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
-    return await locator.textContent() ?? '';
+    return (await locator.textContent({ timeout: BasePage.DEFAULT_TIMEOUT })) ?? '';
   }
 
   public async doGetAttribute(locator: Locator, sAttribute: string, sLogMessage: string): Promise<string | null> {
     await this.logMessage('INFO', sLogMessage);
-    await locator.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
-    const value = await locator.getAttribute(sAttribute);
+    const value = await locator.getAttribute(sAttribute, { timeout: BasePage.DEFAULT_TIMEOUT });
     await this.logMessage('INFO', `Attribute ${sAttribute} has value: ${value}`);
     return value;
   }
 
   public async mouseHover(locator: Locator, sLogMessage: string): Promise<void> {
     await this.logMessage('INFO', sLogMessage);
-    await locator.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
-    await locator.hover();
+    await locator.hover({ timeout: BasePage.DEFAULT_TIMEOUT });
   }
 
   public async clearAndSetInputValue(inputField: Locator, inputValue: string): Promise<void> {
-    await inputField.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
-    await inputField.click();
-    await inputField.fill('');
+    await inputField.click({ timeout: BasePage.DEFAULT_TIMEOUT });
+    await inputField.fill('', { timeout: BasePage.DEFAULT_TIMEOUT });
     await this.logMessage('INFO', 'Cleared input value');
-    await inputField.fill(inputValue);
+    await inputField.fill(inputValue, { timeout: BasePage.DEFAULT_TIMEOUT });
     await this.logMessage('INFO', `Set input value to ${inputValue}`);
   }
 
   public async addTextFieldValue(value: string, fieldLocator: Locator): Promise<void> {
-    await fieldLocator.waitFor({ state: 'visible', timeout: BasePage.DEFAULT_TIMEOUT });
-    await fieldLocator.click();
-    await fieldLocator.pressSequentially(value);
+    await fieldLocator.click({ timeout: BasePage.DEFAULT_TIMEOUT });
+    await fieldLocator.pressSequentially(value, { timeout: BasePage.DEFAULT_TIMEOUT });
   }
 
   public async doesElementExist(locator: Locator, sLogMessage: string): Promise<boolean> {
@@ -83,5 +72,4 @@ export class BasePage extends CommonFunctions {
     await this.logMessage('INFO', `${sLogMessage} - Element ${isVisible ? 'is' : 'is not'} visible`);
     return isVisible;
   }
-
 }

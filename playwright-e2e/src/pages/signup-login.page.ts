@@ -36,6 +36,15 @@ export class SignUpPage extends BasePage {
   private get eleLoginTitle(): Locator {
     return this.page.locator('.auth-title');
   }
+  private get inputLoginUsername(): Locator {
+    return this.page.locator("input[name='txt_usr_77']");
+  }
+  private get inputLoginPassword(): Locator {
+    return this.page.locator("input[name='txt_pwd_99']");
+  }
+  private get firstAuthLabel(): Locator {
+    return this.page.locator(".auth-label").first();
+  }
 
   // Add methods to interact with the Sign Up page elements
   public async getErrorBannerText(): Promise<string> {
@@ -118,4 +127,17 @@ export class SignUpPage extends BasePage {
     return isTitleVisible && isUsernameVisible && isPasswordVisible && isButtonVisible;
   }
 
+  public async getLoginUsernameId(): Promise<string | null> {
+    return await this.inputLoginUsername.getAttribute('id');
+  }
+
+  public async getLoginPasswordId(): Promise<string | null> {
+    return await this.inputLoginPassword.getAttribute('id');
+  }
+
+  public async getFirstAuthLabelFor(): Promise<string | null> {
+    return await this.firstAuthLabel.getAttribute('for');
+  }
+
 }
+

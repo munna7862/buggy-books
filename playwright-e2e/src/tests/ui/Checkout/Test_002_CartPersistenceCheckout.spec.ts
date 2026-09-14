@@ -30,8 +30,7 @@ const TestData = require(testDataPath) as CartPersistenceCheckoutTestData;
 
 test.describe('Cart Persistence Checkout', () => {
 
-  test('Testcase 1: Complete checkout after cart persists across logout and login @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
-    // networkInterceptor fixture automatically captures network logs (no direct usage needed)
+  test('Testcase 1: Complete checkout after cart persists across logout and login @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page }) => {
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);
     const { userName, password } = getLoginCredentials();
@@ -41,8 +40,7 @@ test.describe('Cart Persistence Checkout', () => {
     });
 
     await test.step('Verify Pre-Authenticated Session', async () => {
-      const isNavigated = await commonFunctions.compareTwoValues(await catalogPage.isLogoutVisible(), true, "Verifying user is pre-authenticated via storageState");
-      expect(isNavigated).toBeTruthy();
+      await commonFunctions.verifyValue(await catalogPage.isLogoutVisible(), true, "Verifying user is pre-authenticated via storageState");
     });
 
     await test.step('Prepare Empty Cart', async () => {
@@ -64,14 +62,12 @@ test.describe('Cart Persistence Checkout', () => {
 
     await test.step('Logout', async () => {
       await catalogPage.clickLogout();
-      const isLogout = await commonFunctions.compareTwoValues(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
-      expect(isLogout).toBeTruthy();
+      await commonFunctions.verifyValue(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
     });
 
     await test.step('Login Again with Existing User', async () => {
       const isLogin = await signUpPage.login(userName, password);
-      const isNavigated = await commonFunctions.compareTwoValues(isLogin, true, "Verifying if user logged in successfully again");
-      expect(isNavigated).toBeTruthy();
+      await commonFunctions.verifyValue(isLogin, true, "Verifying if user logged in successfully again");
     });
 
     await test.step('Verify Cart Persists After Login', async () => {
@@ -98,8 +94,7 @@ test.describe('Cart Persistence Checkout', () => {
 
     await test.step('Logout', async () => {
       await catalogPage.clickLogout();
-      const isLogout = await commonFunctions.compareTwoValues(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
-      expect(isLogout).toBeTruthy();
+      await commonFunctions.verifyValue(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
     });
   });
 

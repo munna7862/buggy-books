@@ -1,9 +1,8 @@
 import { expect } from '@playwright/test';
 import { test } from '../../../core/base/base.fixture';
-import { envConfig, getLoginCredentials } from '../../../config/env.config';
-import TestData from '../../../test-data/ui/VisualRegression/Test_010_VisualRegressionChaos.json';
+import { envConfig } from '../../../config/env.config';
 import { SignUpPage } from '../../../pages/signup-login.page';
-import { CatalogPage } from '../../../pages/catalog.page';
+import { CheckoutPage } from '../../../pages/checkout.page';
 
 const CONFIG_URL = `${envConfig.apiBaseUrl}/api/test/config`;
 const RESET_URL = `${envConfig.apiBaseUrl}/api/test/reset`;
@@ -33,26 +32,22 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
     await request.post(RESET_URL);
   });
 
-  test('VIS_REG_01: Baseline Catalog Screenshot @regression @visual', async ({ commonFunctions, page, request }) => {
-    let flag = false;
+  test('VIS_REG_01: Baseline Catalog Screenshot @regression @visual', async ({ page, request, catalogPage }) => {
     await test.step('Ensure visualChaos is disabled', async () => {
       await syncVisualChaos(request, false);
     });
 
     await test.step('Navigate to catalog page', async () => {
       await page.goto(envConfig.baseUrl);
-      await page.waitForSelector(TestData.SELECTORS.BOOK_CARD);
+      await catalogPage.waitForBookCardSelector();
     });
 
     await test.step('Assert screenshot matches baseline', async () => {
       await expect(page).toHaveScreenshot('catalog-baseline.png', { maxDiffPixelRatio: 0.05 });
-      flag = true;
     });
-
-    expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_02: Chaos-Enabled Catalog Pixel Diff @regression @chaos', async ({ commonFunctions, page, request }) => {
+  test('VIS_REG_02: Chaos-Enabled Catalog Pixel Diff @regression @chaos', async ({ commonFunctions, page, request, catalogPage }) => {
     let diffDetected = false;
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
@@ -60,116 +55,91 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
 
     await test.step('Navigate to catalog and assert screenshot mismatch with baseline', async () => {
       await page.goto(envConfig.baseUrl);
-      await page.waitForSelector('body.visual-chaos-active');
-      await page.waitForSelector(TestData.SELECTORS.BOOK_CARD);
+      await catalogPage.waitForVisualChaosActive();
+      await catalogPage.waitForBookCardSelector();
       try {
         await expect(page).toHaveScreenshot('catalog-baseline.png', { maxDiffPixelRatio: 0.0001, timeout: 2000 });
-      } catch (err) {
+      } catch {
         // Visual diff expected when chaos mode is active
         diffDetected = true;
       }
-      await commonFunctions.compareTwoValues(diffDetected, true, "Verifying visual pixel diff detected under chaos mode");
+      await commonFunctions.verifyValue(diffDetected, true, "Verifying visual pixel diff detected under chaos mode");
     });
-
-    expect(diffDetected).toBeTruthy();
   });
 
-  test('VIS_REG_03: Book Card Border Color Assertion @regression @chaos', async ({ commonFunctions, page, request }) => {
-    let flag = false;
+  test('VIS_REG_03: Book Card Border Color Assertion @regression @chaos', async ({ commonFunctions, page, request, catalogPage }) => {
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
     });
 
     await test.step('Navigate to catalog and assert border-color on book card', async () => {
       await page.goto(envConfig.baseUrl);
-      await page.waitForSelector('body.visual-chaos-active');
-      await page.waitForSelector(TestData.SELECTORS.BOOK_CARD);
-      const borderColor = await page.locator(TestData.SELECTORS.BOOK_CARD).first().evaluate(
-        el => getComputedStyle(el).borderColor
-      );
+      await catalogPage.waitForVisualChaosActive();
+      await catalogPage.waitForBookCardSelector();
+      const borderColor = await catalogPage.getFirstBookCardBorderColor();
+
       // hsl(0, 85%, 60%) or visual chaos variations resolve to reddish color (red channel >= 200)
       const redMatch = borderColor.match(/rgba?\((\d+)/);
       const redChannel = redMatch ? parseInt(redMatch[1], 10) : 0;
-      flag = await commonFunctions.compareTwoValues(
+      await commonFunctions.verifyCondition(
         redChannel >= 200,
-        true,
         `Asserting book card border-color is red (red >= 200), actual: ${borderColor}`
       );
     });
-
-    expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_04: Book Cover Blur Filter Assertion @regression @chaos', async ({ commonFunctions, page, request }) => {
-    let flag = false;
+  test('VIS_REG_04: Book Cover Blur Filter Assertion @regression @chaos', async ({ commonFunctions, page, request, catalogPage }) => {
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
     });
 
     await test.step('Navigate to catalog and assert filter is blurred', async () => {
       await page.goto(envConfig.baseUrl);
-      await page.waitForSelector('body.visual-chaos-active');
-      await page.waitForSelector(TestData.SELECTORS.BOOK_COVER);
-      const filter = await page.locator(TestData.SELECTORS.BOOK_COVER).first().evaluate(
-        el => getComputedStyle(el).filter
-      );
-      flag = await commonFunctions.compareTwoValues(
+      await catalogPage.waitForVisualChaosActive();
+      await catalogPage.waitForBookCardSelector();
+      const filter = await catalogPage.getFirstCoverFilter();
+      await commonFunctions.verifyCondition(
         filter.includes('blur(1.5px)'),
-        true,
         `Asserting book cover has blur filter, actual: ${filter}`
       );
     });
-
-    expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_05: Search Bar Displacement Assertion @regression @chaos', async ({ commonFunctions, page, request }) => {
-    let flag = false;
+  test('VIS_REG_05: Search Bar Displacement Assertion @regression @chaos', async ({ commonFunctions, page, request, catalogPage }) => {
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
     });
 
     await test.step('Navigate to catalog and assert search form transform style', async () => {
       await page.goto(envConfig.baseUrl);
-      await page.waitForSelector('body.visual-chaos-active');
-      await page.waitForSelector(TestData.SELECTORS.SEARCH_FORM);
-      const transform = await page.locator(TestData.SELECTORS.SEARCH_FORM).evaluate(
-        el => getComputedStyle(el).transform
-      );
-      flag = await commonFunctions.compareTwoValues(
+      await catalogPage.waitForVisualChaosActive();
+      await catalogPage.waitForBookCardSelector();
+      const transform = await catalogPage.getSearchFormTransform();
+      await commonFunctions.verifyCondition(
         transform !== 'none' && (transform.includes('-18') || transform.includes('matrix')),
-        true,
         `Asserting search form has translateX(-18px) transform, actual: ${transform}`
       );
     });
-
-    expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_06: Price Tag Rotation Assertion @regression @chaos', async ({ commonFunctions, page, request }) => {
-    let flag = false;
+  test('VIS_REG_06: Price Tag Rotation Assertion @regression @chaos', async ({ commonFunctions, page, request, catalogPage }) => {
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
     });
 
     await test.step('Navigate to catalog and assert price tag transform style', async () => {
       await page.goto(envConfig.baseUrl);
-      await page.waitForSelector(TestData.SELECTORS.PRICE_TAG);
-      const transform = await page.locator(TestData.SELECTORS.PRICE_TAG).first().evaluate(
-        el => getComputedStyle(el).transform
-      );
-      flag = await commonFunctions.compareTwoValues(
+      await catalogPage.waitForVisualChaosActive();
+      await catalogPage.waitForBookCardSelector();
+      const transform = await catalogPage.getFirstPriceTagTransform();
+      await commonFunctions.verifyCondition(
         transform !== 'none' && transform.includes('matrix'),
-        true,
         `Asserting price tag has rotation transform, actual: ${transform}`
       );
     });
-
-    expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_07: Checkout Button Margin Shift @regression @chaos', async ({ commonFunctions, page, request }) => {
-    let flag = false;
+  test('VIS_REG_07: Checkout Button Margin Shift @regression @chaos', async ({ commonFunctions, page, request, catalogPage }) => {
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
     });
@@ -181,62 +151,47 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
       });
 
       await page.goto(envConfig.baseUrl);
-      const catalogPage = new CatalogPage(page);
       await catalogPage.clickNavigateLink("Login");
       const signUpPage = new SignUpPage(page);
       await signUpPage.login(testUser, 'Password123!');
 
-      await page.waitForSelector('body.visual-chaos-active');
+      await catalogPage.waitForVisualChaosActive();
       await catalogPage.clickNavigateLink("Checkout");
-      await page.waitForSelector('#wizard-next-btn');
+      const checkoutPage = new CheckoutPage(page);
+      await checkoutPage.waitForNextStepButton();
 
-      const marginLeft = await page.locator('#wizard-next-btn').evaluate(
-        el => getComputedStyle(el).marginLeft
-      );
-      flag = await commonFunctions.compareTwoValues(
+      const marginLeft = await checkoutPage.getNextStepButtonMarginLeft();
+      await commonFunctions.verifyCondition(
         marginLeft === '15px',
-        true,
         `Asserting checkout button has margin-left: 15px, actual: ${marginLeft}`
       );
     });
-
-    expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_08: Book Card Text Line Height Chaos @regression @chaos', async ({ commonFunctions, page, request }) => {
-    let flag = false;
+  test('VIS_REG_08: Book Card Text Line Height Chaos @regression @chaos', async ({ commonFunctions, page, request, catalogPage }) => {
     await test.step('Enable visualChaos', async () => {
       await syncVisualChaos(request, true);
     });
 
     await test.step('Navigate to catalog and assert line-height multiplier', async () => {
       await page.goto(envConfig.baseUrl);
-      await page.waitForSelector(TestData.SELECTORS.INFO_CELL_H3);
-      // Wait for chaos active class propagation
-      await page.waitForSelector('body.visual-chaos-active');
-      const fontSizeStr = await page.locator(TestData.SELECTORS.INFO_CELL_H3).first().evaluate(
-        el => getComputedStyle(el).fontSize
-      );
-      const lineHeightStr = await page.locator(TestData.SELECTORS.INFO_CELL_H3).first().evaluate(
-        el => getComputedStyle(el).lineHeight
-      );
+      await catalogPage.waitForVisualChaosActive();
+      await catalogPage.waitForBookCardSelector();
+      const { fontSize: fontSizeStr, lineHeight: lineHeightStr } = await catalogPage.getFirstBookCardH3Styles();
 
       const fontSize = parseFloat(fontSizeStr);
       const lineHeight = parseFloat(lineHeightStr);
 
       // line-height: 3.2 !important; -> lineHeight / fontSize should be ~3.2
       const multiplier = lineHeight / fontSize;
-      flag = await commonFunctions.compareTwoValues(
+      await commonFunctions.verifyCondition(
         Math.abs(multiplier - 3.2) < 0.2,
-        true,
         `Asserting book card h3 text line-height multiplier is ~3.2, actual: ${multiplier} (lineHeight: ${lineHeightStr}, fontSize: ${fontSizeStr})`
       );
     });
-
-    expect(flag).toBeTruthy();
   });
 
-  test('VIS_REG_09: Reset Restores Visual Baseline @regression @chaos', async ({ page, request }) => {
+  test('VIS_REG_09: Reset Restores Visual Baseline @regression @chaos', async ({ page, request, catalogPage }) => {
     await test.step('Enable visualChaos first', async () => {
       await syncVisualChaos(request, true);
     });
@@ -249,7 +204,7 @@ test.describe('Visual Regression & Layout Chaos Suite', () => {
 
     await test.step('Navigate to catalog and assert screenshot matches baseline', async () => {
       await page.goto(envConfig.baseUrl);
-      await page.waitForSelector(TestData.SELECTORS.BOOK_CARD);
+      await catalogPage.waitForBookCardSelector();
       await expect(page).toHaveScreenshot('catalog-baseline.png', { maxDiffPixelRatio: 0.05 });
     });
   });

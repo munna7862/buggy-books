@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test';
 import { test } from '../../../core/base/base.fixture';
 import { envConfig, getLoginCredentials } from '../../../config/env.config';
 import { CatalogPage } from '../../../pages/catalog.page';
@@ -8,16 +7,14 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe.serial('Login With Existing User', () => {
 
-  test('Testcase 1: Login With Existing User @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, context, networkInterceptor }) => {
-    // networkInterceptor fixture automatically captures network logs (no direct usage needed)
+  test('Testcase 1: Login With Existing User @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, context }) => {
     await page.goto(envConfig.baseUrl);
 
     await test.step('Perform Login', async () => {
       await catalogPage.clickNavigateLink("Login");
       const { userName, password } = getLoginCredentials();
       const isLogin = await signUpPage.login(userName, password);
-      let isNavigated = await commonFunctions.compareTwoValues(isLogin, true, "Verifying if user logged in successfully");
-      expect(isNavigated).toBeTruthy();
+      await commonFunctions.verifyValue(isLogin, true, "Verifying if user logged in successfully");
     });
 
     // Save authentication state for reuse in next test (BEFORE logout)
@@ -27,12 +24,11 @@ test.describe.serial('Login With Existing User', () => {
 
     await test.step('Logout', async () => {
       await catalogPage.clickLogout();
-      const isLogout = await commonFunctions.compareTwoValues(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
-      expect(isLogout).toBeTruthy();
+      await commonFunctions.verifyValue(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
     });
   });
 
-  test('Testcase 2: Login Using Saved Session Storage @smoke @regression', async ({ browser, signUpPage, catalogPage, commonFunctions, networkInterceptor }) => {
+  test('Testcase 2: Login Using Saved Session Storage @smoke @regression', async ({ browser, commonFunctions }) => {
     // Create a new context with the saved storage state
     const { context, page } = await AuthUtility.createContextWithSavedAuth(browser);
     
@@ -43,13 +39,11 @@ test.describe.serial('Login With Existing User', () => {
       await test.step('Verify Logged In Without Re-entering Credentials', async () => {
         await page.waitForLoadState('domcontentloaded');
         const isLoggedIn = await catalogPageWithNewContext.isLogoutVisible();
-        let isVerified = await commonFunctions.compareTwoValues(isLoggedIn, true, "Verifying if user is logged in using saved session");
-        expect(isVerified).toBeTruthy();
+        await commonFunctions.verifyValue(isLoggedIn, true, "Verifying if user is logged in using saved session");
       });
       await test.step('Perform Logout', async () => {
         await catalogPageWithNewContext.clickLogout();
-        const isLogout = await commonFunctions.compareTwoValues(await catalogPageWithNewContext.isLoginVisible(), true, "Verifying if user logged out successfully");
-        expect(isLogout).toBeTruthy();
+        await commonFunctions.verifyValue(await catalogPageWithNewContext.isLoginVisible(), true, "Verifying if user logged out successfully");
       });
     } finally {
       // Cleanup
@@ -57,8 +51,7 @@ test.describe.serial('Login With Existing User', () => {
     }
   });
 
-  test('Testcase 3: Login Validation Errors @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
-    // networkInterceptor fixture automatically captures network logs (no direct usage needed)
+  test('Testcase 3: Login Validation Errors @regression', async ({ signUpPage, catalogPage, commonFunctions, page }) => {
     await page.goto(envConfig.baseUrl);
 
     await test.step('Attempt Login with Wrong Password', async () => {
@@ -69,8 +62,7 @@ test.describe.serial('Login With Existing User', () => {
 
     await test.step('Verify Error Message', async () => {
       const errorText = await signUpPage.getErrorBannerText();
-      let isErrorVerified = await commonFunctions.compareTwoValues(errorText, "Unauthorized: Invalid credentials", "Verifying if error message is correct");
-      expect(isErrorVerified).toBeTruthy();
+      await commonFunctions.verifyValue(errorText, "Unauthorized: Invalid credentials", "Verifying if error message is correct");
     });
   });
 

@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test';
 import * as path from 'path';
 import { randomBytes } from 'crypto';
 import { test } from '../../../core/base/base.fixture';
@@ -25,11 +24,9 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Profile Summary and Order History', () => {
 
-  test('UI_PROF_01: Verify user account profile summary and avatar preview render correctly @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_PROF_01: Verify user account profile summary and avatar preview render correctly @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page }) => {
     const profilePage = new ProfilePage(page);
     const username = uniqueUsername();
-
-    let isProfileSummaryValid = false;
 
     await test.step('Register new account and navigate to Profile', async () => {
       await catalogPage.navigateToCatalog(envConfig.baseUrl);
@@ -46,16 +43,11 @@ test.describe('Profile Summary and Order History', () => {
       const usernameMatch = profileInfoText.includes(username);
       const avatarValid = avatarSrc.length > 0;
 
-      const isVerified = nameMatch && usernameMatch && avatarValid;
-
-      isProfileSummaryValid = await commonFunctions.compareTwoValues(
-        isVerified,
-        true,
+      await commonFunctions.verifyCondition(
+        nameMatch && usernameMatch && avatarValid,
         'Verifying profile page renders registered full name, username, and avatar preview'
       );
     });
-
-    expect(isProfileSummaryValid).toBeTruthy();
   });
 
 });

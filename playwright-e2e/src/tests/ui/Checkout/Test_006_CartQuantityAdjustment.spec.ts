@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test';
 import * as path from 'path';
 import { randomBytes } from 'crypto';
 import { test } from '../../../core/base/base.fixture';
@@ -33,13 +32,9 @@ test.use({ storageState: { cookies: [], origins: [] } });
 
 test.describe('Cart Quantity & Total Adjustment', () => {
 
-  test('UI_CART_04: Cart item addition and removal dynamically recalculates item count and order total @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
+  test('UI_CART_04: Cart item addition and removal dynamically recalculates item count and order total @regression', async ({ signUpPage, catalogPage, commonFunctions, page }) => {
     const cartPage = new CartPage(page);
     const username = uniqueUsername();
-
-    let isStep1Valid = false;
-    let isStep2Valid = false;
-    let isStep3Valid = false;
     let initialSinglePrice = 0;
 
     await test.step('Register new user session', async () => {
@@ -58,9 +53,8 @@ test.describe('Cart Quantity & Total Adjustment', () => {
       const count = await cartPage.getCartItemsCount();
       initialSinglePrice = await cartPage.getCartTotalAmount();
 
-      const countCheck = count === 1;
-      const priceCheck = initialSinglePrice > 0;
-      isStep1Valid = await commonFunctions.compareTwoValues(countCheck && priceCheck, true, 'Verifying 1 item in cart with non-zero total price');
+      await commonFunctions.verifyValue(count, 1, 'Verifying 1 item in cart');
+      await commonFunctions.verifyCondition(initialSinglePrice > 0, 'Verifying non-zero initial cart total price');
     });
 
     await test.step('Add second book to cart and verify dynamic subtotal increment', async () => {
@@ -73,9 +67,8 @@ test.describe('Cart Quantity & Total Adjustment', () => {
       const updatedCount = await cartPage.getCartItemsCount();
       const updatedTotal = await cartPage.getCartTotalAmount();
 
-      const countIncreased = updatedCount === 2;
-      const totalIncreased = updatedTotal > initialSinglePrice;
-      isStep2Valid = await commonFunctions.compareTwoValues(countIncreased && totalIncreased, true, 'Verifying cart item count increased to 2 and grand total updated dynamically');
+      await commonFunctions.verifyValue(updatedCount, 2, 'Verifying cart item count increased to 2');
+      await commonFunctions.verifyCondition(updatedTotal > initialSinglePrice, 'Verifying grand total updated dynamically upon adding second item');
     });
 
     await test.step('Remove first book and verify cart total decreases dynamically', async () => {
@@ -85,12 +78,9 @@ test.describe('Cart Quantity & Total Adjustment', () => {
       const finalCount = await cartPage.getCartItemsCount();
       const finalTotal = await cartPage.getCartTotalAmount();
 
-      const countDecreased = finalCount === 1;
-      const totalDecreased = finalTotal < totalBeforeRemove;
-      isStep3Valid = await commonFunctions.compareTwoValues(countDecreased && totalDecreased, true, 'Verifying cart item count decreased to 1 and grand total reduced dynamically');
+      await commonFunctions.verifyValue(finalCount, 1, 'Verifying cart item count decreased to 1');
+      await commonFunctions.verifyCondition(finalTotal < totalBeforeRemove, 'Verifying grand total reduced dynamically after item removal');
     });
-
-    expect(isStep1Valid && isStep2Valid && isStep3Valid).toBeTruthy();
   });
 
 });
