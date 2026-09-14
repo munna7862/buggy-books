@@ -1,0 +1,5 @@
+[2026-09-14 20:17:59] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789382879628-3m0z
+[2026-09-14 20:18:00] INFO:  Verifying .layout-wrapper-xyz987 is display:grid with >= 2 columns at desktop (display=grid, cols=3) Success !! Actual and Expected Values are:: true
+[2026-09-14 20:18:00] INFO:  Verifying .layout-wrapper-xyz987 is display:grid with >= 1 column at tablet (display=grid, cols=2) Success !! Actual and Expected Values are:: true
+[2026-09-14 20:18:01] INFO:  Verifying .layout-wrapper-xyz987 collapses to 1 column at mobile (display=grid, cols=1) Success !! Actual and Expected Values are:: true
+[2026-09-14 20:18:01] INFO: Cleaned up ephemeral test session: pw-w4-3-1789382879628-3m0z
