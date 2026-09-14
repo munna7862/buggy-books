@@ -77,4 +77,4 @@
 - [x] Phase 10 planning and Sprint 10.3 documents updated with completed status.
 - [x] Monorepo `npm run typecheck` and `npm run lint` pass with 0 errors across all workspaces.
 - [x] All API test suites pass cleanly under `--project=api`.
-- [ ] Feature branch committed with conventional commits, pushed to remote, and Pull Request raised via GitHub CLI.
+- [x] Feature branch committed with conventional commits, pushed to remote, and Pull Request raised via GitHub CLI: [#95](https://github.com/munna7862/buggy-books/pull/95).
