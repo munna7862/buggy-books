@@ -29,7 +29,19 @@ export interface MessageResponse {
   success?: boolean;
 }
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const resolveBaseUrl = (): string => {
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+    return envUrl;
+  }
+  if (typeof window !== 'undefined' && window.location.hostname) {
+    const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+    return `${protocol}//${window.location.hostname}:4000/api`;
+  }
+  return envUrl || 'http://127.0.0.1:4000/api';
+};
+
+export const BASE_URL = resolveBaseUrl();
 
 // --- CSRF Token Management ---
 let csrfToken: string | null = null;

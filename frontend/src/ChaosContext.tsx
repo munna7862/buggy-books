@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ChaosConfig } from '@buggybooks/types';
+import { BASE_URL } from './api';
 
 interface ChaosContextType {
   config: Partial<ChaosConfig>;
@@ -7,7 +8,7 @@ interface ChaosContextType {
 
 const ChaosContext = createContext<ChaosContextType>({ config: {} });
 
-const BASE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+const BASE_API_URL = BASE_URL;
 
 export function ChaosProvider({ children }: { children: React.ReactNode }) {
   const [config, setConfig] = useState<Partial<ChaosConfig>>({});

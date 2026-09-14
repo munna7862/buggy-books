@@ -3,7 +3,9 @@ import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 import type { BookstoreEvent } from '@buggybooks/types';
 
-const BASE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+import { BASE_URL } from '../api';
+
+const BASE_API_URL = BASE_URL;
 // Resolve root domain origin for Socket.io mapping
 const SOCKET_URL = BASE_API_URL.replace('/api', '');
 
