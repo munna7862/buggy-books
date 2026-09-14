@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import * as path from 'path';
 import { test } from '../../../core/base/base.fixture';
-import { envConfig, getLoginCredentials } from '../../../config/env.config';
+import { envConfig } from '../../../config/env.config';
 import { CartPage } from '../../../pages/cart.page';
 import { CheckoutPage } from '../../../pages/checkout.page';
 
@@ -28,8 +28,7 @@ const TestData = require(testDataPath) as CompleteBookPurchaseTestData;
 
 test.describe('Complete Book Purchase', () => {
 
-  test('Testcase 1: Complete book purchase successfully @smoke @regression', async ({ signUpPage, catalogPage, commonFunctions, page, networkInterceptor }) => {
-    // networkInterceptor fixture automatically captures network logs (no direct usage needed)
+  test('Testcase 1: Complete book purchase successfully @smoke @regression', async ({ catalogPage, commonFunctions, page }) => {
     const cartPage = new CartPage(page);
     const checkoutPage = new CheckoutPage(page);
 
@@ -38,8 +37,7 @@ test.describe('Complete Book Purchase', () => {
     });
 
     await test.step('Verify Pre-Authenticated Session', async () => {
-      const isNavigated = await commonFunctions.compareTwoValues(await catalogPage.isLogoutVisible(), true, "Verifying user is pre-authenticated via storageState");
-      expect(isNavigated).toBeTruthy();
+      await commonFunctions.verifyValue(await catalogPage.isLogoutVisible(), true, "Verifying user is pre-authenticated via storageState");
     });
 
     await test.step('Prepare Empty Cart', async () => {
@@ -70,8 +68,7 @@ test.describe('Complete Book Purchase', () => {
 
     await test.step('Logout', async () => {
       await catalogPage.clickLogout();
-      const isLogout = await commonFunctions.compareTwoValues(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
-      expect(isLogout).toBeTruthy();
+      await commonFunctions.verifyValue(await catalogPage.isLoginVisible(), true, "Verifying if user logged out successfully");
     });
   });
 

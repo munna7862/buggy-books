@@ -258,9 +258,13 @@ if (isSpec && existsSync(targetPath)) {
     const area = pathParts[1];
     const workflowPath = resolve(projectRoot, '..', '.github', 'workflows', 'playwright-docker.yml');
     const workflowContent = existsSync(workflowPath) ? readFileSync(workflowPath, 'utf-8') : '';
+    const hasDynamicSharding = workflowContent.includes('shardIndex') || workflowContent.includes('--shard');
     const registrationPattern = new RegExp(`folder["']?\\s*:\\s*["']ui/${area.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}["']`);
-    addResult('Docker matrix registration', registrationPattern.test(workflowContent), registrationPattern.test(workflowContent)
-      ? `ui/${area} is registered in .github/workflows/playwright-docker.yml.`
+    const isCovered = hasDynamicSharding || registrationPattern.test(workflowContent);
+    addResult('Docker matrix registration', isCovered, isCovered
+      ? (hasDynamicSharding
+          ? `ui/${area} is covered by Playwright dynamic sharding in .github/workflows/playwright-docker.yml.`
+          : `ui/${area} is registered in .github/workflows/playwright-docker.yml.`)
       : `ui/${area} is not registered in .github/workflows/playwright-docker.yml.`);
   } else if (pathParts[0] === 'api') {
     addResult('Docker matrix registration', true, 'API specs are covered by the api shard.');

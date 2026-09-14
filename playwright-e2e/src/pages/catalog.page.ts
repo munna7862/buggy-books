@@ -56,6 +56,29 @@ export class CatalogPage extends BasePage {
     return this.page.locator(`.info-cell-beta a[href="/books/${bookId}"]`);
   }
 
+  private get eleGridWrapper(): Locator {
+    return this.page.locator('.layout-wrapper-xyz987');
+  }
+
+  private get eleBookCover(): Locator {
+    return this.page.locator('.catalog-book-cover');
+  }
+
+  private get eleInfoCell(): Locator {
+    return this.page.locator('.info-cell-beta');
+  }
+
+  private get elePriceTag(): Locator {
+    return this.page.locator('.price-tag-value');
+  }
+
+  private get formSearch(): Locator {
+    return this.page.locator('.catalog-search-form');
+  }
+
+  private get eleInfoCellH3(): Locator {
+    return this.page.locator('.info-cell-beta h3');
+  }
 
   // Actions and Interaction Methods
   public async navigateToCatalog(baseUrl: string): Promise<void> {
@@ -167,6 +190,96 @@ export class CatalogPage extends BasePage {
     await this.clickAddToCartForBook(bookId);
     await responsePromise;
     await this.waitForCartStatusMessage('added to cart');
+  }
+
+  public async getGridWrapperCount(): Promise<number> {
+    return await this.eleGridWrapper.count();
+  }
+
+  public async getBookCardCount(): Promise<number> {
+    return await this.eleBooksCount.count();
+  }
+
+  public async getBookCoverCount(): Promise<number> {
+    return await this.eleBookCover.count();
+  }
+
+  public async getInfoCellCount(): Promise<number> {
+    return await this.eleInfoCell.count();
+  }
+
+  public async getPriceTagCount(): Promise<number> {
+    return await this.elePriceTag.count();
+  }
+
+  public async getSearchInputCount(): Promise<number> {
+    return await this.inputSearch.count();
+  }
+
+  public async getSearchBtnCount(): Promise<number> {
+    return await this.btnSearch.count();
+  }
+
+  public async getSearchClearBtnCount(): Promise<number> {
+    return await this.btnClearSearch.count();
+  }
+
+  public async getGridComputedLayout(): Promise<{ display: string; columnCount: number }> {
+    return await this.eleGridWrapper.evaluate(el => {
+      const style = getComputedStyle(el);
+      const cols = style.gridTemplateColumns.trim().split(/\s+/).filter(s => s.length > 0);
+      return { display: style.display, columnCount: cols.length };
+    });
+  }
+
+  public async getFirstCoverTransform(): Promise<string> {
+    return await this.eleBookCover.first().evaluate(el => getComputedStyle(el).transform);
+  }
+
+  public async hoverFirstBookCard(): Promise<void> {
+    await this.mouseHover(this.eleBooksCount.first(), "Hovering over first book card");
+  }
+
+  public async waitForFirstCoverTransformTransition(): Promise<void> {
+    await this.page.waitForFunction(() => {
+      const el = document.querySelector('.catalog-book-cover');
+      return el ? getComputedStyle(el).transform !== 'none' : false;
+    }).catch(() => undefined);
+  }
+
+  public async waitForBookCardsVisible(): Promise<void> {
+    await this.eleBooksCount.first().waitFor({ state: 'visible', timeout: 30000 });
+  }
+
+  public async getFirstBookCardBorderColor(): Promise<string> {
+    return await this.eleBooksCount.first().evaluate(el => getComputedStyle(el).borderColor);
+  }
+
+  public async getFirstCoverFilter(): Promise<string> {
+    return await this.eleBookCover.first().evaluate(el => getComputedStyle(el).filter);
+  }
+
+  public async getSearchFormTransform(): Promise<string> {
+    return await this.formSearch.evaluate(el => getComputedStyle(el).transform);
+  }
+
+  public async getFirstPriceTagTransform(): Promise<string> {
+    return await this.elePriceTag.first().evaluate(el => getComputedStyle(el).transform);
+  }
+
+  public async getFirstBookCardH3Styles(): Promise<{ fontSize: string; lineHeight: string }> {
+    return await this.eleInfoCellH3.first().evaluate(el => {
+      const style = getComputedStyle(el);
+      return { fontSize: style.fontSize, lineHeight: style.lineHeight };
+    });
+  }
+
+  public async waitForVisualChaosActive(): Promise<void> {
+    await this.page.waitForSelector('body.visual-chaos-active', { timeout: 10000 });
+  }
+
+  public async waitForBookCardSelector(): Promise<void> {
+    await this.eleBooksCount.first().waitFor({ state: 'visible', timeout: 30000 });
   }
 
 }

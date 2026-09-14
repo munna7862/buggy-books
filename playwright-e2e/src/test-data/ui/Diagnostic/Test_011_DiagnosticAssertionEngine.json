@@ -1,0 +1,19 @@
+{
+  "testStrings": {
+    "expected": "BuggyBooks Diagnostic Test",
+    "actual": "BuggyBooks Diagnostic Test",
+    "mismatched": "Different Text"
+  },
+  "testNumbers": {
+    "expected": 42,
+    "actual": 42,
+    "mismatched": 99
+  },
+  "testConditions": {
+    "truthy": true,
+    "falsy": false
+  },
+  "expectedCounts": {
+    "initialBooks": 8
+  }
+}

@@ -68,8 +68,7 @@ test.describe('Concurrent Stock Race Condition & Chaos Dashboard Resilience', ()
         logMessage: `Setting Book ${TestData.book.id} stock count to ${TestData.book.stock}`
       });
 
-      const isStockSet = await commonFunctions.compareTwoValues(stockRes.stock, 1, 'Verifying stock is set to exactly 1');
-      expect(isStockSet).toBeTruthy();
+      await commonFunctions.verifyValue(stockRes.stock, 1, 'Verifying stock is set to exactly 1');
     });
 
     await test.step('Register and Authenticate Two Concurrent Buyers', async () => {
@@ -110,9 +109,8 @@ test.describe('Concurrent Stock Race Condition & Chaos Dashboard Resilience', ()
       });
       const rawCookieB = loginResB.headers?.['set-cookie']?.[0] || '';
       cookieB = rawCookieB.split(';')[0];
-
-      expect(cookieA).toBeTruthy();
-      expect(cookieB).toBeTruthy();
+      await commonFunctions.verifyCondition(Boolean(cookieA), 'Verifying Buyer A session cookie exists');
+      await commonFunctions.verifyCondition(Boolean(cookieB), 'Verifying Buyer B session cookie exists');
     });
 
     await test.step('Stage Final Stock Unit in Both Buyers Carts', async () => {
@@ -168,11 +166,8 @@ test.describe('Concurrent Stock Race Condition & Chaos Dashboard Resilience', ()
       const has200 = statuses.includes(200);
       const has409 = statuses.includes(409);
 
-      const isSingleWinner = await commonFunctions.compareTwoValues(has200, true, 'Verifying exactly one request succeeded with 200');
-      const isConflictDetected = await commonFunctions.compareTwoValues(has409, true, 'Verifying competing request rejected with 409 Conflict');
-
-      expect(isSingleWinner).toBeTruthy();
-      expect(isConflictDetected).toBeTruthy();
+      await commonFunctions.verifyCondition(has200, 'Verifying exactly one request succeeded with 200');
+      await commonFunctions.verifyCondition(has409, 'Verifying competing request rejected with 409 Conflict');
     });
 
     await test.step('Verify Final Inventory Stock Depleted Without Negative Overselling', async () => {
@@ -182,14 +177,13 @@ test.describe('Concurrent Stock Race Condition & Chaos Dashboard Resilience', ()
         logMessage: 'Fetching updated inventory stock for Book 1'
       });
 
-      const isStockZero = await commonFunctions.compareTwoValues(bookRes.stock, 0, 'Asserting stock count is exactly 0');
-      expect(isStockZero).toBeTruthy();
+      await commonFunctions.verifyValue(bookRes.stock, 0, 'Asserting stock count is exactly 0');
     });
 
     await test.step('Navigate to Interactive Chaos Dashboard and Verify Live Controls', async () => {
       await chaosDashboardPage.navigateToDashboard(envConfig.baseUrl);
       const isVisible = await chaosDashboardPage.isDashboardVisible();
-      expect(isVisible).toBeTruthy();
+      await commonFunctions.verifyValue(isVisible, true, 'Asserting chaos dashboard is visible');
 
       await expect.poll(async () => await chaosDashboardPage.getStatusBadgeText(), {
         message: 'Expected Chaos Dashboard status badge to show Live Engine Active',
