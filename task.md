@@ -69,4 +69,4 @@
 - [x] `npm run typecheck` passes with 0 errors across all workspaces.
 - [x] `npm run lint` passes with 0 errors and 0 warnings.
 - [x] All 12 backend test suites (91 tests) and 10 frontend test suites (32 tests) pass with 100% green status.
-- [ ] Pull Request raised and linked.
+- [x] Pull Request raised and linked: [#90](https://github.com/munna7862/buggy-books/pull/90).
