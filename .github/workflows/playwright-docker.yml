@@ -57,6 +57,14 @@ jobs:
           npm ci
           npx playwright install --with-deps chrome
 
+      - name: Pre-Flight Warm-Up Staging Environment
+        run: |
+          echo "Pinging Render backend and frontend to wake from sleep..."
+          curl -s -o /dev/null -w "Backend wake ping status: %{http_code}\n" https://buggy-books.onrender.com/api/books || true
+          curl -s -o /dev/null -w "Frontend wake ping status: %{http_code}\n" https://buggy-books-fe.onrender.com/ || true
+          npx wait-on -t 90000 https://buggy-books.onrender.com/api/books
+          npx wait-on -t 90000 https://buggy-books-fe.onrender.com/
+
       - name: Run tests - Shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
         working-directory: playwright-e2e
         env:
@@ -202,9 +210,10 @@ jobs:
 
       - name: Test Report Summary
         run: |
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
           echo "### 📊 Sharded Test Execution Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Execution Strategy:** Playwright Native Dynamic Sharding (8 Shards)" >> $GITHUB_STEP_SUMMARY
-          echo "- **Allure Report Link:** https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/AutomationReports/Docker/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Allure Report Link:** https://${{ github.repository_owner }}.github.io/${REPO_NAME}/AutomationReports/Docker/${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Monocart Offline Report:** Download \`playwright-monocart-report-docker\` below for offline single-file interactive viewing." >> $GITHUB_STEP_SUMMARY
 
       - name: Generate Allure Report
@@ -251,8 +260,8 @@ jobs:
 
       - name: Print Report URL
         run: |
-          REPO_NAME="${{ github.event.repository.name }}"
-          OWNER="${{ github.repository_owner }}"
+          REPO_NAME="${GITHUB_REPOSITORY#*/}"
+          OWNER="${GITHUB_REPOSITORY%/*}"
           echo "✅ Reports published successfully!"
           echo "📊 Allure Report: https://${OWNER}.github.io/${REPO_NAME}/AutomationReports/Docker/${{ github.run_number }}"
           echo "📋 Monocart Report: Download the 'playwright-monocart-report-docker' artifact for offline viewing."

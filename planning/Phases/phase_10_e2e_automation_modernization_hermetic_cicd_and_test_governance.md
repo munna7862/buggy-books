@@ -74,10 +74,10 @@ graph LR
 
 ## 4. Definition of Done for Phase 10
 
-- [ ] All Playwright UI and API tests produce detailed Winston logs AND fail with precise expected vs actual diffs on assertion failure.
-- [ ] No spec files contain `expect(flag1 && flag2 && flag3).toBeTruthy()`.
-- [ ] Default test timeout is calibrated to 30s; total test execution time is reduced by $>40\%$.
-- [ ] API tests execute under the headless `api` project without launching a browser or running `auth.setup.ts`.
-- [ ] ESLint runs in `playwright-e2e` with zero lint errors.
-- [ ] CI pipeline runs hermetically using managed `webServer` without lingering background processes.
-- [ ] Allure and Monocart reports deploy reliably with valid links on `workflow_dispatch` and `schedule` runs.
+- [x] All Playwright UI and API tests produce detailed Winston logs AND fail with precise expected vs actual diffs on assertion failure.
+- [x] No spec files contain `expect(flag1 && flag2 && flag3).toBeTruthy()`.
+- [x] Default test timeout is calibrated to 30s; total test execution time is reduced by $>40\%$.
+- [x] API tests execute under the headless `api` project without launching a browser or running `auth.setup.ts`.
+- [x] ESLint runs in `playwright-e2e` with zero lint errors.
+- [x] CI pipeline runs hermetically using managed `webServer` without lingering background processes.
+- [x] Allure and Monocart reports deploy reliably with valid links on `workflow_dispatch` and `schedule` runs.

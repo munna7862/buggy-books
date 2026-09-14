@@ -1,9 +1,9 @@
-# Sprint 10.2: Playwright Timeout Calibration, API Project Decoupling & Static Quality Linter
+# Sprint 10.3: CI/CD Pipeline Hermetic Isolation, Process Management & Report Deployment
 
-**Sprint Identifier**: `SPRINT-10.2-PLAYWRIGHT-TIMEOUT-CALIBRATION-API-DECOUPLING-AND-LINTER`  
+**Sprint Identifier**: `SPRINT-10.3-CICD-PIPELINE-HERMETIC-ISOLATION-AND-REPORT-GOVERNANCE`  
 **Phase**: [Phase 10: E2E Automation Modernization, Hermetic CI/CD & Test Governance](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_10_e2e_automation_modernization_hermetic_cicd_and_test_governance.md)  
 **Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Calibrate test timeouts from 300s to 30s in `playwright.config.ts`, establish a lightweight headless API test project decoupled from browser UI authentication, configure ESLint for Playwright TypeScript files with `eslint-plugin-playwright`, and upgrade POM architecture rules in `finalize-spec.ts`.
+**Sprint Goal**: Replace fragile background shell process management with Playwright's native managed `webServer` block in CI, isolate database state during k6 benchmark runs, fix GitHub context variable bugs in report deployment, add pre-flight health checks to Docker sharding, and establish test cataloging standards.
 
 ---
 
@@ -11,44 +11,44 @@
 
 | Persona | Assigned Member | Responsibilities for this Sprint |
 | :--- | :--- | :--- |
-| **Scrum Master** | AI Agent / SM | Sprint backlog initialization, live burndown tracking in `task.md`, workflow handoffs, review facilitation, and DoD audit. |
-| **SDET Architect** | AI Agent / SDET | Calibrating timeouts in `playwright.config.ts`, authoring Section 17 in `specs/test_cases_catalog.md`, architecting headless `api` project, configuring ESLint and AST rules in `finalize-spec.ts`. |
-| **Automation Test Engineer** | AI Agent / QA | Verifying all 9 API test suites execute under the decoupled `api` project without browser launch or `auth.setup.ts`, validating per-test timeout overrides on slow specs. |
-| **Dev Architect & Senior SDE** | AI Agent / SDE | Integrating ESLint into `playwright-e2e` and unifying root monorepo scripts (`npm run lint`, `npm run typecheck`). |
-| **Security Officer** | AI Agent / SEC | Verifying headless API project headers (`x-bypass-rate-limit`), secret isolation, and absence of credential leaks. |
-| **DevOps Engineer** | AI Agent / DevOps | Updating `.github/workflows/playwright-ci.yml` and `ci.yml` to consume the decoupled `api` project and enforce E2E linter quality gates. |
-| **Product Owner** | Human PO / AI PO | Validating accelerated CI cycle times, deterministic test feedback, and authorizing release PR. |
+| **Scrum Master** | AI Agent / SM | Sprint backlog grooming, live burndown tracking in `task.md`, cross-persona handoffs, review facilitation, and DoD compliance audit. |
+| **DevOps Automation Architect** | AI Agent / DevOps | Modernizing `ci.yml`, `playwright-ci.yml`, `playwright-docker.yml`, `playwright-on-demand.yml`, and fixing report deployment URL interpolation. |
+| **Principal SDET** | AI Agent / SDET | Calibrating `webServer` orchestration and conditional `grepInvert` in `playwright.config.ts` for CI and local workflows. |
+| **Performance QA Specialist** | AI Agent / Perf QA | Designing pre-run database snapshotting and between-tier reset steps for k6 performance benchmarks in CI and endurance workflows. |
+| **Security Officer** | AI Agent / SEC | Verifying secret isolation in CI workflow files, absence of exposed credentials, and safe URL interpolation. |
+| **Product Owner** | Human PO / AI PO | Validating Allure/Monocart report links in GitHub Actions summaries, approving Definition of Done, and authorizing release PR. |
 
 ---
 
 ## 2. Sprint Backlog & Granular Subtask Tracking
 
-### User Story US-E2E-1021: Timeout Calibration & Fail-Fast Protection
-*As an SDET / CI Engineer, I want test timeouts calibrated to realistic boundaries (30 seconds default), so that failing or hanging tests fail fast rather than stalling CI runners for 5 minutes (300 seconds) per test attempt.*
-- [x] **US-E2E-1021.1** (`SDET Architect`): In `playwright-e2e/src/config/playwright.config.ts`, update `timeout: 30 * 1000` (30 seconds default).
-- [x] **US-E2E-1021.2** (`SDET Architect`): In `playwright-e2e/src/config/playwright.config.ts`, update `expect.timeout: 10 * 1000` (10 seconds expectation timeout).
-- [x] **US-E2E-1021.3** (`Automation Test Engineer`): Identify intentionally slow or chaos-heavy test suites (`Test_008_WebSocketResilienceValidation.spec.ts`, `Test_010_VisualRegressionChaos.spec.ts`) and apply explicit per-test/suite overrides via `test.setTimeout(60000)`.
+### User Story US-CI-1031: Native Playwright Managed WebServer in CI
+*As a DevOps Engineer, I want CI pipelines to rely on Playwright's native `webServer` lifecycle management, so that we eliminate brittle `nohup ... &` background starts, `wait-on` polls, and `pkill -f` cleanups that risk zombie processes or port conflicts.*
+- [x] **US-CI-1031.1** (`Principal SDET`): In `playwright-e2e/src/config/playwright.config.ts`, configure `webServer` array with readiness URLs (`http://127.0.0.1:4000/api/books` and `http://127.0.0.1:5173`), `reuseExistingServer: !process.env.CI`, `timeout: 60 * 1000`, and `stdout: 'pipe'`.
+- [x] **US-CI-1031.2** (`Principal SDET`): In `playwright-e2e/src/config/playwright.config.ts`, configure `grepInvert: process.env.RUN_QUARANTINE ? undefined : /@quarantine/`.
+- [x] **US-CI-1031.3** (`DevOps Automation Architect`): In `.github/workflows/ci.yml`, remove manual `Start Ephemeral Backend Server`, `Start Ephemeral Frontend Preview Server`, and `Stop Ephemeral Servers` steps from `e2e-smoke-test` job.
+- [x] **US-CI-1031.4** (`DevOps Automation Architect`): In `.github/workflows/playwright-ci.yml`, remove manual background server startup and log upload steps from Job 2 (`api-test`) and Job 3 (`ui-test-matrix`), letting Playwright manage the server lifecycle.
+- [x] **US-CI-1031.5** (`DevOps Automation Architect`): In `.github/workflows/quarantine-audit.yml`, remove manual `nohup` server startup steps and rely on Playwright's native `webServer`.
 
-### User Story US-E2E-1022: Dedicated Headless API Test Project Decoupling
-*As an Automation Engineer running backend API test suites, I want API tests in `src/tests/api/` to execute in a headless API project without browser dependencies or UI login setups, so that API tests execute instantaneously in a lightweight environment without launching Chromium.*
-- [x] **US-E2E-1022.1** (`SDET Architect`): In `playwright-e2e/src/config/playwright.config.ts`, configure dedicated `api` project with `testDir: path.resolve(__dirname, '../tests/api')`, `baseURL: envConfig.apiBaseUrl`, and default headers (`x-bypass-rate-limit: true`), strictly without `dependencies: ['setup']`.
-- [x] **US-E2E-1022.2** (`SDET Architect`): Update browser UI projects (`chromium`, `firefox`, `webkit`, `mobile-chrome`, `mobile-safari`) to restrict `testDir` to `../tests/ui` so API tests are not duplicated across browser matrices.
-- [x] **US-E2E-1022.3** (`Dev Architect`): Add `"test:api"` script to `playwright-e2e/package.json` and root `package.json` for rapid headless API test execution.
-- [x] **US-E2E-1022.4** (`DevOps Engineer`): Update `.github/workflows/playwright-ci.yml` line 169 to run `npx playwright test --config=src/config/playwright.config.ts --project=api --workers=4` and update job summary titles.
+### User Story US-CI-1032: Database State Isolation in Performance Benchmark Gates
+*As an SDET running performance regression benchmarks in CI, I want database state reset or sandboxed before each benchmark tier, so that high-load mutations do not corrupt subsequent benchmark suites.*
+- [x] **US-CI-1032.1** (`Performance QA Specialist`): In `.github/workflows/ci.yml` Stage 3B, add a pre-benchmark snapshot step saving `backend/db.json` to `backend/db.json.bak`.
+- [x] **US-CI-1032.2** (`Performance QA Specialist`): In `.github/workflows/ci.yml` Stage 3B, add state restoration between sequential k6 benchmark runs (`catalog`, `inventory`, `journey`, `auth`, `checkout`), copying `backend/db.json.bak` back to `backend/db.json` and calling `POST /api/test/reset`.
+- [x] **US-CI-1032.3** (`Performance QA Specialist`): In `.github/workflows/perf-endurance.yml`, snapshot `backend/db.json` and restore state between the endurance soak test and the breakpoint saturation test.
 
-### User Story US-E2E-1023: Playwright ESLint Quality Gate & AST Rules
-*As a QA Lead, I want ESLint configured in `playwright-e2e` with `eslint-plugin-playwright`, so that anti-patterns (unawaited expects, boolean accumulators, unencapsulated locators) are caught at commit time and in CI Stage 1.*
-- [x] **US-E2E-1023.1** (`Dev Architect`): Add `eslint`, `@eslint/js`, `typescript-eslint`, and `eslint-plugin-playwright` to `playwright-e2e/package.json`.
-- [x] **US-E2E-1023.2** (`SDET Architect`): Create `playwright-e2e/eslint.config.mjs` configuring recommended Playwright rules (`playwright/missing-playwright-await`, `playwright/no-wait-for-timeout`, `playwright/no-element-handle`, `playwright/no-eval`, `playwright/prefer-web-first-assertions`).
-- [x] **US-E2E-1023.3** (`Dev Architect`): Add `"lint"` script to `playwright-e2e/package.json` (`eslint src/`) and integrate into root `npm run lint` via `"lint:e2e": "npm run lint --workspace=automationframeworks"`.
-- [x] **US-E2E-1023.4** (`SDET Architect`): Update `playwright-e2e/scripts/finalize-spec.ts` to flag any occurrences of boolean accumulator assertions `expect(.*&&.*).toBeTruthy()`.
-- [x] **US-E2E-1023.5** (`DevOps Engineer`): Update `.github/workflows/ci.yml` `e2e-quality-gate` job to execute `npm run lint` alongside `finalize-spec -- --all-poms`.
+### User Story US-CI-1033: Resilient Report Deployment & Staging Pre-Flight Checks
+*As a QA Lead / Engineering Manager, I want Allure and Monocart reports to deploy with correct URLs on all trigger events, and Docker staging sharding to verify target health before execution, so that GitHub Pages report links are never broken and cold-start timeouts on Render do not cause false-positive test failures.*
+- [x] **US-CI-1033.1** (`DevOps Automation Architect`): In `.github/workflows/playwright-ci.yml` (lines 491, 538), replace `${{ github.event.repository.name }}` with safe extraction `REPO_NAME="${GITHUB_REPOSITORY#*/}"` and `OWNER="${GITHUB_REPOSITORY%/*}"`.
+- [x] **US-CI-1033.2** (`DevOps Automation Architect`): In `.github/workflows/playwright-docker.yml` (lines 207, 254), replace `${{ github.event.repository.name }}` with safe extraction from `GITHUB_REPOSITORY`.
+- [x] **US-CI-1033.3** (`DevOps Automation Architect`): In `.github/workflows/playwright-on-demand.yml` (line 825), replace `${{ github.event.repository.name }}` with safe extraction from `GITHUB_REPOSITORY`.
+- [x] **US-CI-1033.4** (`DevOps Automation Architect`): In `.github/workflows/playwright-docker.yml` Job 1, add a pre-flight warm-up step pinging Render backend (`/api/books`) and frontend (`/`) with `curl` and `npx wait-on -t 90000` before running tests.
 
-### User Story US-E2E-1024: Test Cataloging & Quality Governance
-*As a Quality Architect, I want the test cases catalog updated with Section 17 documenting Phase 10 Sprint 10.2 standards and all monorepo checks passing cleanly.*
-- [x] **US-E2E-1024.1** (`SDET Architect`): Document Section 17 in `specs/test_cases_catalog.md` (`TC-TIMEOUT-001`, `TC-API-DECOUPLE-001`, `TC-LINT-001`).
-- [x] **US-E2E-1024.2** (`Security Officer`): Verify rate-limit bypass headers and ensure zero secret leaks in storage states or configurations.
-- [x] **US-E2E-1024.3** (`Product Owner`): Verify 100% green test execution across API and UI suites, approve Definition of Done, and authorize PR creation.
+### User Story US-CI-1034: Test Cataloging, Phase 10 Governance & Monorepo Validation
+*As a Quality Architect, I want the test cases catalog updated with Section 18 documenting Sprint 10.3 CI/CD & hermetic standards, and all monorepo checks passing cleanly.*
+- [x] **US-CI-1034.1** (`Principal SDET`): Author Section 18 in `specs/test_cases_catalog.md` (`TC-CICD-001`, `TC-PERF-ISOLATE-001`, `TC-REPORT-DEPLOY-001`, `TC-DOCKER-PREFLIGHT-001`).
+- [x] **US-CI-1034.2** (`DevOps Automation Architect`): Update `planning/Sprints/sprint_10_3_cicd_pipeline_hermetic_isolation_and_report_governance.md` and `planning/Phases/phase_10_e2e_automation_modernization_hermetic_cicd_and_test_governance.md`.
+- [x] **US-CI-1034.3** (`Security Officer`): Verify secret isolation, safe environment variables, and absence of credential leaks across updated workflows.
+- [x] **US-CI-1034.4** (`Product Owner`): Validate monorepo typecheck, linting, test suite execution, approve Definition of Done, and authorize release PR.
 
 ---
 
@@ -56,25 +56,25 @@
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **Pre-Flight Architecture Gate** | SDET Architect | Calibrated Playwright timeouts (30s test, 10s expect), decoupled API test project without browser launch or auth dependencies, and modern ESLint 9/10 flat config verified. | `[APPROVED]` |
-| **Dev Technical Review** | Dev Architect | Monorepo root `npm run lint` and `npm run typecheck` run clean across all packages; `playwright.config.ts` and CI workflows properly isolated. | `[APPROVED]` |
-| **Security Audit Gate** | Security Officer | API project headers (`x-bypass-rate-limit`) scoped to internal test execution; zero credential or token leakage. | `[APPROVED]` |
-| **POM & Quality Gate** | SDET Architect | `finalize-spec.ts` AST rules pass 33/33 Page Object checks and enforce absence of boolean accumulator assertions across all test specs. | `[APPROVED]` |
-| **PO Acceptance Sign-off** | Product Owner | All 55 API test cases execute headlessly in 9.6s with 100% pass rate. Definition of Done fully satisfied; release PR authorized. | `[APPROVED]` |
+| **Pre-Flight Architecture Gate** | Principal SDET | Playwright native managed `webServer` configured with readiness endpoints (`4000/api/books`, `5173`), 60s calibrated readiness timeouts, `reuseExistingServer: !process.env.CI`, and conditional `grepInvert` verified. | `[APPROVED]` |
+| **DevOps Pipeline Review** | DevOps Automation Architect | Removed brittle `nohup`/`wait-on`/`pkill` background shell scripts from `ci.yml`, `playwright-ci.yml`, and `quarantine-audit.yml`. Replaced fragile repository context interpolation across all workflow files. | `[APPROVED]` |
+| **Performance QA Gate** | Performance QA Specialist | Verified database state snapshotting and per-benchmark restoration logic across `ci.yml` Stage 3B and `perf-endurance.yml`. | `[APPROVED]` |
+| **Security Audit Gate** | Security Officer | Verified absence of credential exposure, safe variable substitution using `GITHUB_REPOSITORY`, and isolated secret parameters. | `[APPROVED]` |
+| **PO Acceptance Sign-off** | Product Owner | All 55 API tests pass under managed `webServer`. Monorepo typecheck and linting pass with 0 errors. Definition of Done fully satisfied; release PR authorized. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] Default test timeout is calibrated to 30s (`timeout: 30 * 1000`) and expect timeout to 10s (`expect.timeout: 10 * 1000`) in `playwright.config.ts`.
-- [x] Slow/chaos tests have explicit `test.setTimeout(60000)` overrides.
-- [x] Dedicated `api` project is established in `playwright.config.ts` without `dependencies: ['setup']`.
-- [x] Browser UI projects are restricted to `../tests/ui`.
-- [x] `playwright-e2e` has ESLint configured with `eslint-plugin-playwright` and passes `npm run lint` with 0 errors.
-- [x] Root `npm run lint` includes `playwright-e2e` (`lint:e2e`).
-- [x] `finalize-spec.ts` flags boolean accumulator assertions and passes across all Page Objects and specs.
-- [x] CI workflows (`playwright-ci.yml`, `ci.yml`) updated with `--project=api` and linting step.
-- [x] Section 17 documented in `specs/test_cases_catalog.md`.
+- [x] Playwright `webServer` cleanly manages backend and frontend preview servers in CI and local workflows with readiness polling.
+- [x] Brittle `nohup ... &`, `wait-on`, and `pkill -f` steps removed from `ci.yml` and `playwright-ci.yml`.
+- [x] `quarantine-audit.yml` and `playwright.config.ts` align with `process.env.RUN_QUARANTINE ? undefined : /@quarantine/`.
+- [x] Database state is snapshotted and restored between sequential k6 performance benchmark runs in `ci.yml` Stage 3B.
+- [x] Database state isolation is established in `perf-endurance.yml`.
+- [x] Report deployment steps in `playwright-ci.yml`, `playwright-docker.yml`, and `playwright-on-demand.yml` extract repository info safely without relying on `github.event.repository.name`.
+- [x] Staging pre-flight warm-up step is established in `playwright-docker.yml` to prevent cold-start failures.
+- [x] Section 18 documented in `specs/test_cases_catalog.md`.
+- [x] Phase 10 planning and Sprint 10.3 documents updated with completed status.
 - [x] Monorepo `npm run typecheck` and `npm run lint` pass with 0 errors across all workspaces.
-- [x] All API test suites pass cleanly under `--project=api` (55 tests in 9.6s).
-- [x] Feature branch committed with conventional commits, merged with `origin/main`, pushed to remote, and Pull Request raised via GitHub CLI (`gh pr create`): [#94](https://github.com/munna7862/buggy-books/pull/94).
+- [x] All API test suites pass cleanly under `--project=api`.
+- [ ] Feature branch committed with conventional commits, pushed to remote, and Pull Request raised via GitHub CLI.

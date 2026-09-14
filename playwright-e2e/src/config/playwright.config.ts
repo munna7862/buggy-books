@@ -14,7 +14,7 @@ export default defineConfig({
   timeout: 30 * 1000,
   retries: 1,
   workers: process.env.CI ? 4 : undefined,
-  grepInvert: /@quarantine/,
+  grepInvert: process.env.RUN_QUARANTINE ? undefined : /@quarantine/,
   expect: {
     timeout: 10 * 1000,
     toHaveScreenshot: {
@@ -66,26 +66,26 @@ export default defineConfig({
     {
       command: 'node dist/server.js',
       cwd: backendDir,
-      port: 4000,
-      timeout: 120 * 1000,
-      reuseExistingServer: true,
+      url: 'http://127.0.0.1:4000/api/books',
+      timeout: 60 * 1000,
+      reuseExistingServer: !process.env.CI,
       stdout: 'pipe',
       stderr: 'pipe',
       env: {
         PORT: '4000',
-        NODE_ENV: 'development',
-        JWT_SECRET: 'local-e2e-seed-secret'
-      }
+        NODE_ENV: process.env.NODE_ENV || 'development',
+        JWT_SECRET: process.env.JWT_SECRET || 'ci-test-secret',
+      },
     },
     {
       command: 'npx vite preview --port 5173 --host 127.0.0.1',
       cwd: frontendDir,
-      port: 5173,
-      timeout: 120 * 1000,
-      reuseExistingServer: true,
+      url: 'http://127.0.0.1:5173',
+      timeout: 60 * 1000,
+      reuseExistingServer: !process.env.CI,
       stdout: 'pipe',
-      stderr: 'pipe'
-    }
+      stderr: 'pipe',
+    },
   ] : undefined,
 
   use: {
