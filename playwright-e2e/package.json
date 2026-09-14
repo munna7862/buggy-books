@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts",
+    "typecheck": "tsc --noEmit",
     "test:smoke": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@smoke\" --grep-invert \"@quarantine\"",
     "test:quarantine": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@quarantine\" --grep-invert \"\"",
     "test:quarantine:audit": "node scripts/quarantine-audit.js",

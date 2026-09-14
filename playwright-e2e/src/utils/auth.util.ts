@@ -4,18 +4,19 @@ import * as path from 'path';
 import { logger } from '../core/logger/logger';
 
 export class AuthUtility {
-  private static readonly AUTH_STATE_DIR = path.join(__dirname, '../../../');
-  private static readonly DEFAULT_AUTH_STATE_FILE = path.join(this.AUTH_STATE_DIR, 'auth-state.json');
+  private static readonly AUTH_STATE_DIR = path.resolve(__dirname, '../../.auth');
+  private static readonly DEFAULT_AUTH_STATE_FILE = path.join(this.AUTH_STATE_DIR, 'user.json');
 
   /**
    * Save authentication state (cookies, localStorage, sessionStorage) to a file
    * Call this after user login to preserve the session for reuse
    * @param context - Playwright browser context
-   * @param filePath - Optional custom file path to save auth state (defaults to auth-state.json)
+   * @param filePath - Optional custom file path to save auth state (defaults to .auth/user.json)
    */
   public static async saveAuthState(context: BrowserContext, filePath?: string): Promise<string> {
     const targetPath = filePath || this.DEFAULT_AUTH_STATE_FILE;
     try {
+      await fs.mkdir(path.dirname(targetPath), { recursive: true });
       const storageState = await context.storageState();
       await fs.writeFile(targetPath, JSON.stringify(storageState, null, 2), 'utf-8');
       logger.info(`✅ Authentication state saved to: ${targetPath}`);
