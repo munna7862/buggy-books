@@ -1,0 +1,16 @@
+[2026-09-15 00:59:05] INFO:  Response status Success !! Actual and Expected Values are:: 201
+[2026-09-15 00:59:05] INFO:  Registration response is an object Success !! Actual and Expected Values are:: object
+[2026-09-15 00:59:05] INFO:  Registration response is not null Success !! Actual and Expected Values are:: true
+[2026-09-15 00:59:05] INFO:  Message is a string Success !! Actual and Expected Values are:: string
+[2026-09-15 00:59:05] INFO:  Username is a string Success !! Actual and Expected Values are:: string
+[2026-09-15 00:59:05] INFO:  Registration message Success !! Actual and Expected Values are:: Registration successful
+[2026-09-15 00:59:05] INFO:  Registered username matches request Success !! Actual and Expected Values are:: johndoe17893997456088d87f12b@
+[2026-09-15 00:59:05] INFO:  Response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","username"]
+[2026-09-15 00:59:05] INFO:  Login response status after registration Success !! Actual and Expected Values are:: 200
+[2026-09-15 00:59:05] INFO:  Login response is an object Success !! Actual and Expected Values are:: object
+[2026-09-15 00:59:05] INFO:  Login response is not null Success !! Actual and Expected Values are:: true
+[2026-09-15 00:59:05] INFO:  Login message is a string Success !! Actual and Expected Values are:: string
+[2026-09-15 00:59:05] INFO:  Login username is a string Success !! Actual and Expected Values are:: string
+[2026-09-15 00:59:05] INFO:  Login message Success !! Actual and Expected Values are:: Login successful
+[2026-09-15 00:59:05] INFO:  Logged in username matches request Success !! Actual and Expected Values are:: johndoe17893997456088d87f12b@
+[2026-09-15 00:59:05] INFO:  Login response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","username"]

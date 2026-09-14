@@ -1,4 +1,0 @@
-[2026-09-14 02:24:51] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789318491389-t4co
-[2026-09-14 02:24:51] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
-[2026-09-14 02:24:51] INFO:  Status code for empty username Success !! Actual and Expected Values are:: true
-[2026-09-14 02:24:51] INFO: Cleaned up ephemeral test session: pw-w3-2-1789318491389-t4co
