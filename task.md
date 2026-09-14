@@ -66,4 +66,4 @@
 - [x] `npm run typecheck` passes with 0 errors across all workspaces.
 - [x] `npm run lint` passes with 0 errors and 0 warnings across all workspaces.
 - [x] All 11 frontend test suites (38 tests) and 12 backend test suites (91 tests) pass with 100% green status.
-- [x] Pull Request raised and linked for Sprint 9.3.
+- [x] Pull Request raised and linked: [#92](https://github.com/munna7862/buggy-books/pull/92).
