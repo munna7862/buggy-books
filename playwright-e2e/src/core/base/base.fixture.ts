@@ -12,6 +12,7 @@ import defaultApiUtil, { ApiUtil } from '../../utils/api.util';
 import { envConfig } from '../../config/env.config';
 import { NetworkInterceptor } from '../network/network.interceptor';
 import { writeFile } from 'fs/promises';
+import { randomBytes } from 'crypto';
 import { test as base, expect, APIRequestContext } from '@playwright/test';
 import { captureFailureState } from './failure-hook';
 import axios from 'axios';
@@ -38,7 +39,7 @@ type TestFixtures = {
 export const test = base.extend<TestFixtures>({
 
   testSessionId: async ({}, use, testInfo) => {
-    const rawId = `pw-w${testInfo.workerIndex}-${testInfo.parallelIndex}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
+    const rawId = `pw-w${testInfo.workerIndex}-${testInfo.parallelIndex}-${Date.now()}-${randomBytes(4).toString('hex')}`;
     await use(rawId);
   },
 
