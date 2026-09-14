@@ -1,0 +1,3 @@
+[2026-09-14 20:48:29] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789384709100-umqm
+[2026-09-14 20:48:29] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true
+[2026-09-14 20:48:29] INFO: Cleaned up ephemeral test session: pw-w3-2-1789384709100-umqm
