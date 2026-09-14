@@ -1,4 +1,4 @@
-import { test, expect } from '../../../core/base/base.fixture';
+import { test, expect } from '@playwright/test';
 import type { Book, PaginatedBooks } from '@buggybooks/types';
 import { CommonFunctions } from '../../../utils/common.util';
 import testData from '../../../test-data/api/BookCatalog/Test_001_BooksApi.json';

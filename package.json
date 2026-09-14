@@ -23,6 +23,7 @@
     "test:e2e": "npm test --workspace=automationframeworks",
     "test:e2e:local": "npm run test:e2e:local --workspace=automationframeworks",
     "test:e2e:matrix": "npm run test:e2e:all --workspace=automationframeworks",
+    "test:api": "npm run test:api --workspace=automationframeworks",
     "test:perf": "npm run test:perf --workspace=buggy-books-performance",
     "test:perf:smoke": "npm run test:perf:smoke --workspace=buggy-books-performance",
     "test:perf:stress": "npm run test:perf:stress --workspace=buggy-books-performance",
@@ -32,9 +33,10 @@
     "test:perf:soak": "npm run test:perf:soak --workspace=buggy-books-performance",
     "test:perf:breakpoint": "npm run test:perf:breakpoint --workspace=buggy-books-performance",
     "test:lhci": "npx @lhci/cli autorun",
-    "lint": "concurrently \"npm run lint:frontend\" \"npm run lint:backend\"",
+    "lint": "concurrently \"npm run lint:frontend\" \"npm run lint:backend\" \"npm run lint:e2e\"",
     "lint:backend": "npm run lint --workspace=buggy-books-backend",
-    "lint:frontend": "npm run lint --workspace=frontend"
+    "lint:frontend": "npm run lint --workspace=frontend",
+    "lint:e2e": "npm run lint --workspace=automationframeworks"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

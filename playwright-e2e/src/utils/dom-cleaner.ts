@@ -93,7 +93,7 @@ export async function getCleanDom(page: Page): Promise<string> {
 
       // Filter out redundant containers to reduce token size.
       // A div or span with no relevant attributes, no text, and 0 or 1 children can be optimized/flattened.
-      const isSemanticTag = ['button', 'input', 'select', 'textarea', 'a', 'form', 'table', 'tr', 'td', 'th', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li'].includes(tagName);
+      const _isSemanticTag = ['button', 'input', 'select', 'textarea', 'a', 'form', 'table', 'tr', 'td', 'th', 'label', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li'].includes(tagName);
       const hasSemanticAttr = attrs.id || attrs['data-testid'] || attrs['data-qa'] || attrs.role || attrs.name || attrs.placeholder;
 
       if ((tagName === 'div' || tagName === 'span') && !hasSemanticAttr) {

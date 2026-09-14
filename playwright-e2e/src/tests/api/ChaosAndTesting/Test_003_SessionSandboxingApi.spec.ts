@@ -1,9 +1,10 @@
-import { test, expect } from '../../../core/base/base.fixture';
+import { test, expect } from '@playwright/test';
 import { envConfig } from '../../../config/env.config';
 
 test.describe('Session-Partitioned Data Sandboxing & Multi-Tenant Isolation', () => {
 
-  test('API_SAN_01: Concurrent sessions maintain 100% data isolation for cart and user state @smoke @regression @sandboxing', async ({ playwright, testSessionId }) => {
+  test('API_SAN_01: Concurrent sessions maintain 100% data isolation for cart and user state @smoke @regression @sandboxing', async ({ playwright }, testInfo) => {
+    const testSessionId = `pw-w${testInfo.workerIndex}-${testInfo.parallelIndex}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`;
     const sessionA = `${testSessionId}-worker-a`;
     const sessionB = `${testSessionId}-worker-b`;
 

@@ -1,4 +1,4 @@
-import { test, expect } from '../../../core/base/base.fixture';
+import { test, expect } from '@playwright/test';
 import { CommonFunctions } from '../../../utils/common.util';
 import { randomBytes } from 'crypto';
 

@@ -5,7 +5,7 @@ import TestData from '../../../test-data/ui/Diagnostic/Test_011_DiagnosticAssert
 
 test.describe('Diagnostic Assertion Engine & Step Logging Suite', () => {
 
-  test('TC-ASSERT-001: verifyValue and verifyCondition exact diff diagnostic assertions @smoke @regression', async ({ commonFunctions, page }) => {
+  test('TC-ASSERT-001: verifyValue and verifyCondition exact diff diagnostic assertions @smoke @regression', async ({ commonFunctions }) => {
     await test.step('Verify matching scalar values succeed cleanly with PASS log', async () => {
       await commonFunctions.verifyValue(TestData.testStrings.actual, TestData.testStrings.expected, 'Validating matching string scalar values');
       await commonFunctions.verifyValue(TestData.testNumbers.actual, TestData.testNumbers.expected, 'Validating matching number scalar values');
@@ -49,7 +49,7 @@ test.describe('Diagnostic Assertion Engine & Step Logging Suite', () => {
     });
   });
 
-  test('TC-ASSERT-002: Locator verification helpers with polling and structured logging @regression', async ({ commonFunctions, catalogPage, page }) => {
+  test('TC-ASSERT-002: Locator verification helpers with polling and structured logging @regression', async ({ commonFunctions, catalogPage }) => {
     await test.step('Navigate to catalog page', async () => {
       await catalogPage.navigateToCatalog(envConfig.baseUrl);
       await catalogPage.waitForBookCardsVisible();

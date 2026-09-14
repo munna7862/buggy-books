@@ -1,8 +1,5 @@
-import { test, expect } from '../../../core/base/base.fixture';
-import { CommonFunctions } from '../../../utils/common.util';
+import { test, expect } from '@playwright/test';
 import { randomBytes } from 'crypto';
-
-const commonUtil = new CommonFunctions();
 
 function uniqueUsername(prefix: string = 'cartuser'): string {
   return `${prefix}${Date.now()}${randomBytes(4).toString('hex')}@`;
@@ -10,7 +7,7 @@ function uniqueUsername(prefix: string = 'cartuser'): string {
 
 test.describe('Cart & Inventory API', () => {
 
-  test('API_CART_01: Cart persistence after server crash @smoke @regression', async ({ request }, testInfo) => {
+  test('API_CART_01: Cart persistence after server crash @smoke @regression', async ({ request }) => {
     // 1. Register a new user
     const username = uniqueUsername();
     const password = 'Password123!';

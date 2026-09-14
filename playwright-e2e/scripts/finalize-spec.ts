@@ -218,6 +218,11 @@ if (isSpec && existsSync(targetPath)) {
     ? 'No inline page selectors found.'
     : `Found ${inlineLocatorMatches.length} inline page selector(s); move them to a Page Object.`);
 
+  const booleanAccumulatorMatches = specContent.match(/expect\s*\([\s\S]*?\)\s*\.toBeTruthy\s*\(/g)?.filter(match => match.includes('&&')) ?? [];
+  addResult('No boolean accumulator assertions', booleanAccumulatorMatches.length === 0, booleanAccumulatorMatches.length === 0
+    ? 'No boolean accumulator assertions found.'
+    : `Found ${booleanAccumulatorMatches.length} boolean accumulator assertion(s); use direct Playwright assertions or CommonFunctions verification helpers.`);
+
   if (isUiSpec) {
     const usesCustomFixture = /import\s*\{[^}]*\btest\b[^}]*\}\s*from\s*['"][^'"]*core\/base\/base\.fixture['"]/.test(specContent);
     const testStepMatches = specContent.match(/\btest\.step\s*\(/g) ?? [];

@@ -1,4 +1,4 @@
-import { test, expect } from '../../../core/base/base.fixture';
+import { test, expect } from '@playwright/test';
 import * as path from 'path';
 import { randomBytes } from 'crypto';
 import { envConfig } from '../../../config/env.config';
@@ -32,9 +32,7 @@ test.describe('Orders API Endpoint', () => {
     const password = 'Password123!';
     const apiBase = envConfig.apiBaseUrl;
 
-    let isOrdersValid = false;
-
-    await test.step('Register new user session via API', async () => {
+    await test.step('Register and authenticate new user session via API', async () => {
       const regRes = await request.post(`${apiBase}/api/register`, {
         data: { username, password, fullName: 'API Orders User' }
       });
@@ -57,23 +55,15 @@ test.describe('Orders API Endpoint', () => {
 
     await test.step('Fetch GET /api/orders and verify orders list payload', async () => {
       const ordersRes = await request.get(`${apiBase}/api/orders`);
-      const status = ordersRes.status();
+      expect(ordersRes.status()).toBe(200);
       const orders = await ordersRes.json();
-
-      const isStatusOk = status === 200;
-      const isArray = Array.isArray(orders);
-      const hasOrder = isArray && orders.length > 0;
-
-      const isValidPayload = isStatusOk && isArray && hasOrder;
-
-      isOrdersValid = await commonUtil.compareTwoValues(
-        isValidPayload,
-        true,
+      expect(Array.isArray(orders)).toBe(true);
+      expect(orders.length).toBeGreaterThan(0);
+      await commonUtil.logMessage(
+        'INFO',
         'Verifying GET /api/orders returns 200 OK and non-empty array of placed orders'
       );
     });
-
-    expect(isOrdersValid).toBeTruthy();
   });
 
 });

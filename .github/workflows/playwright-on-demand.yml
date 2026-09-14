@@ -307,7 +307,7 @@ jobs:
             COMBINED_GREP="${GREP_INPUT}"
           fi
 
-          ARGS=("$TARGET_PATH" "--config=src/config/playwright.config.ts" "--project=chromium" "--workers=${WORKERS}" "--pass-with-no-tests")
+          ARGS=("$TARGET_PATH" "--config=src/config/playwright.config.ts" "--project=api" "--workers=${WORKERS}" "--pass-with-no-tests")
 
           if [ -n "$COMBINED_GREP" ]; then
             ARGS+=("--grep" "$COMBINED_GREP")

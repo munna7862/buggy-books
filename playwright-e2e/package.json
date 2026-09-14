@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts",
+    "test:api": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --project=api",
     "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
     "test:smoke": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@smoke\" --grep-invert \"@quarantine\"",
     "test:quarantine": "cross-env TZ=Australia/Adelaide npx playwright test --config=src/config/playwright.config.ts --grep \"@quarantine\" --grep-invert \"\"",
     "test:quarantine:audit": "node scripts/quarantine-audit.js",
@@ -30,15 +32,20 @@
   "type": "commonjs",
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
+    "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.0",
     "@types/node": "^25.0.10",
     "allure-commandline": "^2.34.1",
     "allure-js-commons": "^3.4.1",
     "allure-playwright": "^3.4.1",
+    "eslint": "^10.10.0",
+    "eslint-plugin-playwright": "^2.12.0",
+    "globals": "^17.12.0",
     "monocart-reporter": "^2.13.0",
     "rimraf": "^5.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.70.0"
   },
   "dependencies": {
     "axios": "^1.13.3",

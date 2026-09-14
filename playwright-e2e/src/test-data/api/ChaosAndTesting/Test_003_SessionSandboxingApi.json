@@ -1,0 +1,4 @@
+{
+  "testSuite": "Session-Partitioned Data Sandboxing & Multi-Tenant Isolation",
+  "description": "Mirrored test data contract for API_SAN_01 multi-tenant session isolation"
+}
