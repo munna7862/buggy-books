@@ -77,4 +77,4 @@
 - [x] Section 17 documented in `specs/test_cases_catalog.md`.
 - [x] Monorepo `npm run typecheck` and `npm run lint` pass with 0 errors across all workspaces.
 - [x] All API test suites pass cleanly under `--project=api` (55 tests in 9.6s).
-- [ ] Feature branch committed with conventional commits, merged with `origin/main`, pushed to remote, and Pull Request raised via GitHub CLI (`gh pr create`).
+- [x] Feature branch committed with conventional commits, merged with `origin/main`, pushed to remote, and Pull Request raised via GitHub CLI (`gh pr create`): [#94](https://github.com/munna7862/buggy-books/pull/94).
