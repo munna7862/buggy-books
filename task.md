@@ -69,3 +69,4 @@
 - [x] `npm install` runs cleanly from root.
 - [x] `npm run lint` and `npm run typecheck` pass with 0 errors and 0 warnings.
 - [x] Backend unit tests (`npm run test:backend`) and frontend tests (`npm run test:frontend`) pass with 100% green status.
+- [x] Pull Request raised and linked: [#89](https://github.com/munna7862/buggy-books/pull/89).
