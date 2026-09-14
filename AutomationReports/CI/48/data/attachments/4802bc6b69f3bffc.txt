@@ -1,0 +1,3 @@
+[2026-09-14 21:42:17] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789387937185-9870feed
+[2026-09-14 21:42:18] INFO: Verifying orphaned form label and unlinked input ID under chaos mode - Condition met (true)
+[2026-09-14 21:42:18] INFO: Cleaned up ephemeral test session: pw-w3-2-1789387937185-9870feed
