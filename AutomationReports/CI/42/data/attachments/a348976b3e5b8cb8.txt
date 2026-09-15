@@ -1,4 +1,0 @@
-[2026-09-14 17:00:16] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1789371016990-bu87
-[2026-09-14 17:00:17] INFO: Last item on page 1 ID: 5
-[2026-09-14 17:00:17] INFO: First item on page 2 ID: 6
-[2026-09-14 17:00:17] INFO: Cleaned up ephemeral test session: pw-w1-0-1789371016990-bu87
