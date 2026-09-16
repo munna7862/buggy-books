@@ -1,0 +1,9 @@
+[2026-09-16 16:38:50] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789542530631-ba4ecca6
+[2026-09-16 16:38:50] INFO: Clicking on Sign Up link
+[2026-09-16 16:38:51] INFO: Entering password: 123
+[2026-09-16 16:38:51] INFO: Getting password strength text
+[2026-09-16 16:38:51] INFO: Verifying if password strength is Weak - Matched: [Weak]
+[2026-09-16 16:38:51] INFO: Entering password: ComplexPass123!
+[2026-09-16 16:38:51] INFO: Getting password strength text
+[2026-09-16 16:38:51] INFO: Verifying if password strength is Strong - Matched: [Strong]
+[2026-09-16 16:38:51] INFO: Cleaned up ephemeral test session: pw-w3-2-1789542530631-ba4ecca6

@@ -1,0 +1,2 @@
+[2026-09-16 16:37:59] INFO: Verifying POST /api/test/config status is 200
+[2026-09-16 16:37:59] INFO: Verifying visualChaos field is true in response config
