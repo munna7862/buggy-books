@@ -1,0 +1,32 @@
+[2026-09-17 16:35:51] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789628751862-e4092468
+[2026-09-17 16:35:52] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-17 16:35:52] INFO: Checking if Logout button is visible on Catalog page - Element is visible
+[2026-09-17 16:35:52] INFO: Verifying user is pre-authenticated via storageState - Matched: [true]
+[2026-09-17 16:35:52] INFO: Clicking on Cart link
+[2026-09-17 16:35:58] INFO: Clicking on Catalog link
+[2026-09-17 16:35:58] INFO: Clicking on Add to Cart button for book id: 1
+[2026-09-17 16:35:58] INFO: Waiting for cart status message: added to cart
+[2026-09-17 16:35:59] INFO: Cart status message "added to cart" is visible
+[2026-09-17 16:35:59] INFO: Waiting for cart status message: Added to cart!
+[2026-09-17 16:35:59] INFO: Cart status message "Added to cart!" is visible
+[2026-09-17 16:35:59] INFO: Clicking on Cart link
+[2026-09-17 16:36:00] INFO: Getting cart item text
+[2026-09-17 16:36:00] INFO: Getting cart total text
+[2026-09-17 16:36:00] INFO: Clicking on Proceed to Checkout button
+[2026-09-17 16:36:00] INFO: Waiting for checkout order total amount: $10.99
+[2026-09-17 16:36:00] INFO: Entering first name: john
+[2026-09-17 16:36:00] INFO: Entering last name: cena
+[2026-09-17 16:36:00] INFO: Entering shipping address: 123 Buggy Lane
+[2026-09-17 16:36:00] INFO: Entering city: Stack City
+[2026-09-17 16:36:00] INFO: Clicking on Next Step button
+[2026-09-17 16:36:01] INFO: Entering card number
+[2026-09-17 16:36:01] INFO: Entering card expiry: 12/30
+[2026-09-17 16:36:01] INFO: Entering card CVV: 123
+[2026-09-17 16:36:01] INFO: Checking if Next Step button is visible - Element is visible
+[2026-09-17 16:36:01] INFO: Clicking on Next Step button on Payment page
+[2026-09-17 16:36:01] INFO: Waiting for confirmation message containing: Payment Successful! Thank you for your order.
+[2026-09-17 16:36:01] INFO: Payment completed successfully and order confirmation message is displayed.
+[2026-09-17 16:36:01] INFO: Clicking on Logout button
+[2026-09-17 16:36:02] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-17 16:36:02] INFO: Verifying if user logged out successfully - Matched: [true]
+[2026-09-17 16:36:02] INFO: Cleaned up ephemeral test session: pw-w3-2-1789628751862-e4092468

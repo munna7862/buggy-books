@@ -1,3 +1,0 @@
-[2026-09-14 20:17:05] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1789382825889-vo9w
-[2026-09-14 20:17:05] INFO:  Verifying API preserves custom x-correlation-id header Success !! Actual and Expected Values are:: custom-correlation-uuid-99999
-[2026-09-14 20:17:05] INFO: Cleaned up ephemeral test session: pw-w2-1-1789382825889-vo9w
