@@ -1,0 +1,16 @@
+[2026-09-18 16:30:01] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789714801538-5217f7a8
+[2026-09-18 16:30:02] INFO: Clicking on Sign Up link
+[2026-09-18 16:30:02] INFO: Entering full name: Full profile_user_HdeVu
+[2026-09-18 16:30:02] INFO: Entering username: profile_user_HdeVu
+[2026-09-18 16:30:02] INFO: Entering password: Password123!
+[2026-09-18 16:30:03] INFO: Entering confirming password: Password123!
+[2026-09-18 16:30:03] INFO: Clicking on Create Account button
+[2026-09-18 16:30:03] INFO: Verifying landing on Checkout Page
+[2026-09-18 16:30:03] INFO: Checking if Checkout label is visible
+[2026-09-18 16:30:04] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-18 16:30:04] INFO: Clicking on Profile navbar link
+[2026-09-18 16:30:04] INFO: Selecting file for avatar upload: /home/runner/work/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/invalid_file.txt
+[2026-09-18 16:30:04] INFO: Clicking Upload Image button
+[2026-09-18 16:30:04] INFO: Getting upload error message text
+[2026-09-18 16:30:04] INFO: Verifying file extension filter 400 error message - Condition met (true)
+[2026-09-18 16:30:04] INFO: Cleaned up ephemeral test session: pw-w3-2-1789714801538-5217f7a8

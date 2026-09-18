@@ -1,0 +1,33 @@
+[2026-09-18 16:29:51] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1789714791203-110f1582
+[2026-09-18 16:29:52] INFO: Clicking on Sign Up link
+[2026-09-18 16:29:52] INFO: Entering full name: Full wiz_user_Joi0h
+[2026-09-18 16:29:52] INFO: Entering username: wiz_user_Joi0h
+[2026-09-18 16:29:52] INFO: Entering password: Password123!
+[2026-09-18 16:29:52] INFO: Entering confirming password: Password123!
+[2026-09-18 16:29:52] INFO: Clicking on Create Account button
+[2026-09-18 16:29:53] INFO: Verifying landing on Checkout Page
+[2026-09-18 16:29:53] INFO: Checking if Checkout label is visible
+[2026-09-18 16:29:53] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-18 16:29:53] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-18 16:29:54] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-18 16:29:54] INFO: Clicking on Add to Cart button for book id: 1
+[2026-09-18 16:29:55] INFO: Waiting for cart status message: added to cart
+[2026-09-18 16:29:55] INFO: Cart status message "added to cart" is visible
+[2026-09-18 16:29:55] INFO: Clicking on Cart link
+[2026-09-18 16:29:55] INFO: Clicking on Proceed to Checkout button
+[2026-09-18 16:29:55] INFO: Entering first name: John
+[2026-09-18 16:29:55] INFO: Entering last name: Doe
+[2026-09-18 16:29:55] INFO: Entering shipping address: 123 Buggy Lane
+[2026-09-18 16:29:56] INFO: Entering city: Stack City
+[2026-09-18 16:29:56] INFO: Clicking on Next Step button to trigger validation
+[2026-09-18 16:29:56] INFO: Entering card number
+[2026-09-18 16:29:56] INFO: Entering card expiry: 12/28
+[2026-09-18 16:29:56] INFO: Entering card CVV: 123
+[2026-09-18 16:29:56] INFO: Clicking on Back step button
+[2026-09-18 16:29:56] INFO: Verifying returning to Step 1 after clicking Back - Matched: [true]
+[2026-09-18 16:29:56] INFO: Clicking on Next Step button to trigger validation
+[2026-09-18 16:29:57] INFO: Verifying returning to Step 2 after clicking Next - Matched: [true]
+[2026-09-18 16:29:57] INFO: Verifying preserved credit card number - Matched: [4111222233334444]
+[2026-09-18 16:29:57] INFO: Verifying preserved expiry date - Matched: [12/28]
+[2026-09-18 16:29:57] INFO: Verifying preserved CVV - Matched: [123]
+[2026-09-18 16:29:57] INFO: Cleaned up ephemeral test session: pw-w2-1-1789714791203-110f1582
