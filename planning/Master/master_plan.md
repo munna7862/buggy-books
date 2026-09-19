@@ -163,6 +163,7 @@ The repository maintains full test pyramid coverage tracked centrally in `specs/
 | **Accessibility (A11y)** | `@axe-core/playwright` | `src/tests/ui/A11y/` | WCAG 2.1 AA automated scans |
 | **Visual Regression** | Playwright PixelMatch | `src/tests/ui/VisualRegression/` | Full-page visual chaos diffs |
 | **WebSocket Resilience** | Socket.io client | `src/tests/ui/WebSockets/` | Disconnect/reconnect events |
+| **Mobile E2E Automation** | Maestro, Appium (WDIO) | `mobile-automation/` | Native Android & iOS test flows (`specs/test_cases_catalog.md`) |
 
 ---
 
@@ -207,6 +208,8 @@ sequenceDiagram
   - `playwright-ci.yml` — Runs Playwright E2E suites against local dev servers.
   - `playwright-docker.yml` — Sharded parallel Playwright runs in isolated Docker containers.
   - `codacy.yml` — Automated static security & code scanning SARIF upload.
+  - `mobile-ci.yml` — Mobile lint, typecheck, and Maestro test execution against headless Android emulators.
+  - `mobile-release.yml` — Automated Expo EAS build pipeline compiling downloadable Android APK release artifacts.
 * **Containerization**:
   - `docker-compose.yml` orchestrating `backend/Dockerfile` and `frontend/Dockerfile` behind an `nginx` reverse proxy.
 
@@ -226,8 +229,9 @@ sequenceDiagram
 | **[Phase 8](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_8_performance_engineering_visual_reporting_and_runtime_observability.md)** | Advanced Performance Engineering, Interactive Visual Reporting & Runtime Observability | `[COMPLETED]` | Standalone interactive HTML performance dashboard, unified k6 summary handlers, CI baseline alignment, stateful e-commerce user journeys (auth bursts, checkout concurrency), Node.js Event Loop Lag diagnostics, and continuous historical regression tracking. |
 | **[Phase 9](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_9_full_stack_quality_hardening_monorepo_workspaces_and_system_resilience.md)** | Full-Stack Quality Hardening, Monorepo Workspaces & System Resilience | `[PLANNED]` | Native npm workspaces, auth token git purge, atomic Windows-safe DB persistence with write queue mutex, strict CORS origin whitelist, dynamic CSRF retry lifecycle, and MSW test mock consolidation. (Sprints 9.1, 9.2, 9.3) |
 | **[Phase 10](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_10_e2e_automation_modernization_hermetic_cicd_and_test_governance.md)** | E2E Automation Modernization, Hermetic CI/CD & Test Governance | `[PLANNED]` | Diagnostic assertion architecture preserving Winston/Allure step logs, native Playwright auto-waiting, 30s timeout calibration, decoupled headless API project, Playwright ESLint linter, managed CI webServers, and resilient report deployment. (Sprints 10.1, 10.2, 10.3) |
-| **[Phase 11](file:///c:/BuggyBooks/buggy-books/planning/Master/mobile_app_master_plan.md)** | Cross-Platform Mobile App Foundations (Android & iOS) & Dual-Auth | `[PLANNED]` | Backend Dual-Authentication (Bearer + Cookie), Expo monorepo workspace, secure token storage (`expo-secure-store`), Native Navigation, Catalog, Book Details, Cart, Checkout, and Profile with Camera/Gallery. (Sprints 11.1, 11.2, 11.3) |
-| **[Phase 12](file:///c:/BuggyBooks/buggy-books/planning/Master/mobile_app_master_plan.md)** | Mobile Chaos Engineering, Appium/Maestro Automation & Mobile CI/CD | `[PLANNED]` | Deliberate mobile anti-patterns (obfuscated `testID`s, keyboard occlusion, dynamic delay, flaky gateway), declarative Maestro test flows, Appium POM suites, and GitHub Actions mobile CI. (Sprints 12.1, 12.2, 12.3) |
+| **[Phase 11](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_11_mobile_foundations_and_full_stack_core.md)** | Cross-Platform Mobile App Foundations (Android & iOS) & Dual-Auth | `[PLANNED]` | Backend Dual-Authentication (Bearer + Cookie + Refresh), Expo monorepo workspace (`mobile/metro.config.js`), secure token storage (`expo-secure-store`), Native Navigation, Catalog, Book Details, Cart, Checkout, and Profile with Camera/Gallery. (Sprints 11.1, 11.2, 11.3) |
+| **[Phase 12](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_12_mobile_anti_patterns_automation_and_cicd.md)** | Mobile Chaos Engineering, Appium/Maestro Automation & Mobile CI/CD | `[PLANNED]` | Deliberate mobile anti-patterns (obfuscated `testID`s, keyboard occlusion, dynamic delay, flaky gateway), declarative Maestro test flows, Appium POM suites, and GitHub Actions mobile CI on macOS runners. (Sprints 12.1, 12.2, 12.3) |
+
 
 
 

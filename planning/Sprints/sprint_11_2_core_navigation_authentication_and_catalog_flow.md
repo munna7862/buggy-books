@@ -21,11 +21,11 @@
 
 ## 2. Sprint Backlog & Granular User Stories
 
-### User Story US-MOB-1121: Secure Storage, API Client & AuthContext
+### User Story US-MOB-1121: Secure Storage, API Client with Refresh Mutex & AuthContext
 - **Story Statement**:  
   *As a* Mobile User,  
-  *I want* my login session securely remembered on my phone,  
-  *So that* I do not have to re-enter my credentials every time I open the app.
+  *I want* my login session securely remembered on my phone with resilient token auto-refresh,  
+  *So that* I do not have to re-enter my credentials every time I open the app and my session does not drop during background tasks.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
   - [ ] Implement `mobile/src/utils/storage.ts` wrapping `expo-secure-store`:
@@ -34,13 +34,16 @@
     - `getRefreshToken(): Promise<string | null>`
     - `clearTokens(): Promise<void>`
   - [ ] Implement `mobile/src/api/client.ts`:
-    - Automatic `baseURL` resolution (`10.0.2.2:4000` for Android Emulator, `localhost:4000` for iOS Simulator, Render for remote).
+    - Automatic `baseURL` resolution: `10.0.2.2:4000` for Android Emulator, `localhost:4000` for iOS Simulator, dynamic LAN IP via `Constants.expoConfig?.hostUri` for physical devices, Render for production.
     - Request interceptor injecting `Authorization: Bearer <token>`.
-    - Response interceptor catching `401 Unauthorized` and attempting silent refresh via `/api/auth/refresh`.
+    - Response interceptor catching `401 Unauthorized`:
+      - Implement a promise-based **refresh mutex queue** to serialize simultaneous 401s into a single `POST /api/auth/refresh` request, replaying queued requests upon resolution.
+      - On refresh failure, wipe tokens and dispatch auth logout event.
   - [ ] Create `mobile/src/context/AuthContext.tsx`:
     - Provides `user`, `isAuthenticated`, `isLoading`, `login()`, `register()`, `logout()`.
 - **Acceptance Criteria**:
   - [ ] Logging in persists JWT in secure storage.
+  - [ ] Multiple parallel 401 requests trigger exactly one `/api/auth/refresh` call and all resolve seamlessly.
   - [ ] Relaunching the app restores authenticated session without prompting for login.
   - [ ] Logging out wipes secure storage and navigates to the login screen.
 
@@ -63,17 +66,18 @@
   - [ ] Implement `RegisterScreen`:
     - Fields: Full Name, Username, Password.
     - Password strength hints and instant login upon successful registration.
+  - [ ] Security Champion (SEC) Audit: Verify that credentials are not logged to console and tokens are cleared on logout.
 - **Acceptance Criteria**:
   - [ ] Submitting valid credentials immediately transitions to the Catalog tab.
   - [ ] Pressing back does not navigate to login when authenticated.
 
 ---
 
-### User Story US-MOB-1123: Book Catalog & Book Detail Screens
+### User Story US-MOB-1123: Book Catalog & Book Detail Screens & Test Catalog
 - **Story Statement**:  
-  *As a* Mobile Book Buyer,  
-  *I want* to browse books in a responsive grid, search by title or author, and view complete book details,  
-  *So that* I can find books and add them to my cart.
+  *As a* Mobile Book Buyer & SDET,  
+  *I want* to browse and search books on mobile, and have all mobile authentication and discovery test cases cataloged,  
+  *So that* I can find books and ensure test coverage traceability per AGENTS.md.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
   - [ ] Implement `CatalogScreen`:
@@ -85,10 +89,18 @@
     - Large cover art, full description, ISBN, stock status indicator.
     - Quantity selector (`-` and `+` buttons).
     - "Add to Cart" CTA button.
+  - [ ] SDET Task: Document mobile test cases in `specs/test_cases_catalog.md`:
+    - `MOB_AUTH_01`: Valid Login & SecureStore Persistence.
+    - `MOB_AUTH_02`: Invalid Credentials & Error Banner.
+    - `MOB_AUTH_03`: Registration & Instant Navigation.
+    - `MOB_AUTH_04`: Silent Token Refresh on Expiration.
+    - `MOB_AUTH_05`: Logout & Storage Purge.
+    - `MOB_CAT_01` to `MOB_CAT_04`: Catalog Grid, Paging, Search & Empty State.
 - **Acceptance Criteria**:
   - [ ] Tapping a book card navigates to its `BookDetailScreen`.
   - [ ] Searching filters books dynamically with debouncing.
   - [ ] Pull-to-refresh refreshes list from the backend API.
+  - [ ] `specs/test_cases_catalog.md` contains the new Mobile Test Suite section.
 
 ---
 
@@ -96,8 +108,9 @@
 
 - [ ] All 3 user stories implemented with strict TypeScript typing.
 - [ ] Mobile app runs on Android Emulator and iOS Simulator without runtime crashes.
-- [ ] Authentication, token refresh, and logout verified with live backend.
+- [ ] Authentication, token refresh mutex, and logout verified with live backend.
 - [ ] Catalog search and book detail rendering verified with backend database.
+- [ ] Test cases cataloged in `specs/test_cases_catalog.md`.
 
 ---
 
@@ -113,3 +126,14 @@ npm run dev:mobile:android
 # Launch Expo app on iOS simulator
 npm run dev:mobile:ios
 ```
+
+---
+
+## 5. Risk Assessment & Technical Mitigations
+
+| Risk | Impact | Likelihood | Mitigation Strategy |
+| :--- | :--- | :--- | :--- |
+| **Concurrent 401 Refresh Storm** | Medium | High | Implement an Axios response interceptor promise queue (mutex) to collapse multiple simultaneous 401 responses into a single refresh call. |
+| **Android Emulator Localhost Network Failure** | High | Medium | Enforce `10.0.2.2` mapping for Android and auto-detect host IP via Expo's manifest for physical Wi-Fi testing. |
+| **SecureStore Emulation Inconsistency** | Low | Low | `expo-secure-store` falls back gracefully to encrypted SQLite/SharedPreferences on emulators where hardware Keystores are simulated. |
+

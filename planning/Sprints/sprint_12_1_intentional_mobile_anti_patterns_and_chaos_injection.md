@@ -14,6 +14,7 @@
 | **Scrum Master** | AI Agent / SM | Sprint backlog coordination, bug catalog verification, and DoD audit. |
 | **Mobile Developer** | AI Agent / Mobile | Implement deliberate anti-patterns across mobile screens and components. |
 | **Chaos Specialist** | AI Agent / Chaos | Ensure error injection and latencies conform strictly to chaos configurations. |
+| **Security Champion** | AI Agent / SEC | Audit client-side error states, verify offline mode doesn't store plain tokens, and approve intentional bug specs. |
 | **Principal SDET** | AI Agent / SDET | Verify that all anti-patterns provide genuine automation challenges for Appium and Maestro. |
 | **Product Owner** | Human PO / AI PO | Review intentional bugs catalog and validate that functional UX remains operable despite obstacles. |
 
@@ -71,10 +72,12 @@
     - Add a toggle in `ChaosScreen` to simulate offline mode.
     - When active, API client simulates network timeout (`ECONNABORTED`), rendering a top floating `OfflineBanner`.
   - [ ] **MOB-B6: Orientation Layout Shift**:
+    - Ensure `app.json` has `"orientation": "default"` enabled to allow landscape rotation.
     - When rotating device to landscape on `CheckoutScreen`, the bottom navigation bar overlaps the submit section unless layout responds to orientation changes.
-  - [ ] Document all mobile anti-patterns (MOB-B1 to MOB-B6) in `intentional_bugs.md`.
+  - [ ] Document all mobile anti-patterns (MOB-B1 to MOB-B6) in `intentional_bugs.md` with SEC and PO review.
 - **Acceptance Criteria**:
   - [ ] Toggling simulated offline mode displays the offline banner and catches requests gracefully.
+  - [ ] Landscape rotation skews layout and triggers MOB-B6 as intended.
   - [ ] `intentional_bugs.md` contains complete catalog of mobile bugs with detection instructions.
 
 ---
@@ -84,7 +87,8 @@
 - [ ] Anti-patterns MOB-B1 through MOB-B6 implemented cleanly in the mobile codebase.
 - [ ] [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md) updated with a dedicated "Mobile Testing Challenges" section.
 - [ ] Mobile app functions normally for human testers while providing challenging automation targets.
-- [ ] TypeScript compilation passes with zero errors.
+- [ ] Security Champion (SEC) signs off on anti-pattern implementations.
+- [ ] TypeScript compilation passes with zero errors (`npm run typecheck:mobile`).
 
 ---
 
@@ -92,8 +96,19 @@
 
 ```bash
 # Verify TypeScript build
-npm run typecheck
+npm run typecheck:mobile
 
 # Launch app to verify anti-patterns
 npm run dev:mobile
 ```
+
+---
+
+## 5. Risk Assessment & Technical Mitigations
+
+| Risk | Impact | Likelihood | Mitigation Strategy |
+| :--- | :--- | :--- | :--- |
+| **Orientation Locked by OS / Expo Defaults** | High | High | Explicitly configure `"orientation": "default"` in `mobile/app.json` and install `expo-screen-orientation` if programmatic rotation locking is required. |
+| **Dynamic Delay Flakiness in Fast Smoke Tests** | Medium | Medium | Provide a chaos toggle or query parameter to clamp `inventoryDelayMs` and client-side add-to-cart delays during deterministic smoke test runs. |
+| **Platform-Specific Keyboard Inconsistencies** | Medium | Low | Verify keyboard dismissal behaviors across both Android (`driver.hideKeyboard()`) and iOS (`driver.dismissAlert()` / tapping outside) in test design. |
+

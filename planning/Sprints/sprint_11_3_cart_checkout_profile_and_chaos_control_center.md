@@ -15,6 +15,7 @@
 | **Mobile Developer** | AI Agent / Mobile | Build `CartContext`, `CartScreen`, `CheckoutScreen`, `ProfileScreen`, and `ChaosScreen`. |
 | **Hardware / Native Specialist** | AI Agent / Native | Handle camera/gallery permission lifecycles, image cropping, and multipart uploads. |
 | **Chaos Specialist** | AI Agent / Chaos | Ensure the Chaos Control Center correctly maps to `GET /api/test/config` and `POST /api/test/config`. |
+| **Security Champion** | AI Agent / SEC | Audit multipart avatar upload stream, 2MB size limit, MIME type whitelist, and Multer disk storage security. |
 | **QA Specialist** | AI Agent / QA | Test end-to-end purchasing flows, avatar upload resilience, and chaos toggle updates. |
 
 ---
@@ -62,13 +63,15 @@
 
 ---
 
-### User Story US-MOB-1133: Profile Screen & Native Avatar Upload
+### User Story US-MOB-1133: Profile Screen, Multer Dual-Auth & Native Avatar Upload
 - **Story Statement**:  
   *As an* Authenticated User,  
   *I want* to view my account profile and upload a custom avatar from my camera or photo library,  
   *So that* I can personalize my bookstore profile.
 - **Story Points**: 1 SP
 - **Technical Subtasks**:
+  - [ ] Update `backend/src/controllers/profileController.ts`:
+    - In `multer.diskStorage.filename`, extract token from `req.headers.authorization` (Bearer) when `req.cookies?.token` is undefined so files are saved as `<username>-<timestamp>.ext`.
   - [ ] Implement `ProfileScreen`:
     - Displays user details: Username, Full Name, joined date.
     - Avatar preview circle with edit badge icon.
@@ -77,18 +80,20 @@
     - Handle camera and photo permissions gracefully.
     - Compress and format image payload as multipart/form-data.
     - Dispatch to `POST /api/profile/upload`.
+  - [ ] Security Champion (SEC) Audit: Verify 2MB size limit and file type filters prevent arbitrary uploads.
   - [ ] Implement "Sign Out" button with confirmation alert.
 - **Acceptance Criteria**:
+  - [ ] Uploaded avatar is named with the authenticated username on backend disk storage.
   - [ ] Successfully uploading a photo updates the avatar display immediately.
   - [ ] Permission denials display a helpful user alert directing to device settings.
 
 ---
 
-### User Story US-MOB-1134: Mobile Chaos Control Center
+### User Story US-MOB-1134: Mobile Chaos Control Center & Test Catalog
 - **Story Statement**:  
   *As an* SDET / QA Engineer testing the mobile app,  
-  *I want* a dedicated Chaos Settings tab to view and adjust backend error rates and delay parameters,  
-  *So that* I can perform chaos engineering experiments directly from the device.
+  *I want* a dedicated Chaos Settings tab and test case traceability in `test_cases_catalog.md`,  
+  *So that* I can perform chaos experiments and guarantee full test coverage governance.
 - **Story Points**: 0.5 SP
 - **Technical Subtasks**:
   - [ ] Implement `ChaosScreen`:
@@ -96,9 +101,15 @@
     - Sliders and numeric steppers for `checkoutFailureRate` (0% to 100%) and `inventoryDelayMs` (0ms to 5000ms).
     - Save button updating config via `POST /api/test/config`.
     - "Reset Database & Chaos" button executing `POST /api/test/reset`.
+  - [ ] SDET Task: Document test cases in `specs/test_cases_catalog.md`:
+    - `MOB_CART_01` to `MOB_CART_03`: Cart Addition, Quantity Recalculation, Item Removal.
+    - `MOB_CHECK_01` & `MOB_CHECK_02`: Checkout Form Validation & Order Placement.
+    - `MOB_PROF_01` & `MOB_PROF_02`: Profile Summary & Avatar Upload.
+    - `MOB_CHAOS_01`: Dynamic Chaos Configuration from Mobile UI.
 - **Acceptance Criteria**:
   - [ ] Adjusting sliders and tapping Save immediately affects subsequent backend requests.
   - [ ] Tapping Reset restores default failure rates and clears test carts and orders.
+  - [ ] `specs/test_cases_catalog.md` updated with complete Phase 11 test specifications.
 
 ---
 
@@ -106,9 +117,10 @@
 
 - [ ] All 4 user stories implemented and integrated into the bottom tab navigator.
 - [ ] End-to-end shopping flow (Add to Cart -> Checkout -> Success) passes on both Android and iOS.
-- [ ] Avatar upload operates smoothly with both Camera and Photo Library inputs.
+- [ ] Avatar upload operates smoothly with both Camera and Photo Library inputs and links to authenticated username.
 - [ ] Chaos settings dynamically update backend behavior.
-- [ ] TypeScript compilation succeeds with zero errors.
+- [ ] TypeScript compilation succeeds with zero errors (`npm run typecheck:mobile`).
+- [ ] Test cases cataloged in `specs/test_cases_catalog.md`.
 
 ---
 
@@ -116,8 +128,19 @@
 
 ```bash
 # Verify TypeScript build of mobile workspace
-npm run typecheck
+npm run typecheck:mobile
 
 # Run full development app
 npm run dev:mobile
 ```
+
+---
+
+## 5. Risk Assessment & Technical Mitigations
+
+| Risk | Impact | Likelihood | Mitigation Strategy |
+| :--- | :--- | :--- | :--- |
+| **Multer DiskStorage Token Blindness** | High | High | Inspect `req.headers.authorization` in Multer storage engine before running `authenticateToken` middleware so file names reflect the authenticated username. |
+| **Permission Revocation Crashes** | Medium | Medium | Wrap `ImagePicker.requestCameraPermissionsAsync` and `requestMediaLibraryPermissionsAsync` in try-catch blocks with graceful user dialog fallbacks. |
+| **Image Memory Exhaustion on Upload** | Medium | Low | Configure `expo-image-picker` with `quality: 0.7` compression and maximum resolution limits before building multipart form payloads. |
+

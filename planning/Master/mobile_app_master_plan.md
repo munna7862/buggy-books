@@ -84,6 +84,7 @@ Playwright's current mobile support in [playwright.config.ts](file:///c:/BuggyBo
 * **Framework**: React Native 0.76+ with Expo SDK 52+
 * **Language**: TypeScript 5.3+ (strict mode enabled)
 * **JS Engine**: Hermes (for instant cold-starts and low memory footprint)
+* **Monorepo Bundler**: `metro.config.js` configured with `watchFolders = [workspaceRoot]` and `nodeModulesPaths` for `@buggybooks/types` hoisted resolution
 * **Navigation**: React Navigation 7.x (`@react-navigation/native`, `@react-navigation/native-stack`, `@react-navigation/bottom-tabs`)
 * **Secure Storage**: `expo-secure-store` (hardware-backed Android Keystore and iOS Keychain)
 * **Hardware & Native APIs**:
@@ -99,9 +100,9 @@ Playwright's current mobile support in [playwright.config.ts](file:///c:/BuggyBo
 
 To allow mobile devices to authenticate seamlessly while maintaining complete stability for the existing React web app, Playwright E2E tests, and k6 performance scripts, the backend will implement a **Dual-Authentication Strategy**.
 
-### 4.1 Token Delivery on Login & Register
+### 4.1 Token Delivery on Login, Register & Refresh
 * **File**: [backend/src/controllers/authController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/authController.ts)
-* **Current Behavior**: Sets `token` and `refreshToken` cookies, but does not return them in the JSON body.
+* **Current Behavior**: Sets `token` and `refreshToken` cookies, but does not return them in the JSON body; `refresh()` strictly inspects `req.cookies?.refreshToken` and returns no tokens in JSON.
 * **Upgraded Behavior**:
   ```typescript
   export const login = async (req: Request, res: Response) => {
@@ -111,6 +112,31 @@ To allow mobile devices to authenticate seamlessly while maintaining complete st
     // Return tokens in JSON for mobile clients while keeping cookies for web
     res.json({
       message: 'Login successful',
+      username: result.username,
+      token: result.token,
+      refreshToken: result.refreshToken
+    });
+  };
+
+  export const register = async (req: Request, res: Response) => {
+    const { username, password, fullName } = req.body;
+    const result = await authService.register(username, password, fullName);
+    setAuthCookies(res, result.token, result.refreshToken);
+    res.status(201).json({
+      message: 'Registration successful',
+      username: result.username,
+      token: result.token,
+      refreshToken: result.refreshToken
+    });
+  };
+
+  export const refresh = async (req: Request, res: Response) => {
+    // 1. Check request body / header (Mobile client) or fallback to cookie (Web SPA)
+    const refreshToken = req.body?.refreshToken || req.cookies?.refreshToken;
+    const result = authService.refresh(refreshToken);
+    setAuthCookies(res, result.token, result.refreshToken);
+    res.json({
+      success: true,
       username: result.username,
       token: result.token,
       refreshToken: result.refreshToken
@@ -147,9 +173,10 @@ To allow mobile devices to authenticate seamlessly while maintaining complete st
   };
   ```
 
-### 4.3 CSRF Protection Adaptation
-* **File**: [backend/src/app.ts](file:///c:/BuggyBooks/buggy-books/backend/src/app.ts#L36-L53)
-* **Strategy**: When a request contains a valid `Authorization: Bearer` header, skip `doubleCsrf` checks because Bearer tokens stored in mobile Keychain/Keystore are immune to browser cross-site ambient credential attacks.
+### 4.3 CSRF Protection Adaptation & Multer Avatar Storage
+* **Files**: [backend/src/app.ts](file:///c:/BuggyBooks/buggy-books/backend/src/app.ts#L36-L53), [backend/src/controllers/profileController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/profileController.ts#L22-L37)
+* **CSRF Strategy**: When a request contains a valid `Authorization: Bearer` header, skip `doubleCsrf` checks because Bearer tokens stored in mobile Keychain/Keystore are immune to browser cross-site ambient credential attacks.
+* **Multer Filename Generation**: Update `profileController.ts` `diskStorage` to inspect `req.headers.authorization` when extracting the username, ensuring mobile uploads with Bearer tokens save as `<username>-<timestamp>.ext` rather than `anonymous-<timestamp>.ext`.
 
 ### 4.4 Multi-Platform Network Resolution
 Mobile clients connect through different IP gateways depending on runtime environment:
@@ -337,22 +364,23 @@ graph TD
 #### **Sprint 11.1: Backend Dual-Auth & Expo Monorepo Scaffolding**
 * **Effort**: 5 Story Points
 * **Deliverables**:
-  1. Update [backend/src/controllers/authController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/authController.ts) to return `token` and `refreshToken` in JSON response.
+  1. Update [backend/src/controllers/authController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/authController.ts) (`login`, `register`, and `refresh`) to return `token` and `refreshToken` in JSON responses.
   2. Update [backend/src/routes/api.ts](file:///c:/BuggyBooks/buggy-books/backend/src/routes/api.ts) to support `Authorization: Bearer <token>` header alongside cookies.
   3. Update [backend/src/app.ts](file:///c:/BuggyBooks/buggy-books/backend/src/app.ts) to exempt Bearer-authenticated requests from CSRF token enforcement.
   4. Register `"mobile"` in the root [package.json](file:///c:/BuggyBooks/buggy-books/package.json) workspaces.
-  5. Scaffold Expo TypeScript project in `buggy-books/mobile` linked with `@buggybooks/types`.
+  5. Scaffold Expo TypeScript project in `buggy-books/mobile` linked with `@buggybooks/types` via `mobile/metro.config.js`.
   6. Verify all existing Jest unit tests and Playwright web tests remain 100% green.
 
 #### **Sprint 11.2: Core Navigation, Authentication & Catalog Flow**
 * **Effort**: 5 Story Points
 * **Deliverables**:
   1. Build `AuthContext` backed by `expo-secure-store` for safe token persistence.
-  2. Implement Centralized API client (`mobile/src/api/client.ts`) with automatic token injection and silent 401 refresh.
+  2. Implement Centralized API client (`mobile/src/api/client.ts`) with automatic token injection and silent 401 refresh with mutex queue.
   3. Build Root Stack Navigator switching between Auth Stack and Main Bottom Tab Navigator.
   4. Implement `LoginScreen` and `RegisterScreen` with validation errors.
   5. Implement `CatalogScreen` with paginated book retrieval, search filtering, and responsive grid layout.
   6. Implement `BookDetailScreen` displaying metadata, price, stock, and synopsis.
+  7. SDET catalogs mobile test scenarios in `specs/test_cases_catalog.md` (`MOB_AUTH_01`–`MOB_CAT_05`).
 
 #### **Sprint 11.3: Cart, Checkout, Profile & Chaos Control Center**
 * **Effort**: 5 Story Points
@@ -360,8 +388,9 @@ graph TD
   1. Build `CartContext` for live state synchronization with backend `GET /api/cart`.
   2. Implement `CartScreen` with item list, quantity adjustment, removal, and live subtotals.
   3. Implement `CheckoutScreen` with multi-field customer details and order confirmation.
-  4. Implement `ProfileScreen` with user details and camera/photo-library avatar upload using `expo-image-picker`.
+  4. Update Multer token extraction in `profileController.ts` and implement `ProfileScreen` with avatar upload using `expo-image-picker`.
   5. Implement `ChaosScreen` allowing testers to view and toggle error rates and delays directly from the mobile device.
+  6. Security Champion (SEC) audits multipart uploads and camera permissions; SDET catalogs Cart/Checkout test scenarios.
 
 ---
 
@@ -375,23 +404,24 @@ graph TD
   3. Induce intentional keyboard occlusion on `CheckoutScreen` by omitting `KeyboardAvoidingView`.
   4. Add client-side recovery UI for handling the backend's 15% `500 Payment Gateway Timeout`.
   5. Implement simulated network dropouts and offline error banner toggles.
-  6. Document all mobile anti-patterns in [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md).
+  6. Unlock orientation in `app.json` (`"orientation": "default"`) to enable MOB-B6 landscape shift bug.
+  7. Document all mobile anti-patterns in [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md) with SEC review.
 
 #### **Sprint 12.2: Maestro & Appium Mobile Test Automation Suites**
 * **Effort**: 8 Story Points
 * **Deliverables**:
-  1. Initialize `mobile-automation/` package in monorepo.
+  1. Initialize `mobile-automation/` package and register in root `package.json` workspaces.
   2. Configure `.maestro/` with declarative test flows covering Login, Catalog Search, Cart, Checkout Retry, and Keyboard Dismissal.
-  3. Configure Appium WebdriverIO with TypeScript, Page Object Models, and Winston structured step logging.
+  3. Configure Appium WebdriverIO with TypeScript, Page Object Models, driver provisioning (`uiautomator2`), and Winston structured step logging.
   4. Implement Android UIAutomator2 and iOS XCUITest configuration profiles.
-  5. Verify 100% green execution on Android Emulator and iOS Simulator.
+  5. Verify 100% green execution on Android Emulator and iOS Simulator; catalog automation specs in `specs/test_cases_catalog.md`.
 
-#### **Sprint 12.3: GitHub Actions CI/CD Pipeline & Build Artifacts**
+#### **Sprint 12.3: GitHub Actions Mobile CI/CD Pipeline & Build Artifacts**
 * **Effort**: 5 Story Points
 * **Deliverables**:
-  1. Add `mobile-lint` and `mobile-typecheck` quality gates to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml).
-  2. Create a dedicated `.github/workflows/mobile-ci.yml` workflow to run unit tests and execute Maestro flows against headless Android emulators (`reactivecircus/android-emulator-runner`).
-  3. Configure Expo EAS (Expo Application Services) build workflow for automated Android APK and iOS artifact generation.
+  1. Add SHA-pinned `mobile-lint` and `mobile-typecheck` quality gates to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml).
+  2. Create a dedicated `.github/workflows/mobile-ci.yml` workflow running Maestro flows on hardware-accelerated `macos-14` / `macos-latest` runners using `reactivecircus/android-emulator-runner`.
+  3. Configure Expo EAS build workflow (`mobile/eas.json`) for automated Android APK artifact generation on release tags.
   4. Add mobile test summaries and execution reports to GitHub Actions step summaries.
 
 ---
@@ -408,6 +438,8 @@ Once integrated, developers and QA engineers can operate the entire stack via un
     "dev:mobile": "npm start --workspace=mobile",
     "dev:mobile:android": "npm run android --workspace=mobile",
     "dev:mobile:ios": "npm run ios --workspace=mobile",
+    "lint:mobile": "npm run lint --workspace=mobile",
+    "typecheck:mobile": "npx tsc --noEmit -p mobile/tsconfig.json",
     "test:mobile:unit": "npm test --workspace=mobile",
     "test:mobile:maestro": "maestro test mobile-automation/.maestro/",
     "test:mobile:appium": "npm run test:e2e --workspace=mobile-automation",

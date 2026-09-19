@@ -26,8 +26,8 @@ The backend manages a dynamic config state in the [ChaosStore](file:///c:/BuggyB
 * **QA Goal**: Challenges testers to write robust, self-healing WebSocket listeners that automatically handle connection drops and state synchronization.
 
 ### 📁 Avatar Upload Failures (`uploadFailureRate`)
-* **File Location**: [profileController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/profileController.ts#L107-L112)
-* **Bug/Behavior**: The profile picture upload endpoint `POST /api/profile/avatar` randomly rejects requests with `500 Internal Server Error: Upload service failed` based on this config rate.
+* **File Location**: [profileController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/profileController.ts)
+* **Bug/Behavior**: The profile picture upload endpoint `POST /api/profile/upload` randomly rejects requests with `500 Internal Server Error: Upload service failed` based on this config rate.
 * **Default Rate**: `0.0` (disabled by default).
 * **QA Goal**: Tests retry handlers on multipart/form-data upload streams.
 
