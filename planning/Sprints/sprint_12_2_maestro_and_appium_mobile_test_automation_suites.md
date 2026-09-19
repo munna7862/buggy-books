@@ -35,7 +35,7 @@
     - `auth/01_login_success.yaml`: Valid login with `txt_usr_77` and `txt_pwd_99`.
     - `auth/02_login_invalid_creds.yaml`: Verify 401 error message display.
     - `catalog/03_search_and_filter.yaml`: Search books and assert item count.
-    - `catalog/04_add_to_cart_delay.yaml`: Add item, handle dynamic delay, assert badge increment.
+    - `catalog/04_add_to_cart_delay.yaml`: Add item, handle dynamic delay via `extendedWaitUntil` condition, assert badge increment.
     - `checkout/05_checkout_retry_loop.yaml`: Fill checkout form, dismiss keyboard, handle 500 retry loop.
     - `checkout/06_orientation_layout_glitch.yaml`: Rotate device to landscape and assert layout shift handling.
 - **Acceptance Criteria**:
@@ -53,7 +53,9 @@
 - **Technical Subtasks**:
   - [ ] Add `"mobile-automation"` to root `package.json` `workspaces` array.
   - [ ] Initialize `mobile-automation/` workspace with `@wdio/cli`, `@wdio/appium-service`, `appium`, and `@buggybooks/types`.
-  - [ ] Add driver provisioning command: `npx appium driver install uiautomator2 && npx appium driver install xcuitest`.
+  - [ ] Add platform-scoped driver provisioning scripts in `mobile-automation/package.json`:
+    - `"driver:android": "appium driver install uiautomator2"` (cross-platform for Windows, Linux, macOS).
+    - `"driver:ios": "appium driver install xcuitest"` (restricted to macOS/Xcode environments).
   - [ ] Create `mobile-automation/src/config/`:
     - `wdio.android.conf.ts`: UIAutomator2 capability profile.
     - `wdio.ios.conf.ts`: XCUITest capability profile.
@@ -89,6 +91,7 @@
     - `MOB_E2E_05`: Simulated Offline Recovery (Maestro & Appium).
     - `MOB_E2E_06`: Landscape Orientation Layout Shift (Maestro & Appium).
   - [ ] Add root npm scripts:
+    - `"test:mobile:appium": "npm run test:android --workspace=mobile-automation"`
     - `"test:mobile:appium:android": "npm run test:android --workspace=mobile-automation"`
     - `"test:mobile:appium:ios": "npm run test:ios --workspace=mobile-automation"`
 - **Acceptance Criteria**:

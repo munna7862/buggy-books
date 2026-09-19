@@ -25,8 +25,8 @@ BuggyBooks has established a proven full-stack web application for QA testing an
 | :--- | :--- | :--- |
 | **Backend Authentication** | Strictly reads `req.cookies?.token`; does not return tokens in login/register/refresh JSON payload. | Support **Dual-Auth**: Inspect `Authorization: Bearer <token>` first, fallback to cookie; return `token` and `refreshToken` in login, register, and refresh responses. |
 | **Backend CSRF Protection** | Enforces `doubleCsrf` cookie check on all mutating requests. | Automatically exempt requests presenting valid `Authorization: Bearer` headers from CSRF checks. |
-| **Profile Avatar Multer Storage** | Multer `diskStorage` only extracts username from `req.cookies?.token`. | Inspect `Authorization: Bearer` header inside Multer engine so mobile uploads save as `<username>-<timestamp>.ext`. |
-| **Mobile Workspace Scaffolding** | No mobile workspace exists in the repository. | Scaffold `mobile/` using React Native 0.76+ & Expo SDK 52+ with TypeScript strict mode, linked to root `package.json` workspaces with monorepo `metro.config.js`. |
+| **Profile Avatar Multer Storage** | Multer `diskStorage` only extracts username from `req.cookies?.token`. | Update Multer storage to leverage `req.user?.username` (populated by preceding `authenticateToken`), ensuring mobile uploads save as `<username>-<timestamp>.ext` without redundant JWT decoding. |
+| **Mobile Workspace Scaffolding** | No mobile workspace exists in the repository. | Scaffold `mobile/` using React Native 0.76+ & Expo SDK 52+ with TypeScript strict mode, linked to root `package.json` workspaces with monorepo `metro.config.js`, and configure `mobile/tsconfig.json` with `typeRoots` and `paths` to isolate React 18 types from root React 19. |
 | **Token Storage & Refresh** | LocalStorage used on web; insecure for mobile. | Implement hardware-backed token storage via `expo-secure-store` with silent token rotation and mutex queuing on HTTP 401. |
 | **Native Navigation & Shell** | React Router 7 for browser DOM only. | Implement React Navigation 7.x (Native Stack + Bottom Tab Navigator) with typed routes. |
 | **Core Screens** | Web-only components. | Build native mobile screens: `LoginScreen`, `RegisterScreen`, `CatalogScreen`, `BookDetailScreen`, `CartScreen`, `CheckoutScreen`, `ProfileScreen`, `ChaosScreen`. |
@@ -50,16 +50,16 @@ graph LR
      - Non-breaking update to `authController.ts` and `auth.service.ts` supporting refresh token rotation and returning `token` and `refreshToken` in JSON for `login`, `register`, and `refresh`.
      - Dual-mode `authenticateToken` middleware in `api.ts` supporting `Bearer` tokens while preserving `loggerStore` structured logging context.
      - Contract expansion in `@buggybooks/types` (`shared/types/`) exporting shared `AuthUser`, `AuthTokensResponse`, and `UserProfile` interfaces.
-     - Multer `diskStorage` update in `profileController.ts` to inspect Bearer tokens for avatar uploads.
-     - CSRF bypass for Bearer-authenticated requests in `app.ts`.
-     - Scaffolding of `mobile/` workspace with Expo (React 18.3.1 isolated from frontend React 19), TypeScript, and `jest-expo` unit test runner, configured with `mobile/metro.config.js` (`disableHierarchicalLookup: true`) to resolve `@buggybooks/types`.
+     - Multer `diskStorage` update in `profileController.ts` leveraging `req.user?.username` (populated by `authenticateToken`) for avatar uploads.
+     - CSRF bypass for Bearer-authenticated requests in `app.ts` verifying non-empty token string.
+     - Scaffolding of `mobile/` workspace with Expo (React 18.3.1 isolated from frontend React 19), TypeScript, and `jest-expo` unit test runner, configured with `mobile/metro.config.js` (`disableHierarchicalLookup: true`) and `mobile/tsconfig.json` (`typeRoots` and `paths`) to resolve `@buggybooks/types` and prevent React 19 type leakage.
      - Root npm script integration (`dev:mobile`, `lint:mobile`, `typecheck:mobile`, `test:mobile:unit`).
      - 100% green verification on existing Jest and Playwright web tests.
 
 2. **[Sprint 11.2: Core Navigation, Authentication & Catalog Flow](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_11_2_core_navigation_authentication_and_catalog_flow.md)**
    * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
-     - Secure token persistence using `expo-secure-store` in mobile `AuthContext` with unit test coverage.
+     - Secure token persistence using `expo-secure-store` in mobile `AuthContext`, supporting offline session hydration from decoded JWT payload, with unit test coverage.
      - Centralized typed mobile API client with automatic token attachment and dual-status silent refresh interceptor handling both `401 Unauthorized` and `403 Forbidden: Invalid token` with mutex queue.
      - Root Native Stack Navigator with unauthenticated Auth Stack and authenticated Bottom Tabs.
      - Functional `LoginScreen` and `RegisterScreen` with native keyboard handling and accessibility labels.
@@ -73,7 +73,7 @@ graph LR
      - `CartContext` maintaining synchronized cart state with backend `GET /api/cart` with unit test coverage.
      - `CartScreen` with item list, quantity adjusters, swipe-to-delete, and checkout CTA.
      - `CheckoutScreen` with address and payment fields, subtotal summary, and order submission.
-     - Build `ProfileScreen` with native camera/gallery avatar upload via `expo-image-picker` with resilient multipart/form-data streaming.
+     - Build `ProfileScreen` with native camera/gallery avatar upload via `expo-image-picker` with resilient multipart/form-data streaming (omitting manual `'Content-Type'` header so native bridge attaches boundary automatically).
      - `ChaosScreen` mobile control center to view and adjust error rates and reset test data.
      - Security Champion (SEC) audit of multipart uploads and camera permissions.
      - SDET cataloging of Cart, Checkout, Profile, and Chaos test scenarios (`MOB_CART_01`–`MOB_CHAOS_01`) in `specs/test_cases_catalog.md`.
@@ -90,4 +90,4 @@ graph LR
 - [ ] Profile avatar upload handles camera and gallery inputs, successfully saving images under authenticated user IDs via Multer.
 - [ ] Chaos settings screen updates backend error rates and reflects changes immediately in subsequent API calls.
 - [ ] Existing web test suites (`npm run test:backend`, `npm run test:frontend`, `npm run test:e2e:local`) remain 100% green with zero regressions.
-- [ ] All mobile feature test cases are documented and cataloged in `specs/test_cases_catalog.md`.
+- [ ] All 12 mobile functional test cases (`MOB_AUTH_01`–`MOB_AUTH_05`, `MOB_CAT_01`–`MOB_CAT_05`, `MOB_CART_01`–`MOB_CART_03`, `MOB_CHECK_01`–`MOB_CHECK_02`, `MOB_PROF_01`–`MOB_PROF_02`, `MOB_CHAOS_01`) are documented and cataloged in `specs/test_cases_catalog.md`.

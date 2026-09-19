@@ -55,8 +55,9 @@
     - Disable button and display subtle loading state during timeout to prevent unintended double-submits while challenging explicit assertion waits.
   - [ ] **MOB-B4: Stochastic Gateway Timeout Handling**:
     - `POST /api/checkout/process` returns HTTP 500 when `checkoutFailureRate` is set (e.g. 15% via `POST /api/test/config { "checkoutFailureRate": 0.15 }`; defaults to 0.0 on backend restart).
+    - Note that `checkoutService.ts` throws before `dataStore.clearCart()`, preserving cart contents upon error.
     - On mobile, display a distinct in-screen error banner (`testID="banner_checkout_error"`) with a "Retry Payment" CTA button (`testID="btn_retry_payment"`).
-    - Automation must detect the error banner and tap "Retry Payment" up to 3 times to achieve success.
+    - Automation must detect the error banner and tap "Retry Payment" up to 3 times to achieve success without re-adding items.
 - **Acceptance Criteria**:
   - [ ] Add-to-cart requires explicit wait for badge update rather than static sleep.
   - [ ] Checkout failure displays clear in-screen retry banner allowing recovery without modal locking.
@@ -76,6 +77,7 @@
   - [ ] **MOB-B6: Orientation Layout Shift**:
     - Ensure `app.json` has `"orientation": "default"` enabled to allow landscape rotation.
     - When rotating device to landscape on `CheckoutScreen`, the bottom navigation bar overlaps the submit section unless layout responds to orientation changes.
+    - For Android emulators in CI, configure `adb shell settings put system accelerometer_rotation 1` so system auto-rotation allows landscape orientation.
   - [ ] Document all mobile anti-patterns (MOB-B1 to MOB-B6) in `intentional_bugs.md` with SEC and PO review, aligned with automated test scenarios `MOB_E2E_01` to `MOB_E2E_06`.
 - **Acceptance Criteria**:
   - [ ] Toggling simulated offline mode displays the offline banner and catches requests gracefully.
@@ -110,7 +112,7 @@ npm run dev:mobile
 
 | Risk | Impact | Likelihood | Mitigation Strategy |
 | :--- | :--- | :--- | :--- |
-| **Orientation Locked by OS / Expo Defaults** | High | High | Explicitly configure `"orientation": "default"` in `mobile/app.json` and install `expo-screen-orientation` if programmatic rotation locking is required. |
+| **Orientation Locked by OS / Expo Defaults** | High | High | Explicitly configure `"orientation": "default"` in `mobile/app.json`, enable emulator accelerometer via `adb shell settings put system accelerometer_rotation 1`, and install `expo-screen-orientation` if programmatic rotation locking is required. |
 | **Dynamic Delay Flakiness in Fast Smoke Tests** | Medium | Medium | Provide a chaos toggle or query parameter to clamp `inventoryDelayMs` and client-side add-to-cart delays during deterministic smoke test runs. |
 | **Platform-Specific Keyboard Inconsistencies** | Medium | Low | Verify keyboard dismissal behaviors across both Android (`driver.hideKeyboard()`) and iOS (tapping keyboard toolbar 'Done' button `$('~Done').click()` or tapping outside) in test design. |
 

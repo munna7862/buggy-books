@@ -42,6 +42,7 @@
       - On refresh failure, wipe tokens and dispatch auth logout event.
   - [ ] Create `mobile/src/context/AuthContext.tsx`:
     - Provides `user`, `isAuthenticated`, `isLoading`, `login()`, `register()`, `logout()`.
+    - Supports offline session hydration: on app startup, loads stored tokens from `expo-secure-store` and hydrates `user` state from the decoded JWT payload, enabling offline app entry.
   - [ ] Author unit tests in `mobile/src/__tests__/storage.test.ts` and `mobile/src/__tests__/AuthContext.test.tsx` verifying token saving, clearing, and session hydration.
 - **Acceptance Criteria**:
   - [ ] Logging in persists JWT in secure storage.

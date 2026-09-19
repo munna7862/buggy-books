@@ -93,7 +93,7 @@
   - [ ] Security Champion (SEC) Audit: Verify 2MB size limit and file type filters prevent arbitrary uploads.
   - [ ] Implement "Sign Out" button with confirmation alert.
 - **Acceptance Criteria**:
-  - [ ] Uploaded avatar is named with the authenticated username on backend disk storage (leveraging Sprint 11.1 Multer update).
+  - [ ] Uploaded avatar is named with the authenticated username on backend disk storage (leveraging Sprint 11.1 Multer update using `req.user?.username`).
   - [ ] Successfully uploading a photo updates the avatar display immediately.
   - [ ] Permission denials display a helpful user alert directing to device settings.
 

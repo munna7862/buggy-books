@@ -183,8 +183,8 @@ To allow mobile devices to authenticate seamlessly while maintaining complete st
 
 ### 4.3 CSRF Protection Adaptation & Multer Avatar Storage
 * **Files**: [backend/src/app.ts](file:///c:/BuggyBooks/buggy-books/backend/src/app.ts#L36-L53), [backend/src/controllers/profileController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/profileController.ts#L22-L37)
-* **CSRF Strategy**: When a request contains a valid `Authorization: Bearer` header, skip `doubleCsrf` checks because Bearer tokens stored in mobile Keychain/Keystore are immune to browser cross-site ambient credential attacks.
-* **Multer Filename Generation**: Update `profileController.ts` `diskStorage` to inspect `req.headers.authorization` when extracting the username, ensuring mobile uploads with Bearer tokens save as `<username>-<timestamp>.ext` rather than `anonymous-<timestamp>.ext`.
+* **CSRF Strategy**: When a request contains a valid `Authorization: Bearer <token>` header (non-empty token string), skip `doubleCsrf` checks because Bearer tokens stored in mobile Keychain/Keystore are immune to browser cross-site ambient credential attacks.
+* **Multer Filename Generation**: In [backend/src/routes/api.ts](file:///c:/BuggyBooks/buggy-books/backend/src/routes/api.ts), `authenticateToken` runs before `handleAvatarUpload`, populating `req.user = user`. Update `profileController.ts` `diskStorage.filename` to directly leverage `(req as Request).user?.username || 'anonymous'`, ensuring mobile uploads save as `<username>-<timestamp>.ext` cleanly without redundant JWT decoding.
 
 ### 4.4 Multi-Platform Network Resolution
 Mobile clients connect through different IP gateways depending on runtime environment:
@@ -327,8 +327,9 @@ appId: com.buggybooks.app
 - tapOn:
     text: "Add to Cart"
     index: 0
-- waitForAnimationToEnd:
-    timeout: 4000
+- extendedWaitUntil:
+    visible: "Cart (1)"
+    timeout: 5000
 - tapOn: "Cart"
 - tapOn: "Proceed to Checkout"
 - tapOn: "txt_f1"
@@ -378,7 +379,7 @@ graph TD
   3. Update `@buggybooks/types` (`shared/types/`) to export shared `AuthUser`, `AuthTokensResponse`, and `UserProfile` contracts.
   4. Update [backend/src/controllers/profileController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/profileController.ts) Multer storage to inspect Bearer tokens for avatar filename attribution.
   5. Update [backend/src/app.ts](file:///c:/BuggyBooks/buggy-books/backend/src/app.ts) to exempt Bearer-authenticated requests from CSRF token enforcement.
-  6. Register `"mobile"` in the root [package.json](file:///c:/BuggyBooks/buggy-books/package.json) workspaces and scaffold Expo TypeScript project in `buggy-books/mobile` linked with `@buggybooks/types` via `mobile/metro.config.js` (`disableHierarchicalLookup: true`), ensuring React 18.3.1 dependency isolation against frontend React 19.
+  6. Register `"mobile"` in the root [package.json](file:///c:/BuggyBooks/buggy-books/package.json) workspaces and scaffold Expo TypeScript project in `buggy-books/mobile` linked with `@buggybooks/types` via `mobile/metro.config.js` (`disableHierarchicalLookup: true`), ensuring React 18.3.1 dependency isolation against frontend React 19, and configure `mobile/tsconfig.json` with `typeRoots` and `paths` pointing strictly to `mobile/node_modules` to isolate React 18 types from root `@types/react` 19.
   7. Provision unit test runner (`jest-expo`, `@testing-library/react-native`) in `mobile/package.json`.
   8. Verify all existing Jest backend and Vitest frontend unit tests and Playwright web tests remain 100% green.
 
@@ -423,16 +424,16 @@ graph TD
 * **Deliverables**:
   1. Initialize `mobile-automation/` package and register in root `package.json` workspaces.
   2. Configure `.maestro/` with declarative test flows covering Login, Catalog Search, Cart, Checkout Retry, Keyboard Dismissal, and Orientation.
-  3. Configure Appium WebdriverIO with TypeScript, Page Object Models, driver provisioning (`uiautomator2` and `xcuitest`), and Winston structured step logging.
+  3. Configure Appium WebdriverIO with TypeScript, Page Object Models, driver provisioning (`"driver:android": "appium driver install uiautomator2"` and macOS-scoped `"driver:ios": "appium driver install xcuitest"`), and Winston structured step logging.
   4. Implement Android UIAutomator2 and iOS XCUITest configuration profiles.
   5. Verify 100% green execution on Android Emulator and iOS Simulator; catalog automation specs in `specs/test_cases_catalog.md` (`MOB_E2E_01` through `MOB_E2E_06`).
 
 #### **Sprint 12.3: GitHub Actions Mobile CI/CD Pipeline & Build Artifacts**
 * **Effort**: 5 Story Points
 * **Deliverables**:
-  1. Add SHA-pinned `mobile-lint`, `mobile-typecheck`, and `mobile-unit-tests` quality gates to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml) with step summaries and coverage artifact uploads.
+  1. Add SHA-pinned `mobile-lint`, `mobile-typecheck`, and `mobile-unit-tests` quality gates to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml) with step summaries (`node scripts/generate-test-summary.js mobile mobile`) and coverage artifact uploads.
   2. Create a dedicated `.github/workflows/mobile-ci.yml` workflow running Maestro flows on hardware-accelerated `macos-14` / `macos-latest` runners using SHA-pinned `reactivecircus/android-emulator-runner`, adding `$HOME/.maestro/bin` to `$GITHUB_PATH`.
-  3. Prebuild native Android project (`npx expo prebuild --platform android --clean`) and compile self-signed standalone APK (`./gradlew assembleDebug`), configuring `adb reverse tcp:4000 tcp:4000` with `EXPO_PUBLIC_API_URL=http://localhost:4000/api` for hermetic execution in CI.
+  3. Prebuild native Android project (`npx expo prebuild --platform android --clean`) and compile self-signed standalone APK with pre-bundled offline JS assets (`npx expo export --platform android` followed by `cd mobile/android && ./gradlew assembleDebug`), configuring `adb reverse tcp:4000 tcp:4000` with `EXPO_PUBLIC_API_URL=http://localhost:4000/api` and `adb shell settings put system accelerometer_rotation 1` for hermetic execution in CI.
   4. Configure Expo EAS build workflow (`mobile/eas.json` and `mobile-release.yml`) for automated Android APK artifact generation on release tags.
   5. Add mobile test summaries and execution reports to GitHub Actions step summaries.
 
@@ -455,6 +456,8 @@ Once integrated, developers and QA engineers can operate the entire stack via un
     "test:mobile:unit": "npm test --workspace=mobile",
     "test:mobile:maestro": "maestro test mobile-automation/.maestro/",
     "test:mobile:appium": "npm run test:e2e --workspace=mobile-automation",
+    "test:mobile:appium:android": "npm run test:android --workspace=mobile-automation",
+    "test:mobile:appium:ios": "npm run test:ios --workspace=mobile-automation",
     "build:mobile:android": "cd mobile && npx eas-cli build --platform android --profile preview --local"
   }
 }

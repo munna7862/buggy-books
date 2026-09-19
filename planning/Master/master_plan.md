@@ -103,16 +103,16 @@ buggy-books/
 
 ### Key API Endpoints & Capabilities
 1. **Auth & Profile**:
-   - `POST /api/auth/register` — User registration with password strength criteria.
-   - `POST /api/auth/login` — Authentication returning JWT token & refresh cookies.
-   - `POST /api/auth/refresh` — Token rotation.
+   - `POST /api/register` — User registration with password strength criteria.
+   - `POST /api/login` — Authentication returning JWT token & refresh cookies (and JSON body for mobile).
+   - `POST /api/auth/refresh` — Token rotation (accepting body refreshToken or cookie).
    - `GET /api/profile` & `POST /api/profile/upload` — User profile & file upload handling.
 2. **Catalog & Inventory**:
    - `GET /api/books` — Paginated book catalog with keyword search and category filtering.
    - `GET /api/books/:id` — Single book details.
    - `GET /api/inventory/report` — Simulates a heavy 3-second delay for performance testing.
 3. **Cart & Checkout**:
-   - `GET /api/cart`, `POST /api/cart/items`, `PUT /api/cart/items/:id`, `DELETE /api/cart/items/:id` — Full cart lifecycle.
+   - `GET /api/cart`, `POST /api/cart` (body: `{ bookId }`), `DELETE /api/cart`, `DELETE /api/cart/:bookId` — Full cart lifecycle.
    - `POST /api/checkout/process` — **Flaky Endpoint** throwing 15% random `500 Internal Server Error` to exercise automation retry logic.
    - `GET /api/orders` & `POST /api/orders` — Order placement and history retrieval.
 4. **Chaos Control API**:
@@ -181,7 +181,7 @@ The repository maintains full test pyramid coverage tracked centrally in `specs/
 | **Accessibility (A11y)** | `@axe-core/playwright` | `src/tests/ui/A11y/` | WCAG 2.1 AA automated scans |
 | **Visual Regression** | Playwright PixelMatch | `src/tests/ui/VisualRegression/` | Full-page visual chaos diffs |
 | **WebSocket Resilience** | Socket.io client | `src/tests/ui/WebSockets/` | Disconnect/reconnect events |
-| **Mobile E2E Automation** | Maestro, Appium (WDIO) | `mobile-automation/` | Native Android & iOS test flows (`specs/test_cases_catalog.md`) |
+| **Mobile E2E Automation** | Maestro, Appium (WDIO) | `mobile-automation/` | 18 Mobile Test Cases (12 Functional Unit/Context + 6 E2E Automation in `specs/test_cases_catalog.md`) |
 
 ---
 
@@ -222,12 +222,12 @@ sequenceDiagram
 ## 8. CI/CD Pipelines & DevOps
 
 * **GitHub Actions Workflows (`.github/workflows/`)**:
-  - `ci.yml` — Runs Jest backend tests, Vitest frontend tests, and TypeScript compilation on PRs.
+  - `ci.yml` — Runs Jest backend tests, Vitest frontend tests, Playwright POM linter, and Stage 1 mobile quality gates (`mobile-lint`, `mobile-typecheck`, `mobile-unit-tests`).
   - `playwright-ci.yml` — Runs Playwright E2E suites against local dev servers.
   - `playwright-docker.yml` — Sharded parallel Playwright runs in isolated Docker containers.
   - `codacy.yml` — Automated static security & code scanning SARIF upload.
-  - `mobile-ci.yml` — Mobile lint, typecheck, and Maestro test execution against headless Android emulators.
-  - `mobile-release.yml` — Automated Expo EAS build pipeline compiling downloadable Android APK release artifacts.
+  - `mobile-ci.yml` — Dedicated headless Android emulator execution running Maestro declarative flows with `adb reverse` network bridging.
+  - `mobile-release.yml` — Automated Expo EAS / Gradle build pipeline compiling downloadable Android APK release artifacts.
 * **Containerization**:
   - `docker-compose.yml` orchestrating `backend/Dockerfile` and `frontend/Dockerfile` behind an `nginx` reverse proxy.
 

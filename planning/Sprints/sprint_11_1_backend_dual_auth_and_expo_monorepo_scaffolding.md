@@ -51,7 +51,7 @@
     - Export `AuthTokensResponse` (`{ message?: string; success?: boolean; username: string; token: string; refreshToken: string }`).
     - Export `UserProfile` (`{ username: string; fullName?: string; avatarUrl?: string }`).
   - [ ] Modify `backend/src/controllers/profileController.ts` in `storageEngine.filename`:
-    - Inspect `req.headers.authorization` for Bearer token extraction when `req.cookies?.token` is undefined, ensuring mobile avatar uploads save as `<username>-<timestamp>.ext`.
+    - Since `authenticateToken` middleware executes before `handleAvatarUpload` and populates `req.user`, directly leverage `(req as Request).user?.username || 'anonymous'`, ensuring mobile avatar uploads save as `<username>-<timestamp>.ext` cleanly without redundant JWT decoding.
   - [ ] Add unit and integration tests in `backend/src/__tests__/auth.test.ts` and `profile.test.ts` verifying:
     - Bearer header authentication on protected routes (`/api/cart`, `/api/profile`).
     - Body-based token refresh (`POST /api/auth/refresh` with `{ refreshToken }`) returning rotated tokens.
@@ -77,7 +77,8 @@
     skipCsrfProtection: (req) => {
       // Allow Bearer token requests to bypass CSRF (mobile native clients)
       const authHeader = req.headers.authorization;
-      if (authHeader && authHeader.startsWith('Bearer ')) return true;
+      const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1]?.trim() : undefined;
+      if (token && token.length > 10) return true;
       ...
     }
     ```
@@ -112,11 +113,14 @@
     config.resolver.disableHierarchicalLookup = true;
     module.exports = config;
     ```
-  - [ ] Configure `mobile/package.json` with dependencies and unit test runner:
+  - [ ] Configure `mobile/package.json` with dependencies, explicit package name (`"name": "mobile"`), and unit test runner:
+    - Package Name: `"name": "mobile"`
     - Dependencies: `"react": "18.3.1"`, `"react-native": "0.76.6"`, `"expo": "~52.0.0"`, `"@buggybooks/types": "*"`, `"@react-navigation/native": "^7.0.0"`, `"@react-navigation/native-stack": "^7.0.0"`, `"@react-navigation/bottom-tabs": "^7.0.0"`, `"expo-secure-store": "~14.0.0"`, `"expo-image-picker": "~16.0.0"`, `"expo-haptics": "~14.0.0"`
     - Note on React Isolation: Pin React 18.3.1 strictly in `mobile/package.json`. Metro's `nodeModulesPaths` resolves `mobile/node_modules` first, ensuring complete isolation from the frontend's React 19.
     - DevDependencies: `"jest": "^29.2.1"`, `"jest-expo": "~52.0.0"`, `"@testing-library/react-native": "^12.0.0"`, `"react-test-renderer": "18.3.1"`, `"typescript": "^5.3.0"`
     - Scripts: `"test": "jest"`, `"lint": "eslint ."`
+  - [ ] Configure `mobile/tsconfig.json` for React 18 type isolation:
+    - Set `"typeRoots": ["./node_modules/@types"]` and configure `"paths": { "react": ["./node_modules/react"], "@types/react": ["./node_modules/@types/react"] }` so that `npx tsc` resolves React 18 types locally rather than traversing upward to root `node_modules` (which contains frontend's React 19 types).
   - [ ] Configure `app.json` with app name (`BuggyBooks`), bundle identifier (`com.buggybooks.app`), and `"orientation": "default"`.
   - [ ] Add root npm scripts:
     - `"dev:mobile": "npm start --workspace=mobile"`

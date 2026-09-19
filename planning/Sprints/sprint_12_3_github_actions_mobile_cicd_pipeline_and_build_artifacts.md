@@ -59,7 +59,7 @@
 
         - name: Generate Mobile Test Summary
           if: always()
-          run: node scripts/generate-test-summary.js mobile .
+          run: node scripts/generate-test-summary.js mobile mobile
 
         - name: Upload Mobile Coverage Artifacts
           uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
@@ -69,6 +69,9 @@
             path: mobile/coverage
             retention-days: 7
     ```
+  - [ ] Update `scripts/generate-test-summary.js`:
+    - Add support for target `'mobile'`, assigning `testRunner = 'Jest'`.
+    - Ensure `generateSummary('mobile', 'mobile')` reads `mobile/test-results.json` and `mobile/coverage/coverage-summary.json`.
 - **Acceptance Criteria**:
   - [ ] PRs with mobile TypeScript or linting errors are blocked by the CI quality gate.
   - [ ] Passing PRs complete Stage 1 within 5 minutes and publish test summaries and coverage artifacts.
@@ -101,17 +104,34 @@
           curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> $GITHUB_PATH
       ```
-    - Launch backend server in CI:
+    - Set up Node.js 20 & Install Monorepo Dependencies:
+      ```yaml
+      - name: Set up Node.js 20
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+      ```
+    - Launch backend server in CI with required test secret:
       ```yaml
       - name: Start Backend Server
         run: |
           npm run dev:backend &
           npx wait-on http://localhost:4000/api/books -t 30000
+        env:
+          PORT: 4000
+          NODE_ENV: test
+          JWT_SECRET: ci-test-secret-do-not-use-in-production
       ```
     - Hermetic Standalone APK Assembly & Signing:
       - Cleanly prebuild native Android directory: `cd mobile && npx expo prebuild --platform android --clean`
+      - Pre-export offline JavaScript bundle: `npx expo export --platform android`
       - Assemble self-signed standalone debug APK with embedded JS bundle: `cd android && ./gradlew assembleDebug`
-      - Note: `./gradlew assembleDebug` automatically signs the APK with the debug keystore, avoiding `INSTALL_PARSE_FAILED_NO_CERTIFICATES` errors on `adb install`.
+      - Note: `./gradlew assembleDebug` automatically signs the APK with the debug keystore and packages the exported JS bundle, avoiding `INSTALL_PARSE_FAILED_NO_CERTIFICATES` errors on `adb install` and runtime crashes without Metro.
     - Boot Android emulator using SHA-pinned action:
       ```yaml
       - name: Run Android Emulator & Maestro Tests
@@ -125,10 +145,13 @@
             # 1. Reverse backend port so emulator localhost:4000 bridges directly to host
             adb reverse tcp:4000 tcp:4000
             
-            # 2. Install prebuilt self-signed standalone APK
+            # 2. Enable accelerometer auto-rotation for MOB-B6 landscape test
+            adb shell settings put system accelerometer_rotation 1
+            
+            # 3. Install prebuilt self-signed standalone APK
             adb install mobile/android/app/build/outputs/apk/debug/app-debug.apk
             
-            # 3. Execute Maestro declarative flows
+            # 4. Execute Maestro declarative flows
             maestro test mobile-automation/.maestro/
       ```
     - Upload Maestro test artifacts, screenshots, and logs on failure.
