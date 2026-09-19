@@ -37,6 +37,7 @@
     - `catalog/03_search_and_filter.yaml`: Search books and assert item count.
     - `catalog/04_add_to_cart_delay.yaml`: Add item, handle dynamic delay, assert badge increment.
     - `checkout/05_checkout_retry_loop.yaml`: Fill checkout form, dismiss keyboard, handle 500 retry loop.
+    - `checkout/06_orientation_layout_glitch.yaml`: Rotate device to landscape and assert layout shift handling.
 - **Acceptance Criteria**:
   - [ ] `maestro test mobile-automation/.maestro/` executes all flows with 100% pass rate.
   - [ ] Tests successfully dismiss the soft keyboard and handle the stochastic checkout retry.
@@ -52,12 +53,12 @@
 - **Technical Subtasks**:
   - [ ] Add `"mobile-automation"` to root `package.json` `workspaces` array.
   - [ ] Initialize `mobile-automation/` workspace with `@wdio/cli`, `@wdio/appium-service`, `appium`, and `@buggybooks/types`.
-  - [ ] Add driver provisioning command: `npx appium driver install uiautomator2`.
+  - [ ] Add driver provisioning command: `npx appium driver install uiautomator2 && npx appium driver install xcuitest`.
   - [ ] Create `mobile-automation/src/config/`:
     - `wdio.android.conf.ts`: UIAutomator2 capability profile.
     - `wdio.ios.conf.ts`: XCUITest capability profile.
   - [ ] Implement `mobile-automation/src/core/BaseMobileScreen.ts`:
-    - Action methods: `clickElement`, `typeText`, `waitForElement`, `swipeUp`, `hideKeyboard`.
+    - Action methods: `clickElement`, `typeText`, `waitForElement`, `swipeUp`, `hideKeyboard`, `setOrientation`.
     - Integrated Winston structured logging and Allure step recording.
   - [ ] Implement Page Object Models:
     - `LoginScreen.ts`, `CatalogScreen.ts`, `CartScreen.ts`, `CheckoutScreen.ts`, `ChaosScreen.ts`.
@@ -79,29 +80,31 @@
     - `auth.e2e.spec.ts`: Sign in, profile inspection, logout.
     - `catalog.e2e.spec.ts`: Search, paging, book details navigation.
     - `checkout_chaos.e2e.spec.ts`: Cart management, keyboard dismissal, payment retry loop.
+    - `orientation_chaos.e2e.spec.ts`: Landscape orientation shift validation on checkout.
   - [ ] SDET Task: Document automation coverage mapping in `specs/test_cases_catalog.md`:
     - `MOB_E2E_01`: Mobile Auth Flow (Maestro & Appium).
     - `MOB_E2E_02`: Catalog Search & Dynamic Delay (Maestro & Appium).
     - `MOB_E2E_03`: Cart & Stochastic Checkout Retry Loop (Maestro & Appium).
     - `MOB_E2E_04`: Keyboard Occlusion Dismissal (Maestro & Appium).
     - `MOB_E2E_05`: Simulated Offline Recovery (Maestro & Appium).
+    - `MOB_E2E_06`: Landscape Orientation Layout Shift (Maestro & Appium).
   - [ ] Add root npm scripts:
     - `"test:mobile:appium:android": "npm run test:android --workspace=mobile-automation"`
     - `"test:mobile:appium:ios": "npm run test:ios --workspace=mobile-automation"`
 - **Acceptance Criteria**:
   - [ ] All test specs execute cleanly against Android Emulator and iOS Simulator.
   - [ ] Execution produces structured logs and Allure report artifacts.
-  - [ ] `specs/test_cases_catalog.md` contains full automated traceability mapping.
+  - [ ] `specs/test_cases_catalog.md` contains full automated traceability mapping covering `MOB_E2E_01` to `MOB_E2E_06`.
 
 ---
 
 ## 3. Definition of Done (DoD)
 
-- [ ] Maestro YAML flows execute with zero failures across all critical paths.
+- [ ] Maestro YAML flows execute with zero failures across all critical paths (including orientation).
 - [ ] Appium WebdriverIO framework passes linting and strict TypeScript compilation.
-- [ ] Both Android UIAutomator2 and iOS XCUITest configurations execute cleanly.
+- [ ] Both Android UIAutomator2 and iOS XCUITest driver setups execute cleanly.
 - [ ] Allure reports and Winston log outputs verified with zero token leaks.
-- [ ] Mobile automation workspace registered in monorepo and cataloged in `specs/test_cases_catalog.md`.
+- [ ] Mobile automation workspace registered in monorepo and cataloged in `specs/test_cases_catalog.md` (`MOB_E2E_01` to `MOB_E2E_06`).
 
 ---
 

@@ -30,12 +30,13 @@
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
   - [ ] **MOB-B1: Obfuscated Locators**:
-    - Login/Register inputs use dynamic or obfuscated testIDs: `testID="txt_usr_77"`, `testID="txt_pwd_99"`.
+    - Refactor Login/Register inputs to use dynamic or obfuscated testIDs: `testID="txt_usr_77"`, `testID="txt_pwd_99"`.
     - Catalog book card buttons use computed testIDs (e.g. `testID={`btn_item_${book.id}_add`}`).
+    - Checkout form inputs use non-semantic labels: `testID="txt_f1"`, `testID="txt_l1"`, `testID="txt_c99"`.
   - [ ] **MOB-B2: Keyboard Occlusion on Checkout**:
     - Omit `KeyboardAvoidingView` on `CheckoutScreen`.
     - When user focuses credit card input on standard portrait phones, soft keyboard covers the "Place Order" CTA button.
-    - Automators must execute `driver.hideKeyboard()` or perform upward drag gestures to reveal the button.
+    - Automation must execute `driver.hideKeyboard()` (Android), tap outside the form (iOS), or perform upward drag gestures to reveal the CTA button.
 - **Acceptance Criteria**:
   - [ ] Standard element queries without proper scrolling fail when the keyboard is open.
   - [ ] Explicit keyboard dismissal or upward scroll reveals the CTA button.
@@ -51,13 +52,14 @@
 - **Technical Subtasks**:
   - [ ] **MOB-B3: Dynamic Add-to-Cart Delay**:
     - In `BookDetailScreen` and `CatalogScreen`, clicking "Add to Cart" simulates processing latency by imposing a randomized `setTimeout` between 500ms and 3500ms before dispatching the API request and animating the cart badge.
+    - Disable button and display subtle loading state during timeout to prevent unintended double-submits while challenging explicit assertion waits.
   - [ ] **MOB-B4: Stochastic Gateway Timeout Handling**:
     - `POST /api/checkout/process` returns HTTP 500 ~15% of the time.
-    - On mobile, display a distinct error banner with a "Retry Payment" CTA button.
-    - Automation must detect the 500 error and tap "Retry Payment" up to 3 times to achieve success.
+    - On mobile, display a distinct in-screen error banner (`testID="banner_checkout_error"`) with a "Retry Payment" CTA button (`testID="btn_retry_payment"`).
+    - Automation must detect the error banner and tap "Retry Payment" up to 3 times to achieve success.
 - **Acceptance Criteria**:
   - [ ] Add-to-cart requires explicit wait for badge update rather than static sleep.
-  - [ ] Checkout failure displays clear retry alert allowing recovery.
+  - [ ] Checkout failure displays clear in-screen retry banner allowing recovery without modal locking.
 
 ---
 
@@ -74,7 +76,7 @@
   - [ ] **MOB-B6: Orientation Layout Shift**:
     - Ensure `app.json` has `"orientation": "default"` enabled to allow landscape rotation.
     - When rotating device to landscape on `CheckoutScreen`, the bottom navigation bar overlaps the submit section unless layout responds to orientation changes.
-  - [ ] Document all mobile anti-patterns (MOB-B1 to MOB-B6) in `intentional_bugs.md` with SEC and PO review.
+  - [ ] Document all mobile anti-patterns (MOB-B1 to MOB-B6) in `intentional_bugs.md` with SEC and PO review, aligned with automated test scenarios `MOB_E2E_01` to `MOB_E2E_06`.
 - **Acceptance Criteria**:
   - [ ] Toggling simulated offline mode displays the offline banner and catches requests gracefully.
   - [ ] Landscape rotation skews layout and triggers MOB-B6 as intended.

@@ -38,9 +38,11 @@
     - Swipe-to-delete gesture or explicit delete button.
     - Subtotal calculation, tax estimation, and total price display.
     - "Proceed to Checkout" CTA button.
+  - [ ] Author unit tests in `mobile/src/__tests__/CartContext.test.tsx` verifying cart addition, quantity updates, and cart badge counter updates.
 - **Acceptance Criteria**:
   - [ ] Adding an item from `BookDetailScreen` updates the Cart badge count immediately.
   - [ ] Removing an item updates the subtotal and fires `DELETE /api/cart/:bookId`.
+  - [ ] Cart unit tests pass cleanly via `npm test --workspace=mobile`.
 
 ---
 
@@ -63,27 +65,26 @@
 
 ---
 
-### User Story US-MOB-1133: Profile Screen, Multer Dual-Auth & Native Avatar Upload
+### User Story US-MOB-1133: Profile Screen & Native Avatar Multipart Upload
 - **Story Statement**:  
   *As an* Authenticated User,  
   *I want* to view my account profile and upload a custom avatar from my camera or photo library,  
   *So that* I can personalize my bookstore profile.
 - **Story Points**: 1 SP
 - **Technical Subtasks**:
-  - [ ] Update `backend/src/controllers/profileController.ts`:
-    - In `multer.diskStorage.filename`, extract token from `req.headers.authorization` (Bearer) when `req.cookies?.token` is undefined so files are saved as `<username>-<timestamp>.ext`.
   - [ ] Implement `ProfileScreen`:
     - Displays user details: Username, Full Name, joined date.
     - Avatar preview circle with edit badge icon.
     - Modal sheet allowing choice between "Take Photo" and "Choose from Gallery".
   - [ ] Integrate `expo-image-picker`:
     - Handle camera and photo permissions gracefully.
-    - Compress and format image payload as multipart/form-data.
-    - Dispatch to `POST /api/profile/upload`.
+    - Compress and format image payload as native `FormData`.
+    - **Crucial**: Omit explicit `'Content-Type': 'multipart/form-data'` in Axios/fetch headers to allow the native network stack to attach the multipart boundary dynamically.
+    - Dispatch to `POST /api/profile/upload` using `Authorization: Bearer <token>`.
   - [ ] Security Champion (SEC) Audit: Verify 2MB size limit and file type filters prevent arbitrary uploads.
   - [ ] Implement "Sign Out" button with confirmation alert.
 - **Acceptance Criteria**:
-  - [ ] Uploaded avatar is named with the authenticated username on backend disk storage.
+  - [ ] Uploaded avatar is named with the authenticated username on backend disk storage (leveraging Sprint 11.1 Multer update).
   - [ ] Successfully uploading a photo updates the avatar display immediately.
   - [ ] Permission denials display a helpful user alert directing to device settings.
 
@@ -120,6 +121,7 @@
 - [ ] Avatar upload operates smoothly with both Camera and Photo Library inputs and links to authenticated username.
 - [ ] Chaos settings dynamically update backend behavior.
 - [ ] TypeScript compilation succeeds with zero errors (`npm run typecheck:mobile`).
+- [ ] Mobile unit tests pass cleanly (`npm test --workspace=mobile`).
 - [ ] Test cases cataloged in `specs/test_cases_catalog.md`.
 
 ---
@@ -127,6 +129,9 @@
 ## 4. Verification Commands
 
 ```bash
+# Verify unit tests of mobile workspace
+npm test --workspace=mobile
+
 # Verify TypeScript build of mobile workspace
 npm run typecheck:mobile
 

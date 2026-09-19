@@ -54,6 +54,24 @@ buggy-books/
 │   │   └── __tests__/             # Vitest + React Testing Library component tests
 │   ├── eslint.config.js           # ESLint 9 Flat Config
 │   └── package.json
+├── mobile/                        # Native Expo / React Native App (Android & iOS)
+│   ├── src/
+│   │   ├── api/                   # Typed HTTP client with 401 refresh mutex
+│   │   ├── context/               # AuthContext (SecureStore) & CartContext
+│   │   ├── navigation/            # RootStack & AppTab navigators
+│   │   ├── screens/               # Catalog, Detail, Cart, Checkout, Profile, Chaos
+│   │   └── utils/                 # Secure storage & network helpers
+│   ├── metro.config.js            # Monorepo workspace Metro resolution
+│   ├── app.json                   # Expo application manifest
+│   └── package.json
+├── mobile-automation/             # Mobile Automation Proving Ground (Appium & Maestro)
+│   ├── .maestro/                  # Declarative Maestro YAML test flows
+│   ├── src/
+│   │   ├── config/                # WDIO Android & iOS capability configs
+│   │   ├── core/                  # BaseMobileScreen & Winston step logger
+│   │   ├── screens/               # Mobile Page Object Models
+│   │   └── specs/                 # Appium TypeScript E2E test suites
+│   └── package.json
 ├── playwright-e2e/                # Active Playwright E2E Automation Framework
 │   ├── src/
 │   │   ├── config/                # playwright.config.ts & env.config.ts

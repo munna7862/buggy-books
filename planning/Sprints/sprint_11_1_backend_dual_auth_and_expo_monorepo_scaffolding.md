@@ -24,26 +24,32 @@
 ### User Story US-MOB-1111: Backend Dual-Authentication & Token Delivery
 - **Story Statement**:  
   *As a* Mobile Developer,  
-  *I want* the backend login, register, and refresh endpoints to accept and return JWT `token` and `refreshToken` in the JSON payload, and protected routes to accept `Authorization: Bearer <token>` headers,  
-  *So that* native mobile clients can securely authenticate and silently rotate tokens without browser cookies.
+  *I want* the backend login, register, and refresh endpoints to accept and return JWT `token` and `refreshToken` in the JSON payload, protected routes to accept `Authorization: Bearer <token>` headers, and avatar uploads to recognize Bearer tokens,  
+  *So that* native mobile clients can securely authenticate, silently rotate tokens, and upload profile assets without browser cookies.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
+  - [ ] Modify `backend/src/services/auth.service.ts`:
+    - Update `refresh(refreshToken?: string)` to verify the token, generate a refreshed access token and a refreshed rotation token, and return `{ token: newToken, refreshToken: newRefreshToken, username }`.
   - [ ] Modify `backend/src/controllers/authController.ts`:
     - On `login`, return `{ message, username, token, refreshToken }`.
     - On `register`, return `{ message, username, token, refreshToken }`.
-    - On `refresh`, accept `req.body.refreshToken` (or fallback to `req.cookies?.refreshToken`), invoke `authService.refresh`, and return `{ success: true, username, token, refreshToken }`.
+    - On `refresh`, accept `req.body.refreshToken` (or fallback to `req.cookies?.refreshToken`), invoke `authService.refresh`, pass valid tokens to `setAuthCookies(res, result.token, result.refreshToken)`, and return `{ success: true, username, token, refreshToken }`.
     - Continue setting `httpOnly` cookies via `setAuthCookies(res, token, refreshToken)` for web backward compatibility.
   - [ ] Modify `backend/src/routes/api.ts` in `authenticateToken`:
     - Read `req.headers.authorization`. If it starts with `Bearer `, verify and extract user.
     - If `Authorization` header is not present, fall back to `req.cookies?.token`.
     - If neither is valid, return `401 Unauthorized`.
-  - [ ] Add unit and integration tests in `backend/src/__tests__/auth.test.ts` verifying:
+  - [ ] Modify `backend/src/controllers/profileController.ts` in `storageEngine.filename`:
+    - Inspect `req.headers.authorization` for Bearer token extraction when `req.cookies?.token` is undefined, ensuring mobile avatar uploads save as `<username>-<timestamp>.ext`.
+  - [ ] Add unit and integration tests in `backend/src/__tests__/auth.test.ts` and `profile.test.ts` verifying:
     - Bearer header authentication on protected routes (`/api/cart`, `/api/profile`).
-    - Body-based token refresh (`POST /api/auth/refresh` with `{ refreshToken }`).
+    - Body-based token refresh (`POST /api/auth/refresh` with `{ refreshToken }`) returning rotated tokens.
+    - Avatar upload with Bearer token saves filename with authenticated username.
     - Existing cookie-based web auth flows remain 100% green.
 - **Acceptance Criteria**:
   - [ ] Sending valid `Authorization: Bearer <jwt>` grants access to protected routes.
   - [ ] Sending valid `refreshToken` in request body returns new `token` and `refreshToken` pair in JSON.
+  - [ ] Avatar uploads with Bearer token name files with authenticated user ID.
   - [ ] Existing cookie-based web requests continue to function identically.
 
 ---
@@ -74,8 +80,8 @@
 ### User Story US-MOB-1113: Expo Monorepo Workspace Scaffolding & Metro Bundler
 - **Story Statement**:  
   *As a* Mobile Developer,  
-  *I want* a clean React Native + Expo TypeScript workspace initialized in `mobile/` with monorepo Metro resolution,  
-  *So that* the mobile app is integrated into the monorepo and can consume `@buggybooks/types`.
+  *I want* a clean React Native + Expo TypeScript workspace initialized in `mobile/` with monorepo Metro resolution and unit test runner,  
+  *So that* the mobile app is integrated into the monorepo, can consume `@buggybooks/types`, and has test execution parity.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
   - [ ] Update root `package.json` to include `"mobile"` in the `workspaces` array.
@@ -92,20 +98,23 @@
       path.resolve(projectRoot, 'node_modules'),
       path.resolve(workspaceRoot, 'node_modules'),
     ];
+    config.resolver.disableHierarchicalLookup = true;
     module.exports = config;
     ```
-  - [ ] Configure `mobile/package.json` with dependencies:
-    - `"@buggybooks/types": "*"`
-    - `"@react-navigation/native"`, `"@react-navigation/native-stack"`, `"@react-navigation/bottom-tabs"`
-    - `"expo-secure-store"`, `"expo-image-picker"`, `"expo-haptics"`
+  - [ ] Configure `mobile/package.json` with dependencies and unit test runner:
+    - Dependencies: `"@buggybooks/types": "*"`, `"@react-navigation/native"`, `"@react-navigation/native-stack"`, `"@react-navigation/bottom-tabs"`, `"expo-secure-store"`, `"expo-image-picker"`, `"expo-haptics"`
+    - DevDependencies: `"jest": "^29.2.1"`, `"jest-expo": "~52.0.0"`, `"@testing-library/react-native": "^12.0.0"`, `"react-test-renderer": "18.3.1"`
+    - Scripts: `"test": "jest"`, `"lint": "eslint ."`
   - [ ] Configure `app.json` with app name (`BuggyBooks`), bundle identifier (`com.buggybooks.app`), and `"orientation": "default"`.
   - [ ] Add root npm scripts:
     - `"dev:mobile": "npm start --workspace=mobile"`
     - `"lint:mobile": "npm run lint --workspace=mobile"`
     - `"typecheck:mobile": "npx tsc --noEmit -p mobile/tsconfig.json"`
+    - `"test:mobile:unit": "npm test --workspace=mobile"`
 - **Acceptance Criteria**:
   - [ ] `npm run install:all` cleanly provisions all monorepo dependencies including `mobile/`.
   - [ ] `npm run typecheck:mobile` validates types without errors.
+  - [ ] `npm run test:mobile:unit` executes successfully.
   - [ ] Metro bundler resolves `@buggybooks/types` without module resolution exceptions.
 
 ---
@@ -114,10 +123,11 @@
 
 - [ ] All 3 user stories implemented and reviewed against acceptance criteria.
 - [ ] Backend Jest unit and integration tests pass with 100% success (`npm run test:backend`).
-- [ ] Token refresh endpoint verified via JSON body payloads and cookie fallbacks.
+- [ ] Token refresh endpoint verified via JSON body payloads and cookie fallbacks with zero `undefined` values.
+- [ ] Multer file naming verified with Bearer token authentication in `profile.test.ts`.
 - [ ] Frontend Vitest component tests pass with 100% success (`npm run test:frontend`).
 - [ ] Playwright web E2E smoke tests pass without regressions (`npm run test:e2e:local`).
-- [ ] `mobile/` compiles cleanly with zero TypeScript errors and resolves `@buggybooks/types`.
+- [ ] `mobile/` compiles cleanly with zero TypeScript errors, resolves `@buggybooks/types`, and passes unit test suite (`npm run test:mobile:unit`).
 
 ---
 
@@ -133,7 +143,10 @@ npm run test:frontend
 # 3. Verify TypeScript across mobile workspace
 npm run typecheck:mobile
 
-# 4. Launch Expo dev server to verify mobile scaffolding & Metro resolution
+# 4. Verify mobile unit tests execute
+npm run test:mobile:unit
+
+# 5. Launch Expo dev server to verify mobile scaffolding & Metro resolution
 npm run dev:mobile
 ```
 

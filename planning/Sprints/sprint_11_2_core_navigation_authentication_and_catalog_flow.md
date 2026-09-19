@@ -41,11 +41,13 @@
       - On refresh failure, wipe tokens and dispatch auth logout event.
   - [ ] Create `mobile/src/context/AuthContext.tsx`:
     - Provides `user`, `isAuthenticated`, `isLoading`, `login()`, `register()`, `logout()`.
+  - [ ] Author unit tests in `mobile/src/__tests__/storage.test.ts` and `mobile/src/__tests__/AuthContext.test.tsx` verifying token saving, clearing, and session hydration.
 - **Acceptance Criteria**:
   - [ ] Logging in persists JWT in secure storage.
   - [ ] Multiple parallel 401 requests trigger exactly one `/api/auth/refresh` call and all resolve seamlessly.
   - [ ] Relaunching the app restores authenticated session without prompting for login.
   - [ ] Logging out wipes secure storage and navigates to the login screen.
+  - [ ] Unit tests pass cleanly via `npm test --workspace=mobile`.
 
 ---
 
@@ -61,7 +63,7 @@
     - `AuthNavigator`: `LoginScreen` and `RegisterScreen` with native slide transitions.
     - `AppTabNavigator`: Bottom tab bar with icons for Catalog, Cart, Profile, and Chaos.
   - [ ] Implement `LoginScreen`:
-    - Fields: Username (`txt_usr_77`), Password (`txt_pwd_99`).
+    - Form fields with baseline accessibility labels and inputs (proto-testIDs configured for subsequent Sprint 12.1 obfuscation).
     - Error banners on invalid credentials (HTTP 401).
   - [ ] Implement `RegisterScreen`:
     - Fields: Full Name, Username, Password.
@@ -95,12 +97,16 @@
     - `MOB_AUTH_03`: Registration & Instant Navigation.
     - `MOB_AUTH_04`: Silent Token Refresh on Expiration.
     - `MOB_AUTH_05`: Logout & Storage Purge.
-    - `MOB_CAT_01` to `MOB_CAT_04`: Catalog Grid, Paging, Search & Empty State.
+    - `MOB_CAT_01`: Initial Catalog Load & Two-Column Grid.
+    - `MOB_CAT_02`: Catalog Search Filtering with Debounce.
+    - `MOB_CAT_03`: Catalog Pull-to-Refresh State Synchronization.
+    - `MOB_CAT_04`: Search No-Results Empty State.
+    - `MOB_CAT_05`: Book Detail View, Metadata & Quantity Selector.
 - **Acceptance Criteria**:
   - [ ] Tapping a book card navigates to its `BookDetailScreen`.
   - [ ] Searching filters books dynamically with debouncing.
   - [ ] Pull-to-refresh refreshes list from the backend API.
-  - [ ] `specs/test_cases_catalog.md` contains the new Mobile Test Suite section.
+  - [ ] `specs/test_cases_catalog.md` contains the new Mobile Test Suite section covering `MOB_AUTH_01`–`MOB_CAT_05`.
 
 ---
 
@@ -110,6 +116,7 @@
 - [ ] Mobile app runs on Android Emulator and iOS Simulator without runtime crashes.
 - [ ] Authentication, token refresh mutex, and logout verified with live backend.
 - [ ] Catalog search and book detail rendering verified with backend database.
+- [ ] Mobile unit tests pass with 100% success (`npm test --workspace=mobile`).
 - [ ] Test cases cataloged in `specs/test_cases_catalog.md`.
 
 ---
@@ -119,6 +126,9 @@
 ```bash
 # Start backend in development mode
 npm run dev:backend
+
+# Run mobile unit tests
+npm test --workspace=mobile
 
 # Launch Expo app on Android emulator
 npm run dev:mobile:android

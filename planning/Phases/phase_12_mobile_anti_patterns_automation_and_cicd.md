@@ -57,17 +57,18 @@ graph LR
    * *Estimated Effort*: 8 Story Points
    * *Key Deliverables*:
      - Creation of `mobile-automation/` package registered in root `package.json` workspaces.
-     - Maestro YAML test flows in `.maestro/` covering auth, catalog, cart, checkout retry, and keyboard handling.
-     - Appium WebdriverIO framework with TypeScript, Page Object Models, driver provisioning (`uiautomator2`), and Winston structured step logging.
+     - Maestro YAML test flows in `.maestro/` covering auth, catalog, cart, checkout retry, keyboard handling, and orientation shifts.
+     - Appium WebdriverIO framework with TypeScript, Page Object Models, driver provisioning (`uiautomator2` and `xcuitest`), and Winston structured step logging.
      - Execution profiles for Android UIAutomator2 and iOS XCUITest.
      - 100% green execution across automated test flows on both platforms.
-     - Full traceability of automated flows in `specs/test_cases_catalog.md`.
+     - Full traceability of automated flows in `specs/test_cases_catalog.md` (`MOB_E2E_01` to `MOB_E2E_06`).
 
 3. **[Sprint 12.3: GitHub Actions Mobile CI/CD Pipeline & Build Artifacts](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_12_3_github_actions_mobile_cicd_pipeline_and_build_artifacts.md)**
    * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
-     - SHA-pinned mobile quality gates (`mobile-lint`, `mobile-typecheck`) added to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml).
-     - New `.github/workflows/mobile-ci.yml` executing Maestro flows against headless Android emulators on `macos-latest` runners.
+     - SHA-pinned mobile quality gates (`mobile-lint`, `mobile-typecheck`, `mobile-unit-tests`) added to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml).
+     - New `.github/workflows/mobile-ci.yml` executing Maestro flows against headless Android emulators on hardware-accelerated `macos-latest` runners using SHA-pinned `reactivecircus/android-emulator-runner`.
+     - Standalone release APK bundling (`npx expo export` + `./gradlew assembleRelease`) and `adb reverse tcp:4000 tcp:4000` network bridging for hermetic, Metro-free execution in CI.
      - Expo EAS build integration (`mobile/eas.json` and `mobile-release.yml`) for automated Android APK artifact generation on release tags.
      - Step summaries and test report attachments published on GitHub Actions workflow runs.
 
@@ -79,7 +80,7 @@ graph LR
 - [ ] [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md) is updated with complete detection and automation instructions for MOB-B1 through MOB-B6.
 - [ ] Maestro declarative test flows execute with a 100% pass rate locally and in GitHub Actions CI.
 - [ ] Appium WebdriverIO POM framework compiles strictly in TypeScript with zero lint warnings and successfully controls both Android UIAutomator2 and iOS XCUITest drivers.
-- [ ] Mobile linting and typecheck quality gates run in `.github/workflows/ci.yml` using SHA-pinned action references.
-- [ ] Dedicated `.github/workflows/mobile-ci.yml` successfully boots an Android emulator on `macos-latest`, installs the prebuilt APK, and executes smoke flows without hanging or timing out.
+- [ ] Mobile linting, typecheck, and unit test quality gates run in `.github/workflows/ci.yml` using SHA-pinned action references.
+- [ ] Dedicated `.github/workflows/mobile-ci.yml` successfully boots an Android emulator on `macos-latest`, installs the prebuilt standalone APK, bridges network via `adb reverse`, and executes smoke flows without hanging or timing out.
 - [ ] Release pipeline produces a sideloadable standalone Android APK artifact attached to GitHub releases.
-- [ ] All automated mobile test scenarios are cataloged in `specs/test_cases_catalog.md`.
+- [ ] All automated mobile test scenarios (`MOB_E2E_01` through `MOB_E2E_06`) are cataloged in `specs/test_cases_catalog.md`.

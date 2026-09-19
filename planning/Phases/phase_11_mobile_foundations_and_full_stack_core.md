@@ -47,20 +47,21 @@ graph LR
 1. **[Sprint 11.1: Backend Dual-Auth & Expo Monorepo Scaffolding](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_11_1_backend_dual_auth_and_expo_monorepo_scaffolding.md)**
    * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
-     - Non-breaking update to `authController.ts` returning `token` and `refreshToken` in JSON for `login`, `register`, and `refresh`.
+     - Non-breaking update to `authController.ts` and `auth.service.ts` supporting refresh token rotation and returning `token` and `refreshToken` in JSON for `login`, `register`, and `refresh`.
      - Dual-mode `authenticateToken` middleware in `api.ts` supporting `Bearer` tokens.
+     - Multer `diskStorage` update in `profileController.ts` to inspect Bearer tokens for avatar uploads.
      - CSRF bypass for Bearer-authenticated requests in `app.ts`.
-     - Scaffolding of `mobile/` workspace with Expo and TypeScript, configured with `mobile/metro.config.js` to resolve `@buggybooks/types`.
-     - Root npm script integration (`dev:mobile`, `lint:mobile`, `typecheck:mobile`).
+     - Scaffolding of `mobile/` workspace with Expo, TypeScript, and `jest-expo` unit test runner, configured with `mobile/metro.config.js` (`disableHierarchicalLookup: true`) to resolve `@buggybooks/types`.
+     - Root npm script integration (`dev:mobile`, `lint:mobile`, `typecheck:mobile`, `test:mobile:unit`).
      - 100% green verification on existing Jest and Playwright web tests.
 
 2. **[Sprint 11.2: Core Navigation, Authentication & Catalog Flow](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_11_2_core_navigation_authentication_and_catalog_flow.md)**
    * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
-     - Secure token persistence using `expo-secure-store` in mobile `AuthContext`.
+     - Secure token persistence using `expo-secure-store` in mobile `AuthContext` with unit test coverage.
      - Centralized typed mobile API client with automatic token attachment and 401 refresh with mutex queue.
      - Root Native Stack Navigator with unauthenticated Auth Stack and authenticated Bottom Tabs.
-     - Functional `LoginScreen` and `RegisterScreen` with native keyboard handling.
+     - Functional `LoginScreen` and `RegisterScreen` with native keyboard handling and accessibility labels.
      - `CatalogScreen` featuring a 2-column `FlatList`, pull-to-refresh, search bar, and stock counters.
      - `BookDetailScreen` displaying high-res cover, synopsis, ratings, and quantity selector.
      - SDET drafting of `MOB_AUTH_01`–`MOB_CAT_05` in `specs/test_cases_catalog.md`.
@@ -68,21 +69,21 @@ graph LR
 3. **[Sprint 11.3: Cart, Checkout, Profile & Chaos Control Center](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_11_3_cart_checkout_profile_and_chaos_control_center.md)**
    * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
-     - `CartContext` maintaining synchronized cart state with backend `GET /api/cart`.
+     - `CartContext` maintaining synchronized cart state with backend `GET /api/cart` with unit test coverage.
      - `CartScreen` with item list, quantity adjusters, swipe-to-delete, and checkout CTA.
      - `CheckoutScreen` with address and payment fields, subtotal summary, and order submission.
-     - Update Multer token extraction in `profileController.ts` and build `ProfileScreen` with native camera/gallery avatar upload via `expo-image-picker`.
+     - Build `ProfileScreen` with native camera/gallery avatar upload via `expo-image-picker` with resilient multipart/form-data streaming.
      - `ChaosScreen` mobile control center to view and adjust error rates and reset test data.
      - Security Champion (SEC) audit of multipart uploads and camera permissions.
-     - SDET cataloging of Cart, Checkout, Profile, and Chaos test scenarios in `specs/test_cases_catalog.md`.
+     - SDET cataloging of Cart, Checkout, Profile, and Chaos test scenarios (`MOB_CART_01`–`MOB_CHAOS_01`) in `specs/test_cases_catalog.md`.
 
 ---
 
 ## 4. Definition of Done for Phase 11
 
-- [ ] Backend dual-authentication supports both `Authorization: Bearer` and `httpOnly` cookies across `/api/login`, `/api/register`, and `/api/auth/refresh` with 100% passing unit and integration tests.
+- [ ] Backend dual-authentication supports both `Authorization: Bearer` and `httpOnly` cookies across `/api/login`, `/api/register`, `/api/auth/refresh`, and `/api/profile/upload` with 100% passing unit and integration tests.
 - [ ] Mutating requests with Bearer tokens bypass CSRF checks without compromising cookie-based CSRF protection.
-- [ ] `mobile/` is registered in root workspaces and compiles cleanly via `npm run typecheck:mobile` and `npm run lint:mobile`.
+- [ ] `mobile/` is registered in root workspaces, passes `npm test --workspace=mobile`, and compiles cleanly via `npm run typecheck:mobile` and `npm run lint:mobile`.
 - [ ] `mobile/metro.config.js` resolves hoisted `@buggybooks/types` with zero bundler errors.
 - [ ] Complete native user journey passes on both Android Emulator and iOS Simulator: Login -> Browse Catalog -> View Book -> Add to Cart -> Checkout -> Place Order.
 - [ ] Profile avatar upload handles camera and gallery inputs, successfully saving images under authenticated user IDs via Multer.

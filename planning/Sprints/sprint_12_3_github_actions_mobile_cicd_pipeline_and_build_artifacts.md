@@ -66,26 +66,50 @@
 ### User Story US-MOB-1232: Headless Android Emulator & Maestro CI Workflow
 - **Story Statement**:  
   *As an* SDET,  
-  *I want* Maestro E2E test flows to run automatically against a headless Android emulator in CI on hardware-accelerated runners,  
-  *So that* all mobile user journeys are verified continuously on real OS targets without timeouts.
-- **Story Points**: 2 SP
+  *I want* Maestro E2E test flows to run automatically against a headless Android emulator in CI on hardware-accelerated runners with zero external bundler dependencies,  
+  *So that* all mobile user journeys are verified continuously on real OS targets hermetically without timeouts.
+- **Story Points*: 2 SP
 - **Technical Subtasks**:
   - [ ] Create `.github/workflows/mobile-ci.yml`:
-    - Trigger on PRs modifying `mobile/**` or `mobile-automation/**`, nightly cron, or on-demand dispatch (`workflow_dispatch`).
-    - Run on `macos-latest` (Apple Silicon M1/M2) with native hardware acceleration enabled.
-    - Set up Android SDK, Java 17, and boot headless Android emulator using `reactivecircus/android-emulator-runner@v2`:
-      - API Level: 33/34
-      - Target: `google_apis`
-      - Arch: `arm64-v8a`
+    - Strict path triggers: `mobile/**`, `mobile-automation/**`, `.github/workflows/mobile-ci.yml`, nightly cron, or manual dispatch (`workflow_dispatch`).
+    - Runner: `macos-latest` (Apple Silicon hardware-accelerated virtualization).
+    - Set up Java 17:
+      ```yaml
+      - name: Set up Java 17
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      ```
+    - Boot Android emulator using SHA-pinned action:
+      ```yaml
+      - name: Run Android Emulator & Maestro Tests
+        uses: reactivecircus/android-emulator-runner@d94c3fbe4fe6a29e4ab5ba84646633a2c53a693c # v2.33.0
+        with:
+          api-level: 34
+          target: google_apis
+          arch: arm64-v8a
+          profile: pixel_6
+          script: |
+            # 1. Reverse backend port so emulator accesses host server uniformly
+            adb reverse tcp:4000 tcp:4000
+            
+            # 2. Install prebuilt standalone release APK (offline JS bundle embedded)
+            adb install mobile/android/app/build/outputs/apk/release/app-release.apk
+            
+            # 3. Execute Maestro declarative flows
+            maestro test mobile-automation/.maestro/
+      ```
     - Install Maestro CLI: `curl -fsSL "https://get.maestro.mobile.dev" | bash`.
-    - Launch backend server in CI: `npm run dev:backend &` with healthcheck wait loop.
-    - Build or install Expo Android APK into the emulator:
-      - For CI efficiency: run `npx expo prebuild --platform android` then `cd mobile/android && ./gradlew assembleDebug`, or install cached debug build.
-      - Sideload APK into running emulator: `adb install mobile/android/app/build/outputs/apk/debug/app-debug.apk`.
-    - Execute `maestro test mobile-automation/.maestro/`.
+    - Launch backend server in CI: `npm run dev:backend &` with curl healthcheck loop against `http://localhost:4000/api/books`.
+    - Hermetic Build Strategy:
+      - Run `npx expo prebuild --platform android`.
+      - Export offline JS bundle and compile release APK: `npx expo export -p android && cd mobile/android && ./gradlew assembleRelease`.
+      - This completely avoids the fatal "Metro bundler not running" cold-start crash in headless CI.
     - Upload Maestro test artifacts, screenshots, and logs on failure.
 - **Acceptance Criteria**:
   - [ ] Android emulator boots on `macos-latest` within 3 minutes and executes all Maestro flows cleanly.
+  - [ ] Sideloaded APK runs standalone with embedded JS bundle and accesses host backend via `adb reverse`.
   - [ ] Failures capture automatic screenshots and attach them to the workflow summary.
 
 ---
@@ -103,8 +127,8 @@
     - `production`: Optimized AAB/IPA production bundles.
   - [ ] Create `.github/workflows/mobile-release.yml`:
     - Trigger on git tags matching `v*`.
-    - Execute EAS build or Gradle headless build (`./gradlew assembleRelease`).
-    - Attach the compiled APK to the GitHub Release.
+    - Build standalone APK using headless Gradle (`./gradlew assembleRelease`) for free, account-independent builds, with fallback to cloud EAS if `EXPO_TOKEN` secret is configured.
+    - Attach the compiled APK (`BuggyBooks-vX.Y.Z.apk`) to the GitHub Release.
 - **Acceptance Criteria**:
   - [ ] Pushing a release tag (e.g. `v1.1.0`) triggers build generation.
   - [ ] Standalone APK is attached to GitHub Release and ready for sideloading onto Android phones.
@@ -113,9 +137,10 @@
 
 ## 3. Definition of Done (DoD)
 
-- [ ] Mobile linting and typecheck jobs active in main CI workflow using SHA-pinned actions.
-- [ ] Headless Android emulator test workflow operational in GitHub Actions on `macos-latest` runner.
-- [ ] EAS build profile (`eas.json`) tested and producing valid Android APKs.
+- [ ] Mobile linting, typecheck, and unit test jobs active in main CI workflow using SHA-pinned actions.
+- [ ] Headless Android emulator test workflow operational in GitHub Actions on `macos-latest` runner with `adb reverse` network bridging.
+- [ ] Standalone release APK compiled and verified without Metro bundler dependencies.
+- [ ] EAS build profile (`eas.json`) and Gradle headless build tested and producing valid Android APKs.
 - [ ] Zero secrets leaked in workflow definitions.
 
 ---
@@ -123,11 +148,15 @@
 ## 4. Verification Commands
 
 ```bash
-# Verify mobile lint and typecheck
+# 1. Verify mobile lint, typecheck, and unit tests
 npm run lint:mobile
 npm run typecheck:mobile
+npm test --workspace=mobile
 
-# Local dry-run of EAS build
+# 2. Local headless standalone bundle test
+cd mobile && npx expo export -p android && cd android && ./gradlew assembleRelease
+
+# 3. Local dry-run of EAS build
 cd mobile && npx eas-cli build --platform android --profile preview --local --dry-run
 ```
 
@@ -139,5 +168,7 @@ cd mobile && npx eas-cli build --platform android --profile preview --local --dr
 | :--- | :--- | :--- | :--- |
 | **macOS Runner Minute Consumption** | Medium | High | Restrict `mobile-ci.yml` trigger paths to `mobile/**` and `mobile-automation/**` only, and reserve full matrix runs for nightly schedules and release tags. |
 | **Android Emulator Cold-Boot Slowness** | High | Medium | Cache AVD snapshots and Gradle dependencies across workflow runs using `actions/cache`. |
+| **Emulator localhost Networking Mismatch** | High | High | Execute `adb reverse tcp:4000 tcp:4000` immediately after emulator boot so Android guest requests to `localhost:4000` bridge directly to host. |
+| **Debug APK Crash without Metro Bundler** | Critical | High | Build standalone APK (`./gradlew assembleRelease`) with pre-bundled offline JS assets (`npx expo export`), ensuring zero Metro runtime dependency in CI. |
 | **Expo EAS Token Exposure in CI Logs** | Critical | Low | Pass `EXPO_TOKEN` strictly via encrypted GitHub Secrets (`${{ secrets.EXPO_TOKEN }}`) with log masking. |
 
