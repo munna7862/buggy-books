@@ -1,0 +1,99 @@
+# Sprint 12.1: Intentional Mobile Anti-Patterns & Chaos Injection
+
+**Sprint Identifier**: `SPRINT-12.1-INTENTIONAL-MOBILE-ANTI-PATTERNS-AND-CHAOS-INJECTION`  
+**Phase Mapping**: [Phase 12: Mobile Chaos Engineering, Appium/Maestro Automation & Mobile CI/CD](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_12_mobile_anti_patterns_automation_and_cicd.md)  
+**Estimated Velocity**: 5 Story Points  
+**Sprint Goal**: Implement deliberate mobile anti-patterns (MOB-B1 through MOB-B6) including obfuscated `testID`s, keyboard occlusion, dynamic add-to-cart delays, stochastic checkout recovery, offline network dropouts, and orientation layout glitches, and catalog them in `intentional_bugs.md`.
+
+---
+
+## 1. Persona Roles & Ownership Matrix
+
+| Persona | Assigned Member | Responsibilities for this Sprint |
+| :--- | :--- | :--- |
+| **Scrum Master** | AI Agent / SM | Sprint backlog coordination, bug catalog verification, and DoD audit. |
+| **Mobile Developer** | AI Agent / Mobile | Implement deliberate anti-patterns across mobile screens and components. |
+| **Chaos Specialist** | AI Agent / Chaos | Ensure error injection and latencies conform strictly to chaos configurations. |
+| **Principal SDET** | AI Agent / SDET | Verify that all anti-patterns provide genuine automation challenges for Appium and Maestro. |
+| **Product Owner** | Human PO / AI PO | Review intentional bugs catalog and validate that functional UX remains operable despite obstacles. |
+
+---
+
+## 2. Sprint Backlog & Granular User Stories
+
+### User Story US-MOB-1211: Obfuscated Native Locators & Keyboard Occlusion
+- **Story Statement**:  
+  *As an* SDET writing mobile automation scripts,  
+  *I want* mobile screens to present non-trivial locators and keyboard occlusion hurdles,  
+  *So that* my automated test scripts must utilize advanced locator chaining, scrolling, and keyboard management rather than trivial IDs.
+- **Story Points**: 2 SP
+- **Technical Subtasks**:
+  - [ ] **MOB-B1: Obfuscated Locators**:
+    - Login/Register inputs use dynamic or obfuscated testIDs: `testID="txt_usr_77"`, `testID="txt_pwd_99"`.
+    - Catalog book card buttons use computed testIDs (e.g. `testID={`btn_item_${book.id}_add`}`).
+  - [ ] **MOB-B2: Keyboard Occlusion on Checkout**:
+    - Omit `KeyboardAvoidingView` on `CheckoutScreen`.
+    - When user focuses credit card input on standard portrait phones, soft keyboard covers the "Place Order" CTA button.
+    - Automators must execute `driver.hideKeyboard()` or perform upward drag gestures to reveal the button.
+- **Acceptance Criteria**:
+  - [ ] Standard element queries without proper scrolling fail when the keyboard is open.
+  - [ ] Explicit keyboard dismissal or upward scroll reveals the CTA button.
+
+---
+
+### User Story US-MOB-1212: Dynamic Delays & Stochastic Checkout Gateway Timeout
+- **Story Statement**:  
+  *As an* SDET testing asynchronous stability,  
+  *I want* client-side dynamic delays and stochastic 500 errors on mobile checkout,  
+  *So that* automation scripts must implement dynamic waiting and retry/backoff strategies.
+- **Story Points**: 1.5 SP
+- **Technical Subtasks**:
+  - [ ] **MOB-B3: Dynamic Add-to-Cart Delay**:
+    - In `BookDetailScreen` and `CatalogScreen`, clicking "Add to Cart" simulates processing latency by imposing a randomized `setTimeout` between 500ms and 3500ms before dispatching the API request and animating the cart badge.
+  - [ ] **MOB-B4: Stochastic Gateway Timeout Handling**:
+    - `POST /api/checkout/process` returns HTTP 500 ~15% of the time.
+    - On mobile, display a distinct error banner with a "Retry Payment" CTA button.
+    - Automation must detect the 500 error and tap "Retry Payment" up to 3 times to achieve success.
+- **Acceptance Criteria**:
+  - [ ] Add-to-cart requires explicit wait for badge update rather than static sleep.
+  - [ ] Checkout failure displays clear retry alert allowing recovery.
+
+---
+
+### User Story US-MOB-1213: Simulated Network Interruption & Orientation Glitches
+- **Story Statement**:  
+  *As an* SDET testing resilience and visual regression,  
+  *I want* simulated network dropout modes and orientation layout shifts,  
+  *So that* my automation suites can test offline recovery and multi-orientation snapshots.
+- **Story Points**: 1.5 SP
+- **Technical Subtasks**:
+  - [ ] **MOB-B5: Simulated Network Interruption**:
+    - Add a toggle in `ChaosScreen` to simulate offline mode.
+    - When active, API client simulates network timeout (`ECONNABORTED`), rendering a top floating `OfflineBanner`.
+  - [ ] **MOB-B6: Orientation Layout Shift**:
+    - When rotating device to landscape on `CheckoutScreen`, the bottom navigation bar overlaps the submit section unless layout responds to orientation changes.
+  - [ ] Document all mobile anti-patterns (MOB-B1 to MOB-B6) in `intentional_bugs.md`.
+- **Acceptance Criteria**:
+  - [ ] Toggling simulated offline mode displays the offline banner and catches requests gracefully.
+  - [ ] `intentional_bugs.md` contains complete catalog of mobile bugs with detection instructions.
+
+---
+
+## 3. Definition of Done (DoD)
+
+- [ ] Anti-patterns MOB-B1 through MOB-B6 implemented cleanly in the mobile codebase.
+- [ ] [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md) updated with a dedicated "Mobile Testing Challenges" section.
+- [ ] Mobile app functions normally for human testers while providing challenging automation targets.
+- [ ] TypeScript compilation passes with zero errors.
+
+---
+
+## 4. Verification Commands
+
+```bash
+# Verify TypeScript build
+npm run typecheck
+
+# Launch app to verify anti-patterns
+npm run dev:mobile
+```
