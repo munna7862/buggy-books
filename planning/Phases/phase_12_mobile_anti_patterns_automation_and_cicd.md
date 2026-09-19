@@ -54,7 +54,7 @@ graph LR
      - Cataloging of MOB-B1 through MOB-B6 in [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md) with Security Champion (SEC) review.
 
 2. **[Sprint 12.2: Maestro & Appium Mobile Test Automation Suites](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_12_2_maestro_and_appium_mobile_test_automation_suites.md)**
-   * *Estimated Effort*: 8 Story Points
+   * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
      - Creation of `mobile-automation/` package registered in root `package.json` workspaces.
      - Maestro YAML test flows in `.maestro/` covering auth, catalog, cart, checkout retry, keyboard handling, and orientation shifts.
@@ -66,9 +66,9 @@ graph LR
 3. **[Sprint 12.3: GitHub Actions Mobile CI/CD Pipeline & Build Artifacts](file:///c:/BuggyBooks/buggy-books/planning/Sprints/sprint_12_3_github_actions_mobile_cicd_pipeline_and_build_artifacts.md)**
    * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
-     - SHA-pinned mobile quality gates (`mobile-lint`, `mobile-typecheck`, `mobile-unit-tests`) added to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml).
-     - New `.github/workflows/mobile-ci.yml` executing Maestro flows against headless Android emulators on hardware-accelerated `macos-latest` runners using SHA-pinned `reactivecircus/android-emulator-runner`.
-     - Standalone release APK bundling (`npx expo export` + `./gradlew assembleRelease`) and `adb reverse tcp:4000 tcp:4000` network bridging for hermetic, Metro-free execution in CI.
+     - SHA-pinned mobile quality gates (`mobile-lint`, `mobile-typecheck`, `mobile-unit-tests`) added to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml) with step summaries and coverage artifact uploads.
+     - New `.github/workflows/mobile-ci.yml` executing Maestro flows against headless Android emulators on hardware-accelerated `macos-latest` runners using SHA-pinned `reactivecircus/android-emulator-runner`, adding `$HOME/.maestro/bin` to `$GITHUB_PATH`.
+     - Prebuild native Android project (`npx expo prebuild --platform android --clean`) and compile self-signed standalone APK (`./gradlew assembleDebug`) with `adb reverse tcp:4000 tcp:4000` network bridging and `EXPO_PUBLIC_API_URL` for hermetic execution in CI.
      - Expo EAS build integration (`mobile/eas.json` and `mobile-release.yml`) for automated Android APK artifact generation on release tags.
      - Step summaries and test report attachments published on GitHub Actions workflow runs.
 

@@ -48,10 +48,11 @@ graph LR
    * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
      - Non-breaking update to `authController.ts` and `auth.service.ts` supporting refresh token rotation and returning `token` and `refreshToken` in JSON for `login`, `register`, and `refresh`.
-     - Dual-mode `authenticateToken` middleware in `api.ts` supporting `Bearer` tokens.
+     - Dual-mode `authenticateToken` middleware in `api.ts` supporting `Bearer` tokens while preserving `loggerStore` structured logging context.
+     - Contract expansion in `@buggybooks/types` (`shared/types/`) exporting shared `AuthUser`, `AuthTokensResponse`, and `UserProfile` interfaces.
      - Multer `diskStorage` update in `profileController.ts` to inspect Bearer tokens for avatar uploads.
      - CSRF bypass for Bearer-authenticated requests in `app.ts`.
-     - Scaffolding of `mobile/` workspace with Expo, TypeScript, and `jest-expo` unit test runner, configured with `mobile/metro.config.js` (`disableHierarchicalLookup: true`) to resolve `@buggybooks/types`.
+     - Scaffolding of `mobile/` workspace with Expo (React 18.3.1 isolated from frontend React 19), TypeScript, and `jest-expo` unit test runner, configured with `mobile/metro.config.js` (`disableHierarchicalLookup: true`) to resolve `@buggybooks/types`.
      - Root npm script integration (`dev:mobile`, `lint:mobile`, `typecheck:mobile`, `test:mobile:unit`).
      - 100% green verification on existing Jest and Playwright web tests.
 
@@ -59,7 +60,7 @@ graph LR
    * *Estimated Effort*: 5 Story Points
    * *Key Deliverables*:
      - Secure token persistence using `expo-secure-store` in mobile `AuthContext` with unit test coverage.
-     - Centralized typed mobile API client with automatic token attachment and 401 refresh with mutex queue.
+     - Centralized typed mobile API client with automatic token attachment and dual-status silent refresh interceptor handling both `401 Unauthorized` and `403 Forbidden: Invalid token` with mutex queue.
      - Root Native Stack Navigator with unauthenticated Auth Stack and authenticated Bottom Tabs.
      - Functional `LoginScreen` and `RegisterScreen` with native keyboard handling and accessibility labels.
      - `CatalogScreen` featuring a 2-column `FlatList`, pull-to-refresh, search bar, and stock counters.

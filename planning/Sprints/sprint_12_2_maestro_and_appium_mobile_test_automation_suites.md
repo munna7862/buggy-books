@@ -2,7 +2,7 @@
 
 **Sprint Identifier**: `SPRINT-12.2-MAESTRO-AND-APPIUM-MOBILE-TEST-AUTOMATION-SUITES`  
 **Phase Mapping**: [Phase 12: Mobile Chaos Engineering, Appium/Maestro Automation & Mobile CI/CD](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_12_mobile_anti_patterns_automation_and_cicd.md)  
-**Estimated Velocity**: 8 Story Points  
+**Estimated Velocity**: 5 Story Points  
 **Sprint Goal**: Author end-to-end mobile test automation suites using both Maestro (declarative YAML flows) and Appium (WebdriverIO + TypeScript Page Object Model), covering authentication, catalog search, asynchronous cart delays, keyboard management, and stochastic checkout retry loops.
 
 ---
@@ -27,7 +27,7 @@
   *As an* SDET running fast mobile smoke tests,  
   *I want* declarative Maestro YAML test flows covering critical user journeys,  
   *So that* I can run lightning-fast tests on physical devices and emulators with zero driver boilerplate.
-- **Story Points**: 3 SP
+- **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
   - [ ] Initialize `mobile-automation/.maestro/` directory.
   - [ ] Configure `.maestro/config.yaml` with `appId: com.buggybooks.app`.
@@ -49,7 +49,7 @@
   *As an* Enterprise Automation Engineer,  
   *I want* an Appium + WebdriverIO + TypeScript Page Object Model workspace integrated into the monorepo,  
   *So that* I can write modular, maintainable, and type-safe cross-platform mobile tests.
-- **Story Points**: 3 SP
+- **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
   - [ ] Add `"mobile-automation"` to root `package.json` `workspaces` array.
   - [ ] Initialize `mobile-automation/` workspace with `@wdio/cli`, `@wdio/appium-service`, `appium`, and `@buggybooks/types`.
@@ -74,7 +74,7 @@
   *As a* QA Lead & SDET,  
   *I want* comprehensive end-to-end regression specs in Appium tracked in `test_cases_catalog.md`,  
   *So that* regression tests run automatically against Android and iOS with complete coverage governance.
-- **Story Points**: 2 SP
+- **Story Points**: 1 SP (Low)
 - **Technical Subtasks**:
   - [ ] Author specs in `mobile-automation/src/specs/`:
     - `auth.e2e.spec.ts`: Sign in, profile inspection, logout.
@@ -125,6 +125,7 @@ npm run test:mobile:appium:android
 | Risk | Impact | Likelihood | Mitigation Strategy |
 | :--- | :--- | :--- | :--- |
 | **Appium UIAutomator2 Session Cold-Start Timeouts** | High | Medium | Configure `appWaitActivity: "*"` and `uiautomator2ServerLaunchTimeout: 60000` in `wdio.android.conf.ts` to accommodate slow emulator initialization. |
+| **Windows Platform Maestro DX** | Medium | Medium | Install Maestro on Windows via PowerShell (`irm https://get.maestro.mobile.dev | iex`) or run via WSL2 connected to the host emulator; use Appium for native Windows Node.js execution. |
 | **Deep Component Tree XPath Latency** | Medium | Medium | Prefer accessibility labels (`~locator`) and resource IDs (`id=...`) over deep relative XPaths to maintain sub-second interaction speed. |
 | **Test Credential Leakage in Reports** | High | Low | Sanitize all passwords and tokens in `MobileLogger.ts` and Allure step parameters before persisting logs. |
 

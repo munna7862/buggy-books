@@ -34,17 +34,19 @@
     - `getRefreshToken(): Promise<string | null>`
     - `clearTokens(): Promise<void>`
   - [ ] Implement `mobile/src/api/client.ts`:
-    - Automatic `baseURL` resolution: `10.0.2.2:4000` for Android Emulator, `localhost:4000` for iOS Simulator, dynamic LAN IP via `Constants.expoConfig?.hostUri` for physical devices, Render for production.
+    - Automatic `baseURL` resolution: Prioritize `process.env.EXPO_PUBLIC_API_URL` (critical for `adb reverse` in CI). Fallback to `10.0.2.2:4000` for Android Emulator, `localhost:4000` for iOS Simulator, dynamic LAN IP via `Constants.expoConfig?.hostUri` for physical devices, and Render for production.
     - Request interceptor injecting `Authorization: Bearer <token>`.
-    - Response interceptor catching `401 Unauthorized`:
-      - Implement a promise-based **refresh mutex queue** to serialize simultaneous 401s into a single `POST /api/auth/refresh` request, replaying queued requests upon resolution.
+    - Response interceptor catching **both `401 Unauthorized` and `403 Forbidden`** (specifically when `error.response?.data?.error` contains `token` or `Invalid token`):
+      - *Note on BuggyBooks Backend*: The Express API returns `403 Forbidden` (not 401) when an access token expires. The interceptor must check `status === 401 || (status === 403 && data?.error?.includes('token'))`.
+      - Implement a promise-based **refresh mutex queue** to serialize simultaneous 401/403s into a single `POST /api/auth/refresh` request, replaying queued requests upon resolution.
       - On refresh failure, wipe tokens and dispatch auth logout event.
   - [ ] Create `mobile/src/context/AuthContext.tsx`:
     - Provides `user`, `isAuthenticated`, `isLoading`, `login()`, `register()`, `logout()`.
   - [ ] Author unit tests in `mobile/src/__tests__/storage.test.ts` and `mobile/src/__tests__/AuthContext.test.tsx` verifying token saving, clearing, and session hydration.
 - **Acceptance Criteria**:
   - [ ] Logging in persists JWT in secure storage.
-  - [ ] Multiple parallel 401 requests trigger exactly one `/api/auth/refresh` call and all resolve seamlessly.
+  - [ ] Expired token responses (`403 Forbidden: Invalid token`) and `401 Unauthorized` trigger silent refresh with mutex queue, recovering requests seamlessly.
+  - [ ] Multiple parallel expired requests trigger exactly one `/api/auth/refresh` call and all resolve seamlessly.
   - [ ] Relaunching the app restores authenticated session without prompting for login.
   - [ ] Logging out wipes secure storage and navigates to the login screen.
   - [ ] Unit tests pass cleanly via `npm test --workspace=mobile`.
@@ -143,7 +145,7 @@ npm run dev:mobile:ios
 
 | Risk | Impact | Likelihood | Mitigation Strategy |
 | :--- | :--- | :--- | :--- |
-| **Concurrent 401 Refresh Storm** | Medium | High | Implement an Axios response interceptor promise queue (mutex) to collapse multiple simultaneous 401 responses into a single refresh call. |
-| **Android Emulator Localhost Network Failure** | High | Medium | Enforce `10.0.2.2` mapping for Android and auto-detect host IP via Expo's manifest for physical Wi-Fi testing. |
+| **Concurrent 401/403 Refresh Storm & Backend 403 Expiration** | High | High | Implement an Axios response interceptor promise queue (mutex) that intercepts both 401 and 403 (Invalid token) to collapse multiple simultaneous responses into a single refresh call. |
+| **Android Emulator Localhost Network Failure** | High | Medium | Prioritize `EXPO_PUBLIC_API_URL` (enabling `adb reverse` in CI), falling back to `10.0.2.2` mapping for Android and auto-detecting host IP via Expo's manifest for physical Wi-Fi testing. |
 | **SecureStore Emulation Inconsistency** | Low | Low | `expo-secure-store` falls back gracefully to encrypted SQLite/SharedPreferences on emulators where hardware Keystores are simulated. |
 

@@ -39,6 +39,17 @@
     - Read `req.headers.authorization`. If it starts with `Bearer `, verify and extract user.
     - If `Authorization` header is not present, fall back to `req.cookies?.token`.
     - If neither is valid, return `401 Unauthorized`.
+    - **Crucial**: Preserve `loggerStore` context for structured log correlation:
+      ```typescript
+      const store = loggerStore.getStore();
+      if (store && user.username) {
+        store.username = user.username;
+      }
+      ```
+  - [ ] Expand contracts in `shared/types/` (`auth.types.d.ts` and `index.d.ts`):
+    - Export `AuthUser` (`{ username: string; type: 'access' }`).
+    - Export `AuthTokensResponse` (`{ message?: string; success?: boolean; username: string; token: string; refreshToken: string }`).
+    - Export `UserProfile` (`{ username: string; fullName?: string; avatarUrl?: string }`).
   - [ ] Modify `backend/src/controllers/profileController.ts` in `storageEngine.filename`:
     - Inspect `req.headers.authorization` for Bearer token extraction when `req.cookies?.token` is undefined, ensuring mobile avatar uploads save as `<username>-<timestamp>.ext`.
   - [ ] Add unit and integration tests in `backend/src/__tests__/auth.test.ts` and `profile.test.ts` verifying:
@@ -102,8 +113,9 @@
     module.exports = config;
     ```
   - [ ] Configure `mobile/package.json` with dependencies and unit test runner:
-    - Dependencies: `"@buggybooks/types": "*"`, `"@react-navigation/native"`, `"@react-navigation/native-stack"`, `"@react-navigation/bottom-tabs"`, `"expo-secure-store"`, `"expo-image-picker"`, `"expo-haptics"`
-    - DevDependencies: `"jest": "^29.2.1"`, `"jest-expo": "~52.0.0"`, `"@testing-library/react-native": "^12.0.0"`, `"react-test-renderer": "18.3.1"`
+    - Dependencies: `"react": "18.3.1"`, `"react-native": "0.76.6"`, `"expo": "~52.0.0"`, `"@buggybooks/types": "*"`, `"@react-navigation/native": "^7.0.0"`, `"@react-navigation/native-stack": "^7.0.0"`, `"@react-navigation/bottom-tabs": "^7.0.0"`, `"expo-secure-store": "~14.0.0"`, `"expo-image-picker": "~16.0.0"`, `"expo-haptics": "~14.0.0"`
+    - Note on React Isolation: Pin React 18.3.1 strictly in `mobile/package.json`. Metro's `nodeModulesPaths` resolves `mobile/node_modules` first, ensuring complete isolation from the frontend's React 19.
+    - DevDependencies: `"jest": "^29.2.1"`, `"jest-expo": "~52.0.0"`, `"@testing-library/react-native": "^12.0.0"`, `"react-test-renderer": "18.3.1"`, `"typescript": "^5.3.0"`
     - Scripts: `"test": "jest"`, `"lint": "eslint ."`
   - [ ] Configure `app.json` with app name (`BuggyBooks`), bundle identifier (`com.buggybooks.app`), and `"orientation": "default"`.
   - [ ] Add root npm scripts:

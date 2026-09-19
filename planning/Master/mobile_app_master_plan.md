@@ -167,6 +167,13 @@ To allow mobile devices to authenticate seamlessly while maintaining complete st
         return res.status(403).json({ error: 'Forbidden: Invalid token' });
       }
       req.user = user;
+
+      // Preserve AsyncLocalStorage structured logging context
+      const store = loggerStore.getStore();
+      if (store && user.username) {
+        store.username = user.username;
+      }
+
       next();
     } catch {
       return res.status(403).json({ error: 'Forbidden: Invalid token' });
@@ -181,11 +188,12 @@ To allow mobile devices to authenticate seamlessly while maintaining complete st
 
 ### 4.4 Multi-Platform Network Resolution
 Mobile clients connect through different IP gateways depending on runtime environment:
-* **Android Studio Emulator**: Maps host `localhost` to `http://10.0.2.2:4000/api`.
+* **Android Studio Emulator**: Maps host `localhost` to `http://10.0.2.2:4000/api` (default fallback).
 * **Apple iOS Simulator**: Can directly access `http://localhost:4000/api`.
-* **Physical Devices (Wi-Fi)**: LAN IP (e.g., `http://192.168.1.X:4000/api`).
+* **CI / Headless Emulator with `adb reverse`**: Directly accesses `http://localhost:4000/api`.
+* **Physical Devices (Wi-Fi)**: Dynamic LAN IP (e.g., `http://192.168.1.X:4000/api`).
 * **Remote / Production**: `https://buggy-books-api.onrender.com/api`.
-* **Implementation**: `mobile/src/api/config.ts` auto-detects `Platform.OS` and environment variables.
+* **Implementation**: `mobile/src/api/config.ts` prioritizes `process.env.EXPO_PUBLIC_API_URL`, falling back to `Platform.OS === 'android' ? 'http://10.0.2.2:4000/api' : 'http://localhost:4000/api'`.
 
 ---
 
@@ -366,18 +374,19 @@ graph TD
 * **Effort**: 5 Story Points
 * **Deliverables**:
   1. Update [backend/src/controllers/authController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/authController.ts) (`login`, `register`, and `refresh`) and [backend/src/services/auth.service.ts](file:///c:/BuggyBooks/buggy-books/backend/src/services/auth.service.ts) to support refresh token rotation and return `token` and `refreshToken` in JSON responses.
-  2. Update [backend/src/routes/api.ts](file:///c:/BuggyBooks/buggy-books/backend/src/routes/api.ts) to support `Authorization: Bearer <token>` header alongside cookies.
-  3. Update [backend/src/controllers/profileController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/profileController.ts) Multer storage to inspect Bearer tokens for avatar filename attribution.
-  4. Update [backend/src/app.ts](file:///c:/BuggyBooks/buggy-books/backend/src/app.ts) to exempt Bearer-authenticated requests from CSRF token enforcement.
-  5. Register `"mobile"` in the root [package.json](file:///c:/BuggyBooks/buggy-books/package.json) workspaces and scaffold Expo TypeScript project in `buggy-books/mobile` linked with `@buggybooks/types` via `mobile/metro.config.js` (`disableHierarchicalLookup: true`).
-  6. Provision unit test runner (`jest-expo`, `@testing-library/react-native`) in `mobile/package.json`.
-  7. Verify all existing Jest backend and Vitest frontend unit tests and Playwright web tests remain 100% green.
+  2. Update [backend/src/routes/api.ts](file:///c:/BuggyBooks/buggy-books/backend/src/routes/api.ts) to support `Authorization: Bearer <token>` header alongside cookies, preserving `loggerStore` context.
+  3. Update `@buggybooks/types` (`shared/types/`) to export shared `AuthUser`, `AuthTokensResponse`, and `UserProfile` contracts.
+  4. Update [backend/src/controllers/profileController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/profileController.ts) Multer storage to inspect Bearer tokens for avatar filename attribution.
+  5. Update [backend/src/app.ts](file:///c:/BuggyBooks/buggy-books/backend/src/app.ts) to exempt Bearer-authenticated requests from CSRF token enforcement.
+  6. Register `"mobile"` in the root [package.json](file:///c:/BuggyBooks/buggy-books/package.json) workspaces and scaffold Expo TypeScript project in `buggy-books/mobile` linked with `@buggybooks/types` via `mobile/metro.config.js` (`disableHierarchicalLookup: true`), ensuring React 18.3.1 dependency isolation against frontend React 19.
+  7. Provision unit test runner (`jest-expo`, `@testing-library/react-native`) in `mobile/package.json`.
+  8. Verify all existing Jest backend and Vitest frontend unit tests and Playwright web tests remain 100% green.
 
 #### **Sprint 11.2: Core Navigation, Authentication & Catalog Flow**
 * **Effort**: 5 Story Points
 * **Deliverables**:
   1. Build `AuthContext` backed by `expo-secure-store` for safe token persistence, with unit tests covering storage and context lifecycle.
-  2. Implement Centralized API client (`mobile/src/api/client.ts`) with automatic token injection and silent 401 refresh with mutex queue.
+  2. Implement Centralized API client (`mobile/src/api/client.ts`) with automatic token injection and dual-status silent refresh interceptor handling both `401 Unauthorized` and `403 Forbidden: Invalid token` with mutex queue.
   3. Build Root Stack Navigator switching between Auth Stack and Main Bottom Tab Navigator.
   4. Implement `LoginScreen` and `RegisterScreen` with validation errors and baseline accessibility labels.
   5. Implement `CatalogScreen` with paginated book retrieval, search filtering, and responsive grid layout.
@@ -410,7 +419,7 @@ graph TD
   7. Document all mobile anti-patterns (MOB-B1 through MOB-B6) in [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md) with SEC review.
 
 #### **Sprint 12.2: Maestro & Appium Mobile Test Automation Suites**
-* **Effort**: 8 Story Points
+* **Effort**: 5 Story Points
 * **Deliverables**:
   1. Initialize `mobile-automation/` package and register in root `package.json` workspaces.
   2. Configure `.maestro/` with declarative test flows covering Login, Catalog Search, Cart, Checkout Retry, Keyboard Dismissal, and Orientation.
@@ -421,10 +430,10 @@ graph TD
 #### **Sprint 12.3: GitHub Actions Mobile CI/CD Pipeline & Build Artifacts**
 * **Effort**: 5 Story Points
 * **Deliverables**:
-  1. Add SHA-pinned `mobile-lint`, `mobile-typecheck`, and `mobile-unit-tests` quality gates to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml).
-  2. Create a dedicated `.github/workflows/mobile-ci.yml` workflow running Maestro flows on hardware-accelerated `macos-14` / `macos-latest` runners using SHA-pinned `reactivecircus/android-emulator-runner`.
-  3. Build standalone offline release bundle (`npx expo export` + `./gradlew assembleRelease`) and configure `adb reverse tcp:4000 tcp:4000` so tests run reliably without active Metro servers in CI.
-  4. Configure Expo EAS build workflow (`mobile/eas.json`) for automated Android APK artifact generation on release tags.
+  1. Add SHA-pinned `mobile-lint`, `mobile-typecheck`, and `mobile-unit-tests` quality gates to [.github/workflows/ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml) with step summaries and coverage artifact uploads.
+  2. Create a dedicated `.github/workflows/mobile-ci.yml` workflow running Maestro flows on hardware-accelerated `macos-14` / `macos-latest` runners using SHA-pinned `reactivecircus/android-emulator-runner`, adding `$HOME/.maestro/bin` to `$GITHUB_PATH`.
+  3. Prebuild native Android project (`npx expo prebuild --platform android --clean`) and compile self-signed standalone APK (`./gradlew assembleDebug`), configuring `adb reverse tcp:4000 tcp:4000` with `EXPO_PUBLIC_API_URL=http://localhost:4000/api` for hermetic execution in CI.
+  4. Configure Expo EAS build workflow (`mobile/eas.json` and `mobile-release.yml`) for automated Android APK artifact generation on release tags.
   5. Add mobile test summaries and execution reports to GitHub Actions step summaries.
 
 ---
@@ -458,8 +467,10 @@ Once integrated, developers and QA engineers can operate the entire stack via un
 | Risk | Impact | Likelihood | Mitigation Strategy |
 | :--- | :--- | :--- | :--- |
 | **Breaking Web & Playwright Tests with Auth Changes** | High | Low | Implement additive Dual-Authentication: cookies remain default for web; Bearer token header is checked first. All existing tests run in CI to verify zero regressions. |
-| **Emulator Network Host Mismatches** | Medium | Medium | Implement automatic URL resolver mapping `Platform.OS === 'android' ? '10.0.2.2' : 'localhost'`, with an `.env` override to target LAN IPs or Render. |
-| **Windows Platform iOS Build Limitations** | Medium | High | Use **Expo Go** for live testing on physical iPhones connected to the same Wi-Fi network. Use cloud-based EAS (`eas build --platform ios`) or macOS GitHub Actions runners for IPA production artifacts. |
+| **Backend Token Expiry Returning 403 Instead of 401** | High | High | Configure mobile HTTP client interceptor to catch both HTTP 401 and HTTP 403 (specifically when error body includes `Invalid token`) to trigger silent token refresh mutex without failure. |
+| **Monorepo React Version Conflict (React 19 vs 18.3.1)** | High | Medium | Strictly pin `"react": "18.3.1"` in `mobile/package.json`, preserve local `mobile/node_modules/react`, and configure Metro to search `projectRoot` before `workspaceRoot`. |
+| **Emulator Network Host Mismatches** | Medium | Medium | Implement automatic URL resolver prioritizing `EXPO_PUBLIC_API_URL` (for `adb reverse` in CI), falling back to `10.0.2.2` (Android local) and `localhost` (iOS). |
+| **Windows Platform iOS & Maestro Limitations** | Medium | Medium | Use **Expo Go** for physical iPhones. On Windows, execute Maestro via native Windows binary (`irm https://get.maestro.mobile.dev | iex`) or WSL2 with ADB port forwarding; Appium runs natively on Windows Node.js. |
 | **Complex Appium Environment Setup for Contributors** | High | Medium | Provide **Maestro** as the primary lightweight E2E tool (single binary, zero Node/Java driver setup), with Appium reserved for enterprise POM regression practice. |
 
 ---

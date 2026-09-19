@@ -54,7 +54,7 @@
     - In `BookDetailScreen` and `CatalogScreen`, clicking "Add to Cart" simulates processing latency by imposing a randomized `setTimeout` between 500ms and 3500ms before dispatching the API request and animating the cart badge.
     - Disable button and display subtle loading state during timeout to prevent unintended double-submits while challenging explicit assertion waits.
   - [ ] **MOB-B4: Stochastic Gateway Timeout Handling**:
-    - `POST /api/checkout/process` returns HTTP 500 ~15% of the time.
+    - `POST /api/checkout/process` returns HTTP 500 when `checkoutFailureRate` is set (e.g. 15% via `POST /api/test/config { "checkoutFailureRate": 0.15 }`; defaults to 0.0 on backend restart).
     - On mobile, display a distinct in-screen error banner (`testID="banner_checkout_error"`) with a "Retry Payment" CTA button (`testID="btn_retry_payment"`).
     - Automation must detect the error banner and tap "Retry Payment" up to 3 times to achieve success.
 - **Acceptance Criteria**:
@@ -112,5 +112,5 @@ npm run dev:mobile
 | :--- | :--- | :--- | :--- |
 | **Orientation Locked by OS / Expo Defaults** | High | High | Explicitly configure `"orientation": "default"` in `mobile/app.json` and install `expo-screen-orientation` if programmatic rotation locking is required. |
 | **Dynamic Delay Flakiness in Fast Smoke Tests** | Medium | Medium | Provide a chaos toggle or query parameter to clamp `inventoryDelayMs` and client-side add-to-cart delays during deterministic smoke test runs. |
-| **Platform-Specific Keyboard Inconsistencies** | Medium | Low | Verify keyboard dismissal behaviors across both Android (`driver.hideKeyboard()`) and iOS (`driver.dismissAlert()` / tapping outside) in test design. |
+| **Platform-Specific Keyboard Inconsistencies** | Medium | Low | Verify keyboard dismissal behaviors across both Android (`driver.hideKeyboard()`) and iOS (tapping keyboard toolbar 'Done' button `$('~Done').click()` or tapping outside) in test design. |
 

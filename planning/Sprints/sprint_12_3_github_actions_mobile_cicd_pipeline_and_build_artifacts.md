@@ -43,6 +43,7 @@
           with:
             node-version: "20"
             cache: "npm"
+            cache-dependency-path: package-lock.json
 
         - name: Install dependencies
           run: npm ci
@@ -53,12 +54,24 @@
         - name: Run Mobile Typecheck
           run: npm run typecheck:mobile
 
-        - name: Run Mobile Unit Tests
-          run: npm test --workspace=mobile
+        - name: Run Mobile Unit Tests with Coverage
+          run: npm test --workspace=mobile -- --coverage
+
+        - name: Generate Mobile Test Summary
+          if: always()
+          run: node scripts/generate-test-summary.js mobile .
+
+        - name: Upload Mobile Coverage Artifacts
+          uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+          if: always()
+          with:
+            name: mobile-coverage
+            path: mobile/coverage
+            retention-days: 7
     ```
 - **Acceptance Criteria**:
   - [ ] PRs with mobile TypeScript or linting errors are blocked by the CI quality gate.
-  - [ ] Passing PRs complete Stage 1 within 5 minutes.
+  - [ ] Passing PRs complete Stage 1 within 5 minutes and publish test summaries and coverage artifacts.
   - [ ] All GitHub Actions are pinned to full commit SHAs per security policy.
 
 ---
@@ -81,6 +94,24 @@
           distribution: 'temurin'
           java-version: '17'
       ```
+    - Install Maestro CLI and register in `$GITHUB_PATH`:
+      ```yaml
+      - name: Install Maestro CLI
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> $GITHUB_PATH
+      ```
+    - Launch backend server in CI:
+      ```yaml
+      - name: Start Backend Server
+        run: |
+          npm run dev:backend &
+          npx wait-on http://localhost:4000/api/books -t 30000
+      ```
+    - Hermetic Standalone APK Assembly & Signing:
+      - Cleanly prebuild native Android directory: `cd mobile && npx expo prebuild --platform android --clean`
+      - Assemble self-signed standalone debug APK with embedded JS bundle: `cd android && ./gradlew assembleDebug`
+      - Note: `./gradlew assembleDebug` automatically signs the APK with the debug keystore, avoiding `INSTALL_PARSE_FAILED_NO_CERTIFICATES` errors on `adb install`.
     - Boot Android emulator using SHA-pinned action:
       ```yaml
       - name: Run Android Emulator & Maestro Tests
@@ -91,25 +122,19 @@
           arch: arm64-v8a
           profile: pixel_6
           script: |
-            # 1. Reverse backend port so emulator accesses host server uniformly
+            # 1. Reverse backend port so emulator localhost:4000 bridges directly to host
             adb reverse tcp:4000 tcp:4000
             
-            # 2. Install prebuilt standalone release APK (offline JS bundle embedded)
-            adb install mobile/android/app/build/outputs/apk/release/app-release.apk
+            # 2. Install prebuilt self-signed standalone APK
+            adb install mobile/android/app/build/outputs/apk/debug/app-debug.apk
             
             # 3. Execute Maestro declarative flows
             maestro test mobile-automation/.maestro/
       ```
-    - Install Maestro CLI: `curl -fsSL "https://get.maestro.mobile.dev" | bash`.
-    - Launch backend server in CI: `npm run dev:backend &` with curl healthcheck loop against `http://localhost:4000/api/books`.
-    - Hermetic Build Strategy:
-      - Run `npx expo prebuild --platform android`.
-      - Export offline JS bundle and compile release APK: `npx expo export -p android && cd mobile/android && ./gradlew assembleRelease`.
-      - This completely avoids the fatal "Metro bundler not running" cold-start crash in headless CI.
     - Upload Maestro test artifacts, screenshots, and logs on failure.
 - **Acceptance Criteria**:
   - [ ] Android emulator boots on `macos-latest` within 3 minutes and executes all Maestro flows cleanly.
-  - [ ] Sideloaded APK runs standalone with embedded JS bundle and accesses host backend via `adb reverse`.
+  - [ ] Sideloaded debug APK runs standalone with embedded JS bundle and accesses host backend via `adb reverse`.
   - [ ] Failures capture automatic screenshots and attach them to the workflow summary.
 
 ---
@@ -168,7 +193,7 @@ cd mobile && npx eas-cli build --platform android --profile preview --local --dr
 | :--- | :--- | :--- | :--- |
 | **macOS Runner Minute Consumption** | Medium | High | Restrict `mobile-ci.yml` trigger paths to `mobile/**` and `mobile-automation/**` only, and reserve full matrix runs for nightly schedules and release tags. |
 | **Android Emulator Cold-Boot Slowness** | High | Medium | Cache AVD snapshots and Gradle dependencies across workflow runs using `actions/cache`. |
-| **Emulator localhost Networking Mismatch** | High | High | Execute `adb reverse tcp:4000 tcp:4000` immediately after emulator boot so Android guest requests to `localhost:4000` bridge directly to host. |
-| **Debug APK Crash without Metro Bundler** | Critical | High | Build standalone APK (`./gradlew assembleRelease`) with pre-bundled offline JS assets (`npx expo export`), ensuring zero Metro runtime dependency in CI. |
+| **Emulator localhost Networking Mismatch** | High | High | Execute `adb reverse tcp:4000 tcp:4000` immediately after emulator boot and ensure `EXPO_PUBLIC_API_URL=http://localhost:4000/api` is injected so requests bridge directly to host. |
+| **Debug APK Crash without Metro Bundler / Unsigned APK** | Critical | High | Build standalone APK (`./gradlew assembleDebug`) with pre-bundled offline JS assets (`npx expo export`) and automatic debug keystore signing, ensuring clean `adb install` without certificate failures or Metro runtime dependency in CI. |
 | **Expo EAS Token Exposure in CI Logs** | Critical | Low | Pass `EXPO_TOKEN` strictly via encrypted GitHub Secrets (`${{ secrets.EXPO_TOKEN }}`) with log masking. |
 

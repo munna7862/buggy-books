@@ -78,8 +78,17 @@
     - Modal sheet allowing choice between "Take Photo" and "Choose from Gallery".
   - [ ] Integrate `expo-image-picker`:
     - Handle camera and photo permissions gracefully.
-    - Compress and format image payload as native `FormData`.
-    - **Crucial**: Omit explicit `'Content-Type': 'multipart/form-data'` in Axios/fetch headers to allow the native network stack to attach the multipart boundary dynamically.
+    - Format image payload into React Native `FormData`:
+      ```typescript
+      const formData = new FormData();
+      formData.append('avatar', {
+        uri: asset.uri,
+        name: asset.fileName || `avatar_${Date.now()}.jpg`,
+        type: asset.mimeType || 'image/jpeg'
+      } as any);
+      ```
+    - **Crucial**: Omit explicit `'Content-Type': 'multipart/form-data'` in headers so Axios/fetch lets the native network layer append the boundary parameter automatically.
+    - Ensure fallback filename and MIME type match Multer's backend file filter (`/jpeg|jpg|png/`).
     - Dispatch to `POST /api/profile/upload` using `Authorization: Bearer <token>`.
   - [ ] Security Champion (SEC) Audit: Verify 2MB size limit and file type filters prevent arbitrary uploads.
   - [ ] Implement "Sign Out" button with confirmation alert.

@@ -106,7 +106,7 @@ buggy-books/
    - `POST /api/auth/register` — User registration with password strength criteria.
    - `POST /api/auth/login` — Authentication returning JWT token & refresh cookies.
    - `POST /api/auth/refresh` — Token rotation.
-   - `GET /api/user/profile` & `POST /api/user/avatar` — User profile & file upload handling.
+   - `GET /api/profile` & `POST /api/profile/upload` — User profile & file upload handling.
 2. **Catalog & Inventory**:
    - `GET /api/books` — Paginated book catalog with keyword search and category filtering.
    - `GET /api/books/:id` — Single book details.
