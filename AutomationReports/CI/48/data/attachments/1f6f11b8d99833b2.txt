@@ -1,3 +1,0 @@
-[2026-09-14 21:43:05] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1789387985819-8426db05
-[2026-09-14 21:43:06] INFO: Asserting book cover has blur filter, actual: blur(1.5px) - Condition met (true)
-[2026-09-14 21:43:06] INFO: Cleaned up ephemeral test session: pw-w1-0-1789387985819-8426db05

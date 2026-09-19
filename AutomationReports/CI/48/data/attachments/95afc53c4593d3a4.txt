@@ -1,2 +1,0 @@
-[2026-09-14 21:42:15] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
-[2026-09-14 21:42:15] INFO:  Unsupported login method status Success !! Actual and Expected Values are:: true
