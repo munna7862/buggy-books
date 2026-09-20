@@ -24,7 +24,7 @@ export function ChaosScreen() {
   const [isSaving, setIsSaving] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [bannerMessage, setBannerMessage] = useState<{ text: string; isError?: boolean } | null>(null);
-  const bannerTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const bannerTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {

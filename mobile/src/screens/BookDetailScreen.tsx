@@ -33,7 +33,7 @@ export function BookDetailScreen({ route }: BookDetailScreenProps) {
   const [isLoading, setIsLoading] = useState(!initialBook);
   const [isAdding, setIsAdding] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
-  const feedbackTimerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const feedbackTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
