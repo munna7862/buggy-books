@@ -1,0 +1,46 @@
+appId: com.buggybooks.app
+tags:
+  - checkout
+  - orientation
+  - anti-pattern
+---
+# Flow: 06_orientation_layout_glitch.yaml
+# Description: Rotate device to landscape, verify orientation layout shift handling (MOB-B6), and restore portrait
+- launchApp:
+    clearState: false
+
+# Open Cart and proceed to checkout
+- tapOn:
+    id: "tab_cart"
+
+- extendedWaitUntil:
+    visible:
+      id: "btn-proceed-checkout"
+    timeout: 5000
+
+- tapOn:
+    id: "btn-proceed-checkout"
+
+- extendedWaitUntil:
+    visible:
+      id: "txt_f1"
+    timeout: 5000
+
+# Rotate device to Landscape to trigger orientation layout shift (MOB-B6)
+- setOrientation: LANDSCAPE
+
+# Verify form inputs remain interactable despite orientation shift
+- assertVisible:
+    id: "txt_f1"
+
+# Scroll down to ensure Place Order button can be scrolled into view
+- scroll
+
+- assertVisible:
+    id: "btn_place_order"
+
+# Rotate back to Portrait orientation
+- setOrientation: PORTRAIT
+
+- assertVisible:
+    id: "txt_f1"

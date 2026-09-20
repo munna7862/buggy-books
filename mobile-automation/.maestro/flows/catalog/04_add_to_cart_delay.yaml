@@ -1,0 +1,40 @@
+appId: com.buggybooks.app
+tags:
+  - catalog
+  - cart
+  - anti-pattern
+---
+# Flow: 04_add_to_cart_delay.yaml
+# Description: Quick add item to cart, handle dynamic latency (MOB-B3) via extendedWaitUntil, and verify cart badge
+- launchApp:
+    clearState: false
+
+- tapOn:
+    id: "tab_catalog"
+
+- extendedWaitUntil:
+    visible:
+      id: "catalog_search_input"
+    timeout: 5000
+
+# Tap quick add button on first catalog item (dynamic delay between 500ms and 3500ms)
+- tapOn:
+    id: "btn_item_book-1_add"
+
+# Assert dynamic latency resolves and cart badge updates within extended timeout
+- extendedWaitUntil:
+    visible:
+      id: "tab_cart"
+    timeout: 6000
+
+# Navigate to Cart Tab to assert item is present in cart
+- tapOn:
+    id: "tab_cart"
+
+- extendedWaitUntil:
+    visible:
+      id: "cart-items-list"
+    timeout: 5000
+
+- assertVisible:
+    id: "btn-proceed-checkout"

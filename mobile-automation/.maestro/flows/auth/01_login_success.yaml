@@ -1,0 +1,39 @@
+appId: com.buggybooks.app
+tags:
+  - auth
+  - smoke
+---
+# Flow: 01_login_success.yaml
+# Description: Valid user login using obfuscated testIDs (MOB-B1) and assertion of Catalog navigation
+- launchApp:
+    clearState: true
+
+# Assert login inputs are visible
+- assertVisible:
+    id: "txt_usr_77"
+- assertVisible:
+    id: "txt_pwd_99"
+
+# Enter valid credentials
+- tapOn:
+    id: "txt_usr_77"
+- inputText: "testuser"
+
+- tapOn:
+    id: "txt_pwd_99"
+- inputText: "password123"
+
+- hideKeyboard
+
+# Submit login
+- tapOn:
+    id: "btn_login_submit"
+
+# Assert successful authentication & navigation to Catalog screen
+- extendedWaitUntil:
+    visible:
+      id: "tab_catalog"
+    timeout: 10000
+
+- assertVisible:
+    id: "catalog_search_input"

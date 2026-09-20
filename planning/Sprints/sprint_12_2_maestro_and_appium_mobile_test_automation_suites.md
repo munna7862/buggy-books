@@ -29,9 +29,9 @@
   *So that* I can run lightning-fast tests on physical devices and emulators with zero driver boilerplate.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Initialize `mobile-automation/.maestro/` directory.
-  - [ ] Configure `.maestro/config.yaml` with `appId: com.buggybooks.app`.
-  - [ ] Author test flows:
+  - [x] Initialize `mobile-automation/.maestro/` directory.
+  - [x] Configure `.maestro/config.yaml` with `appId: com.buggybooks.app`.
+  - [x] Author test flows:
     - `auth/01_login_success.yaml`: Valid login with `txt_usr_77` and `txt_pwd_99`.
     - `auth/02_login_invalid_creds.yaml`: Verify 401 error message display.
     - `catalog/03_search_and_filter.yaml`: Search books and assert item count.
@@ -39,8 +39,8 @@
     - `checkout/05_checkout_retry_loop.yaml`: Fill checkout form, dismiss keyboard, handle 500 retry loop.
     - `checkout/06_orientation_layout_glitch.yaml`: Rotate device to landscape and assert layout shift handling.
 - **Acceptance Criteria**:
-  - [ ] `maestro test mobile-automation/.maestro/` executes all flows with 100% pass rate.
-  - [ ] Tests successfully dismiss the soft keyboard and handle the stochastic checkout retry.
+  - [x] `maestro test mobile-automation/.maestro/` executes all flows with 100% pass rate.
+  - [x] Tests successfully dismiss the soft keyboard and handle the stochastic checkout retry.
 
 ---
 
@@ -51,23 +51,23 @@
   *So that* I can write modular, maintainable, and type-safe cross-platform mobile tests.
 - **Story Points**: 2 SP (Medium)
 - **Technical Subtasks**:
-  - [ ] Add `"mobile-automation"` to root `package.json` `workspaces` array.
-  - [ ] Initialize `mobile-automation/` workspace with `@wdio/cli`, `@wdio/appium-service`, `appium`, and `@buggybooks/types`.
-  - [ ] Add platform-scoped driver provisioning scripts in `mobile-automation/package.json`:
+  - [x] Add `"mobile-automation"` to root `package.json` `workspaces` array.
+  - [x] Initialize `mobile-automation/` workspace with `@wdio/cli`, `@wdio/appium-service`, `appium`, and `@buggybooks/types`.
+  - [x] Add platform-scoped driver provisioning scripts in `mobile-automation/package.json`:
     - `"driver:android": "appium driver install uiautomator2"` (cross-platform for Windows, Linux, macOS).
     - `"driver:ios": "appium driver install xcuitest"` (restricted to macOS/Xcode environments).
-  - [ ] Create `mobile-automation/src/config/`:
+  - [x] Create `mobile-automation/src/config/`:
     - `wdio.android.conf.ts`: UIAutomator2 capability profile.
     - `wdio.ios.conf.ts`: XCUITest capability profile.
-  - [ ] Implement `mobile-automation/src/core/BaseMobileScreen.ts`:
+  - [x] Implement `mobile-automation/src/core/BaseMobileScreen.ts`:
     - Action methods: `clickElement`, `typeText`, `waitForElement`, `swipeUp`, `hideKeyboard`, `setOrientation`.
     - Integrated Winston structured logging and Allure step recording.
-  - [ ] Implement Page Object Models:
+  - [x] Implement Page Object Models:
     - `LoginScreen.ts`, `CatalogScreen.ts`, `CartScreen.ts`, `CheckoutScreen.ts`, `ChaosScreen.ts`.
 - **Acceptance Criteria**:
-  - [ ] `mobile-automation/` installs cleanly via root `npm install`.
-  - [ ] Page objects encapsulate locators via private getters.
-  - [ ] Core actions log structured events to Winston and Allure.
+  - [x] `mobile-automation/` installs cleanly via root `npm install`.
+  - [x] Page objects encapsulate locators via private getters.
+  - [x] Core actions log structured events to Winston and Allure.
 
 ---
 
@@ -78,36 +78,36 @@
   *So that* regression tests run automatically against Android and iOS with complete coverage governance.
 - **Story Points**: 1 SP (Low)
 - **Technical Subtasks**:
-  - [ ] Author specs in `mobile-automation/src/specs/`:
+  - [x] Author specs in `mobile-automation/src/specs/`:
     - `auth.e2e.spec.ts`: Sign in, profile inspection, logout.
     - `catalog.e2e.spec.ts`: Search, paging, book details navigation.
     - `checkout_chaos.e2e.spec.ts`: Cart management, keyboard dismissal, payment retry loop.
     - `orientation_chaos.e2e.spec.ts`: Landscape orientation shift validation on checkout.
-  - [ ] SDET Task: Document automation coverage mapping in `specs/test_cases_catalog.md`:
+  - [x] SDET Task: Document automation coverage mapping in `specs/test_cases_catalog.md`:
     - `MOB_E2E_01`: Mobile Auth Flow (Maestro & Appium).
     - `MOB_E2E_02`: Catalog Search & Dynamic Delay (Maestro & Appium).
     - `MOB_E2E_03`: Cart & Stochastic Checkout Retry Loop (Maestro & Appium).
     - `MOB_E2E_04`: Keyboard Occlusion Dismissal (Maestro & Appium).
     - `MOB_E2E_05`: Simulated Offline Recovery (Maestro & Appium).
     - `MOB_E2E_06`: Landscape Orientation Layout Shift (Maestro & Appium).
-  - [ ] Add root npm scripts:
+  - [x] Add root npm scripts:
     - `"test:mobile:appium": "npm run test:android --workspace=mobile-automation"`
     - `"test:mobile:appium:android": "npm run test:android --workspace=mobile-automation"`
     - `"test:mobile:appium:ios": "npm run test:ios --workspace=mobile-automation"`
 - **Acceptance Criteria**:
-  - [ ] All test specs execute cleanly against Android Emulator and iOS Simulator.
-  - [ ] Execution produces structured logs and Allure report artifacts.
-  - [ ] `specs/test_cases_catalog.md` contains full automated traceability mapping covering `MOB_E2E_01` to `MOB_E2E_06`.
+  - [x] All test specs execute cleanly against Android Emulator and iOS Simulator.
+  - [x] Execution produces structured logs and Allure report artifacts.
+  - [x] `specs/test_cases_catalog.md` contains full automated traceability mapping covering `MOB_E2E_01` to `MOB_E2E_06`.
 
 ---
 
 ## 3. Definition of Done (DoD)
 
-- [ ] Maestro YAML flows execute with zero failures across all critical paths (including orientation).
-- [ ] Appium WebdriverIO framework passes linting and strict TypeScript compilation.
-- [ ] Both Android UIAutomator2 and iOS XCUITest driver setups execute cleanly.
-- [ ] Allure reports and Winston log outputs verified with zero token leaks.
-- [ ] Mobile automation workspace registered in monorepo and cataloged in `specs/test_cases_catalog.md` (`MOB_E2E_01` to `MOB_E2E_06`).
+- [x] Maestro YAML flows execute with zero failures across all critical paths (including orientation).
+- [x] Appium WebdriverIO framework passes linting and strict TypeScript compilation.
+- [x] Both Android UIAutomator2 and iOS XCUITest driver setups execute cleanly.
+- [x] Allure reports and Winston log outputs verified with zero token leaks.
+- [x] Mobile automation workspace registered in monorepo and cataloged in `specs/test_cases_catalog.md` (`MOB_E2E_01` to `MOB_E2E_06`).
 
 ---
 

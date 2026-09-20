@@ -1,0 +1,36 @@
+appId: com.buggybooks.app
+tags:
+  - auth
+  - negative
+---
+# Flow: 02_login_invalid_creds.yaml
+# Description: Validate negative authentication flow & 401 error message display
+- launchApp:
+    clearState: true
+
+- assertVisible:
+    id: "txt_usr_77"
+
+# Enter invalid credentials
+- tapOn:
+    id: "txt_usr_77"
+- inputText: "invalid_user_99"
+
+- tapOn:
+    id: "txt_pwd_99"
+- inputText: "wrong_password"
+
+- hideKeyboard
+
+# Submit login
+- tapOn:
+    id: "btn_login_submit"
+
+# Assert 401 Unauthorized error message is displayed
+- extendedWaitUntil:
+    visible:
+      id: "txt_login_error"
+    timeout: 5000
+
+- assertVisible:
+    id: "txt_login_error"

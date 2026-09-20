@@ -1,0 +1,40 @@
+appId: com.buggybooks.app
+tags:
+  - catalog
+  - search
+---
+# Flow: 03_search_and_filter.yaml
+# Description: Search books catalog and assert item count & filtered results
+- launchApp:
+    clearState: false
+
+# Navigate/Ensure on Catalog tab
+- tapOn:
+    id: "tab_catalog"
+
+- assertVisible:
+    id: "catalog_search_input"
+
+# Tap search input and query for JavaScript books
+- tapOn:
+    id: "catalog_search_input"
+- eraseText
+- inputText: "JavaScript"
+
+- hideKeyboard
+
+# Assert catalog results count is updated and visible
+- extendedWaitUntil:
+    visible:
+      id: "catalog_results_count"
+    timeout: 5000
+
+- assertVisible:
+    id: "catalog_results_count"
+
+# Clear search filter
+- tapOn:
+    id: "btn_filter_clear"
+
+- assertVisible:
+    id: "catalog_search_input"
