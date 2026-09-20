@@ -65,15 +65,19 @@ jobs:
           NODE_ENV: production
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
-      - name: Export Offline JavaScript Bundle & Prebuild Android
+      - name: Prebuild Android
         working-directory: mobile
-        run: |
-          npx expo export --platform android
-          npx expo prebuild --platform android --clean
+        run: npx expo prebuild --platform android --clean
 
       - name: Assemble Standalone Debug APK
         working-directory: mobile/android
         run: ./gradlew assembleDebug --no-daemon
+
+      - name: Start Metro Bundler
+        working-directory: mobile
+        run: |
+          nohup npx expo start --localhost > metro.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:8081 || true
 
       - name: Run Android Emulator & Maestro Tests
         uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
@@ -85,8 +89,9 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -no-audio -no-boot-anim
           script: |
-            # 1. Reverse backend port so emulator localhost:4000 bridges directly to host
+            # 1. Reverse backend and metro ports so emulator bridges directly to host
             adb reverse tcp:4000 tcp:4000
+            adb reverse tcp:8081 tcp:8081
 
             # 2. Enable accelerometer auto-rotation for MOB-B6 landscape test
             adb shell settings put system accelerometer_rotation 1
