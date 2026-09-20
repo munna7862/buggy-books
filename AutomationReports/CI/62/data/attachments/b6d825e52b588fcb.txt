@@ -1,0 +1,11 @@
+[2026-09-20 16:54:10] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-20 16:54:10] INFO:  Login response status Success !! Actual and Expected Values are:: 200
+[2026-09-20 16:54:10] INFO:  Login response is an object Success !! Actual and Expected Values are:: object
+[2026-09-20 16:54:10] INFO:  Login response is not null Success !! Actual and Expected Values are:: true
+[2026-09-20 16:54:10] INFO:  Login message is a string Success !! Actual and Expected Values are:: string
+[2026-09-20 16:54:10] INFO:  Login username is a string Success !! Actual and Expected Values are:: string
+[2026-09-20 16:54:10] INFO:  Login message Success !! Actual and Expected Values are:: Login successful
+[2026-09-20 16:54:10] INFO:  Logged in username matches request Success !! Actual and Expected Values are:: johndoe1789889050318792e64a3@
+[2026-09-20 16:54:10] INFO:  Token is a string Success !! Actual and Expected Values are:: string
+[2026-09-20 16:54:10] INFO:  RefreshToken is a string Success !! Actual and Expected Values are:: string
+[2026-09-20 16:54:10] INFO:  Login response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","refreshToken","token","username"]
