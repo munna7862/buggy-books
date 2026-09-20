@@ -55,13 +55,14 @@ jobs:
       - name: Install Monorepo Dependencies
         run: npm ci
 
-      - name: Start Backend Server
+      - name: Build & Start Backend Server
         run: |
-          npm run dev:backend &
-          npx wait-on http://localhost:4000/api/books -t 30000
+          npm run build --workspace=buggy-books-backend
+          nohup node backend/dist/server.js > backend.log 2>&1 &
+          npx wait-on -t 30000 http://127.0.0.1:4000/api/books || (cat backend.log && exit 1)
         env:
           PORT: 4000
-          NODE_ENV: test
+          NODE_ENV: production
           JWT_SECRET: ci-test-secret-do-not-use-in-production
 
       - name: Export Offline JavaScript Bundle & Prebuild Android

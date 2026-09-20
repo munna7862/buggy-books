@@ -196,7 +196,7 @@ jobs:
         run: npm run typecheck:mobile
 
       - name: Run Mobile Unit Tests with Coverage
-        run: npm test --workspace=mobile -- --coverage
+        run: npm run test:ci --workspace=mobile
 
       - name: Generate Mobile Test Summary
         if: always()
