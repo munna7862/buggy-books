@@ -71,7 +71,7 @@ jobs:
 
       - name: Assemble Standalone Debug APK
         working-directory: mobile/android
-        run: ./gradlew assembleDebug --no-daemon
+        run: ./gradlew assembleDebug -Pandroid.kotlinVersion=1.9.25 -PkotlinVersion=1.9.25 -Pandroid.suppressKotlinVersionCompatibilityCheck=true --no-daemon
 
       - name: Start Metro Bundler
         working-directory: mobile

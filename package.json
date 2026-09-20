@@ -47,7 +47,9 @@
     "lint:frontend": "npm run lint --workspace=frontend",
     "lint:mobile": "npm run lint --workspace=mobile",
     "lint:e2e": "npm run lint --workspace=automationframeworks",
-    "lint:mobile-automation": "npm run lint --workspace=mobile-automation"
+    "lint:mobile-automation": "npm run lint --workspace=mobile-automation",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
@@ -68,5 +70,10 @@
     "metro-transform-plugins": "0.81.5",
     "metro-minify-terser": "0.81.5",
     "metro-runtime": "0.81.5"
+  },
+  "dependencies": {
+    "expo": "~52.0.49",
+    "react": "18.3.1",
+    "react-native": "0.76.9"
   }
 }
