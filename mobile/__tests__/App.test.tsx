@@ -1,14 +1,18 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 import App from '../App';
 
 describe('BuggyBooks Mobile App Entry', () => {
-  it('renders the header title and dual-auth status correctly', () => {
-    const { getByText } = render(<App />);
+  it('renders the root app with login screen when unauthenticated (MOB_AUTH_01)', async () => {
+    const { getByText, getAllByText, getByTestId } = render(<App />);
 
-    expect(getByText('BuggyBooks')).toBeTruthy();
-    expect(getByText('Dual-Auth Session Active')).toBeTruthy();
-    expect(getByText('Bearer Token Supported')).toBeTruthy();
-    expect(getByText('The Clean Architecture Guide')).toBeTruthy();
+    await waitFor(() => {
+      expect(getAllByText('🐛 BuggyBooks').length).toBeGreaterThanOrEqual(1);
+      expect(getByText('Welcome Back')).toBeTruthy();
+      expect(getByTestId('input-username')).toBeTruthy();
+      expect(getByTestId('input-password')).toBeTruthy();
+      expect(getByTestId('button-login')).toBeTruthy();
+      expect(getByTestId('link-register')).toBeTruthy();
+    });
   });
 });

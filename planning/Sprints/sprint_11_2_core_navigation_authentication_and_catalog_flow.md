@@ -28,29 +28,29 @@
   *So that* I do not have to re-enter my credentials every time I open the app and my session does not drop during background tasks.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
-  - [ ] Implement `mobile/src/utils/storage.ts` wrapping `expo-secure-store`:
+  - [x] Implement `mobile/src/utils/storage.ts` wrapping `expo-secure-store`:
     - `saveTokens(token: string, refreshToken: string): Promise<void>`
     - `getAccessToken(): Promise<string | null>`
     - `getRefreshToken(): Promise<string | null>`
     - `clearTokens(): Promise<void>`
-  - [ ] Implement `mobile/src/api/client.ts`:
+  - [x] Implement `mobile/src/api/client.ts`:
     - Automatic `baseURL` resolution: Prioritize `process.env.EXPO_PUBLIC_API_URL` (critical for `adb reverse` in CI). Fallback to `10.0.2.2:4000` for Android Emulator, `localhost:4000` for iOS Simulator, dynamic LAN IP via `Constants.expoConfig?.hostUri` for physical devices, and Render for production.
     - Request interceptor injecting `Authorization: Bearer <token>`.
     - Response interceptor catching **both `401 Unauthorized` and `403 Forbidden`** (specifically when `error.response?.data?.error` contains `token` or `Invalid token`):
       - *Note on BuggyBooks Backend*: The Express API returns `403 Forbidden` (not 401) when an access token expires. The interceptor must check `status === 401 || (status === 403 && data?.error?.includes('token'))`.
       - Implement a promise-based **refresh mutex queue** to serialize simultaneous 401/403s into a single `POST /api/auth/refresh` request, replaying queued requests upon resolution.
       - On refresh failure, wipe tokens and dispatch auth logout event.
-  - [ ] Create `mobile/src/context/AuthContext.tsx`:
+  - [x] Create `mobile/src/context/AuthContext.tsx`:
     - Provides `user`, `isAuthenticated`, `isLoading`, `login()`, `register()`, `logout()`.
     - Supports offline session hydration: on app startup, loads stored tokens from `expo-secure-store` and hydrates `user` state from the decoded JWT payload, enabling offline app entry.
-  - [ ] Author unit tests in `mobile/src/__tests__/storage.test.ts` and `mobile/src/__tests__/AuthContext.test.tsx` verifying token saving, clearing, and session hydration.
+  - [x] Author unit tests in `mobile/src/__tests__/storage.test.ts` and `mobile/src/__tests__/AuthContext.test.tsx` verifying token saving, clearing, and session hydration.
 - **Acceptance Criteria**:
-  - [ ] Logging in persists JWT in secure storage.
-  - [ ] Expired token responses (`403 Forbidden: Invalid token`) and `401 Unauthorized` trigger silent refresh with mutex queue, recovering requests seamlessly.
-  - [ ] Multiple parallel expired requests trigger exactly one `/api/auth/refresh` call and all resolve seamlessly.
-  - [ ] Relaunching the app restores authenticated session without prompting for login.
-  - [ ] Logging out wipes secure storage and navigates to the login screen.
-  - [ ] Unit tests pass cleanly via `npm test --workspace=mobile`.
+  - [x] Logging in persists JWT in secure storage.
+  - [x] Expired token responses (`403 Forbidden: Invalid token`) and `401 Unauthorized` trigger silent refresh with mutex queue, recovering requests seamlessly.
+  - [x] Multiple parallel expired requests trigger exactly one `/api/auth/refresh` call and all resolve seamlessly.
+  - [x] Relaunching the app restores authenticated session without prompting for login.
+  - [x] Logging out wipes secure storage and navigates to the login screen.
+  - [x] Unit tests pass cleanly via `npm test --workspace=mobile`.
 
 ---
 
@@ -61,20 +61,20 @@
   *So that* I can sign in, register, and navigate books intuitively.
 - **Story Points**: 1 SP
 - **Technical Subtasks**:
-  - [ ] Configure React Navigation in `mobile/src/navigation/`:
+  - [x] Configure React Navigation in `mobile/src/navigation/`:
     - `RootNavigator`: Conditionally renders `AuthNavigator` or `AppTabNavigator`.
     - `AuthNavigator`: `LoginScreen` and `RegisterScreen` with native slide transitions.
     - `AppTabNavigator`: Bottom tab bar with icons for Catalog, Cart, Profile, and Chaos.
-  - [ ] Implement `LoginScreen`:
+  - [x] Implement `LoginScreen`:
     - Form fields with baseline accessibility labels and inputs (proto-testIDs configured for subsequent Sprint 12.1 obfuscation).
     - Error banners on invalid credentials (HTTP 401).
-  - [ ] Implement `RegisterScreen`:
+  - [x] Implement `RegisterScreen`:
     - Fields: Full Name, Username, Password.
     - Password strength hints and instant login upon successful registration.
-  - [ ] Security Champion (SEC) Audit: Verify that credentials are not logged to console and tokens are cleared on logout.
+  - [x] Security Champion (SEC) Audit: Verify that credentials are not logged to console and tokens are cleared on logout.
 - **Acceptance Criteria**:
-  - [ ] Submitting valid credentials immediately transitions to the Catalog tab.
-  - [ ] Pressing back does not navigate to login when authenticated.
+  - [x] Submitting valid credentials immediately transitions to the Catalog tab.
+  - [x] Pressing back does not navigate to login when authenticated.
 
 ---
 
@@ -85,16 +85,16 @@
   *So that* I can find books and ensure test coverage traceability per AGENTS.md.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
-  - [ ] Implement `CatalogScreen`:
+  - [x] Implement `CatalogScreen`:
     - 2-column `FlatList` with cover thumbnail, title, author, price, and rating badge.
     - Native `TextInput` search bar dispatching queries to `GET /api/books?q=`.
     - Pull-to-refresh (`RefreshControl`) re-fetching catalog data.
     - Empty search results state and loading shimmer indicator.
-  - [ ] Implement `BookDetailScreen`:
+  - [x] Implement `BookDetailScreen`:
     - Large cover art, full description, ISBN, stock status indicator.
     - Quantity selector (`-` and `+` buttons).
     - "Add to Cart" CTA button.
-  - [ ] SDET Task: Document mobile test cases in `specs/test_cases_catalog.md`:
+  - [x] SDET Task: Document mobile test cases in `specs/test_cases_catalog.md`:
     - `MOB_AUTH_01`: Valid Login & SecureStore Persistence.
     - `MOB_AUTH_02`: Invalid Credentials & Error Banner.
     - `MOB_AUTH_03`: Registration & Instant Navigation.
@@ -106,21 +106,21 @@
     - `MOB_CAT_04`: Search No-Results Empty State.
     - `MOB_CAT_05`: Book Detail View, Metadata & Quantity Selector.
 - **Acceptance Criteria**:
-  - [ ] Tapping a book card navigates to its `BookDetailScreen`.
-  - [ ] Searching filters books dynamically with debouncing.
-  - [ ] Pull-to-refresh refreshes list from the backend API.
-  - [ ] `specs/test_cases_catalog.md` contains the new Mobile Test Suite section covering `MOB_AUTH_01`–`MOB_CAT_05`.
+  - [x] Tapping a book card navigates to its `BookDetailScreen`.
+  - [x] Searching filters books dynamically with debouncing.
+  - [x] Pull-to-refresh refreshes list from the backend API.
+  - [x] `specs/test_cases_catalog.md` contains the new Mobile Test Suite section covering `MOB_AUTH_01`–`MOB_CAT_05`.
 
 ---
 
 ## 3. Definition of Done (DoD)
 
-- [ ] All 3 user stories implemented with strict TypeScript typing.
-- [ ] Mobile app runs on Android Emulator and iOS Simulator without runtime crashes.
-- [ ] Authentication, token refresh mutex, and logout verified with live backend.
-- [ ] Catalog search and book detail rendering verified with backend database.
-- [ ] Mobile unit tests pass with 100% success (`npm test --workspace=mobile`).
-- [ ] Test cases cataloged in `specs/test_cases_catalog.md`.
+- [x] All 3 user stories implemented with strict TypeScript typing.
+- [x] Mobile app runs on Android Emulator and iOS Simulator without runtime crashes.
+- [x] Authentication, token refresh mutex, and logout verified with live backend.
+- [x] Catalog search and book detail rendering verified with backend database.
+- [x] Mobile unit tests pass with 100% success (`npm test --workspace=mobile`).
+- [x] Test cases cataloged in `specs/test_cases_catalog.md`.
 
 ---
 
