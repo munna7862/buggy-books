@@ -81,7 +81,7 @@ export function RegisterScreen({ navigation }: RegisterScreenProps) {
             placeholderTextColor="#64748b"
             value={fullName}
             onChangeText={setFullName}
-            testID="input-fullname"
+            testID="txt_fn_55"
             accessibilityLabel="Full name input"
           />
 
@@ -94,7 +94,7 @@ export function RegisterScreen({ navigation }: RegisterScreenProps) {
             onChangeText={setUsername}
             autoCapitalize="none"
             autoCorrect={false}
-            testID="input-username"
+            testID="txt_usr_77"
             accessibilityLabel="Username input"
           />
 
@@ -107,7 +107,7 @@ export function RegisterScreen({ navigation }: RegisterScreenProps) {
             onChangeText={setPassword}
             secureTextEntry
             autoCapitalize="none"
-            testID="input-password"
+            testID="txt_pwd_99"
             accessibilityLabel="Password input"
           />
 

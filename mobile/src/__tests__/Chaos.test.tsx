@@ -157,4 +157,20 @@ describe('ChaosScreen', () => {
       expect(getByText('✓ Test database and chaos config reset to defaults!')).toBeTruthy();
     });
   });
+
+  it('toggles simulated offline connection dropout (MOB-B5)', async () => {
+    jest.spyOn(apiClient, 'get').mockResolvedValueOnce({
+      data: mockChaosConfig,
+    });
+
+    const { getByTestId, getByText } = render(<ChaosScreen />);
+
+    await waitFor(() => {
+      expect(getByTestId('toggle_simulated_offline')).toBeTruthy();
+      expect(getByText('ONLINE')).toBeTruthy();
+    });
+
+    fireEvent(getByTestId('toggle_simulated_offline'), 'valueChange', true);
+    expect(getByText('OFFLINE')).toBeTruthy();
+  });
 });

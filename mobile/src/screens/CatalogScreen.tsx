@@ -15,6 +15,8 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { Book, PaginatedBooks } from '@buggybooks/types';
 import type { CatalogStackParamList } from '../navigation/types';
 import { apiClient } from '../api/client';
+import { useCart } from '../context/CartContext';
+import * as Haptics from 'expo-haptics';
 
 type CatalogScreenNavigationProp = NativeStackNavigationProp<CatalogStackParamList, 'Catalog'>;
 
@@ -23,13 +25,42 @@ interface CatalogScreenProps {
 }
 
 export function CatalogScreen({ navigation }: CatalogScreenProps) {
+  const { addToCart } = useCart();
   const [books, setBooks] = useState<Book[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [addingBookId, setAddingBookId] = useState<string | null>(null);
 
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const addTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (addTimerRef.current) clearTimeout(addTimerRef.current);
+    };
+  }, []);
+
+  const handleQuickAddToCart = (book: Book) => {
+    setAddingBookId(book.id);
+    Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Medium)?.catch?.(() => {});
+
+    // MOB-B3: Dynamic Add-to-Cart delay (500ms - 3500ms, 0ms in test environment)
+    const dynamicDelay = process.env.NODE_ENV === 'test' ? 0 : Math.floor(Math.random() * 3000) + 500;
+
+    if (addTimerRef.current) clearTimeout(addTimerRef.current);
+    addTimerRef.current = setTimeout(async () => {
+      try {
+        await addToCart(book.id, 1);
+        Haptics.notificationAsync?.(Haptics.NotificationFeedbackType.Success)?.catch?.(() => {});
+      } catch {
+        Haptics.notificationAsync?.(Haptics.NotificationFeedbackType.Error)?.catch?.(() => {});
+      } finally {
+        setAddingBookId(null);
+      }
+    }, dynamicDelay);
+  };
 
   const fetchBooks = useCallback(async (query: string = '', isRefresh: boolean = false) => {
     if (isRefresh) {
@@ -133,6 +164,24 @@ export function CatalogScreen({ navigation }: CatalogScreenProps) {
               <Text style={styles.ratingText}>★ 4.8</Text>
             </View>
           </View>
+
+          <TouchableOpacity
+            style={[styles.quickAddButton, addingBookId === item.id && styles.buttonDisabled]}
+            onPress={(e) => {
+              e?.stopPropagation?.();
+              handleQuickAddToCart(item);
+            }}
+            disabled={addingBookId === item.id}
+            testID={`btn_item_${item.id}_add`}
+            accessibilityRole="button"
+            accessibilityLabel={`Add ${item.title} to cart`}
+          >
+            {addingBookId === item.id ? (
+              <ActivityIndicator size="small" color="#ffffff" />
+            ) : (
+              <Text style={styles.quickAddButtonText}>+ Add</Text>
+            )}
+          </TouchableOpacity>
         </View>
       </TouchableOpacity>
     );
@@ -393,5 +442,21 @@ const styles = StyleSheet.create({
     color: '#f87171',
     fontSize: 13,
     textAlign: 'center',
+  },
+  quickAddButton: {
+    marginTop: 8,
+    backgroundColor: '#6366f1',
+    paddingVertical: 6,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  quickAddButtonText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '700',
+  },
+  buttonDisabled: {
+    opacity: 0.6,
   },
 });

@@ -35,15 +35,15 @@ describe('CheckoutScreen', () => {
     jest.clearAllMocks();
   });
 
-  it('renders form inputs and order summary accurately', () => {
+  it('renders form inputs and order summary accurately with obfuscated locators (MOB-B1)', () => {
     const { getByTestId, getByText } = render(
       <CheckoutScreen navigation={mockNavigation} />
     );
 
-    expect(getByTestId('input-first-name')).toBeTruthy();
-    expect(getByTestId('input-last-name')).toBeTruthy();
-    expect(getByTestId('input-shipping-address')).toBeTruthy();
-    expect(getByTestId('input-credit-card')).toBeTruthy();
+    expect(getByTestId('txt_f1')).toBeTruthy();
+    expect(getByTestId('txt_l1')).toBeTruthy();
+    expect(getByTestId('txt_addr_88')).toBeTruthy();
+    expect(getByTestId('txt_c99')).toBeTruthy();
     expect(getByTestId('checkout-total-price')).toBeTruthy();
     expect(getByText('$53.99')).toBeTruthy();
   });
@@ -69,10 +69,10 @@ describe('CheckoutScreen', () => {
       <CheckoutScreen navigation={mockNavigation} />
     );
 
-    fireEvent.changeText(getByTestId('input-first-name'), 'Alice');
-    fireEvent.changeText(getByTestId('input-last-name'), 'Smith');
-    fireEvent.changeText(getByTestId('input-shipping-address'), '456 Book Way');
-    fireEvent.changeText(getByTestId('input-credit-card'), '123456');
+    fireEvent.changeText(getByTestId('txt_f1'), 'Alice');
+    fireEvent.changeText(getByTestId('txt_l1'), 'Smith');
+    fireEvent.changeText(getByTestId('txt_addr_88'), '456 Book Way');
+    fireEvent.changeText(getByTestId('txt_c99'), '123456');
 
     fireEvent.press(getByTestId('btn-place-order'));
 
@@ -94,10 +94,10 @@ describe('CheckoutScreen', () => {
       <CheckoutScreen navigation={mockNavigation} />
     );
 
-    fireEvent.changeText(getByTestId('input-first-name'), 'Bob');
-    fireEvent.changeText(getByTestId('input-last-name'), 'Jones');
-    fireEvent.changeText(getByTestId('input-shipping-address'), '789 Library St');
-    fireEvent.changeText(getByTestId('input-credit-card'), '4242424242424242');
+    fireEvent.changeText(getByTestId('txt_f1'), 'Bob');
+    fireEvent.changeText(getByTestId('txt_l1'), 'Jones');
+    fireEvent.changeText(getByTestId('txt_addr_88'), '789 Library St');
+    fireEvent.changeText(getByTestId('txt_c99'), '4242424242424242');
 
     fireEvent.press(getByTestId('btn-place-order'));
 
@@ -119,7 +119,7 @@ describe('CheckoutScreen', () => {
     expect(mockNavigation.navigate).toHaveBeenCalledWith('CatalogTab');
   });
 
-  it('displays error banner when order submission fails', async () => {
+  it('displays error banner and retry payment CTA when order submission fails (MOB-B4)', async () => {
     jest.spyOn(apiClient, 'post').mockRejectedValueOnce({
       response: {
         data: {
@@ -132,18 +132,35 @@ describe('CheckoutScreen', () => {
       <CheckoutScreen navigation={mockNavigation} />
     );
 
-    fireEvent.changeText(getByTestId('input-first-name'), 'Carol');
-    fireEvent.changeText(getByTestId('input-last-name'), 'White');
-    fireEvent.changeText(getByTestId('input-shipping-address'), '101 Pine St');
-    fireEvent.changeText(getByTestId('input-credit-card'), '1111222233334444');
+    fireEvent.changeText(getByTestId('txt_f1'), 'Carol');
+    fireEvent.changeText(getByTestId('txt_l1'), 'White');
+    fireEvent.changeText(getByTestId('txt_addr_88'), '101 Pine St');
+    fireEvent.changeText(getByTestId('txt_c99'), '1111222233334444');
 
     fireEvent.press(getByTestId('btn-place-order'));
 
     await waitFor(() => {
-      expect(getByTestId('checkout-error-banner')).toBeTruthy();
+      expect(getByTestId('banner_checkout_error')).toBeTruthy();
+      expect(getByTestId('btn_retry_payment')).toBeTruthy();
       expect(
         getByText('⚠️ Internal Server Error: Payment Gateway Timeout')
       ).toBeTruthy();
+    });
+
+    // Tap Retry Payment and mock success
+    jest.spyOn(apiClient, 'post').mockResolvedValueOnce({
+      data: {
+        success: true,
+        orderId: 'ORD-RETRY-101',
+      },
+    });
+
+    fireEvent.press(getByTestId('btn_retry_payment'));
+
+    await waitFor(() => {
+      expect(apiClient.post).toHaveBeenCalledTimes(2);
+      expect(getByTestId('order-confirmation-view')).toBeTruthy();
+      expect(getByText('ORD-RETRY-101')).toBeTruthy();
     });
   });
 });

@@ -5,6 +5,7 @@ import { NavigationContainer, DarkTheme } from '@react-navigation/native';
 import { AuthProvider } from './src/context/AuthContext';
 import { CartProvider } from './src/context/CartContext';
 import { RootNavigator } from './src/navigation/RootNavigator';
+import { OfflineBanner } from './src/components/OfflineBanner';
 
 const appTheme = {
   ...DarkTheme,
@@ -31,6 +32,7 @@ export default function App() {
         <CartProvider>
           <NavContainer theme={appTheme}>
             <StatusBar style="light" />
+            <OfflineBanner />
             <RootNavigator />
           </NavContainer>
         </CartProvider>

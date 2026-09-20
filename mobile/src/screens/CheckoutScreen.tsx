@@ -8,8 +8,7 @@ import {
   SafeAreaView,
   ScrollView,
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
+  useWindowDimensions,
 } from 'react-native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import type { CompositeNavigationProp } from '@react-navigation/native';
@@ -37,6 +36,8 @@ interface FormErrors {
 
 export function CheckoutScreen({ navigation }: CheckoutScreenProps) {
   const { cart, total, subtotal, tax, clearCart } = useCart();
+  const { width, height } = useWindowDimensions();
+  const isLandscape = width > height;
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -184,162 +185,172 @@ export function CheckoutScreen({ navigation }: CheckoutScreenProps) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.keyboardAvoid}
+      {/* MOB-B2: KeyboardAvoidingView omitted to induce keyboard occlusion over Place Order CTA */}
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
       >
-        <ScrollView
-          style={styles.scrollView}
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-        >
-          {serverError && (
-            <View style={styles.errorBanner} testID="checkout-error-banner">
-              <Text style={styles.errorBannerText}>⚠️ {serverError}</Text>
-            </View>
-          )}
-
-          {/* Shipping Information Section */}
-          <View style={styles.sectionCard}>
-            <Text style={styles.sectionTitle}>📦 Shipping Details</Text>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>First Name</Text>
-              <TextInput
-                style={[styles.input, errors.firstName ? styles.inputError : null]}
-                placeholder="John"
-                placeholderTextColor="#64748b"
-                value={firstName}
-                onChangeText={(text) => {
-                  setFirstName(text);
-                  if (errors.firstName) setErrors((prev) => ({ ...prev, firstName: undefined }));
-                }}
-                testID="input-first-name"
-                accessibilityLabel="First Name"
-              />
-              {errors.firstName && (
-                <Text style={styles.errorText} testID="error-first-name">
-                  {errors.firstName}
-                </Text>
-              )}
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Last Name</Text>
-              <TextInput
-                style={[styles.input, errors.lastName ? styles.inputError : null]}
-                placeholder="Doe"
-                placeholderTextColor="#64748b"
-                value={lastName}
-                onChangeText={(text) => {
-                  setLastName(text);
-                  if (errors.lastName) setErrors((prev) => ({ ...prev, lastName: undefined }));
-                }}
-                testID="input-last-name"
-                accessibilityLabel="Last Name"
-              />
-              {errors.lastName && (
-                <Text style={styles.errorText} testID="error-last-name">
-                  {errors.lastName}
-                </Text>
-              )}
-            </View>
-
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Shipping Address</Text>
-              <TextInput
-                style={[styles.input, errors.address ? styles.inputError : null]}
-                placeholder="123 Bookstore Ave, Suite 4B"
-                placeholderTextColor="#64748b"
-                value={address}
-                onChangeText={(text) => {
-                  setAddress(text);
-                  if (errors.address) setErrors((prev) => ({ ...prev, address: undefined }));
-                }}
-                testID="input-shipping-address"
-                accessibilityLabel="Shipping Address"
-              />
-              {errors.address && (
-                <Text style={styles.errorText} testID="error-shipping-address">
-                  {errors.address}
-                </Text>
-              )}
-            </View>
+        {serverError && (
+          <View style={styles.errorBanner} testID="banner_checkout_error">
+            <Text style={styles.errorBannerText}>⚠️ {serverError}</Text>
+            <TouchableOpacity
+              style={styles.retryPaymentButton}
+              onPress={handlePlaceOrder}
+              disabled={isSubmitting}
+              testID="btn_retry_payment"
+              accessibilityRole="button"
+              accessibilityLabel="Retry Payment"
+            >
+              <Text style={styles.retryPaymentText}>Retry Payment</Text>
+            </TouchableOpacity>
           </View>
+        )}
 
-          {/* Payment Information Section */}
-          <View style={styles.sectionCard}>
-            <Text style={styles.sectionTitle}>💳 Payment Method</Text>
+        {/* Shipping Information Section */}
+        <View style={styles.sectionCard}>
+          <Text style={styles.sectionTitle}>📦 Shipping Details</Text>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.inputLabel}>Credit Card Number (16 Digits)</Text>
-              <TextInput
-                style={[styles.input, errors.creditCard ? styles.inputError : null]}
-                placeholder="4242 4242 4242 4242"
-                placeholderTextColor="#64748b"
-                value={creditCard}
-                onChangeText={handleCardChange}
-                keyboardType="numeric"
-                maxLength={19}
-                testID="input-credit-card"
-                accessibilityLabel="Credit Card Number"
-              />
-              {errors.creditCard && (
-                <Text style={styles.errorText} testID="error-credit-card">
-                  {errors.creditCard}
-                </Text>
-              )}
-            </View>
-          </View>
-
-          {/* Order Summary Section */}
-          <View style={styles.sectionCard} testID="checkout-summary-card">
-            <Text style={styles.sectionTitle}>🧾 Order Summary ({cart.length} items)</Text>
-
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Subtotal</Text>
-              <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
-            </View>
-
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Estimated Tax (8%)</Text>
-              <Text style={styles.summaryValue}>${tax.toFixed(2)}</Text>
-            </View>
-
-            <View style={styles.summaryRow}>
-              <Text style={styles.summaryLabel}>Shipping</Text>
-              <Text style={styles.freeShippingBadge}>FREE</Text>
-            </View>
-
-            <View style={styles.divider} />
-
-            <View style={styles.summaryRow}>
-              <Text style={styles.totalLabel}>Total Due</Text>
-              <Text style={styles.totalValue} testID="checkout-total-price">
-                ${total.toFixed(2)}
-              </Text>
-            </View>
-          </View>
-
-          {/* Place Order CTA */}
-          <TouchableOpacity
-            style={[styles.placeOrderButton, isSubmitting ? styles.buttonDisabled : null]}
-            onPress={handlePlaceOrder}
-            disabled={isSubmitting}
-            testID="btn-place-order"
-            accessibilityRole="button"
-            accessibilityLabel="Place Order"
-          >
-            {isSubmitting ? (
-              <ActivityIndicator color="#ffffff" size="small" />
-            ) : (
-              <Text style={styles.placeOrderButtonText}>
-                Place Order (${total.toFixed(2)})
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>First Name</Text>
+            <TextInput
+              style={[styles.input, errors.firstName ? styles.inputError : null]}
+              placeholder="John"
+              placeholderTextColor="#64748b"
+              value={firstName}
+              onChangeText={(text) => {
+                setFirstName(text);
+                if (errors.firstName) setErrors((prev) => ({ ...prev, firstName: undefined }));
+              }}
+              testID="txt_f1"
+              accessibilityLabel="First Name"
+            />
+            {errors.firstName && (
+              <Text style={styles.errorText} testID="error-first-name">
+                {errors.firstName}
               </Text>
             )}
-          </TouchableOpacity>
-        </ScrollView>
-      </KeyboardAvoidingView>
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Last Name</Text>
+            <TextInput
+              style={[styles.input, errors.lastName ? styles.inputError : null]}
+              placeholder="Doe"
+              placeholderTextColor="#64748b"
+              value={lastName}
+              onChangeText={(text) => {
+                setLastName(text);
+                if (errors.lastName) setErrors((prev) => ({ ...prev, lastName: undefined }));
+              }}
+              testID="txt_l1"
+              accessibilityLabel="Last Name"
+            />
+            {errors.lastName && (
+              <Text style={styles.errorText} testID="error-last-name">
+                {errors.lastName}
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Shipping Address</Text>
+            <TextInput
+              style={[styles.input, errors.address ? styles.inputError : null]}
+              placeholder="123 Bookstore Ave, Suite 4B"
+              placeholderTextColor="#64748b"
+              value={address}
+              onChangeText={(text) => {
+                setAddress(text);
+                if (errors.address) setErrors((prev) => ({ ...prev, address: undefined }));
+              }}
+              testID="txt_addr_88"
+              accessibilityLabel="Shipping Address"
+            />
+            {errors.address && (
+              <Text style={styles.errorText} testID="error-shipping-address">
+                {errors.address}
+              </Text>
+            )}
+          </View>
+        </View>
+
+        {/* Payment Information Section */}
+        <View style={styles.sectionCard}>
+          <Text style={styles.sectionTitle}>💳 Payment Method</Text>
+
+          <View style={styles.inputGroup}>
+            <Text style={styles.inputLabel}>Credit Card Number (16 Digits)</Text>
+            <TextInput
+              style={[styles.input, errors.creditCard ? styles.inputError : null]}
+              placeholder="4242 4242 4242 4242"
+              placeholderTextColor="#64748b"
+              value={creditCard}
+              onChangeText={handleCardChange}
+              keyboardType="numeric"
+              maxLength={19}
+              testID="txt_c99"
+              accessibilityLabel="Credit Card Number"
+            />
+            {errors.creditCard && (
+              <Text style={styles.errorText} testID="error-credit-card">
+                {errors.creditCard}
+              </Text>
+            )}
+          </View>
+        </View>
+
+        {/* Order Summary Section */}
+        <View style={styles.sectionCard} testID="checkout-summary-card">
+          <Text style={styles.sectionTitle}>🧾 Order Summary ({cart.length} items)</Text>
+
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Subtotal</Text>
+            <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
+          </View>
+
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Estimated Tax (8%)</Text>
+            <Text style={styles.summaryValue}>${tax.toFixed(2)}</Text>
+          </View>
+
+          <View style={styles.summaryRow}>
+            <Text style={styles.summaryLabel}>Shipping</Text>
+            <Text style={styles.freeShippingBadge}>FREE</Text>
+          </View>
+
+          <View style={styles.divider} />
+
+          <View style={styles.summaryRow}>
+            <Text style={styles.totalLabel}>Total Due</Text>
+            <Text style={styles.totalValue} testID="checkout-total-price">
+              ${total.toFixed(2)}
+            </Text>
+          </View>
+        </View>
+
+        {/* Place Order CTA (MOB-B6: Landscape layout shift causes navigation overlap) */}
+        <TouchableOpacity
+          style={[
+            styles.placeOrderButton,
+            isLandscape && styles.landscapeOverlapButton,
+            isSubmitting ? styles.buttonDisabled : null,
+          ]}
+          onPress={handlePlaceOrder}
+          disabled={isSubmitting}
+          testID="btn-place-order"
+          accessibilityRole="button"
+          accessibilityLabel="Place Order"
+        >
+          {isSubmitting ? (
+            <ActivityIndicator color="#ffffff" size="small" />
+          ) : (
+            <Text style={styles.placeOrderButtonText}>
+              Place Order (${total.toFixed(2)})
+            </Text>
+          )}
+        </TouchableOpacity>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -366,6 +377,23 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
+  },
+  retryPaymentButton: {
+    marginTop: 10,
+    backgroundColor: '#ef4444',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+  },
+  retryPaymentText: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: '700',
+  },
+  landscapeOverlapButton: {
+    marginBottom: -35,
+    opacity: 0.9,
   },
   errorBannerText: {
     color: '#fca5a5',

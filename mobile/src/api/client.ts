@@ -23,6 +23,33 @@ function notifyAuthExpired(): void {
   });
 }
 
+// MOB-B5: Simulated Network Interruption & Offline Mode State
+let simulatedOffline = false;
+type NetworkStatusListener = (isOffline: boolean) => void;
+const networkStatusListeners: Set<NetworkStatusListener> = new Set();
+
+export function setSimulatedOffline(offline: boolean): void {
+  simulatedOffline = offline;
+  networkStatusListeners.forEach((listener) => {
+    try {
+      listener(simulatedOffline);
+    } catch {
+      // ignore listener error
+    }
+  });
+}
+
+export function isSimulatedOffline(): boolean {
+  return simulatedOffline;
+}
+
+export function onNetworkStatusChange(listener: NetworkStatusListener): () => void {
+  networkStatusListeners.add(listener);
+  return () => {
+    networkStatusListeners.delete(listener);
+  };
+}
+
 /**
  * Resolves the appropriate backend API base URL depending on runtime environment:
  * 1. process.env.EXPO_PUBLIC_API_URL (manual override or CI adb reverse)
@@ -83,6 +110,18 @@ function processQueue(error: unknown, token: string | null = null): void {
 // Request Interceptor: Attach Bearer token to outgoing requests
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
+    // MOB-B5: Simulate connection abort when offline mode is enabled
+    if (simulatedOffline) {
+      const error = new AxiosError(
+        'Network Error: Simulated offline mode active',
+        'ECONNABORTED',
+        config,
+        null,
+        undefined
+      );
+      return Promise.reject(error);
+    }
+
     // Avoid attaching expired token to the refresh request itself
     if (config.url?.includes('/api/auth/refresh')) {
       return config;
