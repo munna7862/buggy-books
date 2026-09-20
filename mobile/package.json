@@ -9,6 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest",
+    "test:ci": "jest --coverage --json --outputFile=test-results.json",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -43,6 +44,12 @@
   },
   "jest": {
     "preset": "jest-expo",
+    "coverageReporters": [
+      "text",
+      "lcov",
+      "json-summary",
+      "html"
+    ],
     "setupFiles": [
       "<rootDir>/jest.setup.js"
     ],

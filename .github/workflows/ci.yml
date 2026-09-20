@@ -168,6 +168,49 @@ jobs:
         run: npm run finalize-spec -- --all-poms
 
   # -----------------------------------------------------------
+  # Stage 1D: Mobile Quality Gate (Lint, Typecheck & Jest Tests)
+  # -----------------------------------------------------------
+  mobile-quality-gate:
+    name: Mobile Lint & Typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+
+      - name: Set up Node.js 20
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Mobile Lint
+        run: npm run lint:mobile
+
+      - name: Run Mobile Typecheck
+        run: npm run typecheck:mobile
+
+      - name: Run Mobile Unit Tests with Coverage
+        run: npm test --workspace=mobile -- --coverage
+
+      - name: Generate Mobile Test Summary
+        if: always()
+        run: node scripts/generate-test-summary.js mobile mobile
+
+      - name: Upload Mobile Coverage Artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.1
+        if: always()
+        with:
+          name: mobile-coverage
+          path: mobile/coverage
+          retention-days: 7
+
+  # -----------------------------------------------------------
   # Stage 2A: Backend TypeScript Build Verification
   # -----------------------------------------------------------
   backend-build:

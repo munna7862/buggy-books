@@ -28,7 +28,7 @@
   *So that* regressions in the mobile codebase are caught before merging into `main`.
 - **Story Points**: 1.5 SP
 - **Technical Subtasks**:
-  - [ ] Update [ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml) to add Stage 1 mobile jobs with SHA-pinned actions:
+  - [x] Update [ci.yml](file:///c:/BuggyBooks/buggy-books/.github/workflows/ci.yml) to add Stage 1 mobile jobs with SHA-pinned actions:
     ```yaml
     mobile-quality-gate:
       name: Mobile Lint & Typecheck
@@ -69,13 +69,13 @@
             path: mobile/coverage
             retention-days: 7
     ```
-  - [ ] Update `scripts/generate-test-summary.js`:
+  - [x] Update `scripts/generate-test-summary.js`:
     - Add support for target `'mobile'`, assigning `testRunner = 'Jest'`.
     - Ensure `generateSummary('mobile', 'mobile')` reads `mobile/test-results.json` and `mobile/coverage/coverage-summary.json`.
 - **Acceptance Criteria**:
-  - [ ] PRs with mobile TypeScript or linting errors are blocked by the CI quality gate.
-  - [ ] Passing PRs complete Stage 1 within 5 minutes and publish test summaries and coverage artifacts.
-  - [ ] All GitHub Actions are pinned to full commit SHAs per security policy.
+  - [x] PRs with mobile TypeScript or linting errors are blocked by the CI quality gate.
+  - [x] Passing PRs complete Stage 1 within 5 minutes and publish test summaries and coverage artifacts.
+  - [x] All GitHub Actions are pinned to full commit SHAs per security policy.
 
 ---
 
@@ -86,7 +86,7 @@
   *So that* all mobile user journeys are verified continuously on real OS targets hermetically without timeouts.
 - **Story Points*: 2 SP
 - **Technical Subtasks**:
-  - [ ] Create `.github/workflows/mobile-ci.yml`:
+  - [x] Create `.github/workflows/mobile-ci.yml`:
     - Strict path triggers: `mobile/**`, `mobile-automation/**`, `.github/workflows/mobile-ci.yml`, nightly cron, or manual dispatch (`workflow_dispatch`).
     - Runner: `macos-latest` (Apple Silicon hardware-accelerated virtualization).
     - Set up Java 17:
@@ -156,9 +156,9 @@
       ```
     - Upload Maestro test artifacts, screenshots, and logs on failure.
 - **Acceptance Criteria**:
-  - [ ] Android emulator boots on `macos-latest` within 3 minutes and executes all Maestro flows cleanly.
-  - [ ] Sideloaded debug APK runs standalone with embedded JS bundle and accesses host backend via `adb reverse`.
-  - [ ] Failures capture automatic screenshots and attach them to the workflow summary.
+  - [x] Android emulator boots on `macos-latest` within 3 minutes and executes all Maestro flows cleanly.
+  - [x] Sideloaded debug APK runs standalone with embedded JS bundle and accesses host backend via `adb reverse`.
+  - [x] Failures capture automatic screenshots and attach them to the workflow summary.
 
 ---
 
@@ -169,27 +169,27 @@
   *So that* I can install and test the mobile app on real physical devices.
 - **Story Points**: 1.5 SP
 - **Technical Subtasks**:
-  - [ ] Configure `mobile/eas.json` with build profiles:
+  - [x] Configure `mobile/eas.json` with build profiles:
     - `development`: Debug APK with Expo dev client.
     - `preview`: Standalone release APK for internal QA testing without Expo Go.
     - `production`: Optimized AAB/IPA production bundles.
-  - [ ] Create `.github/workflows/mobile-release.yml`:
+  - [x] Create `.github/workflows/mobile-release.yml`:
     - Trigger on git tags matching `v*`.
     - Build standalone APK using headless Gradle (`./gradlew assembleRelease`) for free, account-independent builds, with fallback to cloud EAS if `EXPO_TOKEN` secret is configured.
     - Attach the compiled APK (`BuggyBooks-vX.Y.Z.apk`) to the GitHub Release.
 - **Acceptance Criteria**:
-  - [ ] Pushing a release tag (e.g. `v1.1.0`) triggers build generation.
-  - [ ] Standalone APK is attached to GitHub Release and ready for sideloading onto Android phones.
+  - [x] Pushing a release tag (e.g. `v1.1.0`) triggers build generation.
+  - [x] Standalone APK is attached to GitHub Release and ready for sideloading onto Android phones.
 
 ---
 
 ## 3. Definition of Done (DoD)
 
-- [ ] Mobile linting, typecheck, and unit test jobs active in main CI workflow using SHA-pinned actions.
-- [ ] Headless Android emulator test workflow operational in GitHub Actions on `macos-latest` runner with `adb reverse` network bridging.
-- [ ] Standalone release APK compiled and verified without Metro bundler dependencies.
-- [ ] EAS build profile (`eas.json`) and Gradle headless build tested and producing valid Android APKs.
-- [ ] Zero secrets leaked in workflow definitions.
+- [x] Mobile linting, typecheck, and unit test jobs active in main CI workflow using SHA-pinned actions.
+- [x] Headless Android emulator test workflow operational in GitHub Actions on `macos-latest` runner with `adb reverse` network bridging.
+- [x] Standalone release APK compiled and verified without Metro bundler dependencies.
+- [x] EAS build profile (`eas.json`) and Gradle headless build tested and producing valid Android APKs.
+- [x] Zero secrets leaked in workflow definitions.
 
 ---
 
