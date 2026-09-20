@@ -10,9 +10,15 @@ export type CatalogStackParamList = {
   BookDetail: { bookId: string; book?: Book };
 };
 
+export type CartStackParamList = {
+  Cart: undefined;
+  Checkout: undefined;
+};
+
 export type MainTabParamList = {
   CatalogTab: undefined;
   CartTab: undefined;
   ProfileTab: undefined;
   ChaosTab: undefined;
 };
+

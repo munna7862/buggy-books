@@ -15,6 +15,7 @@ import type { Book } from '@buggybooks/types';
 import * as Haptics from 'expo-haptics';
 import type { CatalogStackParamList } from '../navigation/types';
 import { apiClient } from '../api/client';
+import { useCart } from '../context/CartContext';
 
 type BookDetailRouteProp = RouteProp<CatalogStackParamList, 'BookDetail'>;
 type BookDetailNavigationProp = NativeStackNavigationProp<CatalogStackParamList, 'BookDetail'>;
@@ -26,21 +27,27 @@ interface BookDetailScreenProps {
 
 export function BookDetailScreen({ route }: BookDetailScreenProps) {
   const { bookId, book: initialBook } = route.params;
+  const { addToCart } = useCart();
   const [book, setBook] = useState<Book | null>(initialBook || null);
   const [quantity, setQuantity] = useState(1);
   const [isLoading, setIsLoading] = useState(!initialBook);
   const [isAdding, setIsAdding] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
+  const feedbackTimerRef = React.useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (!initialBook && bookId) {
+    return () => {
+      if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!initialBook) {
       setIsLoading(true);
       apiClient
         .get<Book>(`/api/books/${bookId}`)
         .then((res) => setBook(res.data))
-        .catch(() => {
-          Alert.alert('Error', 'Unable to load book details.');
-        })
+        .catch(() => Alert.alert('Error', 'Failed to load book details.'))
         .finally(() => setIsLoading(false));
     }
   }, [bookId, initialBook]);
@@ -66,22 +73,17 @@ export function BookDetailScreen({ route }: BookDetailScreenProps) {
     Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Medium)?.catch?.(() => {});
 
     try {
-      // Mutating call to /api/cart with dual-auth Bearer token
-      await apiClient.post('/api/cart', {
-        bookId: book.id,
-        quantity,
-      }).catch(() => {
-        // Fallback for demo environments without active cart session
-      });
-
+      await addToCart(book.id, quantity);
       setFeedbackMessage(`Added ${quantity} ${quantity === 1 ? 'copy' : 'copies'} to your cart!`);
-      setTimeout(() => setFeedbackMessage(null), 3500);
+      if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
+      feedbackTimerRef.current = setTimeout(() => setFeedbackMessage(null), 3500);
     } catch {
       setFeedbackMessage('Failed to add book to cart.');
     } finally {
       setIsAdding(false);
     }
   };
+
 
   if (isLoading) {
     return (

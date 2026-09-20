@@ -3,9 +3,10 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import type { MainTabParamList } from './types';
 import { CatalogNavigator } from './CatalogNavigator';
-import { CartScreen } from '../screens/CartScreen';
+import { CartNavigator } from './CartNavigator';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import { ChaosScreen } from '../screens/ChaosScreen';
+import { useCart } from '../context/CartContext';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const TabNavigator = Tab.Navigator as unknown as React.ComponentType<any>;
@@ -13,6 +14,8 @@ const TabScreen = Tab.Screen as unknown as React.ComponentType<any>;
 const IconComponent = Ionicons as unknown as React.ComponentType<any>;
 
 export function AppTabNavigator() {
+  const { cartCount } = useCart();
+
   return (
     <TabNavigator
       initialRouteName="CatalogTab"
@@ -68,10 +71,17 @@ export function AppTabNavigator() {
       />
       <TabScreen
         name="CartTab"
-        component={CartScreen}
+        component={CartNavigator}
         options={{
           title: 'Cart',
-          headerTitle: 'Shopping Cart',
+          headerShown: false,
+          tabBarBadge: cartCount > 0 ? cartCount : undefined,
+          tabBarBadgeStyle: {
+            backgroundColor: '#ef4444',
+            color: '#ffffff',
+            fontSize: 10,
+            fontWeight: '700',
+          },
         }}
       />
       <TabScreen
