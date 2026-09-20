@@ -79,4 +79,4 @@
 - [x] Playwright web E2E smoke tests pass without regressions (`npm run test:e2e:local` or `npm run test:api`).
 - [x] `mobile/` compiles cleanly with zero TypeScript errors, resolves `@buggybooks/types`, and passes unit test suite (`npm run test:mobile:unit`).
 - [x] Section 19 documented in `specs/test_cases_catalog.md`.
-- [x] Feature branch committed with conventional commits, pushed to remote, and Pull Request raised via GitHub CLI (`gh pr create`).
+- [x] Feature branch committed with conventional commits, pushed to remote, and Pull Request raised via GitHub CLI: [#97](https://github.com/munna7862/buggy-books/pull/97).
