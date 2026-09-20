@@ -175,7 +175,7 @@ router.get('/metrics', (req: Request, res: Response) => {
 });
 
 router.get('/profile', authenticateToken, asyncHandler(profileController.getProfile));
-router.post('/profile/upload', authenticateToken, profileController.handleAvatarUpload, asyncHandler(profileController.uploadAvatar));
+router.post('/profile/upload', profileController.handleAvatarUpload, authenticateToken, asyncHandler(profileController.uploadAvatar));
 
 // --- Testing / Chaos API Routes ---
 router.get('/test/config', asyncHandler(testController.getConfig));
