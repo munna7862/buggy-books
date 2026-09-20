@@ -120,15 +120,19 @@ async function validateSuccessfulRegisterContract(responseData: any, expectedUse
   await commonUtil.compareTwoValues(typeof responseData?.username, 'string', 'Username is a string');
   await commonUtil.compareTwoValues(responseData?.message, testData.messages.registrationSuccess, 'Registration message');
   await commonUtil.compareTwoValues(responseData?.username, expectedUsername, 'Registered username matches request');
+  await commonUtil.compareTwoValues(typeof responseData?.token, 'string', 'Token is a string');
+  await commonUtil.compareTwoValues(typeof responseData?.refreshToken, 'string', 'RefreshToken is a string');
   await commonUtil.compareTwoValues(
     JSON.stringify(Object.keys(responseData ?? {}).sort()),
-    JSON.stringify(['message', 'username']),
+    JSON.stringify(['message', 'refreshToken', 'token', 'username']),
     'Response contains only expected contract fields'
   );
 
   expect(responseData).toEqual({
     message: testData.messages.registrationSuccess,
     username: expectedUsername,
+    token: expect.any(String),
+    refreshToken: expect.any(String),
   });
 }
 
@@ -139,15 +143,19 @@ async function validateSuccessfulLoginContract(responseData: any, expectedUserna
   await commonUtil.compareTwoValues(typeof responseData?.username, 'string', 'Login username is a string');
   await commonUtil.compareTwoValues(responseData?.message, testData.messages.loginSuccess, 'Login message');
   await commonUtil.compareTwoValues(responseData?.username, expectedUsername, 'Logged in username matches request');
+  await commonUtil.compareTwoValues(typeof responseData?.token, 'string', 'Token is a string');
+  await commonUtil.compareTwoValues(typeof responseData?.refreshToken, 'string', 'RefreshToken is a string');
   await commonUtil.compareTwoValues(
     JSON.stringify(Object.keys(responseData ?? {}).sort()),
-    JSON.stringify(['message', 'username']),
+    JSON.stringify(['message', 'refreshToken', 'token', 'username']),
     'Login response contains only expected contract fields'
   );
 
   expect(responseData).toEqual({
     message: testData.messages.loginSuccess,
     username: expectedUsername,
+    token: expect.any(String),
+    refreshToken: expect.any(String),
   });
 }
 

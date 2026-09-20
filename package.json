@@ -8,18 +8,22 @@
     "frontend",
     "playwright-e2e",
     "performance",
-    "shared"
+    "shared",
+    "mobile"
   ],
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=buggy-books-backend",
     "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:mobile": "npm start --workspace=mobile",
     "install:all": "npm install",
     "build": "npm run build --workspace=buggy-books-backend && npm run build --workspace=frontend",
-    "typecheck": "concurrently \"npm run build --workspace=buggy-books-backend\" \"npm run build --workspace=frontend\" \"npm run typecheck --workspace=automationframeworks\"",
+    "typecheck": "concurrently \"npm run build --workspace=buggy-books-backend\" \"npm run build --workspace=frontend\" \"npm run typecheck --workspace=automationframeworks\" \"npm run typecheck:mobile\"",
+    "typecheck:mobile": "npx tsc --noEmit -p mobile/tsconfig.json",
     "test:unit": "concurrently \"npm run test:backend\" \"npm run test:frontend\"",
     "test:backend": "npm test --workspace=buggy-books-backend",
     "test:frontend": "npm test --workspace=frontend",
+    "test:mobile:unit": "npm test --workspace=mobile",
     "test:e2e": "npm test --workspace=automationframeworks",
     "test:e2e:local": "npm run test:e2e:local --workspace=automationframeworks",
     "test:e2e:matrix": "npm run test:e2e:all --workspace=automationframeworks",
@@ -33,9 +37,10 @@
     "test:perf:soak": "npm run test:perf:soak --workspace=buggy-books-performance",
     "test:perf:breakpoint": "npm run test:perf:breakpoint --workspace=buggy-books-performance",
     "test:lhci": "npx @lhci/cli autorun",
-    "lint": "concurrently \"npm run lint:frontend\" \"npm run lint:backend\" \"npm run lint:e2e\"",
+    "lint": "concurrently \"npm run lint:frontend\" \"npm run lint:backend\" \"npm run lint:mobile\" \"npm run lint:e2e\"",
     "lint:backend": "npm run lint --workspace=buggy-books-backend",
     "lint:frontend": "npm run lint --workspace=frontend",
+    "lint:mobile": "npm run lint --workspace=mobile",
     "lint:e2e": "npm run lint --workspace=automationframeworks"
   },
   "devDependencies": {

@@ -60,7 +60,7 @@ class AuthService {
 
   public refresh(refreshToken?: string) {
     if (!refreshToken) {
-      logger.warn('Refresh failed: Missing refresh token cookie');
+      logger.warn('Refresh failed: Missing refresh token');
       throw new UnauthorizedError('Unauthorized: Refresh token required');
     }
 
@@ -73,9 +73,10 @@ class AuthService {
       const username = decoded.username;
       const expiry = chaosStore.getConfig().jwtExpirySeconds;
       const newToken = jwt.sign({ username, type: 'access' }, JWT_SECRET, { expiresIn: expiry });
+      const newRefreshToken = jwt.sign({ username, type: 'refresh' }, JWT_SECRET, { expiresIn: '30d' });
 
       logger.info(`Token silently refreshed for user: ${username}`, { username });
-      return { token: newToken, username };
+      return { token: newToken, refreshToken: newRefreshToken, username };
     } catch {
       logger.warn('Refresh failed: Invalid or expired refresh token');
       throw new ForbiddenError('Forbidden: Invalid refresh token');

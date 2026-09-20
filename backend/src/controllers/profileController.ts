@@ -20,18 +20,23 @@ const storageEngine = multer.diskStorage({
     cb(null, UPLOADS_DIR);
   },
   filename: (req, file, cb) => {
-    let username = 'anonymous';
-    try {
-      const token = req.cookies?.token;
-      if (token) {
-        const decoded = jwt.verify(token, JWT_SECRET) as { username?: string };
-        if (decoded?.username) {
-          username = decoded.username;
+    let username = (req as Request).user?.username;
+    if (!username) {
+      try {
+        const authHeader = req.headers.authorization;
+        if (authHeader && authHeader.startsWith('Bearer ')) {
+          const token = authHeader.substring(7).trim();
+          const decoded = jwt.verify(token, JWT_SECRET) as { username?: string };
+          if (decoded?.username) username = decoded.username;
+        } else if (req.cookies?.token) {
+          const decoded = jwt.verify(req.cookies.token, JWT_SECRET) as { username?: string };
+          if (decoded?.username) username = decoded.username;
         }
+      } catch {
+        // fallback
       }
-    } catch {
-      // fallback
     }
+    username = username || 'anonymous';
     const ext = path.extname(file.originalname).toLowerCase();
     cb(null, `${username}-${Date.now()}${ext}`);
   }

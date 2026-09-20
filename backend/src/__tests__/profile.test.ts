@@ -74,6 +74,22 @@ describe('Profile and Avatar Upload API endpoints', () => {
     expect(res.body.avatarUrl).toContain('/uploads/admin-');
   });
 
+  it('should upload avatar successfully with Bearer token authentication and name file with username', async () => {
+    const loginRes = await request(app)
+      .post('/api/login')
+      .send({ username: 'admin', password: 'password123' });
+    const token = loginRes.body.token;
+
+    const res = await request(app)
+      .post('/api/profile/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .attach('avatar', dummyPngPath);
+
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.avatarUrl).toContain('/uploads/admin-');
+  });
+
   it('should reject avatar upload if file format is not image (e.g. TXT file)', async () => {
     const res = await request(app)
       .post('/api/profile/upload')

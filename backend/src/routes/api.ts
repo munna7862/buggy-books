@@ -32,7 +32,14 @@ declare global {
 
 // Middleware to authenticate operations
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies?.token;
+  let token: string | undefined;
+
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.substring(7).trim();
+  } else if (req.cookies?.token) {
+    token = req.cookies.token;
+  }
 
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized: Token required' });
