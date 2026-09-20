@@ -15,7 +15,7 @@ export type { Book, CartItem, PaginatedBooks } from './book.types';
 export type { Order } from './order.types';
 
 // Authentication
-export type { UserRecord } from './auth.types';
+export type { UserRecord, AuthUser, AuthTokensResponse, UserProfile } from './auth.types';
 
 // Chaos/testing configuration
 export type { ChaosConfig } from './chaos.types';

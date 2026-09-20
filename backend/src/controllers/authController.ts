@@ -24,14 +24,24 @@ export const login = async (req: Request, res: Response) => {
   const { username, password } = req.body;
   const result = await authService.login(username, password);
   setAuthCookies(res, result.token, result.refreshToken);
-  res.json({ message: 'Login successful', username: result.username });
+  res.json({
+    message: 'Login successful',
+    username: result.username,
+    token: result.token,
+    refreshToken: result.refreshToken
+  });
 };
 
 export const register = async (req: Request, res: Response) => {
   const { username, password, fullName } = req.body;
   const result = await authService.register(username, password, fullName);
   setAuthCookies(res, result.token, result.refreshToken);
-  res.status(201).json({ message: 'Registration successful', username: result.username });
+  res.status(201).json({
+    message: 'Registration successful',
+    username: result.username,
+    token: result.token,
+    refreshToken: result.refreshToken
+  });
 };
 
 export const logout = (req: Request, res: Response) => {
@@ -43,18 +53,16 @@ export const logout = (req: Request, res: Response) => {
 };
 
 export const refresh = async (req: Request, res: Response) => {
-  const refreshToken = req.cookies?.refreshToken;
+  const refreshToken = req.body?.refreshToken || req.cookies?.refreshToken;
   const result = authService.refresh(refreshToken);
-  
-  const isProd = config.isProduction;
-  res.cookie('token', result.token, {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
-    maxAge: 3600000 // 1 hour
-  });
+  setAuthCookies(res, result.token, result.refreshToken);
 
-  res.json({ success: true, username: result.username });
+  res.json({
+    success: true,
+    username: result.username,
+    token: result.token,
+    refreshToken: result.refreshToken
+  });
 };
 
 export const resetUsers = () => {

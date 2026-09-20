@@ -34,12 +34,20 @@ const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf({
   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
   getCsrfTokenFromRequest: (req) => req.headers['x-csrf-token'] as string,
   skipCsrfProtection: (req) => {
+    // Allow Bearer token requests to bypass CSRF (mobile native clients)
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1]?.trim() : undefined;
+    if (token && token.length > 10) return true;
+
     // Skip for auth endpoints (login, register, logout, refresh)
     const authPaths = ['/api/login', '/api/register', '/api/logout', '/api/auth/refresh'];
     if (authPaths.includes(req.path)) return true;
 
     // Skip for test/chaos endpoints
     if (req.path.startsWith('/api/test/')) return true;
+
+    // Allow test suite to explicitly enforce CSRF testing in test mode
+    if (req.headers['x-enforce-csrf'] === 'true') return false;
 
     // Skip in test mode or if bypass headers are set (allows E2E tests to bypass CSRF)
     if (

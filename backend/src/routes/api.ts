@@ -32,7 +32,14 @@ declare global {
 
 // Middleware to authenticate operations
 const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies?.token;
+  let token: string | undefined;
+
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.substring(7).trim();
+  } else if (req.cookies?.token) {
+    token = req.cookies.token;
+  }
 
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized: Token required' });
@@ -168,7 +175,7 @@ router.get('/metrics', (req: Request, res: Response) => {
 });
 
 router.get('/profile', authenticateToken, asyncHandler(profileController.getProfile));
-router.post('/profile/upload', profileController.handleAvatarUpload, authenticateToken, asyncHandler(profileController.uploadAvatar));
+router.post('/profile/upload', authenticateToken, profileController.handleAvatarUpload, asyncHandler(profileController.uploadAvatar));
 
 // --- Testing / Chaos API Routes ---
 router.get('/test/config', asyncHandler(testController.getConfig));

@@ -1,9 +1,9 @@
-# Sprint 10.3: CI/CD Pipeline Hermetic Isolation, Process Management & Report Deployment
+# Sprint 11.1: Backend Dual-Auth & Expo Monorepo Scaffolding
 
-**Sprint Identifier**: `SPRINT-10.3-CICD-PIPELINE-HERMETIC-ISOLATION-AND-REPORT-GOVERNANCE`  
-**Phase**: [Phase 10: E2E Automation Modernization, Hermetic CI/CD & Test Governance](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_10_e2e_automation_modernization_hermetic_cicd_and_test_governance.md)  
+**Sprint Identifier**: `SPRINT-11.1-BACKEND-DUAL-AUTH-AND-EXPO-MONOREPO-SCAFFOLDING`  
+**Phase Mapping**: [Phase 11: Cross-Platform Mobile App Foundations (Android & iOS) & Dual-Auth](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_11_mobile_foundations_and_full_stack_core.md)  
 **Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Replace fragile background shell process management with Playwright's native managed `webServer` block in CI, isolate database state during k6 benchmark runs, fix GitHub context variable bugs in report deployment, add pre-flight health checks to Docker sharding, and establish test cataloging standards.
+**Sprint Goal**: Enable dual-mode authentication (Bearer tokens + httpOnly cookies) on the backend without breaking existing web/E2E tests, bypass CSRF checks for Bearer tokens, and scaffold the `mobile/` React Native + Expo TypeScript workspace.
 
 ---
 
@@ -12,43 +12,47 @@
 | Persona | Assigned Member | Responsibilities for this Sprint |
 | :--- | :--- | :--- |
 | **Scrum Master** | AI Agent / SM | Sprint backlog grooming, live burndown tracking in `task.md`, cross-persona handoffs, review facilitation, and DoD compliance audit. |
-| **DevOps Automation Architect** | AI Agent / DevOps | Modernizing `ci.yml`, `playwright-ci.yml`, `playwright-docker.yml`, `playwright-on-demand.yml`, and fixing report deployment URL interpolation. |
-| **Principal SDET** | AI Agent / SDET | Calibrating `webServer` orchestration and conditional `grepInvert` in `playwright.config.ts` for CI and local workflows. |
-| **Performance QA Specialist** | AI Agent / Perf QA | Designing pre-run database snapshotting and between-tier reset steps for k6 performance benchmarks in CI and endurance workflows. |
-| **Security Officer** | AI Agent / SEC | Verifying secret isolation in CI workflow files, absence of exposed credentials, and safe URL interpolation. |
-| **Product Owner** | Human PO / AI PO | Validating Allure/Monocart report links in GitHub Actions summaries, approving Definition of Done, and authorizing release PR. |
+| **SDET Architect** | AI Agent / SDET | Test strategy, authoring Section 19 in `specs/test_cases_catalog.md`, designing dual-auth and CSRF exemption test scenarios. |
+| **Backend Specialist / Dev Architect** | AI Agent / SDE | Implement dual-auth in `auth.service.ts`, `authController.ts`, `api.ts`, `profileController.ts`, and CSRF bypass in `app.ts`. Expand `shared/types`. |
+| **Mobile Developer** | AI Agent / Mobile | Configure root npm workspaces, scaffold Expo TypeScript app in `mobile/`, configure Metro bundler, TypeScript isolation, and test runner. |
+| **Security Champion** | AI Agent / SEC | Validate JWT verification semantics, header inspection security, CSRF exemption constraints, and secret leakage prevention. |
+| **QA Specialist** | AI Agent / QA | Execute backend Jest tests, frontend Vitest tests, and verify existing Playwright E2E flows remain 100% green. |
+| **Product Owner** | Human PO / AI PO | Review acceptance criteria, aesthetic & functionality verification, approve Definition of Done, and authorize release PR. |
+| **DevOps Engineer** | AI Agent / DevOps | Monorepo build and lint verification, git synchronization with `origin/main`, commit hygiene, and automated GitHub PR creation. |
 
 ---
 
 ## 2. Sprint Backlog & Granular Subtask Tracking
 
-### User Story US-CI-1031: Native Playwright Managed WebServer in CI
-*As a DevOps Engineer, I want CI pipelines to rely on Playwright's native `webServer` lifecycle management, so that we eliminate brittle `nohup ... &` background starts, `wait-on` polls, and `pkill -f` cleanups that risk zombie processes or port conflicts.*
-- [x] **US-CI-1031.1** (`Principal SDET`): In `playwright-e2e/src/config/playwright.config.ts`, configure `webServer` array with readiness URLs (`http://127.0.0.1:4000/api/books` and `http://127.0.0.1:5173`), `reuseExistingServer: !process.env.CI`, `timeout: 60 * 1000`, and `stdout: 'pipe'`.
-- [x] **US-CI-1031.2** (`Principal SDET`): In `playwright-e2e/src/config/playwright.config.ts`, configure `grepInvert: process.env.RUN_QUARANTINE ? undefined : /@quarantine/`.
-- [x] **US-CI-1031.3** (`DevOps Automation Architect`): In `.github/workflows/ci.yml`, remove manual `Start Ephemeral Backend Server`, `Start Ephemeral Frontend Preview Server`, and `Stop Ephemeral Servers` steps from `e2e-smoke-test` job.
-- [x] **US-CI-1031.4** (`DevOps Automation Architect`): In `.github/workflows/playwright-ci.yml`, remove manual background server startup and log upload steps from Job 2 (`api-test`) and Job 3 (`ui-test-matrix`), letting Playwright manage the server lifecycle.
-- [x] **US-CI-1031.5** (`DevOps Automation Architect`): In `.github/workflows/quarantine-audit.yml`, remove manual `nohup` server startup steps and rely on Playwright's native `webServer`.
+### User Story US-MOB-1111: Backend Dual-Authentication & Token Delivery
+*As a Mobile Developer, I want the backend login, register, and refresh endpoints to accept and return JWT `token` and `refreshToken` in the JSON payload, protected routes to accept `Authorization: Bearer <token>` headers, and avatar uploads to recognize Bearer tokens, so that native mobile clients can securely authenticate, silently rotate tokens, and upload profile assets without browser cookies.*
+- [x] **US-MOB-1111.1** (`Backend Specialist`): Update `authService.refresh(refreshToken?: string)` in `backend/src/services/auth.service.ts` to verify the refresh token, generate both a refreshed access token and a refreshed rotation token (`expiresIn: '30d'`), and return `{ token, refreshToken, username }`.
+- [x] **US-MOB-1111.2** (`Backend Specialist`): Update `backend/src/controllers/authController.ts` in `login`, `register`, and `refresh` to return `{ token, refreshToken, username, message/success }` in response body while continuing to set `httpOnly` cookies via `setAuthCookies(res, token, refreshToken)` for web backward compatibility. Accept `req.body.refreshToken` falling back to `req.cookies?.refreshToken` in `refresh`.
+- [x] **US-MOB-1111.3** (`Backend Specialist`): Update `authenticateToken` in `backend/src/routes/api.ts` to inspect `req.headers.authorization` for `Bearer <token>`, fallback to `req.cookies?.token`, return 401 if missing and 403 if invalid, and preserve `loggerStore` context.
+- [x] **US-MOB-1111.4** (`Dev Architect`): Expand `shared/types/auth.types.d.ts` and `shared/types/index.d.ts` to export `AuthUser`, `AuthTokensResponse`, and `UserProfile`.
+- [x] **US-MOB-1111.5** (`Backend Specialist`): Update `storageEngine.filename` in `backend/src/controllers/profileController.ts` to leverage `(req as Request).user?.username || 'anonymous'` from the upstream `authenticateToken` middleware.
+- [x] **US-MOB-1111.6** (`SDET Architect` & `Backend Specialist`): Add unit/integration tests in `backend/src/__tests__/authRefresh.test.ts` (or `dualAuth.test.ts`) and `profile.test.ts` covering Bearer header auth on protected routes, body-based refresh rotation, and Bearer avatar upload naming.
 
-### User Story US-CI-1032: Database State Isolation in Performance Benchmark Gates
-*As an SDET running performance regression benchmarks in CI, I want database state reset or sandboxed before each benchmark tier, so that high-load mutations do not corrupt subsequent benchmark suites.*
-- [x] **US-CI-1032.1** (`Performance QA Specialist`): In `.github/workflows/ci.yml` Stage 3B, add a pre-benchmark snapshot step saving `backend/db.json` to `backend/db.json.bak`.
-- [x] **US-CI-1032.2** (`Performance QA Specialist`): In `.github/workflows/ci.yml` Stage 3B, add state restoration between sequential k6 benchmark runs (`catalog`, `inventory`, `journey`, `auth`, `checkout`), copying `backend/db.json.bak` back to `backend/db.json` and calling `POST /api/test/reset`.
-- [x] **US-CI-1032.3** (`Performance QA Specialist`): In `.github/workflows/perf-endurance.yml`, snapshot `backend/db.json` and restore state between the endurance soak test and the breakpoint saturation test.
+### User Story US-MOB-1112: CSRF Exemption for Bearer Token Requests
+*As an API Client using Bearer tokens, I want mutating requests (`POST`, `PUT`, `DELETE`) with valid Bearer tokens to be exempt from double-submit cookie CSRF checks, so that native mobile apps do not encounter 403 Forbidden errors when submitting mutations.*
+- [x] **US-MOB-1112.1** (`Backend Specialist`): Update `skipCsrfProtection` in `backend/src/app.ts` to exempt requests with non-empty `Authorization: Bearer <token>` headers (token length > 10).
+- [x] **US-MOB-1112.2** (`SDET Architect` & `Backend Specialist`): Add integration test verifying a mutating request (`POST /api/cart`) with Bearer token succeeds without `x-csrf-token` header, while cookie-only requests without CSRF token are rejected.
 
-### User Story US-CI-1033: Resilient Report Deployment & Staging Pre-Flight Checks
-*As a QA Lead / Engineering Manager, I want Allure and Monocart reports to deploy with correct URLs on all trigger events, and Docker staging sharding to verify target health before execution, so that GitHub Pages report links are never broken and cold-start timeouts on Render do not cause false-positive test failures.*
-- [x] **US-CI-1033.1** (`DevOps Automation Architect`): In `.github/workflows/playwright-ci.yml` (lines 491, 538), replace `${{ github.event.repository.name }}` with safe extraction `REPO_NAME="${GITHUB_REPOSITORY#*/}"` and `OWNER="${GITHUB_REPOSITORY%/*}"`.
-- [x] **US-CI-1033.2** (`DevOps Automation Architect`): In `.github/workflows/playwright-docker.yml` (lines 207, 254), replace `${{ github.event.repository.name }}` with safe extraction from `GITHUB_REPOSITORY`.
-- [x] **US-CI-1033.3** (`DevOps Automation Architect`): In `.github/workflows/playwright-on-demand.yml` (line 825), replace `${{ github.event.repository.name }}` with safe extraction from `GITHUB_REPOSITORY`.
-- [x] **US-CI-1033.4** (`DevOps Automation Architect`): In `.github/workflows/playwright-docker.yml` Job 1, add a pre-flight warm-up step pinging Render backend (`/api/books`) and frontend (`/`) with `curl` and `npx wait-on -t 90000` before running tests.
+### User Story US-MOB-1113: Expo Monorepo Workspace Scaffolding & Metro Bundler
+*As a Mobile Developer, I want a clean React Native + Expo TypeScript workspace initialized in `mobile/` with monorepo Metro resolution and unit test runner, so that the mobile app is integrated into the monorepo, can consume `@buggybooks/types`, and has test execution parity.*
+- [x] **US-MOB-1113.1** (`Mobile Developer`): Update root `package.json` to include `"mobile"` in `workspaces` and add scripts (`dev:mobile`, `lint:mobile`, `typecheck:mobile`, `test:mobile:unit`).
+- [x] **US-MOB-1113.2** (`Mobile Developer`): Create `mobile/package.json` with React 18.3.1, React Native 0.76.6, Expo SDK 52, `@buggybooks/types: "*"`, React Navigation 7, `expo-secure-store`, `expo-image-picker`, `expo-haptics`, `jest-expo`, `@testing-library/react-native`.
+- [x] **US-MOB-1113.3** (`Mobile Developer`): Configure `mobile/metro.config.js` with `watchFolders = [workspaceRoot]` and `nodeModulesPaths` prioritizing `mobile/node_modules`.
+- [x] **US-MOB-1113.4** (`Mobile Developer`): Configure `mobile/tsconfig.json` with React 18 type isolation paths.
+- [x] **US-MOB-1113.5** (`Mobile Developer`): Configure `mobile/app.json` with app name (`BuggyBooks`), scheme (`buggybooks`), and bundle identifier (`com.buggybooks.app`).
+- [x] **US-MOB-1113.6** (`Mobile Developer`): Scaffold `mobile/App.tsx` and unit test `mobile/__tests__/App.test.tsx`.
 
-### User Story US-CI-1034: Test Cataloging, Phase 10 Governance & Monorepo Validation
-*As a Quality Architect, I want the test cases catalog updated with Section 18 documenting Sprint 10.3 CI/CD & hermetic standards, and all monorepo checks passing cleanly.*
-- [x] **US-CI-1034.1** (`Principal SDET`): Author Section 18 in `specs/test_cases_catalog.md` (`TC-CICD-001`, `TC-PERF-ISOLATE-001`, `TC-REPORT-DEPLOY-001`, `TC-DOCKER-PREFLIGHT-001`).
-- [x] **US-CI-1034.2** (`DevOps Automation Architect`): Update `planning/Sprints/sprint_10_3_cicd_pipeline_hermetic_isolation_and_report_governance.md` and `planning/Phases/phase_10_e2e_automation_modernization_hermetic_cicd_and_test_governance.md`.
-- [x] **US-CI-1034.3** (`Security Officer`): Verify secret isolation, safe environment variables, and absence of credential leaks across updated workflows.
-- [x] **US-CI-1034.4** (`Product Owner`): Validate monorepo typecheck, linting, test suite execution, approve Definition of Done, and authorize release PR.
+### User Story US-MOB-1114: Test Cataloging, Governance & Quality Gate
+*As a Quality Architect, I want the test cases catalog updated with Section 19 documenting Sprint 11.1 dual-auth and mobile scaffolding standards, security audit sign-off, and full regression verification.*
+- [x] **US-MOB-1114.1** (`SDET Architect`): Author Section 19 in `specs/test_cases_catalog.md` (`TC-DUAL-AUTH-001`, `TC-REFRESH-BODY-001`, `TC-CSRF-BEARER-001`, `TC-AVATAR-BEARER-001`, `TC-EXPO-SCAFFOLD-001`).
+- [x] **US-MOB-1114.2** (`Security Champion`): Audit Bearer token extraction, CSRF bypass boundary, and secret isolation.
+- [x] **US-MOB-1114.3** (`QA Specialist`): Run backend Jest tests, frontend Vitest tests, and Playwright E2E smoke tests.
+- [x] **US-MOB-1114.4** (`Product Owner`): Validate monorepo typecheck, linting, test suite execution, approve Definition of Done, and authorize release PR.
 
 ---
 
@@ -56,25 +60,23 @@
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **Pre-Flight Architecture Gate** | Principal SDET | Playwright native managed `webServer` configured with readiness endpoints (`4000/api/books`, `5173`), 60s calibrated readiness timeouts, `reuseExistingServer: !process.env.CI`, and conditional `grepInvert` verified. | `[APPROVED]` |
-| **DevOps Pipeline Review** | DevOps Automation Architect | Removed brittle `nohup`/`wait-on`/`pkill` background shell scripts from `ci.yml`, `playwright-ci.yml`, and `quarantine-audit.yml`. Replaced fragile repository context interpolation across all workflow files. | `[APPROVED]` |
-| **Performance QA Gate** | Performance QA Specialist | Verified database state snapshotting and per-benchmark restoration logic across `ci.yml` Stage 3B and `perf-endurance.yml`. | `[APPROVED]` |
-| **Security Audit Gate** | Security Officer | Verified absence of credential exposure, safe variable substitution using `GITHUB_REPOSITORY`, and isolated secret parameters. | `[APPROVED]` |
-| **PO Acceptance Sign-off** | Product Owner | All 55 API tests pass under managed `webServer`. Monorepo typecheck and linting pass with 0 errors. Definition of Done fully satisfied; release PR authorized. | `[APPROVED]` |
+| **Pre-Flight Architecture Gate** | SDET Architect | Section 19 authored in `specs/test_cases_catalog.md` documenting dual-auth, CSRF exemption, and mobile scaffolding test cases. Contracts expanded in `@buggybooks/types`. | `[APPROVED]` |
+| **Backend & Security Gate** | Backend Specialist & Security Champion | Dual-auth token delivery and silent rotation verified. Bearer token extraction and CSRF exemption guarded against arbitrary bypass. Avatar filename properly attributed via authenticated user context. | `[APPROVED]` |
+| **Mobile Scaffolding Gate** | Mobile Developer | Metro bundler config verified for monorepo resolution. React 18 type isolation verified with 0 compiler errors. Mobile Jest unit test passing 100%. | `[APPROVED]` |
+| **Full Regression QA Gate** | QA Specialist | All 97 backend unit tests, 80 frontend component tests, 55 Playwright API tests, and Chromium UI smoke tests pass with 0 regressions. | `[APPROVED]` |
+| **PO Acceptance Sign-off** | Product Owner | All 3 user stories fully satisfy acceptance criteria. Definition of Done 100% compliant. Release PR authorized. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] Playwright `webServer` cleanly manages backend and frontend preview servers in CI and local workflows with readiness polling.
-- [x] Brittle `nohup ... &`, `wait-on`, and `pkill -f` steps removed from `ci.yml` and `playwright-ci.yml`.
-- [x] `quarantine-audit.yml` and `playwright.config.ts` align with `process.env.RUN_QUARANTINE ? undefined : /@quarantine/`.
-- [x] Database state is snapshotted and restored between sequential k6 performance benchmark runs in `ci.yml` Stage 3B.
-- [x] Database state isolation is established in `perf-endurance.yml`.
-- [x] Report deployment steps in `playwright-ci.yml`, `playwright-docker.yml`, and `playwright-on-demand.yml` extract repository info safely without relying on `github.event.repository.name`.
-- [x] Staging pre-flight warm-up step is established in `playwright-docker.yml` to prevent cold-start failures.
-- [x] Section 18 documented in `specs/test_cases_catalog.md`.
-- [x] Phase 10 planning and Sprint 10.3 documents updated with completed status.
-- [x] Monorepo `npm run typecheck` and `npm run lint` pass with 0 errors across all workspaces.
-- [x] All API test suites pass cleanly under `--project=api`.
-- [x] Feature branch committed with conventional commits, pushed to remote, and Pull Request raised via GitHub CLI: [#95](https://github.com/munna7862/buggy-books/pull/95).
+- [x] All 3 user stories implemented and reviewed against acceptance criteria.
+- [x] Backend Jest unit and integration tests pass with 100% success (`npm run test:backend`).
+- [x] Token refresh endpoint verified via JSON body payloads and cookie fallbacks with zero `undefined` values.
+- [x] Multer file naming verified with Bearer token authentication in `profile.test.ts`.
+- [x] Mutating requests with Bearer tokens verified to bypass CSRF without `x-csrf-token` header.
+- [x] Frontend Vitest component tests pass with 100% success (`npm run test:frontend`).
+- [x] Playwright web E2E smoke tests pass without regressions (`npm run test:e2e:local` or `npm run test:api`).
+- [x] `mobile/` compiles cleanly with zero TypeScript errors, resolves `@buggybooks/types`, and passes unit test suite (`npm run test:mobile:unit`).
+- [x] Section 19 documented in `specs/test_cases_catalog.md`.
+- [x] Feature branch committed with conventional commits, pushed to remote, and Pull Request raised via GitHub CLI (`gh pr create`).

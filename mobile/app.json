@@ -1,0 +1,26 @@
+{
+  "expo": {
+    "name": "BuggyBooks",
+    "slug": "buggybooks",
+    "version": "1.0.0",
+    "orientation": "default",
+    "userInterfaceStyle": "dark",
+    "scheme": "buggybooks",
+    "splash": {
+      "backgroundColor": "#121826"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.buggybooks.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#121826"
+      },
+      "package": "com.buggybooks.app"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}

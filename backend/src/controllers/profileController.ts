@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
-import jwt from 'jsonwebtoken';
-import { config, JWT_SECRET } from '../config';
+import { config } from '../config';
 import { profileService } from '../services/profile.service';
 import { BadRequestError } from '../errors/app-error';
 import { sessionStorageContext } from '../data/storage';
@@ -20,18 +19,7 @@ const storageEngine = multer.diskStorage({
     cb(null, UPLOADS_DIR);
   },
   filename: (req, file, cb) => {
-    let username = 'anonymous';
-    try {
-      const token = req.cookies?.token;
-      if (token) {
-        const decoded = jwt.verify(token, JWT_SECRET) as { username?: string };
-        if (decoded?.username) {
-          username = decoded.username;
-        }
-      }
-    } catch {
-      // fallback
-    }
+    const username = (req as Request).user?.username || 'anonymous';
     const ext = path.extname(file.originalname).toLowerCase();
     cb(null, `${username}-${Date.now()}${ext}`);
   }

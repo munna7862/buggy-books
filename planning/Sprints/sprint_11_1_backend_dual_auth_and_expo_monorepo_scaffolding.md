@@ -28,14 +28,14 @@
   *So that* native mobile clients can securely authenticate, silently rotate tokens, and upload profile assets without browser cookies.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
-  - [ ] Modify `backend/src/services/auth.service.ts`:
+  - [x] Modify `backend/src/services/auth.service.ts`:
     - Update `refresh(refreshToken?: string)` to verify the token, generate a refreshed access token and a refreshed rotation token, and return `{ token: newToken, refreshToken: newRefreshToken, username }`.
-  - [ ] Modify `backend/src/controllers/authController.ts`:
+  - [x] Modify `backend/src/controllers/authController.ts`:
     - On `login`, return `{ message, username, token, refreshToken }`.
     - On `register`, return `{ message, username, token, refreshToken }`.
     - On `refresh`, accept `req.body.refreshToken` (or fallback to `req.cookies?.refreshToken`), invoke `authService.refresh`, pass valid tokens to `setAuthCookies(res, result.token, result.refreshToken)`, and return `{ success: true, username, token, refreshToken }`.
     - Continue setting `httpOnly` cookies via `setAuthCookies(res, token, refreshToken)` for web backward compatibility.
-  - [ ] Modify `backend/src/routes/api.ts` in `authenticateToken`:
+  - [x] Modify `backend/src/routes/api.ts` in `authenticateToken`:
     - Read `req.headers.authorization`. If it starts with `Bearer `, verify and extract user.
     - If `Authorization` header is not present, fall back to `req.cookies?.token`.
     - If neither is valid, return `401 Unauthorized`.
@@ -46,22 +46,22 @@
         store.username = user.username;
       }
       ```
-  - [ ] Expand contracts in `shared/types/` (`auth.types.d.ts` and `index.d.ts`):
+  - [x] Expand contracts in `shared/types/` (`auth.types.d.ts` and `index.d.ts`):
     - Export `AuthUser` (`{ username: string; type: 'access' }`).
     - Export `AuthTokensResponse` (`{ message?: string; success?: boolean; username: string; token: string; refreshToken: string }`).
     - Export `UserProfile` (`{ username: string; fullName?: string; avatarUrl?: string }`).
-  - [ ] Modify `backend/src/controllers/profileController.ts` in `storageEngine.filename`:
+  - [x] Modify `backend/src/controllers/profileController.ts` in `storageEngine.filename`:
     - Since `authenticateToken` middleware executes before `handleAvatarUpload` and populates `req.user`, directly leverage `(req as Request).user?.username || 'anonymous'`, ensuring mobile avatar uploads save as `<username>-<timestamp>.ext` cleanly without redundant JWT decoding.
-  - [ ] Add unit and integration tests in `backend/src/__tests__/auth.test.ts` and `profile.test.ts` verifying:
+  - [x] Add unit and integration tests in `backend/src/__tests__/auth.test.ts` and `profile.test.ts` verifying:
     - Bearer header authentication on protected routes (`/api/cart`, `/api/profile`).
     - Body-based token refresh (`POST /api/auth/refresh` with `{ refreshToken }`) returning rotated tokens.
     - Avatar upload with Bearer token saves filename with authenticated username.
     - Existing cookie-based web auth flows remain 100% green.
 - **Acceptance Criteria**:
-  - [ ] Sending valid `Authorization: Bearer <jwt>` grants access to protected routes.
-  - [ ] Sending valid `refreshToken` in request body returns new `token` and `refreshToken` pair in JSON.
-  - [ ] Avatar uploads with Bearer token name files with authenticated user ID.
-  - [ ] Existing cookie-based web requests continue to function identically.
+  - [x] Sending valid `Authorization: Bearer <jwt>` grants access to protected routes.
+  - [x] Sending valid `refreshToken` in request body returns new `token` and `refreshToken` pair in JSON.
+  - [x] Avatar uploads with Bearer token name files with authenticated user ID.
+  - [x] Existing cookie-based web requests continue to function identically.
 
 ---
 
@@ -72,7 +72,7 @@
   *So that* native mobile apps do not encounter 403 Forbidden errors when submitting mutations.
 - **Story Points**: 1 SP
 - **Technical Subtasks**:
-  - [ ] Update `skipCsrfProtection` in `backend/src/app.ts`:
+  - [x] Update `skipCsrfProtection` in `backend/src/app.ts`:
     ```typescript
     skipCsrfProtection: (req) => {
       // Allow Bearer token requests to bypass CSRF (mobile native clients)
@@ -82,10 +82,10 @@
       ...
     }
     ```
-  - [ ] Add integration test verifying a `POST /api/cart` request with Bearer token succeeds without `x-csrf-token` header.
+  - [x] Add integration test verifying a `POST /api/cart` request with Bearer token succeeds without `x-csrf-token` header.
 - **Acceptance Criteria**:
-  - [ ] Bearer-authenticated mutations succeed without requiring CSRF cookies or headers.
-  - [ ] Cookie-authenticated web requests still require valid CSRF tokens.
+  - [x] Bearer-authenticated mutations succeed without requiring CSRF cookies or headers.
+  - [x] Cookie-authenticated web requests still require valid CSRF tokens.
 
 ---
 
@@ -96,9 +96,9 @@
   *So that* the mobile app is integrated into the monorepo, can consume `@buggybooks/types`, and has test execution parity.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
-  - [ ] Update root `package.json` to include `"mobile"` in the `workspaces` array.
-  - [ ] Scaffold `mobile/` with Expo SDK 52+, React Native 0.76+, and TypeScript.
-  - [ ] Configure `mobile/metro.config.js` for npm workspaces:
+  - [x] Update root `package.json` to include `"mobile"` in the `workspaces` array.
+  - [x] Scaffold `mobile/` with Expo SDK 52+, React Native 0.76+, and TypeScript.
+  - [x] Configure `mobile/metro.config.js` for npm workspaces:
     ```javascript
     const { getDefaultConfig } = require('expo/metro-config');
     const path = require('path');
@@ -113,37 +113,37 @@
     config.resolver.disableHierarchicalLookup = true;
     module.exports = config;
     ```
-  - [ ] Configure `mobile/package.json` with dependencies, explicit package name (`"name": "mobile"`), and unit test runner:
+  - [x] Configure `mobile/package.json` with dependencies, explicit package name (`"name": "mobile"`), and unit test runner:
     - Package Name: `"name": "mobile"`
     - Dependencies: `"react": "18.3.1"`, `"react-native": "0.76.6"`, `"expo": "~52.0.0"`, `"@buggybooks/types": "*"`, `"@react-navigation/native": "^7.0.0"`, `"@react-navigation/native-stack": "^7.0.0"`, `"@react-navigation/bottom-tabs": "^7.0.0"`, `"expo-secure-store": "~14.0.0"`, `"expo-image-picker": "~16.0.0"`, `"expo-haptics": "~14.0.0"`
     - Note on React Isolation: Pin React 18.3.1 strictly in `mobile/package.json`. Metro's `nodeModulesPaths` resolves `mobile/node_modules` first, ensuring complete isolation from the frontend's React 19.
     - DevDependencies: `"jest": "^29.2.1"`, `"jest-expo": "~52.0.0"`, `"@testing-library/react-native": "^12.0.0"`, `"react-test-renderer": "18.3.1"`, `"typescript": "^5.3.0"`
     - Scripts: `"test": "jest"`, `"lint": "eslint ."`
-  - [ ] Configure `mobile/tsconfig.json` for React 18 type isolation:
+  - [x] Configure `mobile/tsconfig.json` for React 18 type isolation:
     - Set `"typeRoots": ["./node_modules/@types"]` and configure `"paths": { "react": ["./node_modules/react"], "@types/react": ["./node_modules/@types/react"] }` so that `npx tsc` resolves React 18 types locally rather than traversing upward to root `node_modules` (which contains frontend's React 19 types).
-  - [ ] Configure `app.json` with app name (`BuggyBooks`), bundle identifier (`com.buggybooks.app`), and `"orientation": "default"`.
-  - [ ] Add root npm scripts:
+  - [x] Configure `app.json` with app name (`BuggyBooks`), bundle identifier (`com.buggybooks.app`), and `"orientation": "default"`.
+  - [x] Add root npm scripts:
     - `"dev:mobile": "npm start --workspace=mobile"`
     - `"lint:mobile": "npm run lint --workspace=mobile"`
     - `"typecheck:mobile": "npx tsc --noEmit -p mobile/tsconfig.json"`
     - `"test:mobile:unit": "npm test --workspace=mobile"`
 - **Acceptance Criteria**:
-  - [ ] `npm run install:all` cleanly provisions all monorepo dependencies including `mobile/`.
-  - [ ] `npm run typecheck:mobile` validates types without errors.
-  - [ ] `npm run test:mobile:unit` executes successfully.
-  - [ ] Metro bundler resolves `@buggybooks/types` without module resolution exceptions.
+  - [x] `npm run install:all` cleanly provisions all monorepo dependencies including `mobile/`.
+  - [x] `npm run typecheck:mobile` validates types without errors.
+  - [x] `npm run test:mobile:unit` executes successfully.
+  - [x] Metro bundler resolves `@buggybooks/types` without module resolution exceptions.
 
 ---
 
 ## 3. Definition of Done (DoD)
 
-- [ ] All 3 user stories implemented and reviewed against acceptance criteria.
-- [ ] Backend Jest unit and integration tests pass with 100% success (`npm run test:backend`).
-- [ ] Token refresh endpoint verified via JSON body payloads and cookie fallbacks with zero `undefined` values.
-- [ ] Multer file naming verified with Bearer token authentication in `profile.test.ts`.
-- [ ] Frontend Vitest component tests pass with 100% success (`npm run test:frontend`).
-- [ ] Playwright web E2E smoke tests pass without regressions (`npm run test:e2e:local`).
-- [ ] `mobile/` compiles cleanly with zero TypeScript errors, resolves `@buggybooks/types`, and passes unit test suite (`npm run test:mobile:unit`).
+- [x] All 3 user stories implemented and reviewed against acceptance criteria.
+- [x] Backend Jest unit and integration tests pass with 100% success (`npm run test:backend`).
+- [x] Token refresh endpoint verified via JSON body payloads and cookie fallbacks with zero `undefined` values.
+- [x] Multer file naming verified with Bearer token authentication in `profile.test.ts`.
+- [x] Frontend Vitest component tests pass with 100% success (`npm run test:frontend`).
+- [x] Playwright web E2E smoke tests pass without regressions (`npm run test:e2e:local`).
+- [x] `mobile/` compiles cleanly with zero TypeScript errors, resolves `@buggybooks/types`, and passes unit test suite (`npm run test:mobile:unit`).
 
 ---
 
