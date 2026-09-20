@@ -40,6 +40,12 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Add Android SDK tools to PATH
+        run: |
+          echo "$ANDROID_HOME/platform-tools" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_HOME/emulator" >> $GITHUB_PATH
+
       - name: Set up Java 17
         uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
         with:
@@ -87,12 +93,6 @@ jobs:
           nohup npx expo start --localhost > metro.log 2>&1 &
           npx wait-on -t 30000 http://127.0.0.1:8081 || true
 
-      - name: Prepare & Start ADB Server
-        run: |
-          adb kill-server || true
-          adb start-server
-          adb devices
-
       - name: Run Android Emulator & Maestro Tests
         uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
@@ -104,6 +104,7 @@ jobs:
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           script: |
+            adb devices
             # 1. Reverse backend and metro ports so emulator bridges directly to host
             adb reverse tcp:4000 tcp:4000
             adb reverse tcp:8081 tcp:8081
