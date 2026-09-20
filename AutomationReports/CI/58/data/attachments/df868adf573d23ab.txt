@@ -1,0 +1,16 @@
+[2026-09-20 15:39:06] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789884546808-33a5453d
+[2026-09-20 15:39:06] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-20 15:39:07] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-20 15:39:07] INFO: Clicking on book title link for book ID: 2
+[2026-09-20 15:39:08] INFO: Verifying book detail URL - Condition met (true)
+[2026-09-20 15:39:08] INFO: Getting book detail title
+[2026-09-20 15:39:08] INFO: Verifying book detail title - Matched: [To Kill a Mockingbird Exception]
+[2026-09-20 15:39:08] INFO: Getting book detail author
+[2026-09-20 15:39:08] INFO: Verifying book detail author - Matched: [by Harper Lee]
+[2026-09-20 15:39:08] INFO: Getting book detail price
+[2026-09-20 15:39:08] INFO: Verifying book detail price - Matched: [$15.50]
+[2026-09-20 15:39:08] INFO: Getting book detail description
+[2026-09-20 15:39:08] INFO: Verifying book detail description - Matched: [A coming-of-age tale with unhandled exceptions.]
+[2026-09-20 15:39:08] INFO: Clicking Back to Catalog link
+[2026-09-20 15:39:08] INFO: Verifying back to catalog URL - Condition met (true)
+[2026-09-20 15:39:08] INFO: Cleaned up ephemeral test session: pw-w4-3-1789884546808-33a5453d

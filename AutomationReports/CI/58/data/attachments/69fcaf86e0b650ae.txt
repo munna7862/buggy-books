@@ -1,0 +1,2 @@
+[2026-09-20 15:39:10] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-20 15:39:10] INFO:  Unsupported login content type status Success !! Actual and Expected Values are:: true

@@ -1,0 +1,45 @@
+[2026-09-20 15:39:22] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789884562042-32479d79
+[2026-09-20 15:39:22] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-20 15:39:22] INFO: Clicking on Sign Up link
+[2026-09-20 15:39:23] INFO: Entering full name: E2E Test User
+[2026-09-20 15:39:23] INFO: Entering username: e2e_customer_1789884562161_e2726ebb
+[2026-09-20 15:39:23] INFO: Entering password: Password123!
+[2026-09-20 15:39:23] INFO: Entering confirming password: Password123!
+[2026-09-20 15:39:23] INFO: Clicking on Create Account button
+[2026-09-20 15:39:24] INFO: Verifying landing on Checkout Page
+[2026-09-20 15:39:24] INFO: Checking if Checkout label is visible
+[2026-09-20 15:39:24] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-20 15:39:24] INFO: Verifying new user registered and logged in successfully - Matched: [true]
+[2026-09-20 15:39:24] INFO: Clicking on Catalog link
+[2026-09-20 15:39:24] INFO: Filling search input with: Mockingbird
+[2026-09-20 15:39:24] INFO: Clicking Search button
+[2026-09-20 15:39:24] INFO: Getting catalog result count text
+[2026-09-20 15:39:25] INFO: Verifying catalog search results for 'Mockingbird' - Condition met (true)
+[2026-09-20 15:39:25] INFO: Clicking on book title link for book ID: 2
+[2026-09-20 15:39:25] INFO: Getting book detail title
+[2026-09-20 15:39:25] INFO: Getting book detail price
+[2026-09-20 15:39:25] INFO: Verifying book detail title and price are displayed - Condition met (true)
+[2026-09-20 15:39:25] INFO: Clicking Add to Cart button on Book Detail page
+[2026-09-20 15:39:25] INFO: Waiting for cart status message: added to cart
+[2026-09-20 15:39:25] INFO: Cart status message "added to cart" is visible
+[2026-09-20 15:39:25] INFO: Clicking on Cart link
+[2026-09-20 15:39:25] INFO: Getting cart item text
+[2026-09-20 15:39:25] INFO: Getting cart total text
+[2026-09-20 15:39:25] INFO: Verifying cart contains item and order total - Condition met (true)
+[2026-09-20 15:39:25] INFO: Clicking on Proceed to Checkout button
+[2026-09-20 15:39:25] INFO: Entering first name: Alex
+[2026-09-20 15:39:26] INFO: Entering last name: Rivera
+[2026-09-20 15:39:26] INFO: Entering shipping address: 123 Buggy Lane
+[2026-09-20 15:39:26] INFO: Entering city: Stack City
+[2026-09-20 15:39:26] INFO: Clicking on Next Step button
+[2026-09-20 15:39:26] INFO: Entering card number
+[2026-09-20 15:39:26] INFO: Entering card expiry: 12/30
+[2026-09-20 15:39:26] INFO: Entering card CVV: 123
+[2026-09-20 15:39:26] INFO: Checking if Next Step button is visible - Element is visible
+[2026-09-20 15:39:26] INFO: Clicking on Next Step button on Payment page
+[2026-09-20 15:39:26] INFO: Waiting for confirmation message containing: Order placed successfully
+[2026-09-20 15:39:26] INFO: Payment completed successfully and order confirmation message is displayed.
+[2026-09-20 15:39:26] INFO: Clicking on Logout button
+[2026-09-20 15:39:27] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-20 15:39:27] INFO: Verifying user logged out successfully after completing order - Matched: [true]
+[2026-09-20 15:39:27] INFO: Cleaned up ephemeral test session: pw-w3-2-1789884562042-32479d79
