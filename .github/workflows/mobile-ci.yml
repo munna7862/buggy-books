@@ -75,7 +75,7 @@ jobs:
         run: ./gradlew assembleDebug --no-daemon
 
       - name: Run Android Emulator & Maestro Tests
-        uses: reactivecircus/android-emulator-runner@d94c3fbe4fe6a29e4ab5ba84646633a2c53a693c # v2.33.0
+        uses: reactivecircus/android-emulator-runner@62dbb605bba737720e10b196cb4220d374026a6d # v2.33.0
         with:
           api-level: 34
           target: google_apis
