@@ -1,0 +1,5 @@
+[2026-09-20 19:12:33] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789897353671-6e2d36db
+[2026-09-20 19:12:33] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-09-20 19:12:34] INFO: Total Books displayed in Catalog page are: 8
+[2026-09-20 19:12:34] INFO: Verifying initial catalog book count - Matched: [8]
+[2026-09-20 19:12:34] INFO: Cleaned up ephemeral test session: pw-w4-3-1789897353671-6e2d36db
