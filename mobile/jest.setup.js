@@ -40,7 +40,13 @@ jest.mock('expo-haptics', () => ({
     Medium: 'medium',
     Heavy: 'heavy',
   },
+  NotificationFeedbackType: {
+    Success: 'success',
+    Warning: 'warning',
+    Error: 'error',
+  },
 }));
+
 
 // Mock @expo/vector-icons
 jest.mock('@expo/vector-icons', () => ({
@@ -100,3 +106,37 @@ jest.mock('react-native-safe-area-context', () => {
     useSafeAreaInsets: () => inset,
   };
 });
+
+// Mock expo-image-picker
+jest.mock('expo-image-picker', () => ({
+  requestCameraPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted', granted: true }),
+  requestMediaLibraryPermissionsAsync: jest.fn().mockResolvedValue({ status: 'granted', granted: true }),
+  launchCameraAsync: jest.fn().mockResolvedValue({
+    canceled: false,
+    assets: [
+      {
+        uri: 'file:///mock/camera/photo.jpg',
+        fileName: 'photo.jpg',
+        mimeType: 'image/jpeg',
+        fileSize: 500000,
+      },
+    ],
+  }),
+  launchImageLibraryAsync: jest.fn().mockResolvedValue({
+    canceled: false,
+    assets: [
+      {
+        uri: 'file:///mock/library/avatar.png',
+        fileName: 'avatar.png',
+        mimeType: 'image/png',
+        fileSize: 400000,
+      },
+    ],
+  }),
+  MediaTypeOptions: {
+    Images: 'Images',
+    All: 'All',
+    Videos: 'Videos',
+  },
+}));
+
