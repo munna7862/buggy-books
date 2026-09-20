@@ -88,7 +88,7 @@
 - **Technical Subtasks**:
   - [x] Create `.github/workflows/mobile-ci.yml`:
     - Strict path triggers: `mobile/**`, `mobile-automation/**`, `.github/workflows/mobile-ci.yml`, nightly cron, or manual dispatch (`workflow_dispatch`).
-    - Runner: `macos-latest` (Apple Silicon hardware-accelerated virtualization).
+    - Runner: `ubuntu-latest` (Linux KVM hardware-accelerated virtualization).
     - Set up Java 17:
       ```yaml
       - name: Set up Java 17

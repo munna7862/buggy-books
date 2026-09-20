@@ -27,12 +27,18 @@ permissions:
 jobs:
   maestro-android:
     name: Headless Android Emulator & Maestro E2E
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 35
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+
+      - name: Enable KVM group perms
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
 
       - name: Set up Java 17
         uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
@@ -92,9 +98,8 @@ jobs:
         with:
           api-level: 31
           target: google_apis
-          arch: arm64-v8a
+          arch: x86_64
           profile: pixel_6
-          cores: 3
           emulator-boot-timeout: 600
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
