@@ -1,0 +1,40 @@
+{
+  "name": "mobile-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Appium + WebdriverIO + TypeScript Mobile Automation Framework for BuggyBooks",
+  "main": "index.js",
+  "scripts": {
+    "driver:android": "appium driver install uiautomator2",
+    "driver:ios": "appium driver install xcuitest",
+    "test:android": "wdio run src/config/wdio.android.conf.ts",
+    "test:ios": "wdio run src/config/wdio.ios.conf.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "report:allure": "allure generate reports/allure-results --clean -o reports/allure-report",
+    "clean": "rimraf reports logs"
+  },
+  "dependencies": {
+    "@buggybooks/types": "*",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.17.0",
+    "@wdio/allure-reporter": "^9.3.9",
+    "@wdio/appium-service": "^9.3.9",
+    "@wdio/cli": "^9.3.9",
+    "@wdio/local-runner": "^9.3.9",
+    "@wdio/mocha-framework": "^9.3.9",
+    "@wdio/spec-reporter": "^9.3.9",
+    "@wdio/types": "^9.3.9",
+    "allure-commandline": "^2.32.0",
+    "allure-js-commons": "^3.4.1",
+    "appium": "^2.16.1",
+    "eslint": "^9.20.0",
+    "rimraf": "^5.0.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.0",
+    "webdriverio": "^9.3.9"
+  }
+}

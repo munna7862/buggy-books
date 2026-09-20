@@ -67,6 +67,7 @@ export function AppTabNavigator() {
         options={{
           title: 'Catalog',
           headerShown: false,
+          tabBarButtonTestID: 'tab_catalog',
         }}
       />
       <TabScreen
@@ -75,6 +76,7 @@ export function AppTabNavigator() {
         options={{
           title: 'Cart',
           headerShown: false,
+          tabBarButtonTestID: 'tab_cart',
           tabBarBadge: cartCount > 0 ? cartCount : undefined,
           tabBarBadgeStyle: {
             backgroundColor: '#ef4444',
@@ -90,6 +92,7 @@ export function AppTabNavigator() {
         options={{
           title: 'Profile',
           headerTitle: 'My Profile',
+          tabBarButtonTestID: 'tab_profile',
         }}
       />
       <TabScreen
@@ -98,6 +101,7 @@ export function AppTabNavigator() {
         options={{
           title: 'Chaos',
           headerTitle: 'Chaos Control',
+          tabBarButtonTestID: 'tab_chaos',
         }}
       />
     </TabNavigator>
