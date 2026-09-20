@@ -1,7 +1,0 @@
-[2026-09-16 16:38:38] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789542518698-f55acab0
-[2026-09-16 16:38:38] INFO:  Legacy equality comparison Success !! Actual and Expected Values are:: alpha
-[2026-09-16 16:38:38] INFO: Verifying legacy compareTwoValues returns true - Matched: [true]
-[2026-09-16 16:38:38] ERROR:  Legacy inequality comparison Failed!! Expected Value:: beta || Actual Value:: alpha
-[2026-09-16 16:38:38] ERROR:  Legacy inequality comparison Failed!! Expected Value:: beta || Actual Value:: alpha
-[2026-09-16 16:38:38] INFO: Verifying legacy compareTwoValues returns false on mismatch - Matched: [false]
-[2026-09-16 16:38:38] INFO: Cleaned up ephemeral test session: pw-w4-3-1789542518698-f55acab0
