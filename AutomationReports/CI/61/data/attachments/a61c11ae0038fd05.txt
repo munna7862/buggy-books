@@ -1,0 +1,17 @@
+[2026-09-20 16:41:33] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1789888293806-da61f8cd
+[2026-09-20 16:41:34] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-20 16:41:34] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-20 16:41:34] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-20 16:41:34] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-20 16:41:34] INFO: Verifying direct navigation to /checkout redirects to /login and Login page elements are fully loaded - Condition met (true)
+[2026-09-20 16:41:35] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-20 16:41:35] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-20 16:41:35] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-20 16:41:35] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-20 16:41:35] INFO: Verifying direct navigation to /profile redirects to /login and Login page elements are fully loaded - Condition met (true)
+[2026-09-20 16:41:35] INFO: Checking if Login page title is visible - Element is visible
+[2026-09-20 16:41:35] INFO: Checking if Username input field is visible on Login page - Element is visible
+[2026-09-20 16:41:35] INFO: Checking if Password input field is visible on Login page - Element is visible
+[2026-09-20 16:41:35] INFO: Checking if Sign In button is visible on Login page - Element is visible
+[2026-09-20 16:41:35] INFO: Verifying direct navigation to /cart redirects to /login and Login page elements are fully loaded - Condition met (true)
+[2026-09-20 16:41:35] INFO: Cleaned up ephemeral test session: pw-w3-2-1789888293806-da61f8cd

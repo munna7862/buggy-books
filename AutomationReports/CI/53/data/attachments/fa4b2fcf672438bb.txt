@@ -1,3 +1,0 @@
-[2026-09-17 16:35:47] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1789628747142-7a122845
-[2026-09-17 16:35:49] INFO: Verifying zero image-alt and label violations in standard compliance mode - Matched: [0]
-[2026-09-17 16:35:49] INFO: Cleaned up ephemeral test session: pw-w1-0-1789628747142-7a122845

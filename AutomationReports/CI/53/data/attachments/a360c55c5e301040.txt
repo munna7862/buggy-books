@@ -1,3 +1,0 @@
-[2026-09-17 16:35:47] INFO:  Status code should be 200 for Minimum limit Success !! Actual and Expected Values are:: 200
-[2026-09-17 16:35:47] INFO:  Response page should be 1 for Minimum limit Success !! Actual and Expected Values are:: 1
-[2026-09-17 16:35:47] INFO:  Books array length should be less than or equal to limit 1 Success !! Actual and Expected Values are:: true
