@@ -29,17 +29,17 @@
   *So that* my automated test scripts must utilize advanced locator chaining, scrolling, and keyboard management rather than trivial IDs.
 - **Story Points**: 2 SP
 - **Technical Subtasks**:
-  - [ ] **MOB-B1: Obfuscated Locators**:
+  - [x] **MOB-B1: Obfuscated Locators**:
     - Refactor Login/Register inputs to use dynamic or obfuscated testIDs: `testID="txt_usr_77"`, `testID="txt_pwd_99"`.
     - Catalog book card buttons use computed testIDs (e.g. `testID={`btn_item_${book.id}_add`}`).
     - Checkout form inputs use non-semantic labels: `testID="txt_f1"`, `testID="txt_l1"`, `testID="txt_c99"`.
-  - [ ] **MOB-B2: Keyboard Occlusion on Checkout**:
+  - [x] **MOB-B2: Keyboard Occlusion on Checkout**:
     - Omit `KeyboardAvoidingView` on `CheckoutScreen`.
     - When user focuses credit card input on standard portrait phones, soft keyboard covers the "Place Order" CTA button.
     - Automation must execute `driver.hideKeyboard()` (Android), tap outside the form (iOS), or perform upward drag gestures to reveal the CTA button.
 - **Acceptance Criteria**:
-  - [ ] Standard element queries without proper scrolling fail when the keyboard is open.
-  - [ ] Explicit keyboard dismissal or upward scroll reveals the CTA button.
+  - [x] Standard element queries without proper scrolling fail when the keyboard is open.
+  - [x] Explicit keyboard dismissal or upward scroll reveals the CTA button.
 
 ---
 
@@ -50,17 +50,17 @@
   *So that* automation scripts must implement dynamic waiting and retry/backoff strategies.
 - **Story Points**: 1.5 SP
 - **Technical Subtasks**:
-  - [ ] **MOB-B3: Dynamic Add-to-Cart Delay**:
+  - [x] **MOB-B3: Dynamic Add-to-Cart Delay**:
     - In `BookDetailScreen` and `CatalogScreen`, clicking "Add to Cart" simulates processing latency by imposing a randomized `setTimeout` between 500ms and 3500ms before dispatching the API request and animating the cart badge.
     - Disable button and display subtle loading state during timeout to prevent unintended double-submits while challenging explicit assertion waits.
-  - [ ] **MOB-B4: Stochastic Gateway Timeout Handling**:
+  - [x] **MOB-B4: Stochastic Gateway Timeout Handling**:
     - `POST /api/checkout/process` returns HTTP 500 when `checkoutFailureRate` is set (e.g. 15% via `POST /api/test/config { "checkoutFailureRate": 0.15 }`; defaults to 0.0 on backend restart).
     - Note that `checkoutService.ts` throws before `dataStore.clearCart()`, preserving cart contents upon error.
     - On mobile, display a distinct in-screen error banner (`testID="banner_checkout_error"`) with a "Retry Payment" CTA button (`testID="btn_retry_payment"`).
     - Automation must detect the error banner and tap "Retry Payment" up to 3 times to achieve success without re-adding items.
 - **Acceptance Criteria**:
-  - [ ] Add-to-cart requires explicit wait for badge update rather than static sleep.
-  - [ ] Checkout failure displays clear in-screen retry banner allowing recovery without modal locking.
+  - [x] Add-to-cart requires explicit wait for badge update rather than static sleep.
+  - [x] Checkout failure displays clear in-screen retry banner allowing recovery without modal locking.
 
 ---
 
@@ -71,28 +71,28 @@
   *So that* my automation suites can test offline recovery and multi-orientation snapshots.
 - **Story Points**: 1.5 SP
 - **Technical Subtasks**:
-  - [ ] **MOB-B5: Simulated Network Interruption**:
+  - [x] **MOB-B5: Simulated Network Interruption**:
     - Add a toggle in `ChaosScreen` to simulate offline mode.
     - When active, API client simulates network timeout (`ECONNABORTED`), rendering a top floating `OfflineBanner`.
-  - [ ] **MOB-B6: Orientation Layout Shift**:
+  - [x] **MOB-B6: Orientation Layout Shift**:
     - Ensure `app.json` has `"orientation": "default"` enabled to allow landscape rotation.
     - When rotating device to landscape on `CheckoutScreen`, the bottom navigation bar overlaps the submit section unless layout responds to orientation changes.
     - For Android emulators in CI, configure `adb shell settings put system accelerometer_rotation 1` so system auto-rotation allows landscape orientation.
-  - [ ] Document all mobile anti-patterns (MOB-B1 to MOB-B6) in `intentional_bugs.md` with SEC and PO review, aligned with automated test scenarios `MOB_E2E_01` to `MOB_E2E_06`.
+  - [x] Document all mobile anti-patterns (MOB-B1 to MOB-B6) in `intentional_bugs.md` with SEC and PO review, aligned with automated test scenarios `MOB_E2E_01` to `MOB_E2E_06`.
 - **Acceptance Criteria**:
-  - [ ] Toggling simulated offline mode displays the offline banner and catches requests gracefully.
-  - [ ] Landscape rotation skews layout and triggers MOB-B6 as intended.
-  - [ ] `intentional_bugs.md` contains complete catalog of mobile bugs with detection instructions.
+  - [x] Toggling simulated offline mode displays the offline banner and catches requests gracefully.
+  - [x] Landscape rotation skews layout and triggers MOB-B6 as intended.
+  - [x] `intentional_bugs.md` contains complete catalog of mobile bugs with detection instructions.
 
 ---
 
 ## 3. Definition of Done (DoD)
 
-- [ ] Anti-patterns MOB-B1 through MOB-B6 implemented cleanly in the mobile codebase.
-- [ ] [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md) updated with a dedicated "Mobile Testing Challenges" section.
-- [ ] Mobile app functions normally for human testers while providing challenging automation targets.
-- [ ] Security Champion (SEC) signs off on anti-pattern implementations.
-- [ ] TypeScript compilation passes with zero errors (`npm run typecheck:mobile`).
+- [x] Anti-patterns MOB-B1 through MOB-B6 implemented cleanly in the mobile codebase.
+- [x] [intentional_bugs.md](file:///c:/BuggyBooks/buggy-books/intentional_bugs.md) updated with a dedicated "Mobile Testing Challenges" section.
+- [x] Mobile app functions normally for human testers while providing challenging automation targets.
+- [x] Security Champion (SEC) signs off on anti-pattern implementations.
+- [x] TypeScript compilation passes with zero errors (`npm run typecheck:mobile`).
 
 ---
 

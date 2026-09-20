@@ -34,10 +34,12 @@ export function BookDetailScreen({ route }: BookDetailScreenProps) {
   const [isAdding, setIsAdding] = useState(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
   const feedbackTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+  const addTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
       if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
+      if (addTimerRef.current) clearTimeout(addTimerRef.current);
     };
   }, []);
 
@@ -52,13 +54,6 @@ export function BookDetailScreen({ route }: BookDetailScreenProps) {
     }
   }, [bookId, initialBook]);
 
-  const handleDecrease = () => {
-    if (quantity > 1) {
-      setQuantity((q) => q - 1);
-      Haptics.selectionAsync?.()?.catch?.(() => {});
-    }
-  };
-
   const handleIncrease = () => {
     const maxStock = book?.stock !== undefined ? book.stock : 10;
     if (quantity < maxStock) {
@@ -67,21 +62,34 @@ export function BookDetailScreen({ route }: BookDetailScreenProps) {
     }
   };
 
+  const handleDecrease = () => {
+    if (quantity > 1) {
+      setQuantity((q) => q - 1);
+      Haptics.selectionAsync?.()?.catch?.(() => {});
+    }
+  };
+
   const handleAddToCart = async () => {
-    if (!book) return;
+    if (!book || isAdding) return;
     setIsAdding(true);
     Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Medium)?.catch?.(() => {});
 
-    try {
-      await addToCart(book.id, quantity);
-      setFeedbackMessage(`Added ${quantity} ${quantity === 1 ? 'copy' : 'copies'} to your cart!`);
-      if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
-      feedbackTimerRef.current = setTimeout(() => setFeedbackMessage(null), 3500);
-    } catch {
-      setFeedbackMessage('Failed to add book to cart.');
-    } finally {
-      setIsAdding(false);
-    }
+    // MOB-B3: Dynamic Add-to-Cart delay (500ms - 3500ms, 0ms in test environment)
+    const dynamicDelay = process.env.NODE_ENV === 'test' ? 0 : Math.floor(Math.random() * 3000) + 500;
+
+    if (addTimerRef.current) clearTimeout(addTimerRef.current);
+    addTimerRef.current = setTimeout(async () => {
+      try {
+        await addToCart(book.id, quantity);
+        setFeedbackMessage(`Added ${quantity} ${quantity === 1 ? 'copy' : 'copies'} to your cart!`);
+        if (feedbackTimerRef.current) clearTimeout(feedbackTimerRef.current);
+        feedbackTimerRef.current = setTimeout(() => setFeedbackMessage(null), 3500);
+      } catch {
+        setFeedbackMessage('Failed to add book to cart.');
+      } finally {
+        setIsAdding(false);
+      }
+    }, dynamicDelay);
   };
 
 

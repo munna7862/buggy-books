@@ -91,3 +91,49 @@ When enabled via `/api/test/config`, these flags introduce deliberate layout, ac
 * **File Location**: [app.ts](file:///c:/BuggyBooks/buggy-books/backend/src/app.ts#L61-L71)
 * **Bug/Behavior**: Configured to block any IP that sends more than `60` requests in a 1-minute window, returning a `429 Too Many Requests` response.
 * **QA Goal**: Prepares QA teams for production rate-limits and checks whether automation suites can recover or handle throttled API gateways.
+
+---
+
+## 5. Mobile Testing Challenges (MOB-B1 through MOB-B6)
+
+This section details the deliberate mobile anti-patterns and chaos engineering injections implemented in the React Native / Expo codebase to provide realistic automation challenges for mobile test frameworks (Appium, Maestro, Detox).
+
+### 🕵️ MOB-B1: Obfuscated & Dynamic Native Locators
+* **File Locations**:
+  * [LoginScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/LoginScreen.tsx) (`txt_usr_77`, `txt_pwd_99`)
+  * [RegisterScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/RegisterScreen.tsx) (`txt_fn_55`, `txt_usr_77`, `txt_pwd_99`)
+  * [CatalogScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/CatalogScreen.tsx) (computed `btn_item_${book.id}_add`)
+  * [CheckoutScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/CheckoutScreen.tsx) (`txt_f1`, `txt_l1`, `txt_addr_88`, `txt_c99`)
+* **Bug/Behavior**: Form input elements and button selectors intentionally omit standard semantic test identifiers (`testID="username"`, `testID="credit-card"`). Instead, dynamic or obfuscated identifiers are assigned.
+* **QA Goal**: Challenges mobile SDETs to build resilient locator chaining, accessibility-driven queries (`accessibilityLabel`), relative XPath/accessibility hierarchy inspection, or text matching rather than relying on brittle semantic IDs.
+
+### ⌨️ MOB-B2: Soft Keyboard Occlusion on Checkout
+* **File Location**: [CheckoutScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/CheckoutScreen.tsx)
+* **Bug/Behavior**: The checkout form intentionally omits `KeyboardAvoidingView`. When a user focuses on the credit card input on standard portrait mobile devices, the on-screen soft keyboard covers the "Place Order" CTA button.
+* **QA Goal**: Automation drivers that attempt direct taps without keyboard management fail with element obstruction exceptions. Requires test scripts to execute `driver.hideKeyboard()` (Android), tap outside the form (iOS), or perform upward scroll/drag gestures to reveal the CTA.
+
+### ⏳ MOB-B3: Dynamic Add-to-Cart Asynchronous Delays
+* **File Locations**: [BookDetailScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/BookDetailScreen.tsx) & [CatalogScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/CatalogScreen.tsx)
+* **Bug/Behavior**: Tapping "Add to Cart" triggers a randomized client-side processing delay between `500ms` and `3500ms` (using `setTimeout`) before executing the cart API request and animating the bottom tab badge. The button is disabled with an activity indicator during this window.
+* **QA Goal**: Punishes static thread sleeps (`sleep(1000)`) in automated tests. Tests must wait explicitly for the cart tab badge counter update or the confirmation banner rather than assuming instant synchronous state updates.
+
+### 💥 MOB-B4: Stochastic Gateway Timeout & In-Screen Retry
+* **File Locations**: [checkoutController.ts](file:///c:/BuggyBooks/buggy-books/backend/src/controllers/checkoutController.ts) & [CheckoutScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/CheckoutScreen.tsx)
+* **Bug/Behavior**: Payment processing fails stochastically with HTTP 500 when `checkoutFailureRate` is active (default 15% in test configs). On mobile, this renders an in-screen error banner (`testID="banner_checkout_error"`) with a distinct "Retry Payment" button (`testID="btn_retry_payment"`). Cart contents are preserved.
+* **QA Goal**: Forces automation scripts to implement retry loops (e.g. up to 3 retry attempts) detecting the error banner and tapping "Retry Payment" to achieve order confirmation without restarting the cart flow.
+
+### 📡 MOB-B5: Simulated Network Interruption & Offline Banner
+* **File Locations**:
+  * [client.ts](file:///c:/BuggyBooks/buggy-books/mobile/src/api/client.ts) (`setSimulatedOffline`, request interceptor rejection `ECONNABORTED`)
+  * [OfflineBanner.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/components/OfflineBanner.tsx) (`testID="offline_banner"`)
+  * [ChaosScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/ChaosScreen.tsx) (`testID="toggle_simulated_offline"`)
+* **Bug/Behavior**: When simulated offline mode is toggled on via the Chaos Control Center, the Axios API client intercepts all outgoing HTTP requests and rejects them immediately with `ECONNABORTED`, rendering a persistent floating red warning banner at the top of the app.
+* **QA Goal**: Allows mobile SDETs to test offline resilience, graceful network degradation, caching, and connection recovery handling in automated test suites without manipulating device-level Wi-Fi/Airplane mode settings.
+
+### 🔄 MOB-B6: Landscape Orientation Layout Shift
+* **File Locations**:
+  * [app.json](file:///c:/BuggyBooks/buggy-books/mobile/app.json) (`"orientation": "default"`)
+  * [CheckoutScreen.tsx](file:///c:/BuggyBooks/buggy-books/mobile/src/screens/CheckoutScreen.tsx) (`isLandscape`, `landscapeOverlapButton`)
+* **Bug/Behavior**: With default auto-rotation enabled, rotating the device into landscape orientation (`width > height`) causes layout shifts where the bottom tab bar overlaps the "Place Order" CTA button unless the viewport is explicitly scrolled or the layout is adapted.
+* **QA Goal**: Challenges visual regression and functional automation tools to handle orientation changes (`driver.setOrientation('LANDSCAPE')`), detect overlapping viewports, and verify scroll-to-view capabilities across device orientations.
+

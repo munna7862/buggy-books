@@ -9,8 +9,8 @@ describe('BuggyBooks Mobile App Entry', () => {
     await waitFor(() => {
       expect(getAllByText('🐛 BuggyBooks').length).toBeGreaterThanOrEqual(1);
       expect(getByText('Welcome Back')).toBeTruthy();
-      expect(getByTestId('input-username')).toBeTruthy();
-      expect(getByTestId('input-password')).toBeTruthy();
+      expect(getByTestId('txt_usr_77')).toBeTruthy();
+      expect(getByTestId('txt_pwd_99')).toBeTruthy();
       expect(getByTestId('button-login')).toBeTruthy();
       expect(getByTestId('link-register')).toBeTruthy();
     });

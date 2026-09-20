@@ -1,55 +1,43 @@
-# Sprint 11.3: Cart, Checkout, Profile & Chaos Control Center
+# Task Backlog: BuggyBooks Phase 12
 
-**Sprint Identifier**: `SPRINT-11.3-CART-CHECKOUT-PROFILE-AND-CHAOS-CONTROL-CENTER`  
-**Phase Mapping**: [Phase 11: Cross-Platform Mobile App Foundations (Android & iOS) & Dual-Auth](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_11_mobile_foundations_and_full_stack_core.md)  
-**Assigned Scrum Master**: AI Agent / Scrum Master  
-**Sprint Goal**: Implement CartContext and CartScreen, multi-step CheckoutScreen with order placement, ProfileScreen with native Camera/Gallery avatar upload via `expo-image-picker`, and the in-app Chaos Control Center screen.
+## Current Focus: Sprint 12.1 - Intentional Mobile Anti-Patterns & Chaos Injection
+
+**Sprint Identifier**: `SPRINT-12.1-INTENTIONAL-MOBILE-ANTI-PATTERNS-AND-CHAOS-INJECTION`  
+**Goal**: Implement deliberate mobile anti-patterns (MOB-B1 through MOB-B6) including obfuscated `testID`s, keyboard occlusion, dynamic add-to-cart delays, stochastic checkout recovery, offline network dropouts, and orientation layout glitches, and catalog them in `intentional_bugs.md` and `specs/test_cases_catalog.md`.
 
 ---
 
 ## 1. Persona Roles & Ownership Matrix
 
-| Persona | Assigned Member | Responsibilities for this Sprint |
-| :--- | :--- | :--- |
-| **Scrum Master** | AI Agent / SM | Sprint burndown tracking, live backlog management in `task.md`, cross-persona coordination, and DoD audit. |
-| **SDET Architect** | AI Agent / SDET | Author Section 21 in `specs/test_cases_catalog.md` (`MOB_CART_01`–`MOB_CHAOS_01`), design test cases and edge cases. |
-| **Mobile Developer** | AI Agent / Mobile | Implement `CartContext`, `CartScreen`, `CheckoutScreen`, `ProfileScreen`, `ChaosScreen`, and `CartNavigator`. |
-| **Hardware / Native Specialist** | AI Agent / Native | Implement camera/gallery permission lifecycles, image cropping, and multipart uploads via `expo-image-picker`. |
-| **Chaos Specialist** | AI Agent / Chaos | Ensure Chaos Control Center maps to `GET /api/test/config`, `POST /api/test/config`, and `POST /api/test/reset`. |
-| **Security Champion** | AI Agent / SEC | Audit multipart avatar upload stream, 2MB size limit, MIME type whitelist, and token handling. |
-| **QA Specialist** | AI Agent / QA | Author unit tests in `mobile/src/__tests__/`, verify end-to-end purchasing flows and regression suites. |
+| Persona | Member | Responsibilities | Status |
+| :--- | :--- | :--- | :--- |
+| **Scrum Master** | AI Agent / SM | Sprint backlog coordination, bug catalog verification, and DoD audit. | `ACTIVE` |
+| **Mobile Developer** | AI Agent / Mobile | Implement deliberate anti-patterns across mobile screens and components. | `ACTIVE` |
+| **Chaos Specialist** | AI Agent / Chaos | Ensure error injection and latencies conform strictly to chaos configurations. | `ACTIVE` |
+| **Security Champion** | AI Agent / SEC | Audit client-side error states, verify offline mode doesn't store plain tokens, and approve intentional bug specs. | `ACTIVE` |
+| **Principal SDET** | AI Agent / SDET | Verify that all anti-patterns provide genuine automation challenges for Appium and Maestro. | `ACTIVE` |
+| **Product Owner** | Human PO / AI PO | Review intentional bugs catalog and validate that functional UX remains operable despite obstacles. | `ACTIVE` |
 
 ---
 
-## 2. Sprint Backlog & Granular Subtask Tracking
+## 2. Granular Task Breakdown
 
-### User Story US-MOB-1131: Shopping Cart Management & Live Sync
-*As a Mobile Shopper, I want to view items in my cart, adjust quantities, and remove unwanted books, so that I can manage my purchase before checking out.*
-- [x] **US-MOB-1131.1** (`Mobile Developer`): Implement `mobile/src/context/CartContext.tsx` with `cart`, `loading`, `cartCount`, `total`, `addToCart(bookId)`, `removeFromCart(bookId)`, `clearCart()`, and `refreshCart()`.
-- [x] **US-MOB-1131.2** (`Mobile Developer`): Update `mobile/App.tsx` and `mobile/src/navigation/AppTabNavigator.tsx` to wrap with `CartProvider` and display dynamic `tabBarBadge` on the Cart tab icon.
-- [x] **US-MOB-1131.3** (`Mobile Developer`): Update `mobile/src/screens/BookDetailScreen.tsx` to integrate with `useCart()` for live badge updates and error handling.
-- [x] **US-MOB-1131.4** (`Mobile Developer`): Implement `mobile/src/screens/CartScreen.tsx` with item list, grouped quantities, price subtotal, tax calculation, total, item deletion, clear cart, and "Proceed to Checkout" CTA.
-- [x] **US-MOB-1131.5** (`SDET Architect` & `QA Specialist`): Author unit tests in `mobile/src/__tests__/CartContext.test.tsx` verifying cart addition, badge count calculation, item removal, and clearing.
+### US-MOB-1211: Obfuscated Native Locators & Keyboard Occlusion
+- [x] **US-MOB-1211.1** (`Mobile Dev`): Update `LoginScreen.tsx` and `RegisterScreen.tsx` to use obfuscated `testID="txt_usr_77"`, `testID="txt_pwd_99"`, and `testID="txt_fn_55"` (MOB-B1).
+- [x] **US-MOB-1211.2** (`Mobile Dev`): Add quick Add-to-Cart button with computed `testID={`btn_item_${item.id}_add`}` on `CatalogScreen.tsx` book cards (MOB-B1).
+- [x] **US-MOB-1211.3** (`Mobile Dev`): Refactor `CheckoutScreen.tsx` inputs to non-semantic `testID="txt_f1"`, `testID="txt_l1"`, `testID="txt_addr_88"`, and `testID="txt_c99"` (MOB-B1).
+- [x] **US-MOB-1211.4** (`Mobile Dev`): Omit `KeyboardAvoidingView` on `CheckoutScreen.tsx` to induce keyboard occlusion over the Place Order CTA button (MOB-B2).
 
-### User Story US-MOB-1132: Checkout Screen & Order Submission
-*As a Mobile Shopper, I want to enter my shipping and payment details and submit my order, so that I can complete my book purchase.*
-- [x] **US-MOB-1132.1** (`Mobile Developer`): Configure `CartNavigator` or `CartStackParamList` with `Cart` and `Checkout` screens in `mobile/src/navigation/CartNavigator.tsx`.
-- [x] **US-MOB-1132.2** (`Mobile Developer`): Implement `mobile/src/screens/CheckoutScreen.tsx` with First Name, Last Name, Shipping Address, Credit Card (16 digits), validation, Order Summary preview, and "Place Order" button.
-- [x] **US-MOB-1132.3** (`Mobile Developer`): Connect `CheckoutScreen` to `POST /api/checkout/process`, handle chaos errors gracefully, clear cart on success, and show Order Confirmation modal/card with `orderId`.
-- [x] **US-MOB-1132.4** (`QA Specialist`): Author unit tests in `mobile/src/__tests__/Checkout.test.tsx` verifying form validation, API submission, and order confirmation.
+### US-MOB-1212: Dynamic Delays & Stochastic Checkout Gateway Timeout
+- [x] **US-MOB-1212.1** (`Mobile Dev`): Add randomized dynamic delay (500ms–3500ms) on Add to Cart in `BookDetailScreen.tsx` and `CatalogScreen.tsx`, disabling the button with loading spinner during latency (MOB-B3).
+- [x] **US-MOB-1212.2** (`Mobile Dev` & `Chaos Specialist`): Implement in-screen retry banner `testID="banner_checkout_error"` with "Retry Payment" CTA `testID="btn_retry_payment"` on `CheckoutScreen.tsx` when gateway returns 500 (MOB-B4).
 
-### User Story US-MOB-1133: Profile Screen & Native Avatar Multipart Upload
-*As an Authenticated User, I want to view my account profile and upload a custom avatar from my camera or photo library, so that I can personalize my bookstore profile.*
-- [x] **US-MOB-1133.1** (`Hardware / Native Specialist` & `Mobile Dev`): Update `mobile/jest.setup.js` with `expo-image-picker` mocks.
-- [x] **US-MOB-1133.2** (`Mobile Developer` & `Hardware Specialist`): Implement `mobile/src/screens/ProfileScreen.tsx` with user details, avatar preview, "Take Photo", "Choose from Gallery", permission checks, and `POST /api/profile/upload`.
-- [x] **US-MOB-1133.3** (`Security Champion`): Audit multipart upload (omitted explicit Content-Type for boundary generation, 2MB size limit, JPEG/PNG MIME verification).
-- [x] **US-MOB-1133.4** (`QA Specialist`): Author unit tests in `mobile/src/__tests__/Profile.test.tsx` verifying profile details rendering, image picker launch, and avatar upload handling.
-
-### User Story US-MOB-1134: Mobile Chaos Control Center & Test Catalog
-*As an SDET / QA Engineer testing the mobile app, I want a dedicated Chaos Settings tab and test case traceability in test_cases_catalog.md, so that I can perform chaos experiments and guarantee full test coverage governance.*
-- [x] **US-MOB-1134.1** (`Chaos Specialist` & `Mobile Dev`): Implement `mobile/src/screens/ChaosScreen.tsx` with `GET /api/test/config`, sliders/steppers for `checkoutFailureRate`, `inventoryDelayMs`, `inventoryLockingRate`, `uploadFailureRate`, "Save Configuration", and "Reset Database & Chaos" (`POST /api/test/reset`).
-- [x] **US-MOB-1134.2** (`SDET Architect`): Author Section 21 in `specs/test_cases_catalog.md` documenting `MOB_CART_01`–`MOB_CART_03`, `MOB_CHECK_01`–`MOB_CHECK_02`, `MOB_PROF_01`–`MOB_PROF_02`, and `MOB_CHAOS_01`.
-- [x] **US-MOB-1134.3** (`QA Specialist`): Author unit tests in `mobile/src/__tests__/Chaos.test.tsx` verifying config retrieval, updating, and reset triggers.
+### US-MOB-1213: Simulated Network Interruption & Orientation Glitches
+- [x] **US-MOB-1213.1** (`Mobile Dev`): Implement simulated offline network mode in `mobile/src/api/client.ts` rejecting with `ECONNABORTED`, create `OfflineBanner.tsx`, and mount in `App.tsx` (MOB-B5).
+- [x] **US-MOB-1213.2** (`Chaos Specialist`): Add simulated offline toggle switch `testID="toggle_simulated_offline"` and status badge in `ChaosScreen.tsx` (MOB-B5).
+- [x] **US-MOB-1213.3** (`Mobile Dev`): Implement landscape orientation layout shift on `CheckoutScreen.tsx` overlapping the submit CTA (MOB-B6).
+- [x] **US-MOB-1213.4** (`Security Champion` & `SDET Architect`): Document MOB-B1 to MOB-B6 in `intentional_bugs.md` and Section 22 in `specs/test_cases_catalog.md` (`MOB_E2E_01` to `MOB_E2E_06`).
+- [x] **US-MOB-1213.5** (`Principal SDET` & `QA Specialist`): Author and update comprehensive unit tests in `mobile/src/__tests__/`.
 
 ---
 
@@ -57,24 +45,21 @@
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **Pre-Flight Architecture Gate** | SDET Architect | Section 21 authored in `specs/test_cases_catalog.md`. API contracts and test coverage mapped. | `[APPROVED]` |
-| **Cart & Checkout Gate** | Mobile Dev & QA Specialist | CartContext state sync, tab badge counter, and Checkout order placement validated. | `[APPROVED]` |
-| **Native Hardware & Security Gate** | Native Specialist & Security Champion | Camera/gallery image picker, multipart upload stream, and 2MB limit verified. | `[APPROVED]` |
-| **Full Regression QA Gate** | QA Specialist | Mobile (41/41), Backend (97/97), Frontend (80/80), and Playwright API (55/55) tests all 100% green. | `[APPROVED]` |
-| **PO Acceptance Sign-off** | Product Owner | All 4 user stories accepted. Definition of Done complete. Ready for merge. | `[APPROVED]` |
+| **Pre-Flight Architecture Gate** | SDET Architect | MOB-B1 to MOB-B6 requirements and automation challenges validated. | `[APPROVED]` |
+| **Anti-Patterns & Locators Gate** | Mobile Dev & SDET | Obfuscated locators, keyboard occlusion, and dynamic delays verified. | `[APPROVED]` |
+| **Resilience & Security Gate** | Security Champion & Chaos Specialist | Offline mode interceptor security and chaos error banners verified. | `[APPROVED]` |
+| **Full Regression QA Gate** | QA Specialist | All mobile, backend, frontend, and API tests passing 100% green. | `[APPROVED]` |
+| **PO Acceptance Sign-off** | Product Owner | All 3 user stories accepted. Definition of Done complete. | `[APPROVED]` |
 
 ---
 
 ## 4. Definition of Done (DoD) Checklist
 
-- [x] All 4 user stories implemented with strict TypeScript typing (0 `any`).
-- [x] `CartContext` synchronizes cart with `GET /api/cart`, updates badge count, and supports add/remove/clear.
-- [x] `CheckoutScreen` provides validation, order summary, and order placement via `POST /api/checkout/process`.
-- [x] `ProfileScreen` supports camera/gallery avatar upload via `expo-image-picker` to `POST /api/profile/upload`.
-- [x] `ChaosScreen` connects to `GET /api/test/config`, `POST /api/test/config`, and `POST /api/test/reset`.
-- [x] Section 21 authored in `specs/test_cases_catalog.md`.
-- [x] Mobile unit tests pass with 100% success (`npm test --workspace=mobile` - 41/41 tests).
-- [x] Full monorepo typecheck and lint pass cleanly (`npm run typecheck`, `npm run lint`).
-- [x] Backend and frontend test suites pass cleanly without regressions.
-- [x] Feature branch committed with conventional commits, pushed to remote, Pull Request raised, and all CI checks passed.
-
+- [x] Anti-patterns MOB-B1 through MOB-B6 implemented cleanly in the mobile codebase.
+- [x] `intentional_bugs.md` updated with Section 5 "Mobile Testing Challenges".
+- [x] Section 22 authored in `specs/test_cases_catalog.md` (`MOB_E2E_01` to `MOB_E2E_06`).
+- [x] Mobile app functions normally for human testers while providing challenging automation targets.
+- [x] TypeScript compilation passes with zero errors (`npm run typecheck`).
+- [x] Monorepo lint passes cleanly (`npm run lint`).
+- [x] All test suites pass (Mobile, Backend, Frontend, API).
+- [x] Pull Request opened, all CI checks green, squash merged to `main`.

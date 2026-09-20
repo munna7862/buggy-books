@@ -76,7 +76,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
             onChangeText={setUsername}
             autoCapitalize="none"
             autoCorrect={false}
-            testID="input-username"
+            testID="txt_usr_77"
             accessibilityLabel="Username input"
           />
 
@@ -89,7 +89,7 @@ export function LoginScreen({ navigation }: LoginScreenProps) {
             onChangeText={setPassword}
             secureTextEntry
             autoCapitalize="none"
-            testID="input-password"
+            testID="txt_pwd_99"
             accessibilityLabel="Password input"
           />
 

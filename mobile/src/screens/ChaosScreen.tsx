@@ -8,9 +8,15 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
+  Switch,
 } from 'react-native';
 import type { ChaosConfig } from '@buggybooks/types';
-import { apiClient } from '../api/client';
+import {
+  apiClient,
+  isSimulatedOffline,
+  setSimulatedOffline,
+  onNetworkStatusChange,
+} from '../api/client';
 import * as Haptics from 'expo-haptics';
 
 export function ChaosScreen() {
@@ -19,6 +25,7 @@ export function ChaosScreen() {
   const [inventoryDelayMs, setInventoryDelayMs] = useState(3000);
   const [inventoryLockingRate, setInventoryLockingRate] = useState(0.0);
   const [uploadFailureRate, setUploadFailureRate] = useState(0.0);
+  const [isOffline, setIsOffline] = useState(isSimulatedOffline());
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -31,6 +38,18 @@ export function ChaosScreen() {
       if (bannerTimerRef.current) clearTimeout(bannerTimerRef.current);
     };
   }, []);
+
+  useEffect(() => {
+    return onNetworkStatusChange((offline) => {
+      setIsOffline(offline);
+    });
+  }, []);
+
+  const handleToggleOffline = (val: boolean) => {
+    setSimulatedOffline(val);
+    setIsOffline(val);
+    Haptics.impactAsync?.(Haptics.ImpactFeedbackStyle.Medium)?.catch?.(() => {});
+  };
 
   const fetchConfig = useCallback(async () => {
     setIsLoading(true);
@@ -342,6 +361,29 @@ export function ChaosScreen() {
           </View>
         </View>
 
+        {/* Simulated Network Offline Mode (MOB-B5) */}
+        <View style={styles.controlCard} testID="card-simulated-offline">
+          <View style={styles.controlHeader}>
+            <Text style={styles.controlTitle}>📡 Simulated Offline Mode</Text>
+            <View style={[styles.statusPill, isOffline ? styles.statusOffline : styles.statusOnline]}>
+              <Text style={styles.statusPillText}>{isOffline ? 'OFFLINE' : 'ONLINE'}</Text>
+            </View>
+          </View>
+          <Text style={styles.controlDesc}>
+            Simulate connection dropout (ECONNABORTED). All subsequent API calls immediately fail and a top warning banner is displayed.
+          </Text>
+          <View style={styles.switchRow}>
+            <Text style={styles.switchLabel}>Simulate Connection Dropout</Text>
+            <Switch
+              value={isOffline}
+              onValueChange={handleToggleOffline}
+              trackColor={{ false: '#334155', true: '#ef4444' }}
+              thumbColor={isOffline ? '#ffffff' : '#94a3b8'}
+              testID="toggle_simulated_offline"
+            />
+          </View>
+        </View>
+
         {/* Actions Row */}
         <View style={styles.actions}>
           <TouchableOpacity
@@ -544,5 +586,32 @@ const styles = StyleSheet.create({
   },
   btnDisabled: {
     opacity: 0.6,
+  },
+  statusPill: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 6,
+  },
+  statusOnline: {
+    backgroundColor: 'rgba(34, 197, 94, 0.2)',
+  },
+  statusOffline: {
+    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+  },
+  statusPillText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#f8fafc',
+  },
+  switchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 6,
+  },
+  switchLabel: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#cbd5e1',
   },
 });
