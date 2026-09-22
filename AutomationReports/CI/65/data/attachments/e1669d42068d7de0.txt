@@ -1,0 +1,5 @@
+[2026-09-22 16:44:16] INFO: Verifying user registration status is 201
+[2026-09-22 16:44:16] INFO: Verifying user login status is 200
+[2026-09-22 16:44:16] INFO: Verifying add to cart status is 200
+[2026-09-22 16:44:16] INFO: Verifying process checkout status is 200
+[2026-09-22 16:44:16] INFO: Verifying correlation ID preserved in checkout response
