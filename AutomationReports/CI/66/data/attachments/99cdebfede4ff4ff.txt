@@ -1,0 +1,18 @@
+[2026-09-23 16:45:30] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1790147730249-c7431a55
+[2026-09-23 16:45:30] INFO: Clicking on Sign Up link
+[2026-09-23 16:45:31] INFO: Entering full name: Full profile_user_9wTSr
+[2026-09-23 16:45:31] INFO: Entering username: profile_user_9wTSr
+[2026-09-23 16:45:31] INFO: Entering password: Password123!
+[2026-09-23 16:45:31] INFO: Entering confirming password: Password123!
+[2026-09-23 16:45:31] INFO: Clicking on Create Account button
+[2026-09-23 16:45:31] INFO: Verifying landing on Checkout Page
+[2026-09-23 16:45:31] INFO: Checking if Checkout label is visible
+[2026-09-23 16:45:31] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-23 16:45:32] INFO: Clicking on Profile navbar link
+[2026-09-23 16:45:32] INFO: Selecting file for avatar upload: /home/runner/work/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/valid_avatar.png
+[2026-09-23 16:45:32] INFO: Clicking Upload Image button
+[2026-09-23 16:45:32] INFO: Getting profile avatar preview image src
+[2026-09-23 16:45:32] INFO: Verifying avatar preview image src points to uploads path - Condition met (true)
+[2026-09-23 16:45:32] INFO: Getting upload success message text
+[2026-09-23 16:45:32] INFO: Verifying avatar upload success status message - Matched: [Avatar updated successfully!]
+[2026-09-23 16:45:32] INFO: Cleaned up ephemeral test session: pw-w4-3-1790147730249-c7431a55

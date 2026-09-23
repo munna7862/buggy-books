@@ -1,0 +1,4 @@
+[2026-09-23 16:45:39] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1790147739112-e4a85925
+[2026-09-23 16:45:39] INFO: Verifying --bg CSS variable in light mode equals #f8fafc or hsl (actual: #f8fafc) - Condition met (true)
+[2026-09-23 16:45:39] INFO: Verifying --bg CSS variable in dark mode equals #090d15 or hsl (actual: #090d15) - Condition met (true)
+[2026-09-23 16:45:39] INFO: Cleaned up ephemeral test session: pw-w4-3-1790147739112-e4a85925
