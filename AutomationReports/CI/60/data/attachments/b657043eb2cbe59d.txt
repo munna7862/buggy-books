@@ -1,2 +1,0 @@
-[2026-09-20 16:20:48] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
-[2026-09-20 16:20:48] INFO:  Status code for empty username Success !! Actual and Expected Values are:: true

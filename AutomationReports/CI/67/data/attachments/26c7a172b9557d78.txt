@@ -1,0 +1,3 @@
+[2026-09-24 16:37:05] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
+[2026-09-24 16:37:05] INFO:  Response status code should be 401 Success !! Actual and Expected Values are:: 401
+[2026-09-24 16:37:05] INFO:  Error message for missing token Success !! Actual and Expected Values are:: Unauthorized: Token required
