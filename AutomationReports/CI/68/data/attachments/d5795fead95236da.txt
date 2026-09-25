@@ -1,0 +1,14 @@
+[2026-09-25 16:34:41] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1790319881595-a8455554
+[2026-09-25 16:34:41] INFO: Clicking on Login link
+[2026-09-25 16:34:42] INFO: Entering username: admin
+[2026-09-25 16:34:42] INFO: Entering password: password123
+[2026-09-25 16:34:42] INFO: Clicking on Sign In button
+[2026-09-25 16:34:42] INFO: Verifying landing on Checkout Page
+[2026-09-25 16:34:42] INFO: Checking if Checkout label is visible
+[2026-09-25 16:34:42] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-25 16:34:42] INFO: Verifying if user logged in successfully - Matched: [true]
+[2026-09-25 16:34:42] INFO: ✅ Authentication state saved to: /home/runner/work/buggy-books/buggy-books/playwright-e2e/.auth/user.json
+[2026-09-25 16:34:42] INFO: Clicking on Logout button
+[2026-09-25 16:34:42] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-09-25 16:34:42] INFO: Verifying if user logged out successfully - Matched: [true]
+[2026-09-25 16:34:42] INFO: Cleaned up ephemeral test session: pw-w3-2-1790319881595-a8455554
