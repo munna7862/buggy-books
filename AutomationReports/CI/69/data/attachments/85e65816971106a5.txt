@@ -1,0 +1,20 @@
+[2026-09-26 16:31:28] INFO:  Response status Success !! Actual and Expected Values are:: 201
+[2026-09-26 16:31:28] INFO:  Registration response is an object Success !! Actual and Expected Values are:: object
+[2026-09-26 16:31:28] INFO:  Registration response is not null Success !! Actual and Expected Values are:: true
+[2026-09-26 16:31:28] INFO:  Message is a string Success !! Actual and Expected Values are:: string
+[2026-09-26 16:31:28] INFO:  Username is a string Success !! Actual and Expected Values are:: string
+[2026-09-26 16:31:28] INFO:  Registration message Success !! Actual and Expected Values are:: Registration successful
+[2026-09-26 16:31:28] INFO:  Registered username matches request Success !! Actual and Expected Values are:: johndoe17904060881951bc26f36@
+[2026-09-26 16:31:28] INFO:  Token is a string Success !! Actual and Expected Values are:: string
+[2026-09-26 16:31:28] INFO:  RefreshToken is a string Success !! Actual and Expected Values are:: string
+[2026-09-26 16:31:28] INFO:  Response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","refreshToken","token","username"]
+[2026-09-26 16:31:28] INFO:  Login response status after registration Success !! Actual and Expected Values are:: 200
+[2026-09-26 16:31:28] INFO:  Login response is an object Success !! Actual and Expected Values are:: object
+[2026-09-26 16:31:28] INFO:  Login response is not null Success !! Actual and Expected Values are:: true
+[2026-09-26 16:31:28] INFO:  Login message is a string Success !! Actual and Expected Values are:: string
+[2026-09-26 16:31:28] INFO:  Login username is a string Success !! Actual and Expected Values are:: string
+[2026-09-26 16:31:28] INFO:  Login message Success !! Actual and Expected Values are:: Login successful
+[2026-09-26 16:31:28] INFO:  Logged in username matches request Success !! Actual and Expected Values are:: johndoe17904060881951bc26f36@
+[2026-09-26 16:31:28] INFO:  Token is a string Success !! Actual and Expected Values are:: string
+[2026-09-26 16:31:28] INFO:  RefreshToken is a string Success !! Actual and Expected Values are:: string
+[2026-09-26 16:31:28] INFO:  Login response contains only expected contract fields Success !! Actual and Expected Values are:: ["message","refreshToken","token","username"]

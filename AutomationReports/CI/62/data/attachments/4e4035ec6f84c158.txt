@@ -1,3 +1,0 @@
-[2026-09-20 16:55:03] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1789889103013-e785c35b
-[2026-09-20 16:55:03] INFO: Verifying status dot reflects disconnected or reconnecting state under socket chaos - Matched: [true]
-[2026-09-20 16:55:03] INFO: Cleaned up ephemeral test session: pw-w4-3-1789889103013-e785c35b
