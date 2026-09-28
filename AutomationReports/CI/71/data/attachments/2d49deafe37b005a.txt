@@ -1,0 +1,20 @@
+[2026-09-28 17:40:45] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w5-0-1790583044985-12a9cbd3
+[2026-09-28 17:40:45] INFO: Clicking on Sign Up link
+[2026-09-28 17:40:46] INFO: Entering full name: Full refresh_ui_user_ma8mr
+[2026-09-28 17:40:46] INFO: Entering username: refresh_ui_user_ma8mr
+[2026-09-28 17:40:46] INFO: Entering password: Password123!
+[2026-09-28 17:40:46] INFO: Entering confirming password: Password123!
+[2026-09-28 17:40:46] INFO: Clicking on Create Account button
+[2026-09-28 17:40:47] INFO: Verifying landing on Checkout Page
+[2026-09-28 17:40:47] INFO: Checking if Checkout label is visible
+[2026-09-28 17:40:47] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-09-28 17:40:47] INFO: Clicking on Profile navbar link
+
+[Failure Hook] Capturing state for failing test: "UI_REF_02: Session Expiry Redirection @smoke @regression"...
+[Failure Hook] Failure state successfully captured and written to:
+  DOM Snapshot:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-dom.html
+  ARIA Snapshot: file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-aria.yaml
+  Context JSON:  file:////home/runner/work/buggy-books/buggy-books/playwright-e2e/reports/snapshots/failure-context.json
+[Failure Hook] You can now ask Antigravity to heal this test using these failure reports.
+
+[2026-09-28 17:41:02] INFO: Cleaned up ephemeral test session: pw-w5-0-1790583044985-12a9cbd3
