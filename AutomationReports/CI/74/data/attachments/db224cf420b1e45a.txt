@@ -1,0 +1,3 @@
+[2026-10-01 17:43:49] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1790842429395-97b6ab01
+[2026-10-01 17:43:51] INFO: Verifying Axe detects color contrast ratio violation on result count tag under chaos mode - Condition met (true)
+[2026-10-01 17:43:51] INFO: Cleaned up ephemeral test session: pw-w4-3-1790842429395-97b6ab01
