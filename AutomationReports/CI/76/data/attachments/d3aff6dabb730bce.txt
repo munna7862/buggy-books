@@ -1,0 +1,2 @@
+[2026-10-03 17:01:27] INFO: Verifying x-correlation-id header is present in response
+[2026-10-03 17:01:27] INFO: Verifying x-correlation-id matches valid UUIDv4 format

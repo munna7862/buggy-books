@@ -1,0 +1,4 @@
+[2026-10-03 17:02:01] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1791012721714-04b73a3e
+[2026-10-03 17:02:01] INFO: Clicking on WebSocket Notification Bell button
+[2026-10-03 17:02:02] INFO: Verifying live updates notification dropdown is visible upon clicking bell icon - Matched: [true]
+[2026-10-03 17:02:02] INFO: Cleaned up ephemeral test session: pw-w2-1-1791012721714-04b73a3e
