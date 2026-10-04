@@ -1,0 +1,35 @@
+[2026-10-04 18:14:01] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1791099841817-79e7d464
+[2026-10-04 18:14:02] INFO: Clicking on Sign Up link
+[2026-10-04 18:14:02] INFO: Entering full name: Full wiz_user_Nypa5
+[2026-10-04 18:14:02] INFO: Entering username: wiz_user_Nypa5
+[2026-10-04 18:14:02] INFO: Entering password: Password123!
+[2026-10-04 18:14:02] INFO: Entering confirming password: Password123!
+[2026-10-04 18:14:03] INFO: Clicking on Create Account button
+[2026-10-04 18:14:03] INFO: Verifying landing on Checkout Page
+[2026-10-04 18:14:03] INFO: Checking if Checkout label is visible
+[2026-10-04 18:14:03] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-10-04 18:14:03] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-10-04 18:14:04] INFO: Total Books displayed in Catalog page are: 8
+[2026-10-04 18:14:04] INFO: Clicking on Add to Cart button for book id: 1
+[2026-10-04 18:14:05] INFO: Waiting for cart status message: added to cart
+[2026-10-04 18:14:06] INFO: Cart status message "added to cart" is visible
+[2026-10-04 18:14:06] INFO: Clicking on Cart link
+[2026-10-04 18:14:06] INFO: Clicking on Proceed to Checkout button
+[2026-10-04 18:14:06] INFO: Clicking on Next Step button to trigger validation
+[2026-10-04 18:14:06] INFO: Verifying First Name required error on Step 1 - Condition met (true)
+[2026-10-04 18:14:06] INFO: Verifying Last Name required error on Step 1 - Condition met (true)
+[2026-10-04 18:14:06] INFO: Verifying Address required error on Step 1 - Condition met (true)
+[2026-10-04 18:14:06] INFO: Verifying City required error on Step 1 - Condition met (true)
+[2026-10-04 18:14:06] INFO: Entering first name: John
+[2026-10-04 18:14:06] INFO: Entering last name: Doe
+[2026-10-04 18:14:06] INFO: Entering shipping address: 123 Buggy Lane
+[2026-10-04 18:14:07] INFO: Entering city: Stack City
+[2026-10-04 18:14:07] INFO: Clicking on Next Step button to trigger validation
+[2026-10-04 18:14:07] INFO: Entering card number
+[2026-10-04 18:14:07] INFO: Entering card expiry: 99/99
+[2026-10-04 18:14:07] INFO: Entering card CVV: 12
+[2026-10-04 18:14:07] INFO: Clicking on Next Step button to trigger validation
+[2026-10-04 18:14:07] INFO: Verifying Credit Card 16-digit error on Step 2 - Condition met (true)
+[2026-10-04 18:14:07] INFO: Verifying Expiry MM/YY format error on Step 2 - Condition met (true)
+[2026-10-04 18:14:07] INFO: Verifying CVV 3-digit error on Step 2 - Condition met (true)
+[2026-10-04 18:14:07] INFO: Cleaned up ephemeral test session: pw-w1-0-1791099841817-79e7d464
