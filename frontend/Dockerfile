@@ -1,4 +1,4 @@
-﻿# =====================================================
+# =====================================================
 # Stage 1: Builder
 # Builds the Vite/React production bundle
 # =====================================================
@@ -6,10 +6,15 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+# Copy shared types so path alias @buggybooks/types resolves
+COPY shared ./shared
+
+# Copy frontend manifests and dependencies
+WORKDIR /app/frontend
+COPY frontend/package*.json ./
 RUN npm ci
 
-COPY . .
+COPY frontend/ ./
 
 # VITE_API_URL is injected at build time via --build-arg
 ARG VITE_API_URL=http://localhost:4000/api
@@ -26,10 +31,10 @@ FROM nginx:alpine AS production
 
 # Remove default nginx config and replace with SPA config
 RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy the production Vite build output
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
 
 EXPOSE 80
 
