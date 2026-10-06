@@ -1,2 +1,0 @@
-[2026-10-04 18:13:24] INFO: Last item on page 1 ID: 5
-[2026-10-04 18:13:24] INFO: First item on page 2 ID: 6

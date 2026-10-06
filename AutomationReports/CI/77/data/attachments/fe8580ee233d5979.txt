@@ -1,2 +1,0 @@
-[2026-10-04 18:13:25] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
-[2026-10-04 18:13:25] INFO:  Security status for script tag in username Success !! Actual and Expected Values are:: true

@@ -1,0 +1,1 @@
+[2026-10-06 12:46:42] INFO: Verifying 400 Bad Request returned for invalid data type

@@ -1,0 +1,2 @@
+[2026-10-06 12:46:43] INFO: Verifying POST /api/auth/refresh returns 200 OK
+[2026-10-06 12:46:43] INFO: Verifying new access token issued in Set-Cookie

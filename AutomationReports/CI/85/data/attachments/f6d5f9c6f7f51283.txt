@@ -1,0 +1,23 @@
+[2026-10-06 12:47:25] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1791253045420-05740969
+[2026-10-06 12:47:25] INFO: Clicking on Sign Up link
+[2026-10-06 12:47:26] INFO: Entering full name: autoTestUsermQcZf
+[2026-10-06 12:47:26] INFO: Entering username: autoTestUserJKNbv
+[2026-10-06 12:47:26] INFO: Entering password: AutoTest@123
+[2026-10-06 12:47:26] INFO: Entering confirming password: AutoTest@123
+[2026-10-06 12:47:26] INFO: Clicking on Create Account button
+[2026-10-06 12:47:27] INFO: Verifying landing on Checkout Page
+[2026-10-06 12:47:27] INFO: Checking if Checkout label is visible
+[2026-10-06 12:47:27] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-10-06 12:47:27] INFO: Clicking on Logout button
+[2026-10-06 12:47:27] INFO: Clicking on Login link
+[2026-10-06 12:47:27] INFO: Entering username: autoTestUserJKNbv
+[2026-10-06 12:47:27] INFO: Entering password: AutoTest@123
+[2026-10-06 12:47:27] INFO: Clicking on Sign In button
+[2026-10-06 12:47:28] INFO: Verifying landing on Checkout Page
+[2026-10-06 12:47:28] INFO: Checking if Checkout label is visible
+[2026-10-06 12:47:28] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-10-06 12:47:28] INFO: Verifying if user logged in successfully - Matched: [true]
+[2026-10-06 12:47:28] INFO: Clicking on Logout button
+[2026-10-06 12:47:28] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-10-06 12:47:28] INFO: Verifying if user logged out successfully - Matched: [true]
+[2026-10-06 12:47:28] INFO: Cleaned up ephemeral test session: pw-w3-2-1791253045420-05740969
