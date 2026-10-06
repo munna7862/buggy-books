@@ -1,5 +1,0 @@
-[2026-10-01 17:44:21] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1790842461278-90dc1bfd
-[2026-10-01 17:44:21] INFO: Verifying .catalog-book-cover has transform CSS property before hover (value: none) - Condition met (true)
-[2026-10-01 17:44:21] INFO: Hovering over first book card
-[2026-10-01 17:44:21] INFO: Verifying .catalog-book-cover transform contains matrix values after hover (value: matrix(1.01168, 0.0034376, -0.0034376, 1.01168, 0, 0)) - Condition met (true)
-[2026-10-01 17:44:21] INFO: Cleaned up ephemeral test session: pw-w2-1-1790842461278-90dc1bfd

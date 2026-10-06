@@ -1,1 +1,0 @@
-[2026-10-01 17:44:10] INFO:  Status code should be 200 when Content-Type header is missing Success !! Actual and Expected Values are:: 200
