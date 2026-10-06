@@ -26,7 +26,8 @@ function generateSummary(target, workDir) {
   const coveragePath = path.join(dir, 'coverage', 'coverage-summary.json');
 
   const title = target.charAt(0).toUpperCase() + target.slice(1);
-  const testRunner = target.toLowerCase() === 'backend' ? 'Jest' : 'Vitest';
+  const targetLower = target.toLowerCase();
+  const testRunner = (targetLower === 'backend' || targetLower === 'mobile') ? 'Jest' : 'Vitest';
 
   let results = null;
   if (fs.existsSync(resultsPath)) {
@@ -90,7 +91,7 @@ function generateSummary(target, workDir) {
 function main() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
-    console.error('Usage: node scripts/generate-test-summary.js <backend|frontend> [working-directory]');
+    console.error('Usage: node scripts/generate-test-summary.js <backend|frontend|mobile> [working-directory]');
     process.exit(1);
   }
 

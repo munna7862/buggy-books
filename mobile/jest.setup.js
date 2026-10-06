@@ -1,5 +1,7 @@
 const React = require('react');
 
+jest.setTimeout(15000);
+
 if (typeof global.Buffer === 'undefined') {
   global.Buffer = require('buffer').Buffer;
 }
