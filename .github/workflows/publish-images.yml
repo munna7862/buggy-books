@@ -1,0 +1,99 @@
+name: Publish Container Images to GHCR
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish-images:
+    name: Build & Publish GHCR Images
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Extract Metadata (Git Short SHA)
+        id: meta
+        shell: bash
+        run: |
+          SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
+          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3.10.0
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ------------------------------------------------------------------------
+      # Backend Image: ghcr.io/munna7862/buggy-books-backend
+      # ------------------------------------------------------------------------
+      - name: Build & Push Backend Image
+        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          target: production
+          push: true
+          tags: |
+            ghcr.io/munna7862/buggy-books-backend:latest
+            ghcr.io/munna7862/buggy-books-backend:sha-${{ steps.meta.outputs.short_sha }}
+            ghcr.io/munna7862/buggy-books-backend:${{ github.ref_type == 'tag' && github.ref_name || '' }}
+          labels: |
+            org.opencontainers.image.title=BuggyBooks Backend API
+            org.opencontainers.image.description=Production backend for BuggyBooks e-commerce application
+            org.opencontainers.image.source=https://github.com/munna7862/buggy-books
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # ------------------------------------------------------------------------
+      # Frontend Image: ghcr.io/munna7862/buggy-books-frontend
+      # Injected with VITE_API_URL=http://localhost:4000/api for CI runner execution
+      # ------------------------------------------------------------------------
+      - name: Build & Push Frontend Image
+        uses: docker/build-push-action@471d1dc4e07e5cdedd4c2171150001c434f0b7a4 # v6.15.0
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          target: production
+          build-args: |
+            VITE_API_URL=http://localhost:4000/api
+          push: true
+          tags: |
+            ghcr.io/munna7862/buggy-books-frontend:ci-localhost
+            ghcr.io/munna7862/buggy-books-frontend:sha-${{ steps.meta.outputs.short_sha }}-ci-localhost
+          labels: |
+            org.opencontainers.image.title=BuggyBooks Frontend UI
+            org.opencontainers.image.description=Production Nginx-served static Vite bundle configured for localhost CI
+            org.opencontainers.image.source=https://github.com/munna7862/buggy-books
+            org.opencontainers.image.revision=${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Output Image Summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## 🐳 BuggyBooks Container Images Published to GHCR"
+            echo ""
+            echo "| Image | Tags | Target | Digest / Scope |"
+            echo "| :--- | :--- | :--- | :--- |"
+            echo "| \`ghcr.io/munna7862/buggy-books-backend\` | \`latest\`, \`sha-${{ steps.meta.outputs.short_sha }}\` | \`production\` (:4000) | Full Node.js/Express API |"
+            echo "| \`ghcr.io/munna7862/buggy-books-frontend\` | \`ci-localhost\`, \`sha-${{ steps.meta.outputs.short_sha }}-ci-localhost\` | \`production\` (:80) | Nginx SPA (\`http://localhost:4000/api\`) |"
+          } >> "$GITHUB_STEP_SUMMARY"
