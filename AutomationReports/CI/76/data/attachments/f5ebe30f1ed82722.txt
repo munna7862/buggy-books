@@ -1,2 +1,0 @@
-[2026-10-03 17:01:28] INFO:  Initial registration response status Success !! Actual and Expected Values are:: 201
-[2026-10-03 17:01:28] INFO:  Duplicate registration status Success !! Actual and Expected Values are:: true

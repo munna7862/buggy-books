@@ -1,3 +1,0 @@
-[2026-10-03 17:02:00] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1791012720750-cd5872b9
-[2026-10-03 17:02:01] INFO: Asserting book card h3 text line-height multiplier is ~3.2, actual: 3.2 (lineHeight: 57.6px, fontSize: 18px) - Condition met (true)
-[2026-10-03 17:02:01] INFO: Cleaned up ephemeral test session: pw-w2-1-1791012720750-cd5872b9

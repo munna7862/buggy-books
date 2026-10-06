@@ -1,3 +1,0 @@
-[2026-10-03 17:01:27] INFO: Verifying POST /api/test/config status is 200
-[2026-10-03 17:01:27] INFO: Verifying visualChaos saved as true
-[2026-10-03 17:01:27] INFO: Verifying checkoutFailureRate saved as 0.5
