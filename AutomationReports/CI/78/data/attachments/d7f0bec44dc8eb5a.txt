@@ -1,3 +1,0 @@
-[2026-10-05 18:43:22] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1791188002758-19cb6c50
-[2026-10-05 18:43:23] INFO: Verifying WebSocket status dot has status-connected class - Matched: [true]
-[2026-10-05 18:43:23] INFO: Cleaned up ephemeral test session: pw-w2-1-1791188002758-19cb6c50
