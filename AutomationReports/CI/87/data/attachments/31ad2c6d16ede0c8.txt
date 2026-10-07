@@ -1,0 +1,12 @@
+[2026-10-07 18:37:20] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1791360440890-3e8a17f7
+[2026-10-07 18:37:21] INFO: Clicking on Sign Up link
+[2026-10-07 18:37:21] INFO: Entering full name: autoTestUserYPYSW
+[2026-10-07 18:37:21] INFO: Entering username: autoTestUserlEQOo
+[2026-10-07 18:37:21] INFO: Entering password: AutoTest@123
+[2026-10-07 18:37:22] INFO: Entering confirming password: AutoTest@123
+[2026-10-07 18:37:22] INFO: Clicking on Create Account button
+[2026-10-07 18:37:22] INFO: Verifying landing on Checkout Page
+[2026-10-07 18:37:22] INFO: Checking if Checkout label is visible
+[2026-10-07 18:37:22] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-10-07 18:37:22] INFO: Verifying if user registered successfully - Matched: [true]
+[2026-10-07 18:37:23] INFO: Cleaned up ephemeral test session: pw-w2-1-1791360440890-3e8a17f7
