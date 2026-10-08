@@ -1,0 +1,10 @@
+[2026-10-08 18:52:35] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1791447755874-64c61ccb
+[2026-10-08 18:52:36] INFO: Total Books displayed in Catalog page are: 8
+[2026-10-08 18:52:36] INFO: Verifying if Books count in Catalog page is correct - Matched: [8]
+[2026-10-08 18:52:36] INFO: Clicking on Pagination button number 2
+[2026-10-08 18:52:37] INFO: Total Books displayed in Catalog page are: 7
+[2026-10-08 18:52:37] INFO: Verifying if Books count in Catalog page is correct - Matched: [7]
+[2026-10-08 18:52:37] INFO: Clicking on Pagination button number 1
+[2026-10-08 18:52:37] INFO: Total Books displayed in Catalog page are: 8
+[2026-10-08 18:52:37] INFO: Verifying if Books count in Catalog page is correct - Matched: [8]
+[2026-10-08 18:52:37] INFO: Cleaned up ephemeral test session: pw-w3-2-1791447755874-64c61ccb
