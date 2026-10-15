@@ -1,0 +1,31 @@
+[2026-10-15 17:25:07] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1792047307900-e77372de
+[2026-10-15 17:25:08] INFO: Clicking on Sign Up link
+[2026-10-15 17:25:09] INFO: Entering full name: Full user_a_cart_ARqjO
+[2026-10-15 17:25:09] INFO: Entering username: user_a_cart_ARqjO
+[2026-10-15 17:25:09] INFO: Entering password: Password123!
+[2026-10-15 17:25:09] INFO: Entering confirming password: Password123!
+[2026-10-15 17:25:09] INFO: Clicking on Create Account button
+[2026-10-15 17:25:09] INFO: Verifying landing on Checkout Page
+[2026-10-15 17:25:09] INFO: Checking if Checkout label is visible
+[2026-10-15 17:25:10] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-10-15 17:25:10] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-10-15 17:25:10] INFO: Total Books displayed in Catalog page are: 8
+[2026-10-15 17:25:10] INFO: Clicking on Add to Cart button for book id: 1
+[2026-10-15 17:25:11] INFO: Waiting for cart status message: added to cart
+[2026-10-15 17:25:11] INFO: Cart status message "added to cart" is visible
+[2026-10-15 17:25:11] INFO: Clicking on Cart link
+[2026-10-15 17:25:11] INFO: Verifying User A cart contains added item - Matched: [1]
+[2026-10-15 17:25:11] INFO: Clicking on Logout button
+[2026-10-15 17:25:11] INFO: Clicking on Sign Up link
+[2026-10-15 17:25:12] INFO: Entering full name: Full user_b_cart_bjzW6
+[2026-10-15 17:25:12] INFO: Entering username: user_b_cart_bjzW6
+[2026-10-15 17:25:12] INFO: Entering password: Password123!
+[2026-10-15 17:25:12] INFO: Entering confirming password: Password123!
+[2026-10-15 17:25:12] INFO: Clicking on Create Account button
+[2026-10-15 17:25:12] INFO: Verifying landing on Checkout Page
+[2026-10-15 17:25:12] INFO: Checking if Checkout label is visible
+[2026-10-15 17:25:13] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-10-15 17:25:13] INFO: Clicking on Cart link
+[2026-10-15 17:25:13] INFO: Checking if 'Your cart is empty.' message is visible - Element is visible
+[2026-10-15 17:25:18] INFO: Verifying User B cart is completely empty - Matched: [true]
+[2026-10-15 17:25:18] INFO: Cleaned up ephemeral test session: pw-w4-3-1792047307900-e77372de
