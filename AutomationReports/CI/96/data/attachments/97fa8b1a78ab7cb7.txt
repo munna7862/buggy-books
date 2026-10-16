@@ -1,0 +1,9 @@
+[2026-10-16 17:12:22] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1792132942905-81a1325c
+[2026-10-16 17:12:22] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-10-16 17:12:23] INFO: Total Books displayed in Catalog page are: 8
+[2026-10-16 17:12:23] INFO: Filling search input with: xyz999nonexistent
+[2026-10-16 17:12:23] INFO: Clicking Search button
+[2026-10-16 17:12:23] INFO: Verifying zero books displayed for gibberish search - Matched: [0]
+[2026-10-16 17:12:23] INFO: Getting catalog empty state text
+[2026-10-16 17:12:23] INFO: Verifying empty state message text - Condition met (true)
+[2026-10-16 17:12:23] INFO: Cleaned up ephemeral test session: pw-w2-1-1792132942905-81a1325c
