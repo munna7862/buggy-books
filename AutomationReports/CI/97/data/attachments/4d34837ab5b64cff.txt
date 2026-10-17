@@ -1,0 +1,8 @@
+[2026-10-17 17:01:54] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1792218714350-02239d26
+[2026-10-17 17:01:54] INFO: ✅ New context created with saved authentication state from: /home/runner/work/buggy-books/buggy-books/playwright-e2e/.auth/user.json
+[2026-10-17 17:01:55] INFO: Checking if Logout button is visible on Catalog page - Element is visible
+[2026-10-17 17:01:55] INFO: Verifying if user is logged in using saved session - Matched: [true]
+[2026-10-17 17:01:55] INFO: Clicking on Logout button
+[2026-10-17 17:01:55] INFO: Checking if Login link is visible on Catalog page - Element is visible
+[2026-10-17 17:01:55] INFO: Verifying if user logged out successfully - Matched: [true]
+[2026-10-17 17:01:55] INFO: Cleaned up ephemeral test session: pw-w2-1-1792218714350-02239d26
