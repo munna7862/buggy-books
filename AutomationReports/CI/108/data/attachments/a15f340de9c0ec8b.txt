@@ -1,0 +1,2 @@
+[2026-10-28 18:23:02] INFO: Verifying GET /api/test/config status is 200
+[2026-10-28 18:23:02] INFO: Verifying visualChaos default value is false
