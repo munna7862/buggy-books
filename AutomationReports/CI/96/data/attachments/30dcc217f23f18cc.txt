@@ -1,2 +1,0 @@
-[2026-10-16 17:12:39] INFO:  Registration setup status Success !! Actual and Expected Values are:: 201
-[2026-10-16 17:12:39] INFO:  Security status for SQL injection pattern in username Success !! Actual and Expected Values are:: true

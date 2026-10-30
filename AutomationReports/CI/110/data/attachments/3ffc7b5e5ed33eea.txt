@@ -1,0 +1,9 @@
+[2026-10-30 18:31:16] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1793347276581-f7dc2db8
+[2026-10-30 18:31:16] INFO: Validating matching string scalar values - Matched: [BuggyBooks Diagnostic Test]
+[2026-10-30 18:31:16] INFO: Validating matching number scalar values - Matched: [42]
+[2026-10-30 18:31:16] INFO: Validating positive number condition - Condition met (true)
+[2026-10-30 18:31:16] ERROR: Testing intentional mismatch failure diff - Expected: [42] but Received: [99]
+[2026-10-30 18:31:16] ERROR: Testing intentional mismatch failure diff - Expected: [42] but Received: [99]
+[2026-10-30 18:31:16] ERROR: Testing intentional false condition - Condition failed (false)
+[2026-10-30 18:31:16] ERROR: Testing intentional false condition - Condition failed (false)
+[2026-10-30 18:31:16] INFO: Cleaned up ephemeral test session: pw-w3-2-1793347276581-f7dc2db8
