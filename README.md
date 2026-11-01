@@ -1,368 +1,136 @@
-# 📚 BuggyBooks
+# BuggyBooks
 
-> **A deliberately imperfect bookstore application, purpose-built for QA engineers and SDET practitioners to practise real-world test automation, API testing, and chaos engineering.**
+[![CI](https://github.com/munna7862/buggy-books/actions/workflows/ci.yml/badge.svg)](https://github.com/munna7862/buggy-books/actions/workflows/ci.yml)
+[![Publish Container Images to GHCR](https://github.com/munna7862/buggy-books/actions/workflows/publish-images.yml/badge.svg)](https://github.com/munna7862/buggy-books/actions/workflows/publish-images.yml)
+[![Codacy Security Scan](https://github.com/munna7862/buggy-books/actions/workflows/codacy.yml/badge.svg)](https://github.com/munna7862/buggy-books/actions/workflows/codacy.yml)
 
----
+BuggyBooks is a small online bookshop built on purpose for practising test automation. It has a web frontend, a REST + WebSocket API and an Expo mobile app, and it ships with intentional defects and chaos switches (random checkout failures, slow endpoints, dropped sockets, expiring tokens, obfuscated locators, Shadow DOM) that a test suite has to handle.
 
-## 🌐 Live Application
+The main test suites that target it live in [automation-frameworks](https://github.com/munna7862/automation-frameworks).
 
-| Service | URL | Notes |
-|---|---|---|
-| **Frontend** | <https://buggy-books-fe.onrender.com> | React SPA |
-| **Backend API** | <https://buggy-books-api.onrender.com> | REST API |
+## Live links
 
-> ⚠️ **Note (Free Tier):** The Render backend spins down after 15 minutes of inactivity. The **first request** after inactivity may take up to **30–60 seconds** as the server cold-starts. This is expected behaviour and is itself a testable scenario.
+| What | URL |
+| --- | --- |
+| Frontend | https://buggy-books-fe.onrender.com |
+| API | https://buggy-books.onrender.com/api (for example `/api/books`, `/api/health`) |
+| Playwright report (GitHub Pages) | https://munna7862.github.io/buggy-books/AutomationReports/CI/ |
+| Container images | `ghcr.io/munna7862/buggy-books-backend`, `ghcr.io/munna7862/buggy-books-frontend` |
 
----
+Both Render services are on the free tier and sleep after about 15 minutes idle. The first request after that can take 30-60 seconds, and the data resets when the service restarts.
 
-## 🎯 Purpose & Design Philosophy
+## Status
 
-BuggyBooks is **not** a reference application for clean code. It is intentionally designed with:
+Version `1.0.0`. Phases 1-11 of the roadmap are delivered (36 sprints). Phase 12, mobile automation, is in progress: Sprints 12.1 (mobile anti-patterns) and 12.2 (Maestro and Appium suites) are merged; Sprint 12.3 (mobile CI pipeline and build artifacts) is next. The latest change publishes the backend and frontend images to GHCR.
 
-- **Real-world "bugs"** such as a stochastic checkout failure rate and a long-running inventory API — simulating production conditions that automation suites must handle.
-- **Non-semantic HTML selectors** (e.g. `input[name="txt_usr_77"]`) on forms to challenge testers who rely on obvious attributes.
-- **Chaos engineering endpoints** that allow you to programmatically inject failure modes into the backend, enabling controlled fault-injection testing.
-- **Authentic security patterns** (httpOnly cookies, CORS, Helmet, rate-limiting) so that API automation tests must deal with cookie-based auth rather than trivial header tokens.
+The roadmap is in [planning/Master/master_plan.md](planning/Master/master_plan.md) and [planning/Master/mobile_app_master_plan.md](planning/Master/mobile_app_master_plan.md). Some phase files under `planning/Phases/` still show "Planned" in their header although their sprints have merged.
 
----
+## Tech stack
 
-## 🗂️ Project Structure
+| Part | Stack |
+| --- | --- |
+| Backend (`backend/`) | Node.js, TypeScript, Express 4, Socket.IO, JWT access and refresh tokens in httpOnly cookies (plus Bearer tokens for mobile), bcrypt, Zod, Helmet, CORS, `express-rate-limit`, `csrf-csrf`, Jest + Supertest |
+| Frontend (`frontend/`) | React 19, TypeScript, Vite 8, React Router 7, `socket.io-client`, Vitest + Testing Library |
+| Mobile (`mobile/`) | Expo 52, React Native 0.76, Jest (`jest-expo`) |
+| Shared (`shared/`) | `@buggybooks/types`, shared TypeScript types such as the chaos config |
+| Tests in this repo | Playwright (`playwright-e2e/`), k6 (`performance/`), Appium + WebdriverIO and Maestro (`mobile-automation/`), Lighthouse CI |
+| Delivery | GitHub Actions, Docker Compose, GHCR, Render |
 
-```
-buggy-books/
-├── backend/                    # Node.js / Express API Server
-│   ├── src/
-│   │   ├── __tests__/          # Jest integration & unit tests
-│   │   ├── controllers/        # Route handler logic
-│   │   │   ├── authController.ts
-│   │   │   ├── bookController.ts
-│   │   │   ├── cartController.ts
-│   │   │   ├── checkoutController.ts
-│   │   │   └── testController.ts
-│   │   ├── data/               # In-memory data store + JSON persistence
-│   │   │   ├── dataStore.ts
-│   │   │   ├── chaosStore.ts
-│   │   │   └── storage.ts      # File-based persistence layer
-│   │   ├── routes/
-│   │   │   └── api.ts          # All route declarations
-│   │   ├── app.ts              # Express app (middleware stack)
-│   │   ├── config.ts
-│   │   └── server.ts           # HTTP server entry point
-│   ├── db.json                 # Runtime data (git-ignored in prod)
-│   └── package.json
-│
-├── frontend/                   # React / Vite SPA
-│   ├── src/
-│   │   ├── pages/              # Route-level components
-│   │   │   ├── Catalog.tsx     # Paginated, searchable book list
-│   │   │   ├── BookDetail.tsx  # Single book detail view
-│   │   │   ├── Cart.tsx        # Per-user shopping cart
-│   │   │   ├── Checkout.tsx    # Checkout form with Zod validation
-│   │   │   ├── Login.tsx
-│   │   │   └── Register.tsx
-│   │   ├── AuthContext.tsx     # Global auth state (cookie-based)
-│   │   ├── api.ts              # Centralised API request helper
-│   │   └── App.tsx             # Router & layout
-│   └── package.json
-│
-├── test_cases_catalog.md       # ← Human-readable Playwright test cases
-└── README.md
-```
+## Run it locally
 
----
+Requirements: Node.js 20 or later and npm. Docker is optional.
 
-## 🛠️ Technology Stack
-
-### Backend
-| Technology | Version | Role |
-|---|---|---|
-| **Node.js** | 20.x | Runtime |
-| **TypeScript** | 5.3 | Language |
-| **Express** | 4.x | HTTP framework |
-| **jsonwebtoken** | 9.x | JWT signing & verification |
-| **bcrypt** | 6.x | Password hashing |
-| **cookie-parser** | 1.4 | `httpOnly` cookie parsing |
-| **helmet** | 8.x | Secure HTTP headers |
-| **cors** | 2.8 | Origin restriction |
-| **express-rate-limit** | 7.x | Request throttling (60 req/min) |
-| **zod** | 4.x | Runtime schema validation |
-| **morgan** | 1.x | HTTP request logging |
-| **Jest + Supertest** | 30.x / 7.x | API integration & unit tests |
-| **ts-node-dev** | 2.x | Dev server with hot-reload |
-
-### Frontend
-| Technology | Version | Role |
-|---|---|---|
-| **React** | 19.x | UI framework |
-| **TypeScript** | 6.x | Language |
-| **Vite** | 8.x | Build tool & dev server |
-| **React Router DOM** | 7.x | Client-side routing |
-| **react-hot-toast** | 2.x | Toast notifications |
-| **Vitest** | 4.x | Unit test runner |
-| **Testing Library** | 16.x | Component testing utilities |
-
-### Infrastructure & DevOps
-| Tool | Role |
-|---|---|
-| **Render.com** | Cloud hosting (Free Tier) |
-| **GitHub** | Source control |
-| **GitHub Actions** (optional) | CI/CD trigger |
-
----
-
-## ⚙️ Local Development Setup
-
-### Prerequisites
-- Node.js v20 or higher
-- npm v9 or higher
-- Git
-
-### 1. Clone the repository
 ```bash
-git clone <https://github.com/munna7862/buggy-books.git>
+git clone https://github.com/munna7862/buggy-books.git
 cd buggy-books
+npm install                 # all workspaces
+cp .env.example .env        # set JWT_SECRET
+npm run dev                 # backend on http://localhost:4000, frontend on http://localhost:5173
 ```
 
-### 2. Install all dependencies across monorepo
-```bash
-# Installs root, backend, frontend, and playwright-e2e dependencies in one command
-npm run install:all
-```
+Or build and run both in Docker with `docker compose up --build` (backend on 4000, frontend on 5173). Prebuilt images are on GHCR (see Live links). The mobile app starts with `npm run dev:mobile` (Expo).
 
-### 3. Configure environment variables
-Create `backend/.env`:
-```env
-JWT_SECRET=your-very-long-random-secret-here
-PORT=4000
-NODE_ENV=development
-```
+Seeded accounts:
 
-### 4. Run the full stack in development mode
-```bash
-# From the project root — runs both backend and frontend concurrently
-npm run dev
-```
+| Username | Password |
+| --- | --- |
+| `admin` | `password123` |
+| `testuser` | `buggybooks` |
 
-| Service | Local URL |
-|---|---|
-| Frontend | http://localhost:5173 |
-| Backend API | http://localhost:4000 |
+## Commands
 
-### 5. Unified Monorepo Commands
-| Command | Description |
-|---|---|
-| `npm run install:all` | Provision dependencies across root, backend, frontend, and playwright-e2e |
-| `npm run dev` | Start backend and frontend concurrently with hot-reloading |
-| `npm run typecheck` | Run TypeScript compilation checks across all 3 packages concurrently |
-| `npm run test:unit` | Run backend Jest and frontend Vitest unit test suites concurrently |
-| `npm run test:backend` | Run backend Jest test suite |
-| `npm run test:frontend` | Run frontend Vitest component test suite |
-| `npm run test:e2e` | Run Playwright End-to-End test suite |
-| `npm run build` | Compile production builds for backend and frontend |
-| `npm run lint` | Run ESLint check on frontend |
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Backend and frontend with hot reload |
+| `npm run build` | Production builds of backend and frontend |
+| `npm run typecheck` | Type checks for backend, frontend, Playwright, mobile and mobile automation |
+| `npm run lint` | ESLint across all workspaces |
+| `npm run test:unit` | Backend Jest and frontend Vitest |
+| `npm run test:mobile:unit` | Mobile app Jest tests |
+| `npm run test:e2e` | Playwright suite (`npm run test:api` for API only) |
+| `npm run test:perf:smoke` | k6 smoke; also `test:perf`, `:stress`, `:journey`, `:auth`, `:checkout`, `:soak`, `:breakpoint` |
+| `npm run test:lhci` | Lighthouse CI audit |
+| `npm run test:mobile:appium:android` / `:ios` | Appium mobile tests |
 
----
+## API
 
-## 🔑 Default Credentials
+All routes are under `/api`. Session auth uses an httpOnly `token` cookie; mobile clients can send `Authorization: Bearer <token>`. State-changing browser requests need the `x-csrf-token` header from `GET /api/csrf-token` (auth and `/api/test/*` routes are exempt).
 
-| Username | Password | Role |
-|---|---|---|
-| `admin` | `password123` | Default user |
-| `testuser` | `buggybooks` | Default user |
+| Area | Routes |
+| --- | --- |
+| Auth | `POST /login`, `POST /register`, `POST /logout`, `POST /auth/refresh` |
+| Books | `GET /books` (search and paging), `GET /books/:id`, `GET /inventory/report` (slow on purpose when chaos is on) |
+| Cart | `GET /cart`, `POST /cart`, `DELETE /cart/:bookId`, `DELETE /cart` |
+| Checkout and orders | `POST /checkout/process`, `GET /orders` |
+| Profile | `GET /profile`, `POST /profile/upload` (avatar) |
+| Ops | `GET /health`, `GET /metrics`, `GET /csrf-token` |
+| Test control | `GET /test/config`, `POST /test/config`, `POST /test/reset`, `POST /test/books/:id/stock`, `DELETE /test/session/:id` |
 
-> Both accounts are seeded at startup. You can register additional accounts via `/register` or the API.
+A WebSocket server (Socket.IO) runs on the same port as the API.
 
----
+## Chaos switches
 
-## 🌐 API Reference
+`POST /api/test/config` changes these at runtime. `POST /api/test/reset` restores the defaults and clears carts and orders. The settings are global to the server, so reset them after each test.
 
-### Authentication
-> All protected endpoints authenticate via an `httpOnly` cookie named `token`.
+| Setting | Default | Effect |
+| --- | --- | --- |
+| `checkoutFailureRate` | `0` | Probability (0-1) that checkout returns 500 |
+| `inventoryDelayMs` | `0` | Delay added to `/api/inventory/report` |
+| `jwtExpirySeconds` | `900` | Access-token lifetime |
+| `websocketDropRate` | `0` | Probability of dropping a WebSocket connection |
+| `uploadFailureRate` | `0` | Probability that an avatar upload fails |
+| `injectA11yViolations` | `false` | Adds accessibility violations to the UI |
+| `visualChaos` | `false` | Shifts styles to break visual baselines |
+| `inventoryLockingRate` | `0` | Probability of an optimistic-locking conflict on stock |
 
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/api/login` | No | Login and receive a session cookie |
-| `POST` | `/api/register` | No | Create a new account |
-| `POST` | `/api/logout` | No | Clear the session cookie |
+Always-on hurdles: obfuscated form field names (for example `txt_usr_77`), a delayed add-to-cart, Shadow DOM components, and a rate limiter (600 requests per IP per minute; tests can send `x-bypass-rate-limit: true`). The mobile app adds its own set (MOB-B1 to MOB-B6: dynamic locators, keyboard occlusion, async delays, gateway timeouts, offline banner, orientation shift). Full details: [intentional_bugs.md](intentional_bugs.md).
 
-### Books
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/books` | No | List all books (supports `?q=`, `?page=`, `?limit=`) |
-| `GET` | `/api/books/:id` | No | Get a single book by ID |
-| `GET` | `/api/inventory/report` | No | Intentionally slow endpoint (chaos delay) |
+## Tests and CI
 
-### Cart
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `GET` | `/api/cart` | ✅ Yes | Get the current user's cart |
-| `POST` | `/api/cart` | ✅ Yes | Add a book to the cart (`{ "bookId": "1" }`) |
-| `DELETE` | `/api/cart/:bookId` | ✅ Yes | Remove one item from the cart |
-| `DELETE` | `/api/cart` | ✅ Yes | Clear the entire cart |
+| Workflow | Trigger | What it does |
+| --- | --- | --- |
+| `ci.yml` | push, pull request | Backend Jest and frontend Vitest with coverage, Playwright typing and POM lint, builds, Lighthouse CI, k6 benchmarks (smoke on PRs, full on `main`), Playwright smoke against the built app |
+| `playwright-ci.yml` | after CI, schedule, manual | Full Playwright run; publishes the report to GitHub Pages |
+| `playwright-docker.yml`, `playwright-on-demand.yml` | manual | Playwright in Docker, or against a chosen environment and tag |
+| `perf-endurance.yml` | schedule, manual | k6 soak and breakpoint tests |
+| `perf-baseline-recalibrate.yml` | manual | Recalculates k6 baselines |
+| `quarantine-audit.yml` | schedule, manual | Repeats quarantined tests to check stability |
+| `publish-images.yml` | push to `main`, manual | Builds and pushes the backend and frontend images to GHCR |
+| `codacy.yml` | push, pull request, schedule | Codacy security scan |
 
-### Checkout & Orders
-| Method | Endpoint | Auth | Description |
-|---|---|---|---|
-| `POST` | `/api/checkout/process` | ✅ Yes | Process an order (has stochastic failure!) |
-| `GET` | `/api/orders` | ✅ Yes | Get the current user's order history |
+The Playwright test cases are listed in [specs/test_cases_catalog.md](specs/test_cases_catalog.md).
 
-### Chaos & Test Utilities
-> These endpoints are available in all environments and allow test suites to control application state.
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/api/test/reset` | Wipe all cart & order data, reset chaos config |
-| `POST` | `/api/test/config` | Inject chaos parameters |
-
-**Chaos Config Payload:**
-```json
-{
-  "checkoutFailureRate": 0.0,
-  "inventoryDelayMs": 0
-}
-```
-- `checkoutFailureRate`: Float `0.0` (never fail) → `1.0` (always fail). Default: `0.15`
-- `inventoryDelayMs`: Integer milliseconds to delay `/inventory/report`. Default: `3000`
-
----
-
-## 🎭 Known Bugs & Deliberate Imperfections
-
-These are **intentional design decisions** that serve as targets for automation practice:
-
-| Ref | Description | How to Detect |
-|---|---|---|
-| **B1** | Checkout fails randomly ~15% of the time | Run 20 checkout attempts and chart the fail rate |
-| **B2** | `/api/inventory/report` is always slow (3s delay) | Assert response time > 2500ms |
-| **B3** | Non-semantic login form fields (`txt_usr_77`) | Finding these fields requires robust selectors |
-| **B4** | Data resets on Render cold-start (ephemeral disk) | Register a user, wait, return, and try to login |
-
----
-
-## 🧪 Running Tests
-
-### Full Monorepo Unit Test Suite
-```bash
-# Runs backend Jest tests and frontend Vitest tests concurrently from root
-npm run test:unit
-```
-
-### Backend Tests (Jest)
-```bash
-# From root or inside /backend
-npm run test:backend
-# Or: cd backend && npm test
-```
-
-### Frontend Tests (Vitest)
-```bash
-# From root or inside /frontend
-npm run test:frontend
-# Or: cd frontend && npm test
-```
-
-### Playwright E2E Tests
-```bash
-# From root or inside /playwright-e2e
-npm run test:e2e
-# Or: cd playwright-e2e && npm test
-```
-
----
-
-## 🔄 Sample Flows
-
-### Flow 1: Register → Add to Cart → Checkout
+## Project structure
 
 ```
-1. POST /api/register   { username, password, fullName }
-   ← 201 + Set-Cookie: token=<jwt>; HttpOnly
-
-2. GET  /api/books?page=1&limit=8
-   ← 200 + { books: [...], total: 15, page: 1 }
-
-3. POST /api/cart       { bookId: "6" }
-   ← 200 + [ { id: "6", title: "Harry Potter..." } ]
-
-4. POST /api/checkout/process
-        { firstName: "Jane", lastName: "Doe", creditCard: "1234567812345678" }
-   ← 200 + { success: true, orderId: "f41886..." }
-     OR
-   ← 500   (15% chance — retry logic required!)
-
-5. GET  /api/orders
-   ← 200 + [ { id, items, total, customerName, date } ]
+backend/            Express API: controllers, services, repositories, middleware, chaos store, Jest tests
+frontend/           React app: catalog, book detail, cart, checkout, profile, login, register, chaos dashboard
+mobile/             Expo React Native app
+mobile-automation/  Appium + WebdriverIO screen objects and specs, Maestro flows
+playwright-e2e/     Playwright UI and API tests
+performance/        k6 scenarios, baselines and reporting scripts
+shared/             shared TypeScript types
+specs/              test case catalogue
+planning/           master plans, phases, sprints
+docker-compose.yml  backend and frontend containers
 ```
-
-### Flow 2: Inject Chaos → Test Recovery
-
-```
-1. POST /api/test/config  { "checkoutFailureRate": 1.0 }
-   ← Checkout will now ALWAYS fail
-
-2. POST /api/checkout/process { ... }
-   ← 500 Internal Server Error (assert this!)
-
-3. POST /api/test/config  { "checkoutFailureRate": 0.0 }
-   ← Checkout will now NEVER fail
-
-4. POST /api/checkout/process { ... }
-   ← 200 Success (assert this!)
-
-5. POST /api/test/reset
-   ← Restore default chaos config (0.15 rate)
-```
-
-### Flow 3: Multi-User Cart Isolation
-
-```
-User A logs in → adds Book #1 to cart
-User B logs in → adds Book #3 to cart
-
-GET /api/cart (as User A) → returns only Book #1
-GET /api/cart (as User B) → returns only Book #3
-```
-
----
-
-## 🔒 Security Architecture
-
-| Layer | Implementation |
-|---|---|
-| **Authentication** | JWT stored in `httpOnly`, `SameSite=Strict` cookie — inaccessible to JavaScript (XSS-safe) |
-| **Password Storage** | bcrypt with 10 salt rounds |
-| **HTTP Headers** | Helmet.js sets CSP, X-Frame-Options, HSTS, and more |
-| **CORS** | Restricted to `localhost:5173` and `*.onrender.com` only |
-| **Rate Limiting** | 60 requests per IP per minute |
-| **Input Validation** | Zod schemas enforce shape and types on all mutation endpoints |
-
----
-
-## 📋 Test Automation Resources
-
-| Document | Description |
-|---|---|
-| [`test_cases_catalog.md`](./test_cases_catalog.md) | Complete human-readable test cases for Playwright automation (Smoke / Regression / E2E) |
-
----
-
-## 🏗️ Architecture Decisions
-
-| Decision | Rationale |
-|---|---|
-| **In-memory + JSON file persistence** | Avoids a database dependency; the file store gives local dev persistence while the in-memory nature remains a discoverable "bug" in production |
-| **Stochastic checkout failures** | Forces automation engineers to implement robust retry logic, not just happy-path tests |
-| **Per-user cart isolation via Map** | Enables multi-user concurrent testing — critical for load and parallel test execution |
-| **No frontend token storage** | The `httpOnly` cookie pattern is the real-world secure standard; testers must learn to handle session cookies instead of `localStorage` JWTs |
-
----
-
-## 🤝 Contributing
-
-This project is primarily maintained for QA practice. To contribute a new "bug" or feature:
-
-1. Branch from `main`
-2. Make your changes
-3. Ensure all existing tests still pass (`npm test` in both `/backend` and `/frontend`)
-4. Update `test_cases_catalog.md` with new test cases if applicable
-5. Open a PR against `main`
