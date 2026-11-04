@@ -19,13 +19,24 @@
 
 ---
 
-## 2. Previous: Mobile Rollback & Re-plan (done)
+## 2. Sprint M0.1 Review Comments & Refinement Loop
+
+| Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
+| :--- | :--- | :--- | :--- |
+| **Independent PR Review** | DevOps Engineer | Adding any label other than `run-mobile-e2e` cancelled the in-flight run (concurrency is applied before job `if`), and on `main` a merge could cancel the nightly run. Fixed: per-label noop group, separate nightly group, cancel-in-progress only on PRs. Path filter now covers root `package.json` and all of `backend/`. | `[FIXED]` |
+| **Independent PR Review** | Senior SDE | Session restore deleted tokens on any error (offline or cold start logged the user out). Now only 401/403 clears tokens; test added. The catalog showed "0 books" for a non-list response; now shows an error and the flow asserts at least 1 book. Contract test now checks the login and books response shapes. | `[FIXED]` |
+| **Independent PR Review** | Senior SDE | The literal-path lint only matched strings starting with `/api/`, so `'http://10.0.2.2:4000/api/auth/login'` passed. Now matches `/api/` anywhere, plus template-literal testIDs. Android error texts get `accessibilityLiveRegion`. App ID moved to the contracts, with a test that `app.config.ts` matches. | `[FIXED]` |
+| **Independent PR Review** | Product Owner | Plan said Maestro targets a debug dev-build APK; CI tests a release APK. Plan wording corrected. The `run-mobile-e2e` PR label changes PO decision 3 and is marked as awaiting PO approval. | `[AWAITING PO]` |
+
+---
+
+## 3. Previous: Mobile Rollback & Re-plan (done)
 
 The first mobile attempt (PRs #97-#102) was reviewed and removed in #106. The re-plan (#107) was approved: Android only, Expo dev build, emulator CI on `main` + nightly.
 
 ---
 
-## 2. Sprint Review Comments & Refinement Loop
+## 4. Rollback Review Comments
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
@@ -35,7 +46,7 @@ The first mobile attempt (PRs #97-#102) was reviewed and removed in #106. The re
 
 ---
 
-## 3. Definition of Done (DoD) Checklist
+## 5. Definition of Done (DoD) Checklist
 
 - [x] `npm run typecheck` passes.
 - [x] Backend tests pass (`backend: npm test`), including the dual-auth tests.

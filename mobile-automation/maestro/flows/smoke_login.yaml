@@ -32,7 +32,7 @@ tags:
     text: "Signed in as ${USER_TESTUSER_USERNAME}"
 - extendedWaitUntil:
     visible:
-      text: "\\d+ books in the catalog"
+      text: "[1-9]\\d* books in the catalog"
     timeout: 20000
 - tapOn:
     id: ${CATALOG_LOGOUT}

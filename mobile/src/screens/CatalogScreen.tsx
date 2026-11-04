@@ -18,7 +18,9 @@ export function CatalogScreen() {
     let active = true;
     apiRequest<Book[]>(API_ROUTES.books)
       .then((books) => {
-        if (active) setBookCount(Array.isArray(books) ? books.length : 0);
+        if (!active) return;
+        if (Array.isArray(books)) setBookCount(books.length);
+        else setError('Unexpected response from the server');
       })
       .catch((err: unknown) => {
         if (active) setError(err instanceof Error ? err.message : 'Could not load books');
@@ -37,7 +39,7 @@ export function CatalogScreen() {
       </Text>
 
       {error ? (
-        <Text testID={ids.error} style={styles.error} accessibilityRole="alert">
+        <Text testID={ids.error} style={styles.error} accessibilityRole="alert" accessibilityLiveRegion="polite">
           {error}
         </Text>
       ) : (

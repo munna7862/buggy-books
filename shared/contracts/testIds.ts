@@ -7,6 +7,9 @@
  * These are the clean baseline IDs. Obfuscated IDs are a Phase M2 chaos
  * option and will be switched on through the chaos config.
  */
+/** Android application ID. Used by app.config.ts and as the Maestro `appId`. */
+export const MOBILE_APP_ID = 'com.buggybooks.app';
+
 export const MOBILE_TEST_IDS = {
   app: {
     loading: 'app-loading',

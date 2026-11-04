@@ -68,7 +68,7 @@ export function LoginScreen() {
       />
 
       {error ? (
-        <Text testID={ids.error} style={styles.error} accessibilityRole="alert">
+        <Text testID={ids.error} style={styles.error} accessibilityRole="alert" accessibilityLiveRegion="polite">
           {error}
         </Text>
       ) : null}

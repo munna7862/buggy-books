@@ -1,6 +1,4 @@
-import { API_ROUTES, MOBILE_TEST_IDS, SEEDED_USERS } from '@buggybooks/contracts';
-
-export const APP_ID = 'com.buggybooks.app';
+import { API_ROUTES, MOBILE_APP_ID, MOBILE_TEST_IDS, SEEDED_USERS } from '@buggybooks/contracts';
 
 /** Converts camelCase to UPPER_SNAKE_CASE, e.g. bookCount -> BOOK_COUNT. */
 function toEnvKey(...parts: string[]): string {
@@ -12,7 +10,7 @@ function toEnvKey(...parts: string[]): string {
  * LOGIN_USERNAME, CATALOG_WELCOME, USER_TESTUSER_PASSWORD, RESET_PATH, ...
  */
 export function maestroEnv(backendUrl: string): Record<string, string> {
-  const env: Record<string, string> = { APP_ID, BACKEND_URL: backendUrl, RESET_PATH: API_ROUTES.testReset.path };
+  const env: Record<string, string> = { APP_ID: MOBILE_APP_ID, BACKEND_URL: backendUrl, RESET_PATH: API_ROUTES.testReset.path };
 
   for (const [screen, ids] of Object.entries(MOBILE_TEST_IDS)) {
     for (const [name, id] of Object.entries(ids)) env[toEnvKey(screen, name)] = id;

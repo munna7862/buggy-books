@@ -31,6 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   // Restore a stored session, but only if the backend still accepts the token.
   // Silent refresh arrives in Sprint M1.1; until then an expired token signs the user out.
+  // If the server can't be reached, show the login screen but keep the stored tokens.
   useEffect(() => {
     let active = true;
     (async () => {
@@ -42,8 +43,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
         const profile = await apiRequest<ProfileResponse>(API_ROUTES.profile, { token: stored.token });
         if (active) setState({ status: 'signedIn', username: profile.username, token: stored.token });
-      } catch {
-        await clearTokens().catch(() => undefined);
+      } catch (err) {
+        // Only a rejected token ends the session. If the server is unreachable, slow
+        // or failing, keep the tokens so the next launch can restore the session.
+        if (err instanceof ApiError && (err.status === 401 || err.status === 403)) {
+          await clearTokens().catch(() => undefined);
+        }
         if (active) setState({ status: 'signedOut' });
       }
     })();

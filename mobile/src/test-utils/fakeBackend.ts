@@ -8,6 +8,8 @@ import { API_ROUTES, SEEDED_USERS } from '@buggybooks/contracts';
  */
 export interface FakeBackendOptions {
   books?: { id: string; title: string }[];
+  /** Overrides the GET /api/books body, e.g. to simulate a changed response shape. */
+  booksResponse?: unknown;
   validToken?: string;
 }
 
@@ -47,7 +49,7 @@ export function installFakeBackend(options: FakeBackendOptions = {}) {
         : json(401, { error: 'Unauthorized: Invalid credentials' });
     }
     if (is(API_ROUTES.logout)) return json(200, { message: 'Logged out' });
-    if (is(API_ROUTES.books)) return json(200, books);
+    if (is(API_ROUTES.books)) return json(200, options.booksResponse ?? books);
     if (is(API_ROUTES.profile)) {
       return headers.Authorization === `Bearer ${validToken}`
         ? json(200, { username: SEEDED_USERS.testuser.username })

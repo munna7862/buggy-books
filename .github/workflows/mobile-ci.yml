@@ -13,7 +13,8 @@ on:
       - "mobile/**"
       - "mobile-automation/**"
       - "shared/**"
-      - "backend/src/**"
+      - "backend/**"
+      - "package.json"
       - "package-lock.json"
       - ".github/workflows/mobile-ci.yml"
   push:
@@ -22,16 +23,23 @@ on:
       - "mobile/**"
       - "mobile-automation/**"
       - "shared/**"
-      - "backend/src/**"
+      - "backend/**"
+      - "package.json"
       - "package-lock.json"
       - ".github/workflows/mobile-ci.yml"
   schedule:
     - cron: "17 2 * * *" # nightly, 02:17 UTC
   workflow_dispatch:
 
+# One group per PR (or ref). Nightly runs get their own group so a merge can't cancel them.
+# Label events other than run-mobile-e2e get a unique group: they skip every job and
+# must not cancel the real run. Only PR runs cancel older runs; main and nightly queue.
 concurrency:
-  group: mobile-ci-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  group: >-
+    mobile-ci-${{ github.event.pull_request.number || github.ref }}${{
+    github.event_name == 'schedule' && '-nightly' || '' }}${{
+    (github.event.action == 'labeled' && github.event.label.name != 'run-mobile-e2e') && format('-noop-{0}', github.run_id) || '' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 permissions:
   contents: read

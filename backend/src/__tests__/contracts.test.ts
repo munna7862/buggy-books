@@ -40,9 +40,23 @@ describe('Shared API contract (@buggybooks/contracts)', () => {
       .post(API_ROUTES.login.path)
       .send({ username: user.username, password: user.password });
 
+    // The mobile app reads exactly these fields from the login response.
     expect(res.status).toBe(200);
-    expect(res.body.token).toEqual(expect.any(String));
-    expect(res.body.refreshToken).toEqual(expect.any(String));
+    expect(res.body).toEqual(
+      expect.objectContaining({ username: user.username, token: expect.any(String), refreshToken: expect.any(String) }),
+    );
+  });
+
+  it('GET books without query params returns a plain list of books', async () => {
+    // The mobile catalog relies on this shape; query params switch to a paginated object.
+    const res = await request(app).get(API_ROUTES.books.path);
+
+    expect(res.status).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+    expect(res.body.length).toBeGreaterThan(0);
+    for (const book of res.body) {
+      expect(book).toEqual(expect.objectContaining({ id: expect.any(String), title: expect.any(String), price: expect.any(Number) }));
+    }
   });
 
   it('a Bearer token from login reads the profile of the same user', async () => {

@@ -79,6 +79,26 @@ describe('Login flow (MOB_M0_01, MOB_M0_02)', () => {
     expect(store.size).toBe(0);
   });
 
+  it('keeps a stored session when the server is unreachable at launch', async () => {
+    globalThis.fetch = jest.fn().mockRejectedValue(new TypeError('Network request failed')) as unknown as typeof fetch;
+    store.set('buggybooks.accessToken', 'access-token');
+    store.set('buggybooks.refreshToken', 'refresh-token');
+    await render(<App />);
+
+    expect(await screen.findByTestId(login.screen)).toBeOnTheScreen();
+    expect(store.get('buggybooks.accessToken')).toBe('access-token');
+    expect(store.get('buggybooks.refreshToken')).toBe('refresh-token');
+  });
+
+  it('shows an error instead of "0 books" when the books response is not a list', async () => {
+    installFakeBackend({ booksResponse: { books: [] } });
+    await render(<App />);
+    await signIn(SEEDED_USERS.testuser.username, SEEDED_USERS.testuser.password);
+
+    expect(await screen.findByTestId(catalog.error)).toHaveTextContent('Unexpected response from the server');
+    expect(screen.queryByTestId(catalog.bookCount)).toBeNull();
+  });
+
   it('signs out, clears the tokens and returns to the login screen', async () => {
     const { requests } = installFakeBackend();
     await render(<App />);

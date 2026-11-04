@@ -23,11 +23,13 @@ module.exports = defineConfig([
       'no-restricted-syntax': [
         'error',
         {
-          selector: 'Literal[value=/^\\/api\\//], TemplateElement[value.raw=/^\\/api\\//]',
+          selector:
+            ':not(ImportDeclaration, ImportExpression, ExportAllDeclaration, ExportNamedDeclaration) > Literal[value=/\\/api\\//], TemplateElement[value.raw=/\\/api\\//]',
           message: 'Use API_ROUTES from @buggybooks/contracts instead of a literal API path.',
         },
         {
-          selector: "JSXAttribute[name.name='testID'] > Literal, JSXAttribute[name.name='testID'] > JSXExpressionContainer > Literal",
+          selector:
+            "JSXAttribute[name.name='testID'] > Literal, JSXAttribute[name.name='testID'] > JSXExpressionContainer > :matches(Literal, TemplateLiteral)",
           message: 'Use MOBILE_TEST_IDS from @buggybooks/contracts instead of a literal testID.',
         },
       ],

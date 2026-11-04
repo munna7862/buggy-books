@@ -39,6 +39,7 @@ describe('apiRequest', () => {
     const original = process.env.EXPO_PUBLIC_API_URL;
     delete process.env.EXPO_PUBLIC_API_URL;
     expect(getBaseUrl()).toBe('http://10.0.2.2:4000');
-    process.env.EXPO_PUBLIC_API_URL = original;
+    if (original === undefined) delete process.env.EXPO_PUBLIC_API_URL;
+    else process.env.EXPO_PUBLIC_API_URL = original;
   });
 });

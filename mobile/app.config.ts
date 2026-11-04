@@ -16,6 +16,8 @@ const config: ExpoConfig = {
   scheme: 'buggybooks',
   platforms: ['android'],
   android: {
+    // Must equal MOBILE_APP_ID in @buggybooks/contracts (checked by src/__tests__/appConfig.test.ts).
+    // Expo's config loader can't import the workspace package, so the value is repeated here.
     package: 'com.buggybooks.app',
     adaptiveIcon: {
       backgroundColor: '#0f172a',
