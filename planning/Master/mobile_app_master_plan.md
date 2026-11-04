@@ -1,7 +1,7 @@
 # BuggyBooks Mobile App Master Plan (v2, re-plan)
 
 **Document Identifier**: `PLAN-MASTER-MOBILE-APP-002` (replaces `PLAN-MASTER-MOBILE-APP-001`)
-**Status**: Draft, awaiting Product Owner approval
+**Status**: Approved by Product Owner (scope decisions in section 6)
 **Date**: 2026-11-04
 
 ---
@@ -59,15 +59,15 @@ shared/
     routes.ts            API_ROUTES = { login: '/api/login', ... }   <- backend router + mobile client
     testIds.ts           MOBILE_TEST_IDS = { login: { username: 'txt_usr_77', ... } }
     fixtures.ts          SEEDED_USERS, SEEDED_BOOK_IDS              <- backend seed + automation
-mobile/                  Expo (current SDK at sprint start), React 19 to match frontend
+mobile/                  Expo (current SDK at sprint start), React 19 to match frontend, Android only
   app.config.ts          env-driven API URL, chaos screen only when APP_VARIANT=qa
-  eas.json               development / qa / preview profiles
+  eas.json               development / qa profiles (expo-dev-client, no Expo Go)
 mobile-automation/
   maestro/               flows import IDs via generated env file from testIds.ts
   appium/                (Phase M3) WDIO screen objects using MOBILE_TEST_IDS
 .github/workflows/
-  mobile-ci.yml          lint + typecheck + jest -> prebuild -> gradle assembleDebug ->
-                         emulator + backend -> maestro test
+  mobile-ci.yml          every PR (mobile paths): lint + typecheck + jest + APK build
+                         main + nightly: emulator + backend -> maestro test
 ```
 
 ---
@@ -78,11 +78,11 @@ mobile-automation/
 
 **M0.1 Contracts, build pipeline and smoke flow**
 - Add `shared/contracts/{routes,testIds,fixtures}.ts`. Migrate `backend/src/routes/api.ts` and the user seed to them.
-- Scaffold `mobile/` on the current Expo SDK with React 19, plus a Login screen and an empty Catalog screen only.
-- Add `eas.json` and `expo prebuild`, and a `mobile-ci.yml` job that builds a debug APK and uploads it as an artifact.
-- Add an Android emulator job: start the backend, `adb reverse tcp:4000`, install the APK, run `maestro test flows/smoke_login.yaml`.
+- Scaffold `mobile/` on the current Expo SDK with React 19 and `expo-dev-client`, plus a Login screen and an empty Catalog screen only. Android only: no `ios` config.
+- Add `eas.json` and `expo prebuild --platform android`, and a `mobile-ci.yml` job that builds a debug development-build APK (Gradle, no EAS cloud) and uploads it as an artifact. This job and lint/typecheck/Jest run on every PR that touches `mobile/`, `mobile-automation/` or `shared/`.
+- Add an Android emulator job that runs on push to `main`, nightly (`schedule`) and `workflow_dispatch`, not on PRs: start the backend, `adb reverse tcp:4000`, install the APK, run `maestro test flows/smoke_login.yaml`.
 - Add a contract test (Jest, backend) asserting every `API_ROUTES` entry is registered on the router.
-- **Exit:** CI is green with a real login on an emulator.
+- **Exit:** the emulator job is green with a real login (verified with a manual `workflow_dispatch` run on the sprint branch before merge).
 
 ### Phase M1: Clean core flows (2 sprints)
 
@@ -95,23 +95,24 @@ mobile-automation/
 
 **M2.1** Add `mobileObfuscatedIds`, `mobileKeyboardOcclusion`, `mobileAddToCartDelayMs`, `mobileSimulatedOffline` and `mobileLandscapeShift` to `ChaosConfig`. The app reads them from `/api/test/config` on launch and on resume. Add a QA-variant-only Chaos screen. Each anti-pattern gets a Maestro flow that turns it on through the API, proves the hurdle exists, works around it, and resets.
 
-### Phase M3: Appium proving ground and iOS (2 sprints)
+### Phase M3: Appium proving ground (1 sprint)
 
 **M3.1** Appium + WebdriverIO screen objects (extending a `BaseMobileScreen` that mirrors `BasePage`) using `MOBILE_TEST_IDS`. Run on the Android CI emulator, with Allure reporting.
-**M3.2** iOS simulator build on a macOS runner (`xcodebuild` or EAS local), with Maestro and Appium XCUITest runs, nightly or on demand to save macOS minutes.
+
+iOS is out of scope (see section 6). Revisit it only after M3.1 is stable.
 
 ---
 
 ## 5. Definition of Done additions for mobile sprints
 
-- [ ] The sprint's Maestro flows pass in `mobile-ci.yml` against a real backend (not mocked).
+- [ ] The sprint's Maestro flows pass in the `mobile-ci.yml` emulator job against a real backend (not mocked). Because that job does not run on PRs, trigger it with `workflow_dispatch` on the sprint branch and link the run in the PR.
 - [ ] No string-literal API paths or `testID`s in `mobile/` or `mobile-automation/`: only the `shared/contracts` imports.
 - [ ] `npx jest --no-cache` passes for `mobile/` (a cold-cache run).
 - [ ] The APK artifact is attached to the CI run.
 - [ ] `specs/test_cases_catalog.md` entries point to a real-device flow, not only to unit tests.
 
-## 6. Open decisions for the Product Owner
+## 6. Product Owner decisions (2026-11-04)
 
-1. Is iOS in scope for the first release, or Android-only until M3.2?
-2. Should Expo Go stay supported, or should the project standardise on a development build (needed for some native modules and for Appium)?
-3. Is the CI budget OK for an Android emulator job on every PR, or should it run only on `main` and nightly?
+1. **Platform:** Android only. No iOS config, macOS runners or XCUITest work in M0 to M3.
+2. **Runtime:** a development build (`expo-dev-client`). Expo Go is not supported. Appium and Maestro target the dev-build APK (`com.buggybooks.app`).
+3. **CI budget:** the Android emulator job runs on push to `main`, nightly and on manual dispatch. On PRs, CI runs lint, typecheck, Jest and the APK build only.

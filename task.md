@@ -13,7 +13,8 @@
 - [x] Remove the mobile sections from `intentional_bugs.md`, `specs/test_cases_catalog.md` (sections 20-22, `TC-EXPO-SCAFFOLD-001`) and `README.md`.
 - [x] Remove the superseded Phase 11/12 and Sprint 11.x/12.x planning docs, and update `planning/Master/master_plan.md`.
 - [x] Write the revised plan: `planning/Master/mobile_app_master_plan.md` (v2).
-- [ ] Product Owner approval of the v2 plan (open decisions in section 6 of the plan).
+- [x] Product Owner approval of the v2 plan: Android only, Expo dev build, emulator CI on `main` + nightly (recorded in section 6 of the plan).
+- [ ] Next: Sprint M0.1 (contracts, APK build pipeline, Maestro smoke login).
 
 ---
 
