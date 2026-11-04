@@ -1,0 +1,40 @@
+# MOB_M0_03: a seeded user signs in against the real backend and reaches the catalog.
+# Every id and credential is a variable generated from @buggybooks/contracts by
+# scripts/maestro-env.ts. Do not write literal ids here (`npm run check:flows`).
+appId: ${APP_ID}
+name: Smoke - seeded user signs in
+tags:
+  - smoke
+  - auth
+---
+- runScript: ../scripts/reset_backend.js
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: ${LOGIN_SCREEN}
+    timeout: 30000
+- tapOn:
+    id: ${LOGIN_USERNAME}
+- inputText: ${USER_TESTUSER_USERNAME}
+- tapOn:
+    id: ${LOGIN_PASSWORD}
+- inputText: ${USER_TESTUSER_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: ${LOGIN_SUBMIT}
+- extendedWaitUntil:
+    visible:
+      id: ${CATALOG_WELCOME}
+    timeout: 20000
+- assertVisible:
+    id: ${CATALOG_WELCOME}
+    text: "Signed in as ${USER_TESTUSER_USERNAME}"
+- extendedWaitUntil:
+    visible:
+      text: "\\d+ books in the catalog"
+    timeout: 20000
+- tapOn:
+    id: ${CATALOG_LOGOUT}
+- assertVisible:
+    id: ${LOGIN_SCREEN}

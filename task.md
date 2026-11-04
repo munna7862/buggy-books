@@ -1,20 +1,27 @@
-# Task Backlog: Mobile Rollback & Re-plan
+# Task Backlog: Sprint M0.1 - Mobile Walking Skeleton
 
-## Current Focus: Review and remove the first mobile app attempt (Phases 11-12)
+## Current Focus: Contracts, Android APK build and Maestro smoke login
 
-**Goal**: Review all mobile code added in PRs #97 to #102. Remove the Expo app (`mobile/`) and the Appium/Maestro suite (`mobile-automation/`), keep the backend Bearer-token dual-auth, and publish a revised mobile plan.
+**Goal**: Prove the mobile stack end to end before any feature work: a shared contract package, a minimal Android development-build app (login + placeholder catalog), an APK built in CI, and Maestro flows passing on an emulator against the real backend.
 
 ---
 
 ## 1. Tasks
 
-- [x] Review `mobile/`, `mobile-automation/` and the backend dual-auth changes (typecheck, lint, Jest, cross-check against a running backend).
-- [x] Remove the `mobile/` and `mobile-automation/` workspaces, plus their root scripts and lockfile entries.
-- [x] Remove the mobile sections from `intentional_bugs.md`, `specs/test_cases_catalog.md` (sections 20-22, `TC-EXPO-SCAFFOLD-001`) and `README.md`.
-- [x] Remove the superseded Phase 11/12 and Sprint 11.x/12.x planning docs, and update `planning/Master/master_plan.md`.
-- [x] Write the revised plan: `planning/Master/mobile_app_master_plan.md` (v2).
-- [x] Product Owner approval of the v2 plan: Android only, Expo dev build, emulator CI on `main` + nightly (recorded in section 6 of the plan).
-- [ ] Next: Sprint M0.1 (contracts, APK build pipeline, Maestro smoke login).
+- [x] `shared/contracts` (`@buggybooks/contracts`): `API_ROUTES`, `MOBILE_TEST_IDS`, `SEEDED_USERS`, `SEEDED_BOOK_IDS`.
+- [x] Backend contract test (`backend/src/__tests__/contracts.test.ts`), verified to fail on a wrong login path and on a wrong seeded password.
+- [x] `mobile/`: Expo SDK 58 (React 19.3, React Native 0.88), `expo-dev-client`, Android only, login + placeholder catalog, secure-store session.
+- [x] Mobile unit tests against a fake backend at the `fetch` boundary (12 tests, cold cache).
+- [x] ESLint bans literal API paths and `testID`s in the app.
+- [x] `mobile-automation/`: Maestro flows using contract variables only, plus a flow checker; backend reset before each flow.
+- [x] `.github/workflows/mobile-ci.yml`: quality + APK build on PRs; emulator + Maestro on `main`, nightly, dispatch, or the `run-mobile-e2e` label.
+- [ ] Emulator job green on the sprint PR (`run-mobile-e2e` label).
+
+---
+
+## 2. Previous: Mobile Rollback & Re-plan (done)
+
+The first mobile attempt (PRs #97-#102) was reviewed and removed in #106. The re-plan (#107) was approved: Android only, Expo dev build, emulator CI on `main` + nightly.
 
 ---
 
