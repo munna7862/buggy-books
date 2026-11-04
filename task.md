@@ -1,68 +1,35 @@
-# Task Backlog: BuggyBooks Phase 12
+# Task Backlog: Mobile Rollback & Re-plan
 
-## Current Focus: Sprint 12.2 - Maestro & Appium Mobile Test Automation Suites
+## Current Focus: Review and remove the first mobile app attempt (Phases 11-12)
 
-**Sprint Identifier**: `SPRINT-12.2-MAESTRO-AND-APPIUM-MOBILE-TEST-AUTOMATION-SUITES`  
-**Goal**: Author end-to-end mobile test automation suites using both Maestro (declarative YAML flows) and Appium (WebdriverIO + TypeScript Page Object Model), covering authentication, catalog search, asynchronous cart delays, keyboard management, and stochastic checkout retry loops.
-
----
-
-## 1. Persona Roles & Ownership Matrix
-
-| Persona | Member | Responsibilities | Status |
-| :--- | :--- | :--- | :--- |
-| **Scrum Master** | AI Agent / SM | Story sizing, sprint tracking, and milestone DoD verification. | `ACTIVE` |
-| **Principal SDET** | AI Agent / SDET | Architect the Appium WebdriverIO POM framework and Maestro declarative flow structure. | `ACTIVE` |
-| **Mobile Automation Engineer** | AI Agent / QA | Author YAML flows for Maestro and TypeScript spec files for Appium. | `ACTIVE` |
-| **Security Champion** | AI Agent / SEC | Audit test credentials in test fixtures and ensure zero token leaks in Allure and Winston logs. | `ACTIVE` |
-| **Observability Specialist** | AI Agent / DevOps | Implement Winston structured step logging and Allure reporting for Appium runs. | `ACTIVE` |
-| **Product Owner** | Human PO / AI PO | Review test execution reports and validate full user journey test coverage. | `ACTIVE` |
+**Goal**: Review all mobile code added in PRs #97 to #102. Remove the Expo app (`mobile/`) and the Appium/Maestro suite (`mobile-automation/`), keep the backend Bearer-token dual-auth, and publish a revised mobile plan.
 
 ---
 
-## 2. Granular Task Breakdown
+## 1. Tasks
 
-### US-MOB-1221: Maestro Declarative Mobile Flow Automation
-- [x] **US-MOB-1221.1** (`Mobile Automation Eng`): Initialize `mobile-automation/.maestro/` directory and configure `.maestro/config.yaml` with `appId: com.buggybooks.app`.
-- [x] **US-MOB-1221.2** (`Mobile Automation Eng`): Author `auth/01_login_success.yaml` (obfuscated inputs `txt_usr_77`, `txt_pwd_99`) and `auth/02_login_invalid_creds.yaml` (401 error message).
-- [x] **US-MOB-1221.3** (`Mobile Automation Eng`): Author `catalog/03_search_and_filter.yaml` (search input, count assertion) and `catalog/04_add_to_cart_delay.yaml` (`extendedWaitUntil` for dynamic delay).
-- [x] **US-MOB-1221.4** (`Mobile Automation Eng`): Author `checkout/05_checkout_retry_loop.yaml` (occluded keyboard dismissal, 500 retry handling) and `checkout/06_orientation_layout_glitch.yaml` (device rotation & layout shift).
-
-### US-MOB-1222: Appium WebdriverIO Page Object Model Architecture & Monorepo Registration
-- [x] **US-MOB-1222.1** (`Principal SDET`): Register `"mobile-automation"` in root `package.json` workspaces array.
-- [x] **US-MOB-1222.2** (`Principal SDET`): Scaffold `mobile-automation/package.json`, `tsconfig.json`, and `eslint.config.mjs` with WebdriverIO, Appium, Winston, and Allure.
-- [x] **US-MOB-1222.3** (`DevOps` & `Principal SDET`): Implement `wdio.shared.conf.ts`, `wdio.android.conf.ts`, and `wdio.ios.conf.ts`.
-- [x] **US-MOB-1222.4** (`Security Champion` & `Observability`): Implement `Logger.ts` with credential/token masking to ensure zero secret leakage.
-- [x] **US-MOB-1222.5** (`Principal SDET`): Implement `BaseMobileScreen.ts` with cross-platform locator abstraction, gestures, and Allure step recording.
-- [x] **US-MOB-1222.6** (`Mobile Automation Eng`): Implement Page Object Models: `LoginScreen.ts`, `CatalogScreen.ts`, `CartScreen.ts`, `CheckoutScreen.ts`, `ChaosScreen.ts`, `NavigationTab.ts`.
-
-### US-MOB-1223: Appium Cross-Platform E2E Test Scenarios & Test Catalog Traceability
-- [x] **US-MOB-1223.1** (`Mobile Automation Eng`): Author `auth.e2e.spec.ts` (sign in, profile inspection, logout).
-- [x] **US-MOB-1223.2** (`Mobile Automation Eng`): Author `catalog.e2e.spec.ts` (search, filtering, quick add dynamic latency).
-- [x] **US-MOB-1223.3** (`Mobile Automation Eng`): Author `checkout_chaos.e2e.spec.ts` (cart management, keyboard dismissal under occlusion, payment retry loop).
-- [x] **US-MOB-1223.4** (`Mobile Automation Eng`): Author `orientation_chaos.e2e.spec.ts` (landscape orientation shift on checkout).
-- [x] **US-MOB-1223.5** (`Principal SDET`): Document automation coverage mapping in `specs/test_cases_catalog.md` (`MOB_E2E_01` to `MOB_E2E_06`).
-- [x] **US-MOB-1223.6** (`DevOps`): Configure root npm test, typecheck, and lint scripts for `mobile-automation`.
+- [x] Review `mobile/`, `mobile-automation/` and the backend dual-auth changes (typecheck, lint, Jest, cross-check against a running backend).
+- [x] Remove the `mobile/` and `mobile-automation/` workspaces, plus their root scripts and lockfile entries.
+- [x] Remove the mobile sections from `intentional_bugs.md`, `specs/test_cases_catalog.md` (sections 20-22, `TC-EXPO-SCAFFOLD-001`) and `README.md`.
+- [x] Remove the superseded Phase 11/12 and Sprint 11.x/12.x planning docs, and update `planning/Master/master_plan.md`.
+- [x] Write the revised plan: `planning/Master/mobile_app_master_plan.md` (v2).
+- [ ] Product Owner approval of the v2 plan (open decisions in section 6 of the plan).
 
 ---
 
-## 3. Sprint Review Comments & Refinement Loop
+## 2. Sprint Review Comments & Refinement Loop
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
-| **Pre-Flight Architecture Gate** | SDET Architect | Maestro flows and Appium POM architecture validated. | `[APPROVED]` |
-| **Maestro Flows Gate** | Mobile Automation Eng | All 6 declarative YAML flows verified covering auth, search, delay, checkout retry, orientation. | `[APPROVED]` |
-| **Appium POM & Security Gate** | Security Champion & SDET | Credential masking in Winston/Allure logs and Page Object encapsulation verified. | `[APPROVED]` |
-| **Monorepo Quality Gate** | DevOps & SDET | Monorepo build, typecheck, lint, and unit test verification. | `[APPROVED]` |
-| **PO Acceptance Sign-off** | Product Owner | All user stories accepted, DoD complete. | `[APPROVED]` |
+| **Dev Architect Review** | Senior SDE | The app calls `/api/auth/login`, `/api/auth/register` and `/api/auth/logout`, but the backend serves `/api/login`, `/api/register` and `/api/logout`, so login and register never worked. Unit tests mock `apiClient`, which hid this. | `[REJECTED → REMOVED]` |
+| **SDET Architect Review** | Mobile Automation Eng | 11 automation locators do not exist in the app. Specs use the wrong seeded password (`password123`, should be `buggybooks`) and the wrong book IDs (`book-1`). There is no reset in the suites, they use hardcoded `driver.pause`, and no APK is ever built, so the suite cannot run. | `[REJECTED → REMOVED]` |
+| **Security Officer Review** | Senior SDE | Kept the backend dual-auth. Follow-ups: skip CSRF only after the Bearer token verifies, and add refresh-token reuse detection. Tracked in Phase M1 of the v2 plan. | `[APPROVED WITH FOLLOW-UPS]` |
 
 ---
 
-## 4. Definition of Done (DoD) Checklist
+## 3. Definition of Done (DoD) Checklist
 
-- [x] Maestro YAML flows authored across all critical paths (auth, search, dynamic delay, checkout retry, orientation).
-- [x] Appium WebdriverIO framework registered in monorepo with strict TypeScript compilation.
-- [x] Both Android UIAutomator2 and iOS XCUITest driver config profiles established.
-- [x] Allure reports and Winston log outputs verified with zero token/credential leaks.
-- [x] Mobile automation workspace cataloged in `specs/test_cases_catalog.md` (`MOB_E2E_01` to `MOB_E2E_06`).
-- [ ] Pull Request opened, all CI checks green, squash merged to `main`.
+- [x] `npm run typecheck` passes.
+- [x] Backend tests pass (`backend: npm test`), including the dual-auth tests.
+- [x] No remaining references to `mobile/` or `mobile-automation/` in the workspaces, scripts or docs.
+- [ ] Pull Request opened and CI green.

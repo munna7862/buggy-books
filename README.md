@@ -4,7 +4,7 @@
 [![Publish Container Images to GHCR](https://github.com/munna7862/buggy-books/actions/workflows/publish-images.yml/badge.svg)](https://github.com/munna7862/buggy-books/actions/workflows/publish-images.yml)
 [![Codacy Security Scan](https://github.com/munna7862/buggy-books/actions/workflows/codacy.yml/badge.svg)](https://github.com/munna7862/buggy-books/actions/workflows/codacy.yml)
 
-BuggyBooks is a small online bookshop built on purpose for practising test automation. It has a web frontend, a REST + WebSocket API and an Expo mobile app, and it ships with intentional defects and chaos switches (random checkout failures, slow endpoints, dropped sockets, expiring tokens, obfuscated locators, Shadow DOM) that a test suite has to handle.
+BuggyBooks is a small online bookshop built on purpose for practising test automation. It has a web frontend and a REST + WebSocket API, and it ships with intentional defects and chaos switches (random checkout failures, slow endpoints, dropped sockets, expiring tokens, obfuscated locators, Shadow DOM) that a test suite has to handle.
 
 The main test suites that target it live in [automation-frameworks](https://github.com/munna7862/automation-frameworks).
 
@@ -21,7 +21,7 @@ Both Render services are on the free tier and sleep after about 15 minutes idle.
 
 ## Status
 
-Version `1.0.0`. Phases 1-11 of the roadmap are delivered (36 sprints). Phase 12, mobile automation, is in progress: Sprints 12.1 (mobile anti-patterns) and 12.2 (Maestro and Appium suites) are merged; Sprint 12.3 (mobile CI pipeline and build artifacts) is next. The latest change publishes the backend and frontend images to GHCR.
+Version `1.0.0`. Phases 1-10 of the roadmap are delivered, plus the backend dual-auth (Bearer token) part of Phase 11. The first mobile app attempt (Phases 11-12) was reviewed and removed. A revised mobile plan is in [planning/Master/mobile_app_master_plan.md](planning/Master/mobile_app_master_plan.md). The latest change publishes the backend and frontend images to GHCR.
 
 The roadmap is in [planning/Master/master_plan.md](planning/Master/master_plan.md) and [planning/Master/mobile_app_master_plan.md](planning/Master/mobile_app_master_plan.md). Some phase files under `planning/Phases/` still show "Planned" in their header although their sprints have merged.
 
@@ -29,11 +29,10 @@ The roadmap is in [planning/Master/master_plan.md](planning/Master/master_plan.m
 
 | Part | Stack |
 | --- | --- |
-| Backend (`backend/`) | Node.js, TypeScript, Express 4, Socket.IO, JWT access and refresh tokens in httpOnly cookies (plus Bearer tokens for mobile), bcrypt, Zod, Helmet, CORS, `express-rate-limit`, `csrf-csrf`, Jest + Supertest |
+| Backend (`backend/`) | Node.js, TypeScript, Express 4, Socket.IO, JWT access and refresh tokens in httpOnly cookies (plus `Authorization: Bearer` tokens for non-browser clients), bcrypt, Zod, Helmet, CORS, `express-rate-limit`, `csrf-csrf`, Jest + Supertest |
 | Frontend (`frontend/`) | React 19, TypeScript, Vite 8, React Router 7, `socket.io-client`, Vitest + Testing Library |
-| Mobile (`mobile/`) | Expo 52, React Native 0.76, Jest (`jest-expo`) |
 | Shared (`shared/`) | `@buggybooks/types`, shared TypeScript types such as the chaos config |
-| Tests in this repo | Playwright (`playwright-e2e/`), k6 (`performance/`), Appium + WebdriverIO and Maestro (`mobile-automation/`), Lighthouse CI |
+| Tests in this repo | Playwright (`playwright-e2e/`), k6 (`performance/`) and Lighthouse CI |
 | Delivery | GitHub Actions, Docker Compose, GHCR, Render |
 
 ## Run it locally
@@ -48,7 +47,7 @@ cp .env.example .env        # set JWT_SECRET
 npm run dev                 # backend on http://localhost:4000, frontend on http://localhost:5173
 ```
 
-Or build and run both in Docker with `docker compose up --build` (backend on 4000, frontend on 5173). Prebuilt images are on GHCR (see Live links). The mobile app starts with `npm run dev:mobile` (Expo).
+Or build and run both in Docker with `docker compose up --build` (backend on 4000, frontend on 5173). Prebuilt images are on GHCR (see Live links).
 
 Seeded accounts:
 
@@ -63,18 +62,16 @@ Seeded accounts:
 | --- | --- |
 | `npm run dev` | Backend and frontend with hot reload |
 | `npm run build` | Production builds of backend and frontend |
-| `npm run typecheck` | Type checks for backend, frontend, Playwright, mobile and mobile automation |
+| `npm run typecheck` | Type checks for backend, frontend and Playwright |
 | `npm run lint` | ESLint across all workspaces |
 | `npm run test:unit` | Backend Jest and frontend Vitest |
-| `npm run test:mobile:unit` | Mobile app Jest tests |
 | `npm run test:e2e` | Playwright suite (`npm run test:api` for API only) |
 | `npm run test:perf:smoke` | k6 smoke; also `test:perf`, `:stress`, `:journey`, `:auth`, `:checkout`, `:soak`, `:breakpoint` |
 | `npm run test:lhci` | Lighthouse CI audit |
-| `npm run test:mobile:appium:android` / `:ios` | Appium mobile tests |
 
 ## API
 
-All routes are under `/api`. Session auth uses an httpOnly `token` cookie; mobile clients can send `Authorization: Bearer <token>`. State-changing browser requests need the `x-csrf-token` header from `GET /api/csrf-token` (auth and `/api/test/*` routes are exempt).
+All routes are under `/api`. Session auth uses an httpOnly `token` cookie; non-browser clients can send `Authorization: Bearer <token>`. State-changing browser requests need the `x-csrf-token` header from `GET /api/csrf-token` (auth and `/api/test/*` routes are exempt).
 
 | Area | Routes |
 | --- | --- |
@@ -103,7 +100,7 @@ A WebSocket server (Socket.IO) runs on the same port as the API.
 | `visualChaos` | `false` | Shifts styles to break visual baselines |
 | `inventoryLockingRate` | `0` | Probability of an optimistic-locking conflict on stock |
 
-Always-on hurdles: obfuscated form field names (for example `txt_usr_77`), a delayed add-to-cart, Shadow DOM components, and a rate limiter (600 requests per IP per minute; tests can send `x-bypass-rate-limit: true`). The mobile app adds its own set (MOB-B1 to MOB-B6: dynamic locators, keyboard occlusion, async delays, gateway timeouts, offline banner, orientation shift). Full details: [intentional_bugs.md](intentional_bugs.md).
+Always-on hurdles: obfuscated form field names (for example `txt_usr_77`), a delayed add-to-cart, Shadow DOM components, and a rate limiter (600 requests per IP per minute; tests can send `x-bypass-rate-limit: true`). Full details: [intentional_bugs.md](intentional_bugs.md).
 
 ## Tests and CI
 
@@ -125,8 +122,6 @@ The Playwright test cases are listed in [specs/test_cases_catalog.md](specs/test
 ```
 backend/            Express API: controllers, services, repositories, middleware, chaos store, Jest tests
 frontend/           React app: catalog, book detail, cart, checkout, profile, login, register, chaos dashboard
-mobile/             Expo React Native app
-mobile-automation/  Appium + WebdriverIO screen objects and specs, Maestro flows
 playwright-e2e/     Playwright UI and API tests
 performance/        k6 scenarios, baselines and reporting scripts
 shared/             shared TypeScript types
