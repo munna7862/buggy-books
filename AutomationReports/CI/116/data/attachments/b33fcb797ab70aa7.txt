@@ -1,0 +1,14 @@
+[2026-11-05 04:36:02] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w4-3-1793815562805-f2c56120
+[2026-11-05 04:36:02] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-11-05 04:36:03] INFO: Total Books displayed in Catalog page are: 8
+[2026-11-05 04:36:03] INFO: Filling search input with: Mockingbird
+[2026-11-05 04:36:03] INFO: Clicking Search button
+[2026-11-05 04:36:04] INFO: Verifying search results books count - Matched: [1]
+[2026-11-05 04:36:04] INFO: Getting catalog result count text
+[2026-11-05 04:36:04] INFO: Verifying result count text contains search query - Condition met (true)
+[2026-11-05 04:36:04] INFO: Getting first book title in catalog
+[2026-11-05 04:36:04] INFO: Verifying search result book title - Matched: [To Kill a Mockingbird Exception]
+[2026-11-05 04:36:04] INFO: Clicking Clear search button
+[2026-11-05 04:36:04] INFO: Total Books displayed in Catalog page are: 8
+[2026-11-05 04:36:04] INFO: Verifying catalog count after search clear - Matched: [8]
+[2026-11-05 04:36:04] INFO: Cleaned up ephemeral test session: pw-w4-3-1793815562805-f2c56120
