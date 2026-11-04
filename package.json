@@ -8,18 +8,24 @@
     "frontend",
     "playwright-e2e",
     "performance",
-    "shared"
+    "shared",
+    "shared/contracts",
+    "mobile",
+    "mobile-automation"
   ],
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "npm run dev --workspace=buggy-books-backend",
     "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:mobile": "npm start --workspace=mobile",
     "install:all": "npm install",
     "build": "npm run build --workspace=buggy-books-backend && npm run build --workspace=frontend",
-    "typecheck": "concurrently \"npm run build --workspace=buggy-books-backend\" \"npm run build --workspace=frontend\" \"npm run typecheck --workspace=automationframeworks\"",
+    "typecheck": "concurrently \"npm run build --workspace=buggy-books-backend\" \"npm run build --workspace=frontend\" \"npm run typecheck --workspace=automationframeworks\" \"npm run typecheck --workspace=mobile\" \"npm run typecheck --workspace=mobile-automation\"",
     "test:unit": "concurrently \"npm run test:backend\" \"npm run test:frontend\"",
     "test:backend": "npm test --workspace=buggy-books-backend",
     "test:frontend": "npm test --workspace=frontend",
+    "test:mobile": "npm test --workspace=mobile",
+    "test:maestro": "npm run test:maestro --workspace=mobile-automation",
     "test:e2e": "npm test --workspace=automationframeworks",
     "test:e2e:local": "npm run test:e2e:local --workspace=automationframeworks",
     "test:e2e:matrix": "npm run test:e2e:all --workspace=automationframeworks",
@@ -33,10 +39,12 @@
     "test:perf:soak": "npm run test:perf:soak --workspace=buggy-books-performance",
     "test:perf:breakpoint": "npm run test:perf:breakpoint --workspace=buggy-books-performance",
     "test:lhci": "npx @lhci/cli autorun",
-    "lint": "concurrently \"npm run lint:frontend\" \"npm run lint:backend\" \"npm run lint:e2e\"",
+    "lint": "concurrently \"npm run lint:frontend\" \"npm run lint:backend\" \"npm run lint:e2e\" \"npm run lint:mobile\" \"npm run lint:mobile-automation\"",
     "lint:backend": "npm run lint --workspace=buggy-books-backend",
     "lint:frontend": "npm run lint --workspace=frontend",
-    "lint:e2e": "npm run lint --workspace=automationframeworks"
+    "lint:e2e": "npm run lint --workspace=automationframeworks",
+    "lint:mobile": "npm run lint --workspace=mobile",
+    "lint:mobile-automation": "npm run lint --workspace=mobile-automation"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"

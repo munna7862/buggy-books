@@ -42,7 +42,7 @@ The first mobile attempt (Sprints 11.1 to 12.2, PRs #97 to #102) added `mobile/`
 ## 2. Principles for the re-plan
 
 1. **Contract first, single source of truth.** Route paths, seeded test users and `testID`s live in `shared/` and are imported by the backend, the app *and* the automation. A typo becomes a compile error, not a runtime 404.
-2. **Walking skeleton before features.** Sprint M0 ends with a real debug APK built in CI, installed on an emulator, logging in against a real backend and passing one Maestro flow. No screen work starts before that is green.
+2. **Walking skeleton before features.** Sprint M0 ends with a real APK built in CI, installed on an emulator, logging in against a real backend and passing one Maestro flow. No screen work starts before that is green.
 3. **Every feature slice ships with a real-device flow.** A sprint is not done until its Maestro flow passes in CI against the real backend. Unit tests with mocked HTTP are a supplement, not the proof.
 4. **The clean app first, chaos second.** The anti-patterns (obfuscated IDs, keyboard occlusion, delays, offline mode, orientation shift) go behind the server-side chaos config (`ChaosConfig.mobile*` flags) so they can be turned on and off like the web chaos. A clean baseline makes real regressions visible.
 5. **One automation framework at a time.** Maestro first, because it is the cheapest to keep green. Appium/WebdriverIO comes later, as a separate proving-ground phase, reusing the shared `testID` constants.
@@ -77,12 +77,12 @@ mobile-automation/
 ### Phase M0: Walking skeleton (1 sprint)
 
 **M0.1 Contracts, build pipeline and smoke flow**
-- Add `shared/contracts/{routes,testIds,fixtures}.ts`. Migrate `backend/src/routes/api.ts` and the user seed to them.
+- Add `shared/contracts/{routes,testIds,fixtures}.ts` (`@buggybooks/contracts`). The backend keeps its own route strings, because importing runtime values from `shared/` would break its `rootDir` build and Docker image. Instead, `backend/src/__tests__/contracts.test.ts` fails if any contract route, seeded user or seeded book differs from the backend.
 - Scaffold `mobile/` on the current Expo SDK with React 19 and `expo-dev-client`, plus a Login screen and an empty Catalog screen only. Android only: no `ios` config.
-- Add `eas.json` and `expo prebuild --platform android`, and a `mobile-ci.yml` job that builds a debug development-build APK (Gradle, no EAS cloud) and uploads it as an artifact. This job and lint/typecheck/Jest run on every PR that touches `mobile/`, `mobile-automation/` or `shared/`.
-- Add an Android emulator job that runs on push to `main`, nightly (`schedule`) and `workflow_dispatch`, not on PRs: start the backend, `adb reverse tcp:4000`, install the APK, run `maestro test flows/smoke_login.yaml`.
+- Add `eas.json` and `expo prebuild --platform android`, and a `mobile-ci.yml` job that builds a release APK (Gradle, no EAS cloud; JS bundle embedded so the emulator needs no Metro server; debug-signed, for testing only) and uploads it as an artifact. This job and lint/typecheck/Jest run on every PR that touches `mobile/`, `mobile-automation/` or `shared/`.
+- Add an Android emulator job that runs on push to `main`, nightly (`schedule`), `workflow_dispatch`, and on a PR only when it has the `run-mobile-e2e` label: start the backend, `adb reverse tcp:4000`, install the APK, run the Maestro flows.
 - Add a contract test (Jest, backend) asserting every `API_ROUTES` entry is registered on the router.
-- **Exit:** the emulator job is green with a real login (verified with a manual `workflow_dispatch` run on the sprint branch before merge).
+- **Exit:** the emulator job is green with a real login, verified on the sprint PR with the `run-mobile-e2e` label before merge.
 
 ### Phase M1: Clean core flows (2 sprints)
 
@@ -105,7 +105,7 @@ iOS is out of scope (see section 6). Revisit it only after M3.1 is stable.
 
 ## 5. Definition of Done additions for mobile sprints
 
-- [ ] The sprint's Maestro flows pass in the `mobile-ci.yml` emulator job against a real backend (not mocked). Because that job does not run on PRs, trigger it with `workflow_dispatch` on the sprint branch and link the run in the PR.
+- [ ] The sprint's Maestro flows pass in the `mobile-ci.yml` emulator job against a real backend (not mocked). Because that job does not run on PRs by default, add the `run-mobile-e2e` label to the sprint PR (GitHub only allows `workflow_dispatch` for workflows already on `main`) and link the run in the PR.
 - [ ] No string-literal API paths or `testID`s in `mobile/` or `mobile-automation/`: only the `shared/contracts` imports.
 - [ ] `npx jest --no-cache` passes for `mobile/` (a cold-cache run).
 - [ ] The APK artifact is attached to the CI run.
@@ -114,5 +114,6 @@ iOS is out of scope (see section 6). Revisit it only after M3.1 is stable.
 ## 6. Product Owner decisions (2026-11-04)
 
 1. **Platform:** Android only. No iOS config, macOS runners or XCUITest work in M0 to M3.
-2. **Runtime:** a development build (`expo-dev-client`). Expo Go is not supported. Appium and Maestro target the dev-build APK (`com.buggybooks.app`).
+2. **Runtime:** a development build (`expo-dev-client`). Expo Go is not supported. Developers run the debug dev build locally; CI and the Maestro/Appium suites test a release build of the same app (`com.buggybooks.app`), because it embeds the JS bundle and needs no Metro server.
 3. **CI budget:** the Android emulator job runs on push to `main`, nightly and on manual dispatch. On PRs, CI runs lint, typecheck, Jest and the APK build only.
+   - *Proposed, awaiting PO approval:* also run the emulator job on a PR that has the `run-mobile-e2e` label. GitHub only allows `workflow_dispatch` for workflows already on `main`, so without this a sprint's flows can't be checked on a real emulator before merge.
