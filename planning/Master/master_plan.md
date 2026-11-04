@@ -227,7 +227,7 @@ sequenceDiagram
 | **[Phase 9](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_9_full_stack_quality_hardening_monorepo_workspaces_and_system_resilience.md)** | Full-Stack Quality Hardening, Monorepo Workspaces & System Resilience | `[PLANNED]` | Native npm workspaces, auth token git purge, atomic Windows-safe DB persistence with write queue mutex, strict CORS origin whitelist, dynamic CSRF retry lifecycle, and MSW test mock consolidation. (Sprints 9.1, 9.2, 9.3) |
 | **[Phase 10](file:///c:/BuggyBooks/buggy-books/planning/Phases/phase_10_e2e_automation_modernization_hermetic_cicd_and_test_governance.md)** | E2E Automation Modernization, Hermetic CI/CD & Test Governance | `[PLANNED]` | Diagnostic assertion architecture preserving Winston/Allure step logs, native Playwright auto-waiting, 30s timeout calibration, decoupled headless API project, Playwright ESLint linter, managed CI webServers, and resilient report deployment. (Sprints 10.1, 10.2, 10.3) |
 | **Phase 11** | Backend Dual-Auth (Bearer + Cookie + Refresh Rotation) | `[COMPLETED]` | Bearer-token support, JSON token payloads and CSRF exemption for Bearer requests are kept. The Expo app built in this phase was removed after review. |
-| **Mobile (re-plan)** | Native Mobile App & Mobile Automation | `[RE-PLANNING]` | Replaced by the revised plan in [mobile_app_master_plan.md](mobile_app_master_plan.md). |
+| **Mobile (re-plan)** | Android Mobile App (dev build) & Mobile Automation | `[PLANNED]` | Android only, Expo dev build, emulator CI on `main` + nightly. See [mobile_app_master_plan.md](mobile_app_master_plan.md). |
 
 
 
