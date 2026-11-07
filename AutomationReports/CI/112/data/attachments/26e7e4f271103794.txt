@@ -1,3 +1,0 @@
-[2026-11-01 19:11:24] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1793522484146-77426f40
-[2026-11-01 19:11:25] INFO: Asserting book card border-color is red (red >= 200), actual: rgba(240, 67, 67, 1) - Condition met (true)
-[2026-11-01 19:11:25] INFO: Cleaned up ephemeral test session: pw-w3-2-1793522484146-77426f40
