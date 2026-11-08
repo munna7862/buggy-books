@@ -1,3 +1,0 @@
-[2026-11-02 19:19:06] INFO: Verifying Set-Cookie contains access token
-[2026-11-02 19:19:06] INFO: Verifying Set-Cookie contains refresh token
-[2026-11-02 19:19:06] INFO: Verifying Set-Cookie includes HttpOnly security flag
