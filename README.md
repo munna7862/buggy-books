@@ -51,6 +51,28 @@ Or build and run both in Docker with `docker compose up --build` (backend on 400
 
 The Android app is a development build (Expo Go is not supported) and needs Node 22. With the Android SDK installed, `npm run android --workspace=mobile` builds it and installs it on an emulator, then `npm run dev:mobile` starts Metro.
 
+#### Testing the Android app locally
+
+One-time setup:
+
+1. Install [Android Studio](https://developer.android.com/studio) and create an API 34 x86_64 emulator in Device Manager.
+2. Add the SDK's `platform-tools` folder to `PATH`, and set `ANDROID_HOME` to the SDK folder.
+3. Install the [Maestro CLI](https://docs.maestro.dev/getting-started/installing-maestro). It needs Java 17 or newer.
+
+Start the emulator, then install a release build. Run this again whenever the app code changes:
+
+```bash
+npm run android:release --workspace=mobile
+```
+
+Run the flows:
+
+```bash
+npm run e2e:local -- smoke_login
+```
+
+The flows need a release build because they clear the app's data, and a debug dev build would then stop at its Metro picker. Use `npm run android` with `npm run dev:mobile` for hot reload while working on a screen by hand.
+
 Seeded accounts:
 
 | Username | Password |
@@ -69,6 +91,7 @@ Seeded accounts:
 | `npm run test:unit` | Backend Jest and frontend Vitest |
 | `npm run test:e2e` | Playwright suite (`npm run test:api` for API only) |
 | `npm run test:mobile` | Mobile app Jest tests |
+| `npm run e2e:local` | Maestro flows on a local emulator, starting the backend if needed. Add `-- <flow name>` for one flow |
 | `npm run test:maestro` | Maestro flows against a running emulator and backend (`adb reverse tcp:4000 tcp:4000` first) |
 | `npm run test:perf:smoke` | k6 smoke; also `test:perf`, `:stress`, `:journey`, `:auth`, `:checkout`, `:soak`, `:breakpoint` |
 | `npm run test:lhci` | Lighthouse CI audit |

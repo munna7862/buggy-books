@@ -26,6 +26,7 @@
     "test:frontend": "npm test --workspace=frontend",
     "test:mobile": "npm test --workspace=mobile",
     "test:maestro": "npm run test:maestro --workspace=mobile-automation",
+    "e2e:local": "npm run e2e:local --workspace=mobile-automation --",
     "test:e2e": "npm test --workspace=automationframeworks",
     "test:e2e:local": "npm run test:e2e:local --workspace=automationframeworks",
     "test:e2e:matrix": "npm run test:e2e:all --workspace=automationframeworks",
