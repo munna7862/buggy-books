@@ -1,0 +1,1 @@
+[2026-11-08 22:18:52] INFO: Verifying GET /api/orders returns 200 OK and non-empty array of placed orders
