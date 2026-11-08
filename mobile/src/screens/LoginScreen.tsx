@@ -6,7 +6,7 @@ import { colors } from '../theme';
 
 const ids = MOBILE_TEST_IDS.login;
 
-export function LoginScreen() {
+export function LoginScreen({ onShowRegister }: { onShowRegister: () => void }) {
   const { login } = useAuth();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -84,6 +84,16 @@ export function LoginScreen() {
       >
         {submitting ? <ActivityIndicator color={colors.text} /> : <Text style={styles.buttonText}>Sign in</Text>}
       </Pressable>
+
+      <Pressable
+        testID={ids.registerLink}
+        accessibilityRole="button"
+        accessibilityLabel="Create an account"
+        onPress={onShowRegister}
+        style={({ pressed }) => [styles.link, pressed && styles.buttonDimmed]}
+      >
+        <Text style={styles.linkText}>New here? Create an account</Text>
+      </Pressable>
     </View>
   );
 }
@@ -108,4 +118,6 @@ const styles = StyleSheet.create({
   button: { backgroundColor: colors.primary, borderRadius: 8, paddingVertical: 14, alignItems: 'center', minHeight: 48 },
   buttonDimmed: { opacity: 0.6 },
   buttonText: { color: colors.text, fontSize: 16, fontWeight: '700' },
+  link: { minHeight: 48, alignItems: 'center', justifyContent: 'center', marginTop: 8 },
+  linkText: { color: colors.muted, fontSize: 14 },
 });

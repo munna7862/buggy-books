@@ -478,3 +478,34 @@ These cases cover the shared contracts package (`@buggybooks/contracts`), the An
 | **MOB_M0_02** | Wrong Password & Incomplete Form | Verify that a wrong password shows the server error (`Unauthorized: Invalid credentials`), stores no tokens and stays on the login screen, and that the sign-in button stays disabled until both fields are filled. | High | Login Screen Validation & Errors | `@mobile` `@auth` `@negative` | **Yes**<br>- Test: `mobile/src/__tests__/LoginFlow.test.tsx` |
 | **MOB_M0_03** | Real-Device Smoke Login (Maestro) | On an Android emulator with the release APK and the real backend (`adb reverse tcp:4000`), reset the backend, sign in as `testuser`, assert the catalog welcome and book count, then sign out back to the login screen. | Critical | End-to-End on Android Emulator | `@mobile` `@maestro` `@smoke` `@e2e` | **Yes**<br>- Flow: `mobile-automation/maestro/flows/smoke_login.yaml`<br>- Workflow: `.github/workflows/mobile-ci.yml` (emulator job) |
 | **MOB_M0_04** | Real-Device Wrong Password (Maestro) | On the emulator against the real backend, a wrong password shows the login error and keeps the user on the login screen. | High | End-to-End on Android Emulator | `@mobile` `@maestro` `@auth` `@negative` | **Yes**<br>- Flow: `mobile-automation/maestro/flows/login_invalid_password.yaml` |
+
+---
+
+## 21. Mobile Auth & Catalog (Sprint M1.1)
+
+*Sprint Source: Sprint M1.1 in [mobile_app_master_plan.md](../planning/Master/mobile_app_master_plan.md)*
+
+### **Suite: Mobile Auth & Catalog (Unit, Fake Backend)**
+
+| Test ID | Title | Description | Priority | Module | Tags | Automated |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **MOB_M1_01** | Registration | A new account stores tokens and shows the catalog. A taken username shows the conflict error and stores nothing. The link returns to sign in. | Critical | Register Screen | `@mobile` `@auth` | **Yes**<br>- Test: `mobile/src/__tests__/AuthCatalogFlow.test.tsx` |
+| **MOB_M1_02** | Silent Refresh | A rejected access token is refreshed and the rotated pair stored. Concurrent requests share one refresh. A rejected refresh signs the user out and clears the tokens. | Critical | Auth Context | `@mobile` `@auth` | **Yes**<br>- Tests: `mobile/src/__tests__/AuthCatalogFlow.test.tsx`, `mobile/src/__tests__/LoginFlow.test.tsx` |
+| **MOB_M1_03** | Sign Out Revokes Session | Sign out sends the refresh token to `POST /api/logout`. | High | Auth Context | `@mobile` `@auth` | **Yes**<br>- Test: `mobile/src/__tests__/AuthCatalogFlow.test.tsx` |
+| **MOB_M1_04** | Catalog Paging & Search | The first page shows 8 books and Load more appends the next page. Search runs on the server and shows an empty state. | Critical | Catalog Screen | `@mobile` `@catalog` | **Yes**<br>- Test: `mobile/src/__tests__/AuthCatalogFlow.test.tsx` |
+| **MOB_M1_05** | Book Detail | A row opens title, author, price, stock and description, and back returns to the catalog. | High | Book Detail Screen | `@mobile` `@catalog` | **Yes**<br>- Test: `mobile/src/__tests__/AuthCatalogFlow.test.tsx` |
+| **MOB_M1_06** | Auth & Catalog API Contract | Register and refresh return the fields the app reads, the paginated books shape is stable, book 9 is on page two, and seeded titles match. | Critical | Shared Contracts | `@api` `@contract` | **Yes**<br>- Test: `backend/src/__tests__/contracts.test.ts` |
+| **MOB_M1_07** | Catalog Resilience | A slow response from an older search is ignored, and a failed load shows an error that recovers on retry. | High | Catalog Screen | `@mobile` `@catalog` `@negative` | **Yes**<br>- Test: `mobile/src/__tests__/AuthCatalogFlow.test.tsx` |
+| **MOB_M1_08** | CSRF Skipped Only After Bearer Verifies | An invalid Bearer token, or a refresh token sent as a Bearer token, does not skip the CSRF check. | Critical | Backend Security | `@api` `@security` | **Yes**<br>- Test: `backend/src/__tests__/authRefresh.test.ts` |
+| **MOB_M1_09** | Refresh Token Reuse Detection | A replay inside the 10s grace window is tolerated. A later replay revokes the whole family without affecting other sessions. Logout revokes the session. Tokens issued before this change still refresh. | Critical | Backend Security | `@api` `@security` | **Yes**<br>- Test: `backend/src/__tests__/authRefresh.test.ts` |
+
+### **Suite: Mobile Auth & Catalog (Maestro, Real Backend)**
+
+| Test ID | Title | Description | Priority | Module | Tags | Automated |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **MOB_M1_10** | Register New User | Register, reach the catalog, sign out and sign back in with the new credentials. | Critical | End-to-End on Android Emulator | `@mobile` `@maestro` `@auth` | **Yes**<br>- Flow: `mobile-automation/maestro/flows/register_new_user.yaml` |
+| **MOB_M1_11** | Duplicate Username | Registering a seeded username shows the server error and stays on the form. | High | End-to-End on Android Emulator | `@mobile` `@maestro` `@negative` | **Yes**<br>- Flow: `mobile-automation/maestro/flows/register_duplicate_username.yaml` |
+| **MOB_M1_12** | Session Restore | After closing and reopening the app the user is still signed in. | Critical | End-to-End on Android Emulator | `@mobile` `@maestro` `@auth` | **Yes**<br>- Flow: `mobile-automation/maestro/flows/session_restore.yaml` |
+| **MOB_M1_13** | Silent Refresh | With a 2s access token set through the chaos config, a relaunch stays signed in. | Critical | End-to-End on Android Emulator | `@mobile` `@maestro` `@auth` `@chaos` | **Yes**<br>- Flow: `mobile-automation/maestro/flows/silent_refresh.yaml` |
+| **MOB_M1_14** | Catalog Paging & Search | Load more reaches book 9, search narrows to one book, and a search with no match shows the empty state. | Critical | End-to-End on Android Emulator | `@mobile` `@maestro` `@catalog` | **Yes**<br>- Flow: `mobile-automation/maestro/flows/catalog_search_and_paging.yaml` |
+| **MOB_M1_15** | Book Detail | A book opens with its title and price, and both the on-screen and hardware back return to the catalog. | High | End-to-End on Android Emulator | `@mobile` `@maestro` `@catalog` | **Yes**<br>- Flow: `mobile-automation/maestro/flows/book_detail.yaml` |

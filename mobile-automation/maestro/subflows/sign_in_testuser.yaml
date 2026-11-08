@@ -1,0 +1,22 @@
+# Resets the backend, launches a clean app and signs in as the seeded test user.
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: ${LOGIN_SCREEN}
+    timeout: 30000
+- tapOn:
+    id: ${LOGIN_USERNAME}
+- inputText: ${USER_TESTUSER_USERNAME}
+- tapOn:
+    id: ${LOGIN_PASSWORD}
+- inputText: ${USER_TESTUSER_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: ${LOGIN_SUBMIT}
+- extendedWaitUntil:
+    visible:
+      id: ${CATALOG_WELCOME}
+    timeout: 20000

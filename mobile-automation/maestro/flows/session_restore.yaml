@@ -1,0 +1,17 @@
+# MOB_M1_12: a signed-in user is still signed in after the app is closed and reopened.
+appId: ${APP_ID}
+name: Session - restored after relaunch
+tags:
+  - auth
+---
+- runScript: ../scripts/reset_backend.js
+- runFlow: ../subflows/sign_in_testuser.yaml
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: ${CATALOG_WELCOME}
+    timeout: 30000
+- assertVisible:
+    id: ${CATALOG_WELCOME}
+    text: "Signed in as ${USER_TESTUSER_USERNAME}"

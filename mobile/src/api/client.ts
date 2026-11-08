@@ -20,6 +20,7 @@ export class ApiError extends Error {
 
 export interface RequestOptions {
   params?: Record<string, string>;
+  query?: Record<string, string>;
   body?: unknown;
   token?: string | null;
   timeoutMs?: number;
@@ -35,7 +36,7 @@ interface ErrorBody {
  * always come from the shared contract, never from a string in the app.
  */
 export async function apiRequest<T>(route: ApiRoute, options: RequestOptions = {}): Promise<T> {
-  const { params, body, token, timeoutMs = 10000 } = options;
+  const { params, query, body, token, timeoutMs = 10000 } = options;
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (body !== undefined) headers['Content-Type'] = 'application/json';
   if (token) headers.Authorization = `Bearer ${token}`;
@@ -45,7 +46,7 @@ export async function apiRequest<T>(route: ApiRoute, options: RequestOptions = {
 
   let response: Response;
   try {
-    response = await fetch(`${getBaseUrl()}${buildPath(route.path, params)}`, {
+    response = await fetch(`${getBaseUrl()}${buildPath(route.path, params)}${queryString(query)}`, {
       method: route.method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
@@ -65,6 +66,11 @@ export async function apiRequest<T>(route: ApiRoute, options: RequestOptions = {
     throw new ApiError(errorBody.error || errorBody.message || `Request failed (${response.status})`, response.status);
   }
   return data as T;
+}
+
+function queryString(query: Record<string, string> = {}): string {
+  const pairs = Object.entries(query).map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`);
+  return pairs.length > 0 ? `?${pairs.join('&')}` : '';
 }
 
 function safeJson(text: string): unknown {

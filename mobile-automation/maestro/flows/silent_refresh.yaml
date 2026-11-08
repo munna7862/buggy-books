@@ -1,0 +1,16 @@
+# MOB_M1_13: an expired access token is refreshed silently at launch, so the user stays signed in.
+appId: ${APP_ID}
+name: Session - expired access token refreshes silently
+tags:
+  - auth
+---
+- runScript: ../scripts/reset_backend.js
+- runScript: ../scripts/set_short_token_expiry.js
+- runFlow: ../subflows/sign_in_testuser.yaml
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: ${CATALOG_WELCOME}
+    timeout: 30000
+- runScript: ../scripts/reset_backend.js

@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../app';
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET } from '../config';
+import { REFRESH_REUSE_GRACE_MS } from '../services/auth.service';
 
 describe('JWT Expiration and Silent Refresh Integration Flow', () => {
   beforeEach(async () => {
@@ -194,6 +195,89 @@ describe('JWT Expiration and Silent Refresh Integration Flow', () => {
 
     // Should fail with 403 Forbidden due to missing CSRF token
     expect(cartMutationRes.status).toBe(403);
+  });
+
+  describe('Bearer verification before skipping CSRF (MOB_M1_08)', () => {
+    const postCartWithBearer = (token: string) =>
+      request(app)
+        .post('/api/cart')
+        .set('Authorization', `Bearer ${token}`)
+        .set('x-enforce-csrf', 'true')
+        .send({ bookId: '1', quantity: 1 });
+
+    it('should apply the CSRF check to a Bearer token that does not verify', async () => {
+      const res = await postCartWithBearer('a-long-but-invalid-bearer-token');
+
+      expect(res.status).toBe(403);
+      expect(res.body.error).not.toContain('Invalid token');
+    });
+
+    it('should apply the CSRF check to a refresh token sent as a Bearer token', async () => {
+      const login = await request(app).post('/api/login').send({ username: 'admin', password: 'password123' });
+
+      const res = await postCartWithBearer(login.body.refreshToken);
+
+      expect(res.status).toBe(403);
+      expect(res.body.error).not.toContain('Invalid token');
+    });
+  });
+
+  describe('Refresh token reuse detection (MOB_M1_09)', () => {
+    const login = async () =>
+      (await request(app).post('/api/login').send({ username: 'admin', password: 'password123' })).body.refreshToken as string;
+    const refresh = (refreshToken: string) => request(app).post('/api/auth/refresh').send({ refreshToken });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    const moveClockPastGraceWindow = () => {
+      const later = Date.now() + REFRESH_REUSE_GRACE_MS + 1000;
+      jest.spyOn(Date, 'now').mockReturnValue(later);
+    };
+
+    it('should tolerate a replay inside the grace window without revoking the session', async () => {
+      const original = await login();
+      const first = await refresh(original);
+      const replay = await refresh(original);
+
+      expect(first.status).toBe(200);
+      expect(replay.status).toBe(200);
+      expect((await refresh(first.body.refreshToken)).status).toBe(200);
+    });
+
+    it('should reject a replay after the grace window and revoke the whole family', async () => {
+      const original = await login();
+      const rotated = (await refresh(original)).body.refreshToken as string;
+      moveClockPastGraceWindow();
+
+      expect((await refresh(original)).status).toBe(403);
+      expect((await refresh(rotated)).status).toBe(403);
+    });
+
+    it('should not affect another session of the same user', async () => {
+      const stolen = await login();
+      const other = await login();
+      await refresh(stolen);
+      moveClockPastGraceWindow();
+      await refresh(stolen);
+
+      expect((await refresh(other)).status).toBe(200);
+    });
+
+    it('should revoke the session when logout receives its refresh token', async () => {
+      const refreshToken = await login();
+
+      await request(app).post('/api/logout').send({ refreshToken });
+
+      expect((await refresh(refreshToken)).status).toBe(403);
+    });
+
+    it('should accept a refresh token issued before reuse detection existed', async () => {
+      const legacy = jwt.sign({ username: 'admin', type: 'refresh' }, JWT_SECRET, { expiresIn: '30d' });
+
+      expect((await refresh(legacy)).status).toBe(200);
+    });
   });
 
   it('should fail with 401 if refresh is called without cookies or body', async () => {

@@ -69,8 +69,8 @@ describe('Login flow (MOB_M0_01, MOB_M0_02)', () => {
     expect(await screen.findByTestId(catalog.welcome)).toHaveTextContent('Signed in as testuser');
   });
 
-  it('discards a stored session that the server rejects', async () => {
-    installFakeBackend();
+  it('discards a stored session when the refresh token is also rejected', async () => {
+    installFakeBackend({ refreshRejected: true });
     store.set('buggybooks.accessToken', 'expired-token');
     store.set('buggybooks.refreshToken', 'refresh-token');
     await render(<App />);
@@ -90,8 +90,8 @@ describe('Login flow (MOB_M0_01, MOB_M0_02)', () => {
     expect(store.get('buggybooks.refreshToken')).toBe('refresh-token');
   });
 
-  it('shows an error instead of "0 books" when the books response is not a list', async () => {
-    installFakeBackend({ booksResponse: { books: [] } });
+  it('shows an error instead of "0 books" when the books response is not paginated', async () => {
+    installFakeBackend({ booksResponse: [] });
     await render(<App />);
     await signIn(SEEDED_USERS.testuser.username, SEEDED_USERS.testuser.password);
 

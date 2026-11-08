@@ -1,0 +1,48 @@
+# MOB_M1_14: the catalog pages past the first 8 books, and search filters on the server.
+appId: ${APP_ID}
+name: Catalog - load more and search
+tags:
+  - catalog
+---
+- runScript: ../scripts/reset_backend.js
+- runFlow: ../subflows/sign_in_testuser.yaml
+- extendedWaitUntil:
+    visible:
+      id: ${BOOK_ROW_1}
+    timeout: 20000
+- scrollUntilVisible:
+    element:
+      id: ${CATALOG_LOAD_MORE}
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: ${CATALOG_LOAD_MORE}
+- scrollUntilVisible:
+    element:
+      id: ${BOOK_ROW_9}
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: ${CATALOG_SEARCH}
+- inputText: "1984"
+- hideKeyboard
+- extendedWaitUntil:
+    visible:
+      id: ${BOOK_ROW_3}
+    timeout: 20000
+- extendedWaitUntil:
+    notVisible:
+      id: ${BOOK_ROW_1}
+    timeout: 10000
+- assertVisible:
+    id: ${CATALOG_BOOK_COUNT}
+    text: "1 book in the catalog"
+- tapOn:
+    id: ${CATALOG_SEARCH}
+- eraseText
+- inputText: "no-such-book"
+- hideKeyboard
+- extendedWaitUntil:
+    visible:
+      id: ${CATALOG_EMPTY}
+    timeout: 20000

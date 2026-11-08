@@ -14,5 +14,15 @@ export const SEEDED_USERS = {
   testuser: { username: 'testuser', password: 'buggybooks' },
 } as const satisfies Record<string, SeededUser>;
 
-/** IDs of books in `backend/db.json` that tests may rely on. */
-export const SEEDED_BOOK_IDS = ['1', '2', '3'] as const;
+/**
+ * Books that tests may rely on. Book 9 is deliberately past the first catalog
+ * page, so a flow can prove that "Load more" works.
+ */
+export const SEEDED_BOOKS = [
+  { id: '1', title: 'The Great Buggy Gatsby' },
+  { id: '2', title: 'To Kill a Mockingbird Exception' },
+  { id: '3', title: '1984 Bugs' },
+  { id: '9', title: 'War and Parse' },
+] as const;
+
+export const SEEDED_BOOK_IDS = SEEDED_BOOKS.map((book) => book.id);

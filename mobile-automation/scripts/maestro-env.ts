@@ -1,4 +1,4 @@
-import { API_ROUTES, MOBILE_APP_ID, MOBILE_TEST_IDS, SEEDED_USERS } from '@buggybooks/contracts';
+import { API_ROUTES, MOBILE_APP_ID, MOBILE_TEST_IDS, SEEDED_BOOKS, SEEDED_USERS, bookRowTestId } from '@buggybooks/contracts';
 
 /** Converts camelCase to UPPER_SNAKE_CASE, e.g. bookCount -> BOOK_COUNT. */
 function toEnvKey(...parts: string[]): string {
@@ -10,7 +10,12 @@ function toEnvKey(...parts: string[]): string {
  * LOGIN_USERNAME, CATALOG_WELCOME, USER_TESTUSER_PASSWORD, RESET_PATH, ...
  */
 export function maestroEnv(backendUrl: string): Record<string, string> {
-  const env: Record<string, string> = { APP_ID: MOBILE_APP_ID, BACKEND_URL: backendUrl, RESET_PATH: API_ROUTES.testReset.path };
+  const env: Record<string, string> = {
+    APP_ID: MOBILE_APP_ID,
+    BACKEND_URL: backendUrl,
+    RESET_PATH: API_ROUTES.testReset.path,
+    CONFIG_PATH: API_ROUTES.updateTestConfig.path,
+  };
 
   for (const [screen, ids] of Object.entries(MOBILE_TEST_IDS)) {
     for (const [name, id] of Object.entries(ids)) env[toEnvKey(screen, name)] = id;
@@ -18,6 +23,10 @@ export function maestroEnv(backendUrl: string): Record<string, string> {
   for (const [key, user] of Object.entries(SEEDED_USERS)) {
     env[toEnvKey('user', key, 'username')] = user.username;
     env[toEnvKey('user', key, 'password')] = user.password;
+  }
+  for (const { id, title } of SEEDED_BOOKS) {
+    env[toEnvKey('book', 'row', id)] = bookRowTestId(id);
+    env[toEnvKey('book', 'title', id)] = title;
   }
   return env;
 }

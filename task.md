@@ -1,12 +1,36 @@
-# Task Backlog: Sprint M0.1 - Mobile Walking Skeleton
+# Task Backlog: Sprint M1.1 - Mobile Auth & Catalog
 
-## Current Focus: Contracts, Android APK build and Maestro smoke login
+## Current Focus: Register, session handling, catalog search and paging, book detail
 
-**Goal**: Prove the mobile stack end to end before any feature work: a shared contract package, a minimal Android development-build app (login + placeholder catalog), an APK built in CI, and Maestro flows passing on an emulator against the real backend.
+**Goal**: Replace the M0.1 placeholder with real auth and catalog flows on Android, each proven by a Maestro flow against the real backend, and close the two backend security follow-ups from the re-plan.
 
 ---
 
 ## 1. Tasks
+
+- [x] Backend: skip CSRF only after the Bearer access token verifies.
+- [x] Backend: refresh-token families and a `jti` denylist, with reuse detection and revocation on logout.
+- [x] Contracts: register and book detail `testID`s, `bookRowTestId`, `SEEDED_BOOKS` with titles.
+- [x] App: register screen, silent refresh with one shared refresh, logout revokes the session.
+- [x] App: catalog list with server-side search and Load more; book detail with hardware back.
+- [x] Unit tests against the fake backend at the `fetch` boundary.
+- [x] Maestro flows: register, duplicate username, session restore, silent refresh, search and paging, book detail.
+- [ ] Emulator job green on the sprint PR (`run-mobile-e2e` label, awaiting PO approval).
+
+---
+
+## 2. Sprint M1.1 Review Comments & Refinement Loop
+
+| Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
+| :--- | :--- | :--- | :--- |
+| **Dev Architect Review** | Senior SDE | ESLint rejected a synchronous `setState` in the book detail effect and flagged ref writes in effect cleanups. Book detail now loads in the effect with a cancel flag, and the catalog cleanup no longer touches the ref. | `[FIXED]` |
+| **Security Officer Review** | Senior SDE | The denylist is in memory, so a restart forgets consumed tokens until they expire, and web logout cannot revoke because the refresh cookie is scoped to `/api/auth/refresh`. Accepted for this test target; recorded here as known limits. | `[APPROVED WITH FOLLOW-UPS]` |
+
+---
+
+## 3. Previous: Sprint M0.1 - Mobile Walking Skeleton (done, #108)
+
+### Tasks
 
 - [x] `shared/contracts` (`@buggybooks/contracts`): `API_ROUTES`, `MOBILE_TEST_IDS`, `SEEDED_USERS`, `SEEDED_BOOK_IDS`.
 - [x] Backend contract test (`backend/src/__tests__/contracts.test.ts`), verified to fail on a wrong login path and on a wrong seeded password.
@@ -15,11 +39,11 @@
 - [x] ESLint bans literal API paths and `testID`s in the app.
 - [x] `mobile-automation/`: Maestro flows using contract variables only, plus a flow checker; backend reset before each flow.
 - [x] `.github/workflows/mobile-ci.yml`: quality + APK build on PRs; emulator + Maestro on `main`, nightly, dispatch, or the `run-mobile-e2e` label.
-- [ ] Emulator job green on the sprint PR (`run-mobile-e2e` label).
+- [x] Emulator job green on the sprint PR (`run-mobile-e2e` label).
 
 ---
 
-## 2. Sprint M0.1 Review Comments & Refinement Loop
+### Sprint M0.1 Review Comments & Refinement Loop
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
@@ -30,13 +54,13 @@
 
 ---
 
-## 3. Previous: Mobile Rollback & Re-plan (done)
+## 4. Previous: Mobile Rollback & Re-plan (done)
 
 The first mobile attempt (PRs #97-#102) was reviewed and removed in #106. The re-plan (#107) was approved: Android only, Expo dev build, emulator CI on `main` + nightly.
 
 ---
 
-## 4. Rollback Review Comments
+## 5. Rollback Review Comments
 
 | Gate / Reviewer | Target Role | Review Feedback & Comments | Gate Status |
 | :--- | :--- | :--- | :--- |
@@ -46,7 +70,7 @@ The first mobile attempt (PRs #97-#102) was reviewed and removed in #106. The re
 
 ---
 
-## 5. Definition of Done (DoD) Checklist
+## 6. Definition of Done (DoD) Checklist
 
 - [x] `npm run typecheck` passes.
 - [x] Backend tests pass (`backend: npm test`), including the dual-auth tests.

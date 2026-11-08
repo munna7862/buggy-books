@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cookieParser from 'cookie-parser';
 import { doubleCsrf } from 'csrf-csrf';
+import jwt from 'jsonwebtoken';
 import apiRoutes from './routes/api';
 import { correlationIdMiddleware } from './middleware/correlationId';
 import { sessionMiddleware } from './middleware/session.middleware';
@@ -18,6 +19,16 @@ app.use(cookieParser());
 app.use(correlationIdMiddleware);
 app.use(sessionMiddleware);
 app.use(express.json());
+
+const hasVerifiedBearerToken = (authHeader?: string): boolean => {
+  if (!authHeader?.startsWith('Bearer ')) return false;
+  try {
+    const claims = jwt.verify(authHeader.substring(7).trim(), config.jwtSecret);
+    return typeof claims !== 'string' && claims.type === 'access';
+  } catch {
+    return false;
+  }
+};
 
 // --- CSRF Protection (Double-Submit Cookie Pattern) ---
 const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf({
@@ -34,10 +45,9 @@ const { doubleCsrfProtection, generateCsrfToken } = doubleCsrf({
   ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
   getCsrfTokenFromRequest: (req) => req.headers['x-csrf-token'] as string,
   skipCsrfProtection: (req) => {
-    // Allow Bearer token requests to bypass CSRF (mobile native clients)
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.split(' ')[1]?.trim() : undefined;
-    if (token && token.length > 10) return true;
+    // Native clients authenticate with a Bearer token and have no CSRF exposure,
+    // but only a token that verifies may skip the check.
+    if (hasVerifiedBearerToken(req.headers.authorization)) return true;
 
     // Skip for auth endpoints (login, register, logout, refresh)
     const authPaths = ['/api/login', '/api/register', '/api/logout', '/api/auth/refresh'];

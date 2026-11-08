@@ -1,0 +1,57 @@
+# MOB_M1_10: a new user registers, reaches the catalog, signs out and signs back in.
+appId: ${APP_ID}
+name: Register - new user can sign up and sign back in
+tags:
+  - auth
+---
+- runScript: ../scripts/reset_backend.js
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: ${LOGIN_SCREEN}
+    timeout: 30000
+- tapOn:
+    id: ${LOGIN_REGISTER_LINK}
+- extendedWaitUntil:
+    visible:
+      id: ${REGISTER_SCREEN}
+    timeout: 10000
+- tapOn:
+    id: ${REGISTER_FULL_NAME}
+- inputText: "Maestro Reader"
+- tapOn:
+    id: ${REGISTER_USERNAME}
+- inputText: "maestro-reader"
+- tapOn:
+    id: ${REGISTER_PASSWORD}
+- inputText: "reader-password"
+- hideKeyboard
+- tapOn:
+    id: ${REGISTER_SUBMIT}
+- extendedWaitUntil:
+    visible:
+      id: ${CATALOG_WELCOME}
+    timeout: 20000
+- assertVisible:
+    id: ${CATALOG_WELCOME}
+    text: "Signed in as maestro-reader"
+- tapOn:
+    id: ${CATALOG_LOGOUT}
+- extendedWaitUntil:
+    visible:
+      id: ${LOGIN_SCREEN}
+    timeout: 10000
+- tapOn:
+    id: ${LOGIN_USERNAME}
+- inputText: "maestro-reader"
+- tapOn:
+    id: ${LOGIN_PASSWORD}
+- inputText: "reader-password"
+- hideKeyboard
+- tapOn:
+    id: ${LOGIN_SUBMIT}
+- extendedWaitUntil:
+    visible:
+      id: ${CATALOG_WELCOME}
+    timeout: 20000
