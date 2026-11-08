@@ -1,3 +1,0 @@
-[2026-11-05 04:36:47] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1793815607795-a822b61c
-[2026-11-05 04:36:48] INFO: Asserting price tag has rotation transform, actual: matrix(0.99863, -0.052336, 0.052336, 0.99863, 7.98904, -0.418688) - Condition met (true)
-[2026-11-05 04:36:48] INFO: Cleaned up ephemeral test session: pw-w2-1-1793815607795-a822b61c
