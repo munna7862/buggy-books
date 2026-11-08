@@ -88,7 +88,7 @@ mobile-automation/
 
 **M1.1 Auth and catalog**: register, login, logout, secure-store session hydration, silent refresh, catalog list and search with pagination, book detail. Maestro flows for each.
 **M1.2 Cart, checkout and profile**: cart with server-side quantities, checkout with handling for the flaky `/api/checkout/process` (retry banner), avatar upload (multipart with the correct headers), orders list. Maestro flows for each, including a chaos-driven checkout retry flow.
-- Unit tests use MSW (`msw/native`) against the shared route constants instead of mocking `apiClient`.
+- Unit tests run the real API client against the fake backend at the `fetch` boundary (`mobile/src/test-utils/fakeBackend.ts`), which only answers the shared route constants. This replaces the earlier MSW idea: M0.1 showed it catches wrong paths with no extra dependency.
 - Backend hardening: CSRF skip only after Bearer verification, and refresh-token reuse detection.
 
 ### Phase M2: Opt-in mobile chaos (1 sprint)

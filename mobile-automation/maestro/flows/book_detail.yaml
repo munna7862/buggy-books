@@ -1,0 +1,40 @@
+# MOB_M1_15: opening a book shows its details, and both back routes return to the catalog.
+appId: ${APP_ID}
+name: Book detail - open and go back
+tags:
+  - catalog
+---
+- runScript: ../scripts/reset_backend.js
+- runFlow: ../subflows/sign_in_testuser.yaml
+- extendedWaitUntil:
+    visible:
+      id: ${BOOK_ROW_1}
+    timeout: 20000
+- tapOn:
+    id: ${BOOK_ROW_1}
+- extendedWaitUntil:
+    visible:
+      id: ${BOOK_DETAIL_TITLE}
+    timeout: 20000
+- assertVisible:
+    id: ${BOOK_DETAIL_TITLE}
+    text: "${BOOK_TITLE_1}"
+- assertVisible:
+    id: ${BOOK_DETAIL_PRICE}
+- tapOn:
+    id: ${BOOK_DETAIL_BACK}
+- extendedWaitUntil:
+    visible:
+      id: ${BOOK_ROW_1}
+    timeout: 10000
+- tapOn:
+    id: ${BOOK_ROW_1}
+- extendedWaitUntil:
+    visible:
+      id: ${BOOK_DETAIL_TITLE}
+    timeout: 20000
+- back
+- extendedWaitUntil:
+    visible:
+      id: ${BOOK_ROW_1}
+    timeout: 10000

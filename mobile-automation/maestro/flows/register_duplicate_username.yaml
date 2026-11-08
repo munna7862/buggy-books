@@ -1,0 +1,37 @@
+# MOB_M1_11: registering a taken username shows the server's error and stays on the form.
+appId: ${APP_ID}
+name: Register - taken username is rejected
+tags:
+  - auth
+---
+- runScript: ../scripts/reset_backend.js
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: ${LOGIN_SCREEN}
+    timeout: 30000
+- tapOn:
+    id: ${LOGIN_REGISTER_LINK}
+- extendedWaitUntil:
+    visible:
+      id: ${REGISTER_SCREEN}
+    timeout: 10000
+- tapOn:
+    id: ${REGISTER_USERNAME}
+- inputText: ${USER_TESTUSER_USERNAME}
+- tapOn:
+    id: ${REGISTER_PASSWORD}
+- inputText: "reader-password"
+- hideKeyboard
+- tapOn:
+    id: ${REGISTER_SUBMIT}
+- extendedWaitUntil:
+    visible:
+      id: ${REGISTER_ERROR}
+    timeout: 20000
+- assertVisible:
+    id: ${REGISTER_ERROR}
+    text: ".*already exists.*"
+- assertVisible:
+    id: ${REGISTER_SCREEN}

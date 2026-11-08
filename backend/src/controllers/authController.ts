@@ -46,6 +46,7 @@ export const register = async (req: Request, res: Response) => {
 
 export const logout = (req: Request, res: Response) => {
   const username = req.user?.username;
+  authService.logout(req.body?.refreshToken);
   res.clearCookie('token');
   res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
   logger.info(`User logged out: ${username || 'anonymous'}`, { username });

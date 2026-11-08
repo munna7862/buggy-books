@@ -206,10 +206,11 @@ jobs:
           disable-animations: true
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -no-snapshot
           script: |
+            adb shell settings put global hide_error_dialogs 1
             adb reverse tcp:4000 tcp:4000
             adb install -r apk/app-release.apk
             mkdir -p mobile-automation/reports
-            npm run test:maestro --workspace=mobile-automation -- --format junit --output "$PWD/mobile-automation/reports/maestro-junit.xml" --debug-output "$PWD/mobile-automation/reports/debug"
+            npm run test:maestro --workspace=mobile-automation -- --format junit --output "$PWD/mobile-automation/reports/maestro-junit.xml" --debug-output "$PWD/mobile-automation/reports/debug" || { adb logcat -d > mobile-automation/reports/logcat.txt; adb exec-out screencap -p > mobile-automation/reports/final-screen.png; exit 1; }
 
       - name: Upload Maestro reports & backend log
         if: always()

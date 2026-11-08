@@ -6,12 +6,18 @@ import { maestroEnv } from './maestro-env';
  * Fails if a Maestro flow uses a literal element id or an unknown variable.
  * Element ids must be `${VARIABLE}`s generated from @buggybooks/contracts.
  */
-const flowsDir = path.join(path.dirname(__dirname), 'maestro', 'flows');
+const maestroDir = path.join(path.dirname(__dirname), 'maestro');
 const known = new Set(Object.keys(maestroEnv('http://localhost:4000')));
 const problems: string[] = [];
 
-for (const file of readdirSync(flowsDir).filter((f) => f.endsWith('.yaml'))) {
-  readFileSync(path.join(flowsDir, file), 'utf8')
+const flowFiles = ['flows', 'subflows'].flatMap((dir) =>
+  readdirSync(path.join(maestroDir, dir))
+    .filter((f) => f.endsWith('.yaml'))
+    .map((f) => path.join(dir, f)),
+);
+
+for (const file of flowFiles) {
+  readFileSync(path.join(maestroDir, file), 'utf8')
     .split('\n')
     .forEach((line, index) => {
       const where = `${file}:${index + 1}`;

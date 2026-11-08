@@ -2,7 +2,7 @@ import request from 'supertest';
 import type { IRouter } from 'express';
 import app from '../app';
 import apiRoutes from '../routes/api';
-import { API_ROUTES, SEEDED_BOOK_IDS, SEEDED_USERS, buildPath } from '@buggybooks/contracts';
+import { API_ROUTES, SEEDED_BOOKS, SEEDED_USERS, buildPath } from '@buggybooks/contracts';
 
 interface RouteLayer {
   route?: { path: string; methods: Record<string, boolean> };
@@ -71,9 +71,40 @@ describe('Shared API contract (@buggybooks/contracts)', () => {
     expect(profile.body.username).toBe(username);
   });
 
-  it.each(SEEDED_BOOK_IDS)('seeded book "%s" exists', async (id) => {
+  it.each(SEEDED_BOOKS)('seeded book "$id" exists with the shared title', async ({ id, title }) => {
     const res = await request(app).get(buildPath(API_ROUTES.bookById.path, { id }));
     expect(res.status).toBe(200);
-    expect(res.body.id).toBe(id);
+    expect(res.body).toEqual(expect.objectContaining({ id, title }));
+  });
+
+  it('GET books with page, limit and q returns the paginated shape the catalog reads', async () => {
+    const res = await request(app).get(API_ROUTES.books.path).query({ q: '1984', page: '1', limit: '8' });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ books: [expect.objectContaining({ id: '3' })], total: 1, page: 1, totalPages: 1, limit: 8 });
+  });
+
+  it('the first catalog page leaves the book used by the Load more flow for page two', async () => {
+    const first = await request(app).get(API_ROUTES.books.path).query({ page: '1', limit: '8' });
+    const second = await request(app).get(API_ROUTES.books.path).query({ page: '2', limit: '8' });
+    const ids = (res: request.Response) => (res.body.books as { id: string }[]).map((book) => book.id);
+
+    expect(ids(first)).not.toContain('9');
+    expect(ids(second)).toContain('9');
+  });
+
+  it('register returns the fields the app reads, and refresh rotates them', async () => {
+    const register = await request(app)
+      .post(API_ROUTES.register.path)
+      .send({ username: 'contract-user', password: 'a-password', fullName: 'Contract User' });
+    expect(register.status).toBe(201);
+    expect(register.body).toEqual(
+      expect.objectContaining({ username: 'contract-user', token: expect.any(String), refreshToken: expect.any(String) }),
+    );
+
+    const refresh = await request(app).post(API_ROUTES.refresh.path).send({ refreshToken: register.body.refreshToken });
+    expect(refresh.status).toBe(200);
+    expect(refresh.body).toEqual(expect.objectContaining({ token: expect.any(String), refreshToken: expect.any(String) }));
+    expect(refresh.body.refreshToken).not.toBe(register.body.refreshToken);
   });
 });
