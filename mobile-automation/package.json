@@ -1,0 +1,21 @@
+{
+  "name": "mobile-automation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Maestro flows for the BuggyBooks Android app. Every id and credential comes from @buggybooks/contracts.",
+  "scripts": {
+    "maestro:env": "tsx scripts/maestro-env.ts",
+    "test:maestro": "tsx scripts/run-maestro.ts",
+    "check:flows": "tsx scripts/check-flows.ts",
+    "typecheck": "tsc --noEmit",
+    "lint": "npm run check:flows && npm run typecheck"
+  },
+  "dependencies": {
+    "@buggybooks/contracts": "*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.0",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3"
+  }
+}

@@ -7,7 +7,8 @@
     "baseUrl": ".",
     "paths": {
       "@buggybooks/types": ["../shared/types"],
-      "@buggybooks/types/*": ["../shared/types/*"]
+      "@buggybooks/types/*": ["../shared/types/*"],
+      "@buggybooks/contracts": ["../shared/contracts"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
