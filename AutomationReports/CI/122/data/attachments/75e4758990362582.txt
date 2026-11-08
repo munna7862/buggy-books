@@ -1,0 +1,160 @@
+[2026-11-09 00:03:45] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1794144825204-3d34f8b3
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/test/reset
+[2026-11-09 00:03:45] INFO: ✅ Resetting test database to baseline Success! Status: 200 OK
+[2026-11-09 00:03:45] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Session pw-w2-1-1794144825204-3d34f8b3 test state reset successfully",
+  "sessionId": "pw-w2-1-1794144825204-3d34f8b3"
+}
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/test/books/1/stock
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "stock": 1
+}
+[2026-11-09 00:03:45] INFO: ✅ Setting Book 1 stock count to 1 Success! Status: 200 OK
+[2026-11-09 00:03:45] INFO: 📥 Response Payload: {
+  "success": true,
+  "bookId": "1",
+  "stock": 1,
+  "version": 2
+}
+[2026-11-09 00:03:45] INFO: Verifying stock is set to exactly 1 - Matched: [1]
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/register
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "username": "racer_a_1794144825388",
+  "password": "Password123!",
+  "fullName": "Alice Racer"
+}
+[2026-11-09 00:03:45] INFO: ✅ Registering Buyer A Success! Status: 201 Created
+[2026-11-09 00:03:45] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "racer_a_1794144825388",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhY2VyX2FfMTc5NDE0NDgyNTM4OCIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3OTQxNDQ4MjUsImV4cCI6MTc5NDE0NTcyNX0.K3gu6iNH_E4TUAL5i9pNUF58CvwGiUeta-KZPKaV5bg",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhY2VyX2FfMTc5NDE0NDgyNTM4OCIsInR5cGUiOiJyZWZyZXNoIiwiZmFtaWx5IjoiNjBlNTA1NTctY2RlOC00YjU0LWIzY2ItOTJhMGM3NDM1NjY2IiwiaWF0IjoxNzk0MTQ0ODI1LCJleHAiOjE3OTY3MzY4MjUsImp0aSI6Ijg4MDMwMzA0LTVjODUtNDA3MS05NWJlLWExNzIyMDg0OTg1ZSJ9.HY1oM0ZUw8sFWhde3jTdWvWqbTWw_fIA5HZsLY81_D4"
+}
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/login
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "username": "racer_a_1794144825388",
+  "password": "Password123!"
+}
+[2026-11-09 00:03:45] INFO: ✅ Authenticating Buyer A Success! Status: 200 OK
+[2026-11-09 00:03:45] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "racer_a_1794144825388",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhY2VyX2FfMTc5NDE0NDgyNTM4OCIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3OTQxNDQ4MjUsImV4cCI6MTc5NDE0NTcyNX0.K3gu6iNH_E4TUAL5i9pNUF58CvwGiUeta-KZPKaV5bg",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhY2VyX2FfMTc5NDE0NDgyNTM4OCIsInR5cGUiOiJyZWZyZXNoIiwiZmFtaWx5IjoiNTJlZWE5YTUtZWVlZS00ODYxLTkwMTUtYTZmMGMzMGVkZjljIiwiaWF0IjoxNzk0MTQ0ODI1LCJleHAiOjE3OTY3MzY4MjUsImp0aSI6IjM2OGM5ODE0LTg5MjQtNGI0Zi05MGExLTM1MGZhMTdjOWE2ZiJ9.LA_EXD38nyFEusCprfe8zRLuots82YSmy1XeSXp6Qe0"
+}
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/register
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "username": "racer_b_1794144825388",
+  "password": "Password123!",
+  "fullName": "Bob Racer"
+}
+[2026-11-09 00:03:45] INFO: ✅ Registering Buyer B Success! Status: 201 Created
+[2026-11-09 00:03:45] INFO: 📥 Response Payload: {
+  "message": "Registration successful",
+  "username": "racer_b_1794144825388",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhY2VyX2JfMTc5NDE0NDgyNTM4OCIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3OTQxNDQ4MjUsImV4cCI6MTc5NDE0NTcyNX0.B0YPnSvb4TTqB4VdctgqdoxZWj4CyDX4H1u5Hhlz3Qg",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhY2VyX2JfMTc5NDE0NDgyNTM4OCIsInR5cGUiOiJyZWZyZXNoIiwiZmFtaWx5IjoiMDNjMzc1OWEtMjYxZC00NjM5LTkwZTctNDg3YmY0MmJiOGZlIiwiaWF0IjoxNzk0MTQ0ODI1LCJleHAiOjE3OTY3MzY4MjUsImp0aSI6IjBiZjEzYzhkLTE5ZDQtNGFjOC04NTUwLTY4MmFhM2NhYjNhOSJ9.dRHSyPZDO1xS5G_HzGcAmWVeXYFo79OIt7Qa6-iP7Fw"
+}
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/login
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "username": "racer_b_1794144825388",
+  "password": "Password123!"
+}
+[2026-11-09 00:03:45] INFO: ✅ Authenticating Buyer B Success! Status: 200 OK
+[2026-11-09 00:03:45] INFO: 📥 Response Payload: {
+  "message": "Login successful",
+  "username": "racer_b_1794144825388",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhY2VyX2JfMTc5NDE0NDgyNTM4OCIsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3OTQxNDQ4MjUsImV4cCI6MTc5NDE0NTcyNX0.B0YPnSvb4TTqB4VdctgqdoxZWj4CyDX4H1u5Hhlz3Qg",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InJhY2VyX2JfMTc5NDE0NDgyNTM4OCIsInR5cGUiOiJyZWZyZXNoIiwiZmFtaWx5IjoiZjk3ZmE5ODctMTBhMy00YzM2LTgyOTMtMTVhODE1NjIxNjdiIiwiaWF0IjoxNzk0MTQ0ODI1LCJleHAiOjE3OTY3MzY4MjUsImp0aSI6IjQyOGQ3YTA3LWYyYTctNDE4Ny05OWRkLWJhMWRjMGM3ZjkzOCJ9.zWIzD0QC4iqj6zQzS-H1VrLnvF3hzGt1gndDYhd4yF0"
+}
+[2026-11-09 00:03:45] INFO: Verifying Buyer A session cookie exists - Condition met (true)
+[2026-11-09 00:03:45] INFO: Verifying Buyer B session cookie exists - Condition met (true)
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/cart
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "bookId": "1"
+}
+[2026-11-09 00:03:45] INFO: ✅ Buyer A adding last stock book to cart Success! Status: 200 OK
+[2026-11-09 00:03:45] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop",
+    "stock": 1,
+    "version": 2
+  }
+]
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/cart
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "bookId": "1"
+}
+[2026-11-09 00:03:45] INFO: ✅ Buyer B adding last stock book to cart Success! Status: 200 OK
+[2026-11-09 00:03:45] INFO: 📥 Response Payload: [
+  {
+    "id": "1",
+    "title": "The Great Buggy Gatsby",
+    "author": "F. Scott Fitzgerald",
+    "price": 10.99,
+    "genre": "Classic",
+    "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+    "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop",
+    "stock": 1,
+    "version": 2
+  }
+]
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/checkout/process
+[2026-11-09 00:03:45] INFO: 🚀 Making POST request to http://127.0.0.1:4000/api/checkout/process
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "firstName": "Alice",
+  "lastName": "Racer",
+  "creditCard": "1111222233334444"
+}
+[2026-11-09 00:03:45] INFO: 📤 Request Payload: {
+  "firstName": "Bob",
+  "lastName": "Racer",
+  "creditCard": "5555666677778888"
+}
+[2026-11-09 00:03:46] INFO: ✅ Buyer A initiating concurrent checkout Success! Status: 200 OK
+[2026-11-09 00:03:46] INFO: 📥 Response Payload: {
+  "success": true,
+  "message": "Order processed successfully",
+  "orderId": "b36313da-7315-4058-b5c7-981a0add46de"
+}
+[2026-11-09 00:03:46] ERROR: ❌ Buyer B initiating concurrent checkout Failed! Status: 409 Conflict | Response: {
+  "error": "Conflict: Optimistic lock conflict: version mismatch (expected 2, found 3)",
+  "errorName": "ConflictError",
+  "correlationId": "e6307326-7cad-4fd9-8cdb-3490936f4066"
+}
+[2026-11-09 00:03:46] ERROR: ❌ Buyer B initiating concurrent checkout Failed! Status: 409 Conflict | Response: {
+  "error": "Conflict: Optimistic lock conflict: version mismatch (expected 2, found 3)",
+  "errorName": "ConflictError",
+  "correlationId": "e6307326-7cad-4fd9-8cdb-3490936f4066"
+}
+[2026-11-09 00:03:46] INFO: Verifying exactly one request succeeded with 200 - Condition met (true)
+[2026-11-09 00:03:46] INFO: Verifying competing request rejected with 409 Conflict - Condition met (true)
+[2026-11-09 00:03:46] INFO: 🚀 Making GET request to http://127.0.0.1:4000/api/books/1
+[2026-11-09 00:03:46] INFO: ✅ Fetching updated inventory stock for Book 1 Success! Status: 200 OK
+[2026-11-09 00:03:46] INFO: 📥 Response Payload: {
+  "id": "1",
+  "title": "The Great Buggy Gatsby",
+  "author": "F. Scott Fitzgerald",
+  "price": 10.99,
+  "genre": "Classic",
+  "description": "A story of wealth, obsession, and bugs in the Jazz Age.",
+  "image": "https://images.unsplash.com/photo-1544947950-fa07a98d237f?q=80&w=600&auto=format&fit=crop",
+  "stock": 0,
+  "version": 3
+}
+[2026-11-09 00:03:46] INFO: Asserting stock count is exactly 0 - Matched: [0]
+[2026-11-09 00:03:46] INFO: Navigating to Chaos Control Dashboard: http://127.0.0.1:5173/admin/chaos
+[2026-11-09 00:03:46] INFO: Verifying Chaos Dashboard container is visible - Element is visible
+[2026-11-09 00:03:46] INFO: Asserting chaos dashboard is visible - Matched: [true]
+[2026-11-09 00:03:46] INFO: Reading status badge text
+[2026-11-09 00:03:46] INFO: Selecting High Contention preset
+[2026-11-09 00:03:47] INFO: Clicking Apply Chaos Config button
+[2026-11-09 00:03:48] INFO: Clicking Reset Factory Defaults button
+[2026-11-09 00:03:48] INFO: Cleaned up ephemeral test session: pw-w2-1-1794144825204-3d34f8b3
