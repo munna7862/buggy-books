@@ -1,0 +1,16 @@
+[2026-11-10 19:40:50] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1794301850494-079587f0
+[2026-11-10 19:40:51] INFO: Clicking on Sign Up link
+[2026-11-10 19:40:51] INFO: Entering full name: Full profile_user_nVs5d
+[2026-11-10 19:40:51] INFO: Entering username: profile_user_nVs5d
+[2026-11-10 19:40:51] INFO: Entering password: Password123!
+[2026-11-10 19:40:52] INFO: Entering confirming password: Password123!
+[2026-11-10 19:40:52] INFO: Clicking on Create Account button
+[2026-11-10 19:40:52] INFO: Verifying landing on Checkout Page
+[2026-11-10 19:40:52] INFO: Checking if Checkout label is visible
+[2026-11-10 19:40:53] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-11-10 19:40:53] INFO: Clicking on Profile navbar link
+[2026-11-10 19:40:53] INFO: Selecting file for avatar upload: /home/runner/work/buggy-books/buggy-books/playwright-e2e/src/test-data/ui/Profile/valid_avatar.png
+[2026-11-10 19:40:53] INFO: Clicking Upload Image button
+[2026-11-10 19:40:53] INFO: Getting upload error message text
+[2026-11-10 19:40:54] INFO: Verifying upload chaos 500 error message - Condition met (true)
+[2026-11-10 19:40:54] INFO: Cleaned up ephemeral test session: pw-w3-2-1794301850494-079587f0
