@@ -1,0 +1,41 @@
+[2026-11-13 19:32:55] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w3-2-1794560575812-dd6e5f4f
+[2026-11-13 19:32:55] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-11-13 19:32:56] INFO: Clicking on Sign Up link
+[2026-11-13 19:32:56] INFO: Entering full name: Cart Quantity User
+[2026-11-13 19:32:56] INFO: Entering username: cart_qty_user_1794560575884_2eb0caad
+[2026-11-13 19:32:56] INFO: Entering password: Password123!
+[2026-11-13 19:32:56] INFO: Entering confirming password: Password123!
+[2026-11-13 19:32:56] INFO: Clicking on Create Account button
+[2026-11-13 19:32:57] INFO: Verifying landing on Checkout Page
+[2026-11-13 19:32:57] INFO: Checking if Checkout label is visible
+[2026-11-13 19:32:57] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-11-13 19:32:57] INFO: Clicking on Catalog link
+[2026-11-13 19:32:57] INFO: Filling search input with: Mockingbird
+[2026-11-13 19:32:58] INFO: Clicking Search button
+[2026-11-13 19:32:58] INFO: Clicking on Add to Cart button for book id: 2
+[2026-11-13 19:32:59] INFO: Waiting for cart status message: added to cart
+[2026-11-13 19:32:59] INFO: Cart status message "added to cart" is visible
+[2026-11-13 19:32:59] INFO: Waiting for cart status message: added to cart
+[2026-11-13 19:32:59] INFO: Cart status message "added to cart" is visible
+[2026-11-13 19:32:59] INFO: Clicking on Cart link
+[2026-11-13 19:33:00] INFO: Getting cart total text
+[2026-11-13 19:33:00] INFO: Verifying 1 item in cart - Matched: [1]
+[2026-11-13 19:33:00] INFO: Verifying non-zero initial cart total price - Condition met (true)
+[2026-11-13 19:33:00] INFO: Clicking on Catalog link
+[2026-11-13 19:33:00] INFO: Filling search input with: Gatsby
+[2026-11-13 19:33:00] INFO: Clicking Search button
+[2026-11-13 19:33:00] INFO: Clicking on Add to Cart button for book id: 1
+[2026-11-13 19:33:02] INFO: Waiting for cart status message: added to cart
+[2026-11-13 19:33:02] INFO: Cart status message "added to cart" is visible
+[2026-11-13 19:33:02] INFO: Waiting for cart status message: added to cart
+[2026-11-13 19:33:02] INFO: Cart status message "added to cart" is visible
+[2026-11-13 19:33:02] INFO: Clicking on Cart link
+[2026-11-13 19:33:02] INFO: Getting cart total text
+[2026-11-13 19:33:02] INFO: Verifying cart item count increased to 2 - Matched: [2]
+[2026-11-13 19:33:02] INFO: Verifying grand total updated dynamically upon adding second item - Condition met (true)
+[2026-11-13 19:33:02] INFO: Getting cart total text
+[2026-11-13 19:33:03] INFO: Clicking Remove item button
+[2026-11-13 19:33:03] INFO: Getting cart total text
+[2026-11-13 19:33:03] INFO: Verifying cart item count decreased to 1 - Matched: [1]
+[2026-11-13 19:33:03] INFO: Verifying grand total reduced dynamically after item removal - Condition met (true)
+[2026-11-13 19:33:03] INFO: Cleaned up ephemeral test session: pw-w3-2-1794560575812-dd6e5f4f
