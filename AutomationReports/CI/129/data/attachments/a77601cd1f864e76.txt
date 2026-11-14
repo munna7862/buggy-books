@@ -1,0 +1,3 @@
+[2026-11-14 19:01:07] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1794645067097-ddd5c4c8
+[2026-11-14 19:01:09] INFO: Verifying Axe detects missing image alt text under chaos mode - Condition met (true)
+[2026-11-14 19:01:09] INFO: Cleaned up ephemeral test session: pw-w2-1-1794645067097-ddd5c4c8

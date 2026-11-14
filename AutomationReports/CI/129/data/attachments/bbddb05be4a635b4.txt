@@ -1,0 +1,2 @@
+[2026-11-14 19:01:01] INFO: Verifying status code is 400 Bad Request
+[2026-11-14 19:01:01] INFO: Verifying error response body contains exact same correlationId
