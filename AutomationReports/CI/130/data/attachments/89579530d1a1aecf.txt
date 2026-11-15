@@ -1,0 +1,26 @@
+[2026-11-15 19:16:59] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1794732419159-7bc3d83f
+[2026-11-15 19:16:59] INFO: Clicking on Sign Up link
+[2026-11-15 19:17:00] INFO: Entering full name: Full user_a_cart_5Loo2
+[2026-11-15 19:17:00] INFO: Entering username: user_a_cart_5Loo2
+[2026-11-15 19:17:00] INFO: Entering password: Password123!
+[2026-11-15 19:17:00] INFO: Entering confirming password: Password123!
+[2026-11-15 19:17:00] INFO: Clicking on Create Account button
+[2026-11-15 19:17:00] INFO: Verifying landing on Checkout Page
+[2026-11-15 19:17:00] INFO: Checking if Checkout label is visible
+[2026-11-15 19:17:00] INFO: Landed on Checkout Page successfully and Text is: Checkout
+[2026-11-15 19:17:00] INFO: Navigating to catalog page: http://127.0.0.1:5173
+[2026-11-15 19:17:01] INFO: Total Books displayed in Catalog page are: 8
+[2026-11-15 19:17:01] INFO: Clicking on Add to Cart button for book id: 1
+[2026-11-15 19:17:02] INFO: Waiting for cart status message: added to cart
+[2026-11-15 19:17:02] INFO: Cart status message "added to cart" is visible
+[2026-11-15 19:17:02] INFO: Clicking on Add to Cart button for book id: 2
+[2026-11-15 19:17:04] INFO: Waiting for cart status message: added to cart
+[2026-11-15 19:17:04] INFO: Cart status message "added to cart" is visible
+[2026-11-15 19:17:04] INFO: Clicking on Cart link
+[2026-11-15 19:17:04] INFO: Verifying initial cart item count - Matched: [2]
+[2026-11-15 19:17:04] INFO: Getting cart total text
+[2026-11-15 19:17:04] INFO: Clicking Remove item button
+[2026-11-15 19:17:04] INFO: Verifying cart item count after removal - Matched: [1]
+[2026-11-15 19:17:04] INFO: Getting cart total text
+[2026-11-15 19:17:04] INFO: Verifying total price updated after item removal - Condition met (true)
+[2026-11-15 19:17:04] INFO: Cleaned up ephemeral test session: pw-w2-1-1794732419159-7bc3d83f
