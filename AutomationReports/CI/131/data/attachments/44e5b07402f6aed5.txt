@@ -1,1 +1,0 @@
-[2026-11-16 19:27:57] INFO: Verifying 401 Unauthorized for unauthenticated upload request
