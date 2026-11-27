@@ -1,8 +1,0 @@
-[2026-11-17 20:36:05] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w2-1-1794909965951-ae7ddc1d
-[2026-11-17 20:36:06] INFO: Clicking on Login link
-[2026-11-17 20:36:06] INFO: Entering username: admin
-[2026-11-17 20:36:07] INFO: Entering password: wrongPassword123@
-[2026-11-17 20:36:07] INFO: Clicking on Sign In button
-[2026-11-17 20:36:08] INFO: Getting error banner text
-[2026-11-17 20:36:08] INFO: Verifying if error message is correct - Matched: [Unauthorized: Invalid credentials]
-[2026-11-17 20:36:08] INFO: Cleaned up ephemeral test session: pw-w2-1-1794909965951-ae7ddc1d
