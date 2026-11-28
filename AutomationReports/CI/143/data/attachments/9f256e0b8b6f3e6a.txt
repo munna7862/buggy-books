@@ -1,0 +1,3 @@
+[2026-11-28 20:16:08] INFO: Session isolation fixture active for worker with x-test-session-id: pw-w1-0-1795859168701-071c89fe
+[2026-11-28 20:16:10] INFO: Verifying visual pixel diff detected under chaos mode - Matched: [true]
+[2026-11-28 20:16:10] INFO: Cleaned up ephemeral test session: pw-w1-0-1795859168701-071c89fe
